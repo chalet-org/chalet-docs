@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Document</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta name="description" content="Description" />
+		<meta
+			name="viewport"
+			content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+		/>
+		<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple-dark.css">
+		<!-- <link rel="stylesheet" href="/css/prism-twilight.css"> -->
+		<style>
+			:root {
+				--base-font-size: 16px;
+				--theme-color: rgb(127, 131, 255);
+				/* --sidebar-nav-link-before-content: '😀'; */
+				--sidebar-toggle-background: transparent;
+				--docsifytabs-border-color: var(--blockquote-background);
+    			--docsifytabs-tab-highlight-color: var(--theme-color);
+			}
+			.sidebar-toggle .sidebar-toggle-button {
+				top: 0.33rem;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app"><!-- Loading spinner --></div>
+		<script>
+			window.$docsify = {
+				name: "",
+				repo: "",
+				tabs: {
+					persist: true,
+					sync: true,
+					theme: "classic",
+					tabComments: true,
+					tabHeadings: true,
+				},
+			};
+		</script>
+		<script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+		<script src="//cdn.jsdelivr.net/npm/prismjs@1.22.0/components/prism-json.min.js"></script>
+		<script src="//cdn.jsdelivr.net/npm/prismjs@1.22.0/components/prism-bash.min.js"></script>
+		<script src="//cdn.jsdelivr.net/npm/prismjs@1.22.0/components/prism-c.min.js"></script>
+		<script src="//cdn.jsdelivr.net/npm/prismjs@1.22.0/components/prism-cpp.min.js"></script>
+		<!-- <script src="//cdn.jsdelivr.net/npm/docsify-themeable@0/dist/js/docsify-themeable.min.js"></script> -->
+		<script src="//cdn.jsdelivr.net/npm/docsify-tabs@1"></script>
+	</body>
+</html>
