@@ -5,8 +5,8 @@
 	"tasks": [
 		{
 			"label": "echo",
-			"type": "shell",
-			"command": "docsify serve .",
+			"type": "npm",
+			"script": "dev",
 			"presentation": {
 				"echo": true,
 				"reveal": "always",

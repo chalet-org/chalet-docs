@@ -1,3 +1,27 @@
 {
+	"editor.formatOnSave": true,
 	"files.encoding": "utf8",
+	"files.exclude": {
+		// "**/.git": true,
+		// "**/.svn": true,
+		// "**/.hg": true,
+		// "**/CVS": true,
+		// "**/.DS_Store": true,
+		// "yarn.lock": true,
+		// "yarn-error.log": true,
+		// ".cache/": true,
+		// "dist/": true,
+		// "scripts/": true
+	},
+	"[source.css.styled]": {
+		"editor.formatOnSave": true
+	},
+	"[json]": {
+		"editor.formatOnSave": true,
+		"editor.defaultFormatter": "vscode.json-language-features"
+	},
+	"[jsonc]": {
+		"editor.formatOnSave": true,
+		"editor.defaultFormatter": "vscode.json-language-features"
+	}
 }
