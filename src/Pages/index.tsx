@@ -5,12 +5,21 @@ import styled from "styled-components";
 
 import { ChaletSchema, docsApi } from "Api";
 import { handleStaticProps, ServerProps } from "Utility";
-import { BaseStyle, SchemaDocNode } from "Components";
+import { BaseStyle, SchemaDocNode, Code } from "Components";
 
 type Props = ServerProps<ChaletSchema>;
 
 const Home = ({ schema, error }: Props) => {
-	console.log(schema);
+	// console.log(schema);
+	const cppText = `void myFunction() {
+    MyClass inst;
+    inst.doThing();
+}`;
+	const jsonText = `{
+    "key": "value",
+    "isTrue": true,
+    "index": 1
+}`;
 	return (
 		<>
 			<Head>
@@ -29,7 +38,10 @@ const Home = ({ schema, error }: Props) => {
 				Main
 				<br />
 				<br />
+				<Code language="cpp" text={cppText} />
+				<Code language="json" text={jsonText} />
 				<h2>Schema Reference</h2>
+				<Code language="json" text={JSON.stringify(schema, undefined, 4)} />
 				{error ?? <SchemaDocNode name="root" schema={schema} />}
 			</Styles>
 

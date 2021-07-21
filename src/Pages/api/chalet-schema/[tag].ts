@@ -1,5 +1,4 @@
 import { Optional } from "@andrew-r-king/react-kitchen";
-// import testSchema from "../../../../../chalet-tools/schema/chalet.schema.json";
 
 import { ChaletSchema } from "Api";
 import { ApiReq, ApiRes } from "Utility";
@@ -7,9 +6,10 @@ import { ApiReq, ApiRes } from "Utility";
 const handler = async (req: ApiReq, res: ApiRes<ChaletSchema>): Promise<void> => {
 	try {
 		const { tag } = req.query;
+
 		// TODO: validate if tag is "main" or "v*.*.*"
 
-		const url = `https://raw.githubusercontent.com/chalet-org/chalet-dev/${tag}/schema/chalet.schema.json`;
+		const url = `https://raw.githubusercontent.com/chalet-org/chalet-dev/${tag}/schema/chalet-settings.schema.json`;
 		const token: Optional<string> = process.env.GITHUB_TOKEN ?? null;
 		if (token === null) {
 			throw new Error("Github Token not found");

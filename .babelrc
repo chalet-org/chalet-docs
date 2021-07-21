@@ -1,0 +1,21 @@
+{
+	"presets": [
+		"next/babel"
+	],
+	"plugins": [
+		[
+			"prismjs",
+			{
+				"languages": [
+					"json",
+					"bash",
+					"c",
+					"cpp"
+				],
+				"plugins": [
+					"line-numbers"
+				]
+			}
+		]
+	]
+}
