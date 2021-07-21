@@ -1,11 +1,14 @@
 import { GetStaticPropsResult } from "next";
 import { Optional } from "@andrew-r-king/react-kitchen";
 
-type ServerError = {
-	error: Optional<string>;
+export type ServerError = {
+	message: string;
+	status: number;
 };
 
-export type ServerProps<T> = T & ServerError;
+export type ServerProps<T extends object> = T & {
+	error: Optional<ServerError>;
+};
 
 export function handleStaticProps<U extends object, T extends object = {}>(
 	func: (...args: any[]) => Promise<T>,
@@ -23,12 +26,15 @@ export function handleStaticProps<U extends object, T extends object = {}>(
 				},
 			};
 		} catch (err) {
-			console.error(err);
+			// console.error(err);
 			return {
 				props: {
 					...({} as T),
 					...data,
-					error: err.message,
+					error: {
+						message: err.message,
+						status: err.status ?? 500,
+					},
 				},
 			};
 		}

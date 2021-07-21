@@ -1,7 +1,17 @@
+import React from "react";
 import { AppProps } from "next/app";
 
-const App = ({ Component, pageProps }: AppProps) => {
-	return <Component {...pageProps} />;
+import { Providers } from "Stores";
+import { BaseStyle } from "Components";
+
+const Main = ({ Component, pageProps }: AppProps) => {
+	return (
+		<Providers>
+			<BaseStyle />
+			<Component {...pageProps} />
+			{/* Modal */}
+		</Providers>
+	);
 };
 
-export default App;
+export default Main;

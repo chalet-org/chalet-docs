@@ -3,44 +3,8 @@ import styled from "styled-components";
 import Prism from "prismjs";
 import "prismjs/components";
 
-type CodeTheme = {
-	background: string;
-	border: string;
-	black: string;
-	white: string;
-	gray: string;
-	red: string;
-	lightRed: string;
-	green: string;
-	lightGreen: string;
-	yellow: string;
-	lightYellow: string;
-	blue: string;
-	lightBlue: string;
-	magenta: string;
-	lightMagenta: string;
-	cyan: string;
-	lightCyan: string;
-};
-const codeTheme: CodeTheme = {
-	background: "#0a0a0a",
-	border: "#1d1d1f",
-	black: "#0a0a0a",
-	white: "#dedede",
-	gray: "#7d7d9b",
-	red: "#ff4a98",
-	lightRed: "#ff4a98",
-	green: "#6ffba4",
-	lightGreen: "#6ffba4",
-	yellow: "#f6bb5e",
-	lightYellow: "#f6bb5e",
-	blue: "#45b8ff",
-	lightBlue: "#45b8ff",
-	magenta: "#f589ff",
-	lightMagenta: "#f589ff",
-	cyan: "#0afafa",
-	lightCyan: "#0afafa",
-};
+import { CodeThemeType } from "Theme";
+import { useUiStore } from "Stores";
 
 type Props = {
 	text: string;
@@ -51,6 +15,8 @@ const Code = ({ text, language }: Props) => {
 	useEffect(() => {
 		Prism.highlightAll();
 	}, []);
+
+	const { codeTheme } = useUiStore();
 
 	return (
 		<Styles {...{ ...codeTheme }}>
@@ -63,7 +29,7 @@ export { Code };
 
 const boldWeight: number = 800;
 
-const Styles = styled.pre<CodeTheme>`
+const Styles = styled.pre<CodeThemeType>`
 	display: block;
 	max-height: 24rem;
 	overflow-x: hidden;
@@ -74,6 +40,7 @@ const Styles = styled.pre<CodeTheme>`
 	color: ${(theme) => theme.white};
 	font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
 	font-size: 0.75rem;
+	font-weight: 300;
 	white-space: pre;
 	word-spacing: normal;
 	word-break: normal;

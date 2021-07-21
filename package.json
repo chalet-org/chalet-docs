@@ -9,8 +9,13 @@
 		"lint": "next lint"
 	},
 	"alias": {
+		"Api": "./src/Api",
 		"Components": "./src/Components",
-		"Api": "./src/Api"
+		"HighComponents": "./src/HighComponents",
+		"Layouts": "./src/Layouts",
+		"Stores": "./src/Stores",
+		"Theme": "./src/Theme",
+		"Utility": "./src/Utility"
 	},
 	"dependencies": {
 		"@andrew-r-king/react-kitchen": "^0.1.27",
@@ -23,6 +28,9 @@
 		"styled-components": "^5.3.0"
 	},
 	"devDependencies": {
+		"@babel/core": "^7.14.8",
+		"@babel/plugin-proposal-class-properties": "^7.14.5",
+		"@babel/plugin-proposal-decorators": "^7.14.5",
 		"@types/json-schema": "^7.0.8",
 		"@types/prismjs": "^1.16.6",
 		"@types/react": "17.0.14",

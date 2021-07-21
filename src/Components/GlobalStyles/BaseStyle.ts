@@ -11,7 +11,6 @@ export const BaseStyle = createGlobalStyle`
         font-family: Helvetica,Arial;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        background-color: #fff;
     }
 
     code {

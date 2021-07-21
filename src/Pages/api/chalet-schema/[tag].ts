@@ -3,7 +3,7 @@ import { Optional } from "@andrew-r-king/react-kitchen";
 import { ChaletSchema } from "Api";
 import { ApiReq, ApiRes } from "Utility";
 
-const handler = async (req: ApiReq, res: ApiRes<ChaletSchema>): Promise<void> => {
+const handler = async (req: ApiReq, res: ApiRes<ChaletSchema | Error>): Promise<void> => {
 	try {
 		const { tag } = req.query;
 
@@ -28,7 +28,9 @@ const handler = async (req: ApiReq, res: ApiRes<ChaletSchema>): Promise<void> =>
 			schema,
 		});
 	} catch (err) {
-		res.status(500);
+		res.status(500).json({
+			...err,
+		});
 	}
 };
 
