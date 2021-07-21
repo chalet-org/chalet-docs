@@ -9,17 +9,20 @@ import { BaseStyle, SchemaDocNode, Code } from "Components";
 
 type Props = ServerProps<ChaletSchema>;
 
-const Home = ({ schema, error }: Props) => {
-	// console.log(schema);
-	const cppText = `void myFunction() {
+const cppText = `void myFunction() {
     MyClass inst;
+    inst.thing = 4;
     inst.doThing();
 }`;
-	const jsonText = `{
+
+const jsonText = `{
     "key": "value",
     "isTrue": true,
     "index": 1
 }`;
+
+const Home = ({ schema, error }: Props) => {
+	// console.log(schema);
 	return (
 		<>
 			<Head>
@@ -60,7 +63,9 @@ const Home = ({ schema, error }: Props) => {
 
 const Styles = styled.main`
 	padding: 1rem;
-	white-space: pre;
+	white-space: pre-wrap;
+	background-color: #111111;
+	color: #d9d9d9;
 `;
 
 export const getStaticProps = handleStaticProps(() => docsApi.getChaletSchema());

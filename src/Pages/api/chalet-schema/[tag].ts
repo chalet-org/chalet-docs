@@ -9,7 +9,7 @@ const handler = async (req: ApiReq, res: ApiRes<ChaletSchema>): Promise<void> =>
 
 		// TODO: validate if tag is "main" or "v*.*.*"
 
-		const url = `https://raw.githubusercontent.com/chalet-org/chalet-dev/${tag}/schema/chalet-settings.schema.json`;
+		const url = `https://raw.githubusercontent.com/chalet-org/chalet-dev/${tag}/schema/chalet.schema.json`;
 		const token: Optional<string> = process.env.GITHUB_TOKEN ?? null;
 		if (token === null) {
 			throw new Error("Github Token not found");
@@ -20,11 +20,12 @@ const handler = async (req: ApiReq, res: ApiRes<ChaletSchema>): Promise<void> =>
 				Authorization: "token " + token,
 			},
 		});
-		const blob = await response.blob();
-		const schema = await blob.text();
+		// const blob = await response.blob();
+		// const schema = await blob.text();
+		const schema = await response.json();
 
 		res.status(200).json({
-			schema: JSON.parse(schema),
+			schema,
 		});
 	} catch (err) {
 		res.status(500);
