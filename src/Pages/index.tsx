@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 
 import { docsApi } from "Api";
 import { handleStaticProps } from "Utility";

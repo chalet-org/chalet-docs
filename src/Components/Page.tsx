@@ -1,7 +1,7 @@
-import React, { useMemo } from "react";
+import React, { useEffect } from "react";
 import Head from "next/head";
 // import Image from "next/image";
-import styled, { createGlobalStyle } from "styled-components";
+import styled from "styled-components";
 import { useUiStore } from "Stores";
 import { PageThemeType } from "Theme";
 
@@ -11,13 +11,13 @@ type Props = {
 };
 
 const Page = ({ title, children }: Props) => {
-	const { theme } = useUiStore();
+	const { theme, initialize, initialized } = useUiStore();
 
-	const PageBase = createGlobalStyle`
-	body {
-		background-color: ${theme.bodyBackground}
-	}
-	`;
+	useEffect(initialize, []);
+
+	useEffect(() => {
+		document.body.style.backgroundColor = theme.bodyBackground;
+	}, [theme]);
 
 	return (
 		<>
@@ -31,8 +31,7 @@ const Page = ({ title, children }: Props) => {
 				/>
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
-			<PageBase />
-			<Main {...{ ...theme }}>{children}</Main>
+			<Main {...(!initialized ? null : { ...theme })}>{!initialized ? "" : children}</Main>
 			{/*<footer>
 				<a
 					href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
@@ -48,11 +47,14 @@ const Page = ({ title, children }: Props) => {
 
 export { Page };
 
-const Main = styled.main<PageThemeType>`
+const Main = styled.main<Partial<PageThemeType>>`
 	display: block;
 	position: relative;
+	width: calc(100vw - 2rem);
+	min-height: calc(100vh - 2rem);
+	transition: background-color 0.125s linear;
 
 	padding: 1rem;
-	background-color: ${(theme) => theme.background};
-	color: ${(theme) => theme.mainText};
+	background-color: ${(theme) => theme.background ?? "#757575"};
+	color: ${(theme) => theme.mainText ?? "#232323"};
 `;
