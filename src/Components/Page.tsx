@@ -13,7 +13,11 @@ type Props = {
 const Page = ({ title, children }: Props) => {
 	const { theme, initialize, initialized } = useUiStore();
 
-	useEffect(initialize, []);
+	useEffect(() => {
+		if (!initialized) {
+			initialize();
+		}
+	}, [initialize, initialized]);
 
 	useEffect(() => {
 		document.body.style.backgroundColor = theme.bodyBackground;

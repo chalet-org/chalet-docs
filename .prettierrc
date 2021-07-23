@@ -6,6 +6,13 @@
     "semi": true,
     "arrowParens": "always",
     "bracketSpacing": true,
+    "importOrder": [
+        "^[a-z].+$",
+        "^@[a-z].+$",
+        "^[A-Z].+$",
+        "^[\\.\\/].+$"
+    ],
+    "importOrderSeparation": true,
     "jsxBracketSameLine": false,
     "jsxSingleQuote": false,
     "htmlWhiteSpaceSensitivity": "ignore",

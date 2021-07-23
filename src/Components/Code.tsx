@@ -1,28 +1,26 @@
-import React, { useEffect } from "react";
-import styled from "styled-components";
 import Prism from "prismjs";
 import "prismjs/components";
+import React, { useEffect } from "react";
+import styled from "styled-components";
 
-import { CodeThemeType } from "Theme";
 import { useUiStore } from "Stores";
+import { CodeThemeType } from "Theme";
 
-type Props = {
-	text: string;
-	language: string;
-};
+type Props = React.PropsWithChildren<{
+	text?: string;
+	type?: "pre";
+	lang?: string;
+	meta?: string;
+}>;
 
-const Code = ({ text, language }: Props) => {
+const Code = ({ children, text, lang }: Props) => {
 	useEffect(() => {
 		Prism.highlightAll();
 	}, []);
 
 	const { codeTheme } = useUiStore();
 
-	return (
-		<Styles {...{ ...codeTheme }}>
-			<code className={`language-${language}`}>{text}</code>
-		</Styles>
-	);
+	return <Styles {...{ ...codeTheme }}>{text ?? children ?? ""}</Styles>;
 };
 
 export { Code };
