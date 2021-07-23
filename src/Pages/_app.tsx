@@ -1,8 +1,9 @@
-import React from "react";
 import { AppProps } from "next/app";
+import "normalize.css";
+import React from "react";
 
-import { Providers } from "Stores";
 import { BaseStyle } from "Components";
+import { Providers } from "Stores";
 
 const Main = ({ Component, pageProps }: AppProps) => {
 	return (

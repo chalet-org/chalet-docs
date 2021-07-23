@@ -30,7 +30,11 @@ class MyDocument extends Document {
 	render() {
 		return (
 			<Html>
-				<Head />
+				<Head>
+					<meta httpEquiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+					<meta name="description" content="Description" />
+					<link rel="icon" href="/favicon.ico" />
+				</Head>
 				<body>
 					<Main />
 					<NextScript />

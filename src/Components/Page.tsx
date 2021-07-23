@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
 import Head from "next/head";
+import React, { useEffect } from "react";
 // import Image from "next/image";
 import styled from "styled-components";
+
 import { useUiStore } from "Stores";
 import { PageThemeType } from "Theme";
 
@@ -27,13 +28,10 @@ const Page = ({ title, children }: Props) => {
 		<>
 			<Head>
 				<title>{title}</title>
-				<meta httpEquiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-				<meta name="description" content="Description" />
 				<meta
 					name="viewport"
 					content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
 				/>
-				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<Main {...(!initialized ? null : { ...theme })}>{!initialized ? "" : children}</Main>
 			{/*<footer>
@@ -54,7 +52,7 @@ export { Page };
 const Main = styled.main<Partial<PageThemeType>>`
 	display: block;
 	position: relative;
-	width: calc(100vw - 2rem);
+	width: 100%;
 	min-height: calc(100vh - 2rem);
 	transition: background-color 0.125s linear;
 
