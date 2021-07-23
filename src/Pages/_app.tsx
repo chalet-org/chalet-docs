@@ -1,5 +1,4 @@
 import { AppProps } from "next/app";
-import "normalize.css";
 import React from "react";
 
 import { BaseStyle } from "Components";
