@@ -38,15 +38,16 @@ export default MarkdownTest;
 
 export const getStaticPaths = async () => {
 	try {
-		const pathsRaw = await recursiveDirectorySearch("/docs", ["md", "mdx"]);
-		const paths = pathsRaw.map((path: string): string => {
-			const result: string = path.substring(0, path.lastIndexOf("."));
+		const pathsRaw = await recursiveDirectorySearch(path.sep + "docs", ["md", "mdx"]);
+		const paths = pathsRaw.map((inPath: string): string => {
+			let result: string = inPath.substring(0, inPath.lastIndexOf("."));
+			result = result.replaceAll(/\\/g, "/");
 			if (result.endsWith("/index")) {
 				return result.slice(0, -6);
 			}
 			return result;
 		});
-		// console.log(paths);
+		console.log(paths);
 
 		return {
 			fallback: false,
@@ -62,7 +63,7 @@ const getFirstExistingPath = (inPath: string, extensions: string[]): string => {
 	let arr: string[] = [];
 	for (const ext of extensions) {
 		arr.push(path.join(process.cwd(), `${inPath}.${ext}`));
-		arr.push(path.join(process.cwd(), `${inPath}/index.${ext}`));
+		arr.push(path.join(process.cwd(), inPath, `index.${ext}`));
 	}
 	for (const p of arr) {
 		// console.log(p);
@@ -77,9 +78,10 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
 	try {
 		if (!!params) {
 			const { slug: slugRaw } = params;
+			console.log("slugRaw:", slugRaw);
 
-			const slug = typeof slugRaw === "string" ? slugRaw : slugRaw?.join("/") ?? "";
-			const filename: string = getFirstExistingPath(`/docs/${slug}`, ["mdx", "md"]);
+			const slug = typeof slugRaw === "string" ? slugRaw : slugRaw?.join(path.sep) ?? "";
+			const filename: string = getFirstExistingPath(path.join("docs", slug), ["mdx", "md"]);
 			// console.log("filename:", filename);
 			if (filename.length === 0) {
 				throw new Error(`File not found: ${filename}`);
