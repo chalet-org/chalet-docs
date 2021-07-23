@@ -47,7 +47,7 @@ export const getStaticPaths = async () => {
 			}
 			return result;
 		});
-		console.log(paths);
+		// console.log(paths);
 
 		return {
 			fallback: false,
@@ -78,7 +78,6 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
 	try {
 		if (!!params) {
 			const { slug: slugRaw } = params;
-			console.log("slugRaw:", slugRaw);
 
 			const slug = typeof slugRaw === "string" ? slugRaw : slugRaw?.join(path.sep) ?? "";
 			const filename: string = getFirstExistingPath(path.join("docs", slug), ["mdx", "md"]);
