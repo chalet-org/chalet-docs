@@ -24,6 +24,7 @@ type Props = {
 const components: Dictionary<React.ComponentType<any>> = {
 	a: dynamic.component("Link"),
 	pre: dynamic.component("Code"),
+	blockquote: dynamic.component("BlockQuote"),
 };
 
 const MarkdownTest = ({ meta, markdown }: Props) => {
@@ -79,7 +80,7 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext) => {
 		if (!!params) {
 			const { slug: slugRaw } = params;
 
-			const slug = typeof slugRaw === "string" ? slugRaw : slugRaw?.join(path.sep) ?? "";
+			const slug: string = typeof slugRaw === "string" ? slugRaw : slugRaw?.join(path.sep) ?? "";
 			const filename: string = getFirstExistingPath(path.join("docs", slug), ["mdx", "md"]);
 			// console.log("filename:", filename);
 			if (filename.length === 0) {

@@ -7,28 +7,41 @@ import { useUiStore } from "Stores";
 import { CodeThemeType } from "Theme";
 
 type Props = React.PropsWithChildren<{
-	text?: string;
-	type?: "pre";
 	lang?: string;
-	meta?: string;
 }>;
 
-const Code = ({ children, text, lang }: Props) => {
+const Code = ({ children, ...props }: Props) => {
 	useEffect(() => {
 		Prism.highlightAll();
 	}, []);
 
 	const { codeTheme } = useUiStore();
 
-	return <Styles {...{ ...codeTheme }}>{text ?? children ?? ""}</Styles>;
+	return (
+		<>
+			{React.Children.map(children, (child: any) => {
+				// This is weird, but next-mdx-remote does some funky stuff with the component
+				const lang = props.lang ?? child.props.className.replaceAll(/( |language-)/g, "");
+
+				return (
+					<Styles {...codeTheme} data-lang={lang}>
+						{React.cloneElement(child)}
+					</Styles>
+				);
+			})}
+		</>
+	);
 };
 
 export { Code };
 
 const boldWeight: number = 800;
 
-const Styles = styled.pre<CodeThemeType>`
+type StyleProps = CodeThemeType;
+
+const Styles = styled.pre<StyleProps>`
 	display: block;
+	position: relative;
 	max-height: 24rem;
 	overflow-x: hidden;
 	overflow-y: auto;
@@ -49,6 +62,15 @@ const Styles = styled.pre<CodeThemeType>`
 	margin: 0.5rem 0;
 	padding: 1.25rem;
 	outline: 0;
+
+	&:after {
+		content: attr(data-lang);
+		color: ${(theme) => theme.accent};
+		display: block;
+		position: absolute;
+		top: 0.75rem;
+		right: 1rem;
+	}
 
 	/* Inline code */
 	/*:not(pre) > code[class*="language-"] {

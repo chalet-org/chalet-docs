@@ -3,6 +3,7 @@ import { CodeThemeType } from "./CodeThemeType";
 export const lightCodeTheme: CodeThemeType = {
 	background: "#ffffff",
 	border: "#eeeeee",
+	accent: "#7f83ff",
 	black: "#eeeeee",
 	white: "#0a0a0a",
 	gray: "#7d7d9b",

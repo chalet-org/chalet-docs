@@ -96,4 +96,8 @@ export const BaseStyle = createGlobalStyle`
         color: inherit;
         text-decoration: none;
     }
+
+	.router-progress-bar {
+		z-index: 50;
+	}
 `;

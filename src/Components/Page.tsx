@@ -53,7 +53,7 @@ const Main = styled.main<Partial<PageThemeType>>`
 	display: block;
 	position: relative;
 	width: 100%;
-	min-height: calc(100vh - 2rem);
+	min-height: 100vh;
 	transition: background-color 0.125s linear;
 
 	padding: 1rem;

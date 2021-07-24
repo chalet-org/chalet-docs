@@ -3,6 +3,7 @@ import { CodeThemeType } from "./CodeThemeType";
 export const darkCodeTheme: CodeThemeType = {
 	background: "#0a0a0a",
 	border: "#1d1d1f",
+	accent: "#7f83ff",
 	black: "#0a0a0a",
 	white: "#dedede",
 	gray: "#7d7d9b",

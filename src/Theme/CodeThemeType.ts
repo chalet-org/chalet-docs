@@ -1,6 +1,7 @@
 export type CodeThemeType = {
 	background: string;
 	border: string;
+	accent: string;
 	black: string;
 	white: string;
 	gray: string;

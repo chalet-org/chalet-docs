@@ -19,7 +19,7 @@ const TestLayout = ({ schema }: Props) => {
 				<button onClick={() => setTheme(PageTheme.Light, CodeTheme.Light)}>Light</button>
 				<br />
 				<h2>Schema Reference</h2>
-				<Code lang="json" text={JSON.stringify(schema, undefined, 4)} />
+				{/* <Code lang="json" text={JSON.stringify(schema, undefined, 4)} /> */}
 				<SchemaDocNode name="$root" schema={schema} />
 			</Styles>
 		</Page>

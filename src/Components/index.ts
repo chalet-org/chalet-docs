@@ -1,3 +1,4 @@
+export * from "./BlockQuote";
 export * from "./Code";
 export * from "./GlobalStyles";
 export * from "./Link";
