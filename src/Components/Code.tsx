@@ -1,8 +1,11 @@
 import Prism from "prismjs";
 import "prismjs/components";
 import React, { useEffect } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
+import { Dictionary } from "@andrew-r-king/react-kitchen";
+
+import { globalFonts } from "Components";
 import { useUiStore } from "Stores";
 import { CodeThemeType } from "Theme";
 
@@ -17,41 +20,50 @@ const Code = ({ children, ...props }: Props) => {
 
 	const { codeTheme } = useUiStore();
 
+	return <CodeStyles {...codeTheme}>{children}</CodeStyles>;
+};
+
+const CodePre = ({ children, ...props }: Props) => {
+	useEffect(() => {
+		Prism.highlightAll();
+	}, []);
+
+	const { codeTheme } = useUiStore();
+
 	return (
 		<>
 			{React.Children.map(children, (child: any) => {
 				// This is weird, but next-mdx-remote does some funky stuff with the component
-				const lang = props.lang ?? child.props.className.replaceAll(/( |language-)/g, "");
+				const lang = props.lang ?? child.props?.className.replaceAll(/( |language-)/g, "") ?? "";
 
 				return (
-					<Styles {...codeTheme} data-lang={lang}>
-						{React.cloneElement(child)}
-					</Styles>
+					<PreStyles {...codeTheme} fonts={globalFonts} data-lang={lang}>
+						{child ? React.cloneElement(child) : null}
+					</PreStyles>
 				);
 			})}
 		</>
 	);
 };
 
-export { Code };
+export { Code, CodePre };
 
 const boldWeight: number = 800;
 
-type StyleProps = CodeThemeType;
+type StyleProps = CodeThemeType & {
+	fonts?: Dictionary<string>;
+};
 
-const Styles = styled.pre<StyleProps>`
-	display: block;
+const codeCss = css<StyleProps>`
 	position: relative;
-	max-height: 24rem;
 	overflow-x: hidden;
 	overflow-y: auto;
 	background-color: ${(theme) => theme.background};
 	border: 0.125rem solid ${(theme) => theme.border};
 	border-radius: 0.5rem;
 	color: ${(theme) => theme.white};
-	font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
-	font-size: 0.75rem;
-	font-weight: 300;
+	font-size: 0.875rem;
+	font-weight: 400;
 	white-space: pre;
 	word-spacing: normal;
 	word-break: normal;
@@ -59,18 +71,7 @@ const Styles = styled.pre<StyleProps>`
 	line-height: 1.5;
 	tab-size: 4;
 	hyphens: none;
-	margin: 0.5rem 0;
-	padding: 1.25rem;
 	outline: 0;
-
-	&:after {
-		content: attr(data-lang);
-		color: ${(theme) => theme.accent};
-		display: block;
-		position: absolute;
-		top: 0.75rem;
-		right: 1rem;
-	}
 
 	/* Inline code */
 	/*:not(pre) > code[class*="language-"] {
@@ -86,7 +87,7 @@ const Styles = styled.pre<StyleProps>`
 
 		&.important,
 		&.bold {
-			font-weight: bold;
+			font-weight: 800;
 		}
 		&.italic {
 			font-style: italic;
@@ -192,5 +193,38 @@ const Styles = styled.pre<StyleProps>`
 	}
 	.style .token.string {
 		color: ${(theme) => theme.white};
+	}
+`;
+
+const CodeStyles = styled.code<StyleProps>`
+	display: inline;
+	padding: 0 0.5rem;
+	padding-top: 0.325rem;
+	padding-bottom: 0.175rem;
+	margin: 0 0.25rem;
+	font-size: 0.75rem;
+	vertical-align: middle;
+
+	${codeCss}
+
+	color: ${(theme) => theme.blue};
+`;
+
+const PreStyles = styled.pre<StyleProps>`
+	display: block;
+	max-height: 24rem;
+	margin: 0.75rem 0;
+	padding: 1.25rem;
+
+	${codeCss}
+
+	&:after {
+		content: attr(data-lang);
+		color: ${(theme) => theme.accent};
+		display: block;
+		position: absolute;
+		top: 0.75rem;
+		right: 1rem;
+		font-family: ${(props) => props.fonts?.header ?? "inherit"};
 	}
 `;

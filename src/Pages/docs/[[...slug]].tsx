@@ -23,7 +23,8 @@ type Props = {
 
 const components: Dictionary<React.ComponentType<any>> = {
 	a: dynamic.component("Link"),
-	pre: dynamic.component("Code"),
+	pre: dynamic.component("CodePre"),
+	inlineCode: dynamic.component("Code"),
 	blockquote: dynamic.component("BlockQuote"),
 	ThemeToggle: dynamic.component("ThemeToggle"),
 };

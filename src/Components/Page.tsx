@@ -54,7 +54,6 @@ const Main = styled.main<Partial<PageThemeType>>`
 	position: relative;
 	width: 100%;
 	min-height: 100vh;
-	transition: background-color 0.125s linear;
 
 	padding: 1rem;
 	background-color: ${(theme) => theme.background ?? "#757575"};

@@ -21,7 +21,7 @@ export { BlockQuote };
 
 const Styles = styled.div<CodeThemeType>`
 	display: block;
-	margin: 0;
+	margin: 0.75rem 0;
 	padding: 0;
 	background-color: ${(theme) => theme.background};
 	border: 0.125rem solid ${(theme) => theme.border};
@@ -29,12 +29,18 @@ const Styles = styled.div<CodeThemeType>`
 	overflow: hidden;
 
 	> blockquote {
-		padding: 1rem;
-		padding-left: 1.5rem;
+		padding: 0.75rem;
+		padding-left: 1.25rem;
 		border-left: 0.25rem solid ${(theme) => theme.accent};
 
+		> p {
+			font-size: 1.25rem;
+			padding-top: 0.25rem;
+			padding-bottom: 0.5rem;
+		}
+
 		> .quote {
-			margin: 1rem 0;
+			margin: 0.375rem 0;
 			margin-left: -0.5rem;
 		}
 	}
