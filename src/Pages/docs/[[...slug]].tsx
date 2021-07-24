@@ -25,6 +25,7 @@ const components: Dictionary<React.ComponentType<any>> = {
 	a: dynamic.component("Link"),
 	pre: dynamic.component("Code"),
 	blockquote: dynamic.component("BlockQuote"),
+	ThemeToggle: dynamic.component("ThemeToggle"),
 };
 
 const MarkdownTest = ({ meta, markdown }: Props) => {
