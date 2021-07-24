@@ -31,7 +31,7 @@ const Styles = styled.pre<CodeThemeType>`
 	display: block;
 	max-height: 24rem;
 	overflow-x: hidden;
-	overflow-y: scroll;
+	overflow-y: auto;
 	background-color: ${(theme) => theme.background};
 	border: 0.125rem solid ${(theme) => theme.border};
 	border-radius: 0.5rem;
