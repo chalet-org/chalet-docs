@@ -1,4 +1,5 @@
-import { GetStaticPropsResult } from "next";
+import { GetStaticPropsContext, GetStaticPropsResult } from "next";
+
 import { Optional } from "@andrew-r-king/react-kitchen";
 
 export type ServerError = {
@@ -11,12 +12,12 @@ export type ServerProps<T extends object> = T & {
 };
 
 export function handleStaticProps<U extends object, T extends object = {}>(
-	func: (...args: any[]) => Promise<T>,
+	func: (ctx?: GetStaticPropsContext) => Promise<T>,
 	data: U = {} as U
-): () => Promise<GetStaticPropsResult<ServerProps<T & U>>> {
-	return async () => {
+): (ctx?: GetStaticPropsContext) => Promise<GetStaticPropsResult<ServerProps<T & U>>> {
+	return async (ctx?: GetStaticPropsContext) => {
 		try {
-			const res = await func();
+			const res = await func(ctx);
 
 			return {
 				props: {

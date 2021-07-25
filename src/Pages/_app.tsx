@@ -8,7 +8,9 @@ import ProgressBar from "@badrap/bar-of-progress";
 import { BaseStyle } from "Components";
 import { Providers, useUiStore } from "Stores";
 
-const Main = ({ Component, pageProps }: AppProps) => {
+type Props = AppProps;
+
+const Main = ({ Component, pageProps }: Props) => {
 	const [progress, setProgress] = useState<Optional<ProgressBar>>(null);
 	const { codeTheme } = useUiStore();
 
@@ -18,15 +20,18 @@ const Main = ({ Component, pageProps }: AppProps) => {
 			Router.events.off("routeChangeComplete", progress.finish);
 			Router.events.off("routeChangeError", progress.finish);
 		}
+
 		const prog = new ProgressBar({
 			size: "0.25rem",
 			color: codeTheme.accent,
 			className: "router-progress-bar",
 			delay: 100,
 		});
+
 		Router.events.on("routeChangeStart", prog.start);
 		Router.events.on("routeChangeComplete", prog.finish);
 		Router.events.on("routeChangeError", prog.finish);
+
 		setProgress(prog);
 	}, [codeTheme]);
 

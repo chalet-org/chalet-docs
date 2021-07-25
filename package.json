@@ -13,6 +13,7 @@
 		"Api": "./src/Api",
 		"Components": "./src/Components",
 		"HighComponents": "./src/HighComponents",
+		"Hooks": "./src/Hooks",
 		"Layouts": "./src/Layouts",
 		"Stores": "./src/Stores",
 		"Theme": "./src/Theme",

@@ -1,17 +1,17 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Page } from "Components";
+import { NavProps, Page } from "Components";
 import { ServerError } from "Utility";
 
-type Props = {
+type Props = NavProps & {
 	error: ServerError;
 	children?: React.ReactNode;
 };
 
-const ServerErrorLayout = ({ error, children }: Props) => {
+const ServerErrorLayout = ({ error, children, ...navProps }: Props) => {
 	return (
-		<Page title="500: Internal Server Error">
+		<Page title="500: Internal Server Error" {...navProps}>
 			<Styles>
 				<h3>500: Internal Server Error</h3>
 				<div>Message:</div>

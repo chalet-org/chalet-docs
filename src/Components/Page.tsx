@@ -3,16 +3,16 @@ import React, { useEffect } from "react";
 // import Image from "next/image";
 import styled from "styled-components";
 
-import { SideNavigation } from "Components";
+import { NavProps, SideNavigation } from "Components";
 import { useUiStore } from "Stores";
 import { PageThemeType } from "Theme";
 
-type Props = {
+type Props = NavProps & {
 	children?: React.ReactNode;
 	title: string;
 };
 
-const Page = ({ title, children }: Props) => {
+const Page = ({ title, children, ...navProps }: Props) => {
 	const { theme, initialize, initialized, navWidth, navOpen } = useUiStore();
 
 	useEffect(() => {
@@ -34,7 +34,7 @@ const Page = ({ title, children }: Props) => {
 					content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
 				/>
 			</Head>
-			<SideNavigation />
+			<SideNavigation {...navProps} />
 			<Main {...(!initialized ? null : { ...theme })} {...{ navWidth }} className={navOpen ? "nav-open" : ""}>
 				<Container>{!initialized ? "" : children}</Container>
 			</Main>
