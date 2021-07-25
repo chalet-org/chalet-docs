@@ -1,3 +1,4 @@
+import copy from "copy-to-clipboard";
 import Prism from "prismjs";
 import "prismjs/components";
 import React, { useEffect } from "react";
@@ -20,7 +21,18 @@ const Code = ({ children, ...props }: Props) => {
 
 	const { codeTheme } = useUiStore();
 
-	return <CodeStyles {...codeTheme}>{children}</CodeStyles>;
+	return (
+		<CodeStyles
+			{...codeTheme}
+			onClick={() => {
+				if (children) {
+					copy(`${children}`);
+				}
+			}}
+		>
+			{children}
+		</CodeStyles>
+	);
 };
 
 const CodePre = ({ children, ...props }: Props) => {
@@ -214,7 +226,7 @@ const PreStyles = styled.pre<StyleProps>`
 	display: block;
 	max-height: 24rem;
 	margin: 0.75rem 0;
-	padding: 1.25rem;
+	padding: 1rem 1.25rem;
 
 	${codeCss}
 
@@ -224,7 +236,8 @@ const PreStyles = styled.pre<StyleProps>`
 		display: block;
 		position: absolute;
 		top: 0.75rem;
-		right: 1rem;
-		font-family: ${(props) => props.fonts?.header ?? "inherit"};
+		right: 1.25rem;
+		font-family: ${(props) => props.fonts?.paragraph ?? "inherit"};
+		font-size: 1rem;
 	}
 `;

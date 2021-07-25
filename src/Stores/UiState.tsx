@@ -21,10 +21,14 @@ class UiState extends BaseState {
 	codeThemeID: CodeTheme = CodeTheme.Dark;
 	codeTheme: CodeThemeType = darkCodeTheme;
 
+	navOpen: boolean = false;
+	navWidth: string = "20rem";
+
 	@Action
 	initialize = () => {
 		this.setPageTheme(LocalStorage.get<PageTheme>("themeId", PageTheme.Dark));
 		this.setCodeTheme(LocalStorage.get<CodeTheme>("codeThemeID", CodeTheme.Dark));
+		this.navOpen = LocalStorage.get("navOpen", "true") == "true";
 		this.initialized = true;
 	};
 
@@ -68,6 +72,14 @@ class UiState extends BaseState {
 				throw new Error("Code theme not implemented");
 		}
 	};
+
+	@Action
+	setNavOpen = (inValue: boolean) => {
+		this.navOpen = inValue;
+		LocalStorage.set("navOpen", this.navOpen ? "true" : "false");
+	};
+
+	toggleNavigation = () => this.setNavOpen(!this.navOpen);
 }
 
 export { UiState };

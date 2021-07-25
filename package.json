@@ -21,6 +21,7 @@
 	"dependencies": {
 		"@andrew-r-king/react-kitchen": "^0.1.27",
 		"@badrap/bar-of-progress": "^0.1.2",
+		"copy-to-clipboard": "^3.3.1",
 		"gray-matter": "^4.0.3",
 		"next": "11.0.1",
 		"next-mdx-remote": "^3.0.4",
@@ -37,6 +38,7 @@
 		"@babel/plugin-proposal-decorators": "^7.14.5",
 		"@trivago/prettier-plugin-sort-imports": "^2.0.2",
 		"@types/json-schema": "^7.0.8",
+		"@types/node": "^16.4.2",
 		"@types/prismjs": "^1.16.6",
 		"@types/react": "17.0.14",
 		"@types/styled-components": "^5.1.11",

@@ -12,7 +12,7 @@ class LocalStorage {
 		return typeof window !== "undefined";
 	};
 
-	static get = <Value extends string>(key: string, defaultValue: Value): Value => {
+	static get = <Value extends string = string>(key: string, defaultValue: Value): Value => {
 		const item = LocalStorage.storage().getItem(key);
 		if (item === null) {
 			// console.log(`item '${key}' is: null`);
@@ -24,7 +24,7 @@ class LocalStorage {
 		return item as Value;
 	};
 
-	static set = <Value extends string>(key: string, value: Value): boolean => {
+	static set = <Value extends string = string>(key: string, value: Value): boolean => {
 		try {
 			LocalStorage.storage().setItem(key, value);
 			return true;

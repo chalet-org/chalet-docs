@@ -1,6 +1,6 @@
 import { createGlobalStyle, css } from "styled-components";
 
-import { globalFonts } from "./Fonts";
+import { fontImports, globalFonts } from "./Fonts";
 
 const cssReset = css`
 	*,
@@ -72,28 +72,11 @@ const cssReset = css`
 
 export const BaseStyle = createGlobalStyle`
     ${cssReset}
-
-	@font-face {
-		font-family: 'Courier Prime Code';
-		src: url('/fonts/CourierPrimeCode-Italic.woff2') format('woff2');
-		font-weight: normal;
-		font-style: italic;
-		font-display: swap;
-	}
-
-	@font-face {
-		font-family: 'Courier Prime Code';
-		src: url('/fonts/CourierPrimeCode-Regular.woff2') format('woff2');
-		font-weight: normal;
-		font-style: normal;
-		font-display: swap;
-	}
-
-
+	${fontImports}
 
     html {
         font-size: 16px;
-        background-color: #757575;
+        background-color: #111111;
     }
 
     body {
@@ -101,7 +84,7 @@ export const BaseStyle = createGlobalStyle`
         padding: 0;
 		font-family: ${globalFonts.paragraph};
 		font-size: 1.125rem;
-		line-height: 1.375;
+		line-height: 1.625;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
     }
@@ -117,8 +100,8 @@ export const BaseStyle = createGlobalStyle`
 		letter-spacing: 0.625rem;
 		word-spacing: 0.25rem;
         margin: 0;
-		padding-top: 0.25rem;
-		padding-bottom: 0.75rem;
+		padding-top: 0.5rem;
+		padding-bottom: 1rem;
     }
 
 	h1 {
@@ -152,6 +135,11 @@ export const BaseStyle = createGlobalStyle`
         color: inherit;
         text-decoration: none;
     }
+
+	button {
+		outline: 0;
+		border: none;
+	}
 
 	.router-progress-bar {
 		z-index: 50;

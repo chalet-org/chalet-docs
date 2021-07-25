@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 // import Image from "next/image";
 import styled from "styled-components";
 
+import { SideNavigation } from "Components";
 import { useUiStore } from "Stores";
 import { PageThemeType } from "Theme";
 
@@ -12,7 +13,7 @@ type Props = {
 };
 
 const Page = ({ title, children }: Props) => {
-	const { theme, initialize, initialized } = useUiStore();
+	const { theme, initialize, initialized, navWidth, navOpen } = useUiStore();
 
 	useEffect(() => {
 		if (!initialized) {
@@ -33,7 +34,10 @@ const Page = ({ title, children }: Props) => {
 					content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
 				/>
 			</Head>
-			<Main {...(!initialized ? null : { ...theme })}>{!initialized ? "" : children}</Main>
+			<SideNavigation />
+			<Main {...(!initialized ? null : { ...theme })} {...{ navWidth }} className={navOpen ? "nav-open" : ""}>
+				<Container>{!initialized ? "" : children}</Container>
+			</Main>
 			{/*<footer>
 				<a
 					href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
@@ -49,13 +53,32 @@ const Page = ({ title, children }: Props) => {
 
 export { Page };
 
-const Main = styled.main<Partial<PageThemeType>>`
+type NavBarProps = {
+	navWidth: string;
+};
+
+const Main = styled.main<Partial<PageThemeType> & NavBarProps>`
+	display: block;
+	position: absolute;
+	min-height: 100vh;
+	top: 0;
+	right: 0;
+	bottom: auto;
+	left: 0;
+	transition: left 0.125s linear;
+
+	background-color: ${(theme) => theme.background ?? "#fde2e2"};
+	color: ${(theme) => theme.mainText ?? "#232323"};
+
+	&.nav-open {
+		left: ${(props) => props.navWidth};
+	}
+`;
+
+const Container = styled.div`
 	display: block;
 	position: relative;
-	width: 100%;
-	min-height: 100vh;
-
+	max-width: 54rem;
 	padding: 1rem;
-	background-color: ${(theme) => theme.background ?? "#757575"};
-	color: ${(theme) => theme.mainText ?? "#232323"};
+	margin: 0 auto;
 `;
