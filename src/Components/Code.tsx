@@ -35,7 +35,21 @@ const Code = ({ children, ...props }: Props) => {
 	);
 };
 
-const CodePre = ({ children, ...props }: Props) => {
+const CodePre = ({ children, lang }: Props) => {
+	useEffect(() => {
+		Prism.highlightAll();
+	}, []);
+
+	const { codeTheme } = useUiStore();
+
+	return (
+		<PreStyles {...codeTheme} fonts={globalFonts} data-lang={lang}>
+			<code className={`language-${lang}`}>{children}</code>
+		</PreStyles>
+	);
+};
+
+const CodePreFromMarkdown = ({ children, ...props }: Props) => {
 	useEffect(() => {
 		Prism.highlightAll();
 	}, []);
@@ -58,7 +72,7 @@ const CodePre = ({ children, ...props }: Props) => {
 	);
 };
 
-export { Code, CodePre };
+export { Code, CodePre, CodePreFromMarkdown };
 
 const boldWeight: number = 800;
 
@@ -68,8 +82,7 @@ type StyleProps = CodeThemeType & {
 
 const codeCss = css<StyleProps>`
 	position: relative;
-	overflow-x: hidden;
-	overflow-y: auto;
+	overflow: auto;
 	background-color: ${(theme) => theme.background};
 	border: 0.125rem solid ${(theme) => theme.border};
 	border-radius: 0.5rem;
@@ -224,7 +237,7 @@ const CodeStyles = styled.code<StyleProps>`
 
 const PreStyles = styled.pre<StyleProps>`
 	display: block;
-	max-height: 24rem;
+	/* max-height: 24rem; */
 	margin: 0.75rem 0;
 	padding: 1rem 1.25rem;
 

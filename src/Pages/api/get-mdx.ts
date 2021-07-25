@@ -33,7 +33,6 @@ const handler = async (
 			throw new Error("Invalid query sent in request");
 		}
 		const filename: string = getFirstExistingPath(path.join("mdpages", req.query.slug), ["mdx", "md"]);
-		console.log(filename);
 		if (filename.length === 0) {
 			throw new Error(`File not found: ${filename}`);
 		}
@@ -45,7 +44,9 @@ const handler = async (
 			encoding: "utf8",
 		});
 		const { data: meta, content } = matter(fileContent);
-		const mdx: MDXRemoteSerializeResult<Record<string, unknown>> = await serialize(content);
+		const mdx: MDXRemoteSerializeResult<Record<string, unknown>> = await serialize(content, {
+			target: ["esnext"],
+		});
 		const navProps: MDXResult = {
 			meta: {
 				...meta,

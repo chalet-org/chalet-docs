@@ -2,18 +2,18 @@ import React from "react";
 import styled from "styled-components";
 
 import { ChaletSchema } from "Api";
-import { Code, NavProps, Page, SchemaDocNode } from "Components";
+import { CodePre, Page, SchemaDocNode } from "Components";
 
-type Props = NavProps & ChaletSchema;
+type Props = ChaletSchema;
 
-const TestLayout = ({ schema, ...navProps }: Props) => {
+const TestLayout = ({ schema }: Props) => {
 	return (
-		<Page title="Sandbox for all of the things" {...navProps}>
+		<Page title="Sandbox for all of the things">
 			<Styles>
-				Main
+				<h1>Home</h1>
 				<br />
-				<h2>Schema Reference</h2>
-				{/* <Code lang="json" text={JSON.stringify(schema, undefined, 4)} /> */}
+				<h3>Schema Reference</h3>
+				<CodePre lang="json">{JSON.stringify(schema, undefined, 2)}</CodePre>
 				<SchemaDocNode name="$root" schema={schema} />
 			</Styles>
 		</Page>

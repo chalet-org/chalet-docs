@@ -1,20 +1,18 @@
 import React from "react";
 
 import { docsApi } from "Api";
-import { NavProps } from "Components";
 import { ServerErrorLayout } from "Layouts";
 import { handleStaticProps } from "Utility";
 
-type Props = NavProps;
+type Props = {};
 
-const ServerErrorPage = ({ ...navProps }: Props) => {
+const ServerErrorPage = (props: Props) => {
 	return (
 		<ServerErrorLayout
 			error={{
 				message: "Internal Server Error",
 				status: 500,
 			}}
-			{...navProps}
 		/>
 	);
 };

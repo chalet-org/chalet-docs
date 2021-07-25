@@ -7,26 +7,27 @@ import styled from "styled-components";
 import { Dictionary } from "@andrew-r-king/react-kitchen";
 
 import { docsApi, MDXResult } from "Api";
-import { NavProps, Page } from "Components";
+import { Page } from "Components";
 import { dynamic, handleStaticProps, recursiveDirectorySearch } from "Utility";
 
-type Props = NavProps &
-	MDXResult & {
-		children?: React.ReactNode;
-	};
+type Props = MDXResult & {
+	children?: React.ReactNode;
+};
 
 const components: Dictionary<React.ComponentType<any>> = {
 	a: dynamic.component("Link"),
-	pre: dynamic.component("CodePre"),
+	pre: dynamic.component("CodePreFromMarkdown"),
 	inlineCode: dynamic.component("Code"),
 	blockquote: dynamic.component("BlockQuote"),
 	ThemeToggle: dynamic.component("ThemeToggle"),
 };
 
-const MarkdownTest = ({ meta, mdx, children, ...navProps }: Props) => {
+const MarkdownTest = ({ meta, mdx, children }: Props) => {
 	return (
-		<Page title={meta.title} {...navProps}>
-			<Styles>{!!mdx ? <MDXRemote {...mdx} components={components} /> : <div>Error 🙀</div>}</Styles>
+		<Page title={meta.title}>
+			<Styles>
+				<MDXRemote {...mdx} components={components} />
+			</Styles>
 		</Page>
 	);
 };

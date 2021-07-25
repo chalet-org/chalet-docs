@@ -10,7 +10,8 @@ import { useUiStore } from "Stores";
 import { PageThemeType } from "Theme";
 import { dynamic } from "Utility";
 
-const components: Dictionary<React.ComponentType<any>> = {
+const components: Record<string, React.ReactNode> = {
+	p: dynamic.component("Stub"),
 	a: dynamic.component("Link"),
 };
 
@@ -33,6 +34,10 @@ const SideNavigation = ({ mdxNav }: Props) => {
 		},
 		[toggleNavigation]
 	);
+
+	if (!initialized) {
+		return null;
+	}
 	return (
 		<>
 			<SidebarToggle
@@ -43,12 +48,8 @@ const SideNavigation = ({ mdxNav }: Props) => {
 			>
 				Toggle
 			</SidebarToggle>
-			<StyledAside
-				className={`sidebar ${navOpen ? "open" : ""}`}
-				width={navWidth}
-				{...(!initialized ? null : { ...theme })}
-			>
-				{!!mdxNav ? <MDXRemote {...mdxNav} components={components} /> : ""}
+			<StyledAside className={`sidebar ${navOpen ? "open" : ""}`} width={navWidth} {...theme}>
+				<MDXRemote {...mdxNav} components={components} />
 			</StyledAside>
 		</>
 	);
@@ -69,7 +70,8 @@ type AsideProps = {
 };
 
 const StyledAside = styled.aside<Partial<PageThemeType> & AsideProps>`
-	display: block;
+	display: flex;
+	flex-direction: column;
 	position: fixed;
 	bottom: 0;
 	top: 0;
@@ -81,11 +83,6 @@ const StyledAside = styled.aside<Partial<PageThemeType> & AsideProps>`
 
 	background-color: ${(theme) => theme.bodyBackground ?? "#000000"};
 	color: ${(theme) => theme.mainText ?? "#232323"};
-
-	> p {
-		display: flex;
-		flex-direction: column;
-	}
 
 	&.open {
 		left: 0;

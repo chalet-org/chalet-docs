@@ -6,4 +6,5 @@ export * from "./Link";
 export * from "./Page";
 export * from "./SchemaDocNode";
 export * from "./SideNavigation";
+export * from "./Stub";
 export * from "./ThemeToggle";

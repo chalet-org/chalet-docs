@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 
-import { NavProps, Page } from "Components";
+import { Page } from "Components";
 
-type Props = NavProps & {};
+type Props = {};
 
-const NotFoundLayout = ({ ...navProps }: Props) => {
+const NotFoundLayout = (props: Props) => {
 	return (
-		<Page title="404: Page Not Found" {...navProps}>
+		<Page title="404: Page Not Found">
 			<Styles>
 				<h3>404: Page Not Found</h3>
 			</Styles>
