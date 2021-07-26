@@ -22,6 +22,9 @@
 				"languages": [
 					"json",
 					"bash",
+					"javascript",
+					"typescript",
+					"yaml",
 					"c",
 					"cpp"
 				],

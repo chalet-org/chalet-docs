@@ -1,8 +1,7 @@
 import copy from "copy-to-clipboard";
 import Prism from "prismjs";
 import "prismjs/components";
-import React, { useEffect } from "react";
-import { renderToString } from "react-dom/server";
+import React from "react";
 import styled, { css } from "styled-components";
 
 import { Dictionary } from "@andrew-r-king/react-kitchen";
@@ -32,7 +31,11 @@ const Code = ({ children, ...props }: Props) => {
 	);
 };
 
-const CodePre = ({ children, lang }: Props) => {
+type CodeProps = Props & {
+	children: string;
+};
+
+const CodePre = ({ children, lang }: CodeProps) => {
 	const { codeTheme } = useUiStore();
 
 	return (
@@ -40,7 +43,9 @@ const CodePre = ({ children, lang }: Props) => {
 			<code
 				className={`language-${lang}`}
 				dangerouslySetInnerHTML={{
-					__html: Prism.highlight((children as string) ?? "", Prism.languages[lang], lang),
+					__html: !!Prism.languages[lang]
+						? Prism.highlight(children ?? "", Prism.languages[lang], lang)
+						: children,
 				}}
 			/>
 		</PreStyles>
@@ -50,27 +55,24 @@ const CodePre = ({ children, lang }: Props) => {
 const CodePreFromMarkdown = ({ children, ...props }: Props) => {
 	const { codeTheme } = useUiStore();
 
-	console.log("children", children);
-
 	return (
 		<>
 			{React.Children.map(children, (child: any) => {
 				// This is weird, but next-mdx-remote does some funky stuff with the component
 				const lang = props.lang ?? child.props?.className.replaceAll(/( |language-)/g, "") ?? "";
 
-				console.log("lang", lang);
-				// console.log("clone", child);
-
 				return (
 					<PreStyles {...codeTheme} fonts={globalFonts} data-lang={lang}>
 						<code
 							className={`language-${lang}`}
 							dangerouslySetInnerHTML={{
-								__html: Prism.highlight(
-									(child.props?.children as string) ?? "",
-									Prism.languages[lang],
-									lang
-								),
+								__html: !!Prism.languages[lang]
+									? Prism.highlight(
+											(child.props?.children as string) ?? "",
+											Prism.languages[lang],
+											lang
+									  )
+									: child.props?.children,
 							}}
 						/>
 					</PreStyles>
@@ -131,7 +133,7 @@ const codeCss = css<StyleProps>`
 		}
 
 		&.atrule {
-			color: ${(theme) => theme.lightYellow};
+			color: ${(theme) => theme.blue};
 		}
 		&.attr-name {
 			color: ${(theme) => theme.green};
@@ -144,7 +146,7 @@ const codeCss = css<StyleProps>`
 			font-weight: ${boldWeight};
 		}
 		&.builtin {
-			color: ${(theme) => theme.green};
+			color: ${(theme) => theme.cyan};
 		}
 		&.cdata {
 			color: ${(theme) => theme.gray};
