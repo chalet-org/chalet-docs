@@ -1,8 +1,8 @@
-import { GetStaticPropsContext } from "next";
+import { NextPageContext } from "next";
 import React from "react";
 
+import { docsApi } from "Api";
 import { NotFoundLayout } from "Layouts";
-import { markdownFiles } from "Server/MarkdownFiles";
 
 type Props = {};
 
@@ -10,12 +10,10 @@ const NotFoundPage = (props: Props) => {
 	return <NotFoundLayout />;
 };
 
-export const getStaticProps = async (ctx: GetStaticPropsContext) => {
-	const navProps = await markdownFiles.getNavBar();
+NotFoundPage.getInitialProps = async (ctx: NextPageContext) => {
+	const navProps = await docsApi.getNavBar();
 	return {
-		props: {
-			...navProps,
-		},
+		...navProps,
 	};
 };
 

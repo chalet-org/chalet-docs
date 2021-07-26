@@ -1,18 +1,22 @@
-import { GetStaticPropsContext } from "next";
+import { GetStaticPropsContext, NextPageContext } from "next";
 import { MDXRemote } from "next-mdx-remote";
+import { useRouter } from "next/router";
 import path from "path";
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 
 import { Dictionary } from "@andrew-r-king/react-kitchen";
 
+import { docsApi, MDXResult } from "Api";
 import { Page } from "Components";
-import { markdownFiles, MDXResult } from "Server/MarkdownFiles";
-import { dynamic, recursiveDirectorySearch } from "Utility";
+import { ServerErrorLayout } from "Layouts";
+import { dynamic, handleInitialProps, recursiveDirectorySearch, ServerProps } from "Utility";
 
-type Props = MDXResult & {
-	children?: React.ReactNode;
-};
+type Props = ServerProps<
+	MDXResult & {
+		children?: React.ReactNode;
+	}
+>;
 
 const components: Dictionary<React.ComponentType<any>> = {
 	a: dynamic.component("Link"),
@@ -22,7 +26,19 @@ const components: Dictionary<React.ComponentType<any>> = {
 	ThemeToggle: dynamic.component("ThemeToggle"),
 };
 
-const MarkdownPage = ({ meta, mdx, children }: Props) => {
+const MarkdownPage = ({ meta, mdx, error, children }: Props) => {
+	const router = useRouter();
+
+	useEffect(() => {
+		if (!!error) {
+			router.replace("/404", router.asPath, {
+				shallow: true,
+			});
+		}
+	}, [error]);
+
+	if (!!error) return null;
+
 	return (
 		<Page title={meta.title}>
 			<Styles>
@@ -32,11 +48,27 @@ const MarkdownPage = ({ meta, mdx, children }: Props) => {
 	);
 };
 
+MarkdownPage.getInitialProps = handleInitialProps(async (ctx) => {
+	try {
+		const navProps = await docsApi.getNavBar();
+		const { slug: slugRaw } = ctx.query;
+		const slug: string = path.join("docs", typeof slugRaw === "string" ? slugRaw : slugRaw?.join(path.sep) ?? "");
+		const { meta, mdx } = await docsApi.getMdx(slug);
+		return {
+			...navProps,
+			meta,
+			mdx,
+		};
+	} catch (err) {
+		throw err;
+	}
+});
+
 export default MarkdownPage;
 
-const mdpages = "mdpages";
+// const mdpages = "mdpages";
 
-export async function getStaticPaths() {
+/*export const getStaticPaths = async () => {
 	try {
 		const pathsRaw = await recursiveDirectorySearch(`${mdpages}/docs`, ["md", "mdx"]);
 		const paths = pathsRaw.map((inPath: string): string => {
@@ -57,7 +89,7 @@ export async function getStaticPaths() {
 		console.error(err.message);
 		throw err;
 	}
-}
+};
 
 export const getStaticProps = async (ctx: GetStaticPropsContext) => {
 	if (!ctx || !ctx.params) {
@@ -76,7 +108,7 @@ export const getStaticProps = async (ctx: GetStaticPropsContext) => {
 			mdx,
 		},
 	};
-};
+};*/
 
 const Styles = styled.div`
 	display: block;

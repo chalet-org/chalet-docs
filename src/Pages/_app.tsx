@@ -38,7 +38,7 @@ const Main = ({ Component, pageProps: { mdxNav, ...pageProps } }: Props) => {
 	return (
 		<Providers>
 			<BaseStyle />
-			<SideNavigation mdxNav={mdxNav} />
+			{mdxNav && <SideNavigation mdxNav={mdxNav} />}
 			<Component {...pageProps} />
 			{/* Modal */}
 		</Providers>

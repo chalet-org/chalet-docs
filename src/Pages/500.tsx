@@ -1,8 +1,8 @@
-import { GetStaticPropsContext } from "next";
+import { NextPageContext } from "next";
 import React from "react";
 
+import { docsApi } from "Api";
 import { ServerErrorLayout } from "Layouts";
-import { markdownFiles } from "Server/MarkdownFiles";
 
 type Props = {};
 
@@ -17,12 +17,10 @@ const ServerErrorPage = (props: Props) => {
 	);
 };
 
-export const getStaticProps = async (ctx: GetStaticPropsContext) => {
-	const navProps = await markdownFiles.getNavBar();
+ServerErrorPage.getInitialProps = async (ctx: NextPageContext) => {
+	const navProps = await docsApi.getNavBar();
 	return {
-		props: {
-			...navProps,
-		},
+		...navProps,
 	};
 };
 

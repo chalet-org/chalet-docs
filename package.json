@@ -21,7 +21,7 @@
 		"Utility": "./src/Utility"
 	},
 	"dependencies": {
-		"@andrew-r-king/react-kitchen": "^0.1.27",
+		"@andrew-r-king/react-kitchen": "^0.1.28",
 		"@badrap/bar-of-progress": "^0.1.2",
 		"copy-to-clipboard": "^3.3.1",
 		"gray-matter": "^4.0.3",

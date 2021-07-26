@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { Page } from "Components";
+import { NotFoundLayout } from "Layouts";
 import { ServerError } from "Utility";
 
 type Props = {
@@ -10,6 +11,9 @@ type Props = {
 };
 
 const ServerErrorLayout = ({ error, children }: Props) => {
+	if (error.status === 404) {
+		return <NotFoundLayout />;
+	}
 	return (
 		<Page title="500: Internal Server Error">
 			<Styles>

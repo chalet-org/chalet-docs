@@ -39,9 +39,6 @@ const getMdx = async (slug: string): Promise<MDXResult> => {
 		if (filename.length === 0) {
 			throw new Error(`File not found: ${filename}`);
 		}
-		if (!fs.existsSync(filename)) {
-			throw new Error(`path doesn't exist`);
-		}
 
 		const fileContent: string = fs.readFileSync(filename, {
 			encoding: "utf8",

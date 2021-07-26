@@ -1,20 +1,17 @@
-import { GetStaticPropsContext } from "next";
+import { NextPageContext } from "next";
 
+import { docsApi } from "Api";
 import { withServerErrorPage } from "HighComponents";
 import { TestLayout } from "Layouts";
-import { getChaletSchema } from "Server/ChaletSchema";
-import { markdownFiles } from "Server/MarkdownFiles";
 
 const HomePage = withServerErrorPage(TestLayout);
 
-export const getStaticProps = async (ctx: GetStaticPropsContext) => {
-	const navProps = await markdownFiles.getNavBar();
-	const schema = await getChaletSchema();
+HomePage.getInitialProps = async (ctx: NextPageContext) => {
+	const navProps = await docsApi.getNavBar();
+	const schema = await docsApi.getChaletSchema();
 	return {
-		props: {
-			...navProps,
-			schema,
-		},
+		...navProps,
+		schema,
 	};
 };
 

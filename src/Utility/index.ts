@@ -1,5 +1,5 @@
 export * from "./ApiTypes";
-export * from "./HandleStaticProps";
+export * from "./HandleInitialProps";
 export * from "./Hash";
 export * from "./LocalStorage";
 export * from "./RecursiveDirectorySearch";

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { ChaletSchema, docsApi } from "Api";
+import { ChaletSchema } from "Api";
 import { CodePre, Page, SchemaDocNode } from "Components";
 
 type Props = ChaletSchema;
@@ -23,17 +23,6 @@ const TestLayout = ({ schema, ...props }: Props) => {
 			</Styles>
 		</Page>
 	);
-};
-
-TestLayout.getInitialProps = async () => {
-	try {
-		const schema = await docsApi.getChaletSchema();
-		return {
-			schema,
-		};
-	} catch (err) {
-		throw err;
-	}
 };
 
 export { TestLayout };
