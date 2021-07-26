@@ -33,7 +33,7 @@ const Main = ({ Component, pageProps: { mdxNav, ...pageProps } }: Props) => {
 		Router.events.on("routeChangeError", prog.finish);
 
 		setProgress(prog);
-	}, [codeTheme]);
+	}, [codeTheme]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	return (
 		<Providers>

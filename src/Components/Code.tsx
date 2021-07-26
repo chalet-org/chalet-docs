@@ -2,6 +2,7 @@ import copy from "copy-to-clipboard";
 import Prism from "prismjs";
 import "prismjs/components";
 import React, { useEffect } from "react";
+import { renderToString } from "react-dom/server";
 import styled, { css } from "styled-components";
 
 import { Dictionary } from "@andrew-r-king/react-kitchen";
@@ -11,14 +12,10 @@ import { useUiStore } from "Stores";
 import { CodeThemeType } from "Theme";
 
 type Props = React.PropsWithChildren<{
-	lang?: string;
+	lang: string;
 }>;
 
 const Code = ({ children, ...props }: Props) => {
-	useEffect(() => {
-		Prism.highlightAll();
-	}, []);
-
 	const { codeTheme } = useUiStore();
 
 	return (
@@ -36,25 +33,24 @@ const Code = ({ children, ...props }: Props) => {
 };
 
 const CodePre = ({ children, lang }: Props) => {
-	useEffect(() => {
-		Prism.highlightAll();
-	}, []);
-
 	const { codeTheme } = useUiStore();
 
 	return (
 		<PreStyles {...codeTheme} fonts={globalFonts} data-lang={lang}>
-			<code className={`language-${lang}`}>{children}</code>
+			<code
+				className={`language-${lang}`}
+				dangerouslySetInnerHTML={{
+					__html: Prism.highlight((children as string) ?? "", Prism.languages[lang], lang),
+				}}
+			/>
 		</PreStyles>
 	);
 };
 
 const CodePreFromMarkdown = ({ children, ...props }: Props) => {
-	useEffect(() => {
-		Prism.highlightAll();
-	}, []);
-
 	const { codeTheme } = useUiStore();
+
+	console.log("children", children);
 
 	return (
 		<>
@@ -62,9 +58,21 @@ const CodePreFromMarkdown = ({ children, ...props }: Props) => {
 				// This is weird, but next-mdx-remote does some funky stuff with the component
 				const lang = props.lang ?? child.props?.className.replaceAll(/( |language-)/g, "") ?? "";
 
+				console.log("lang", lang);
+				// console.log("clone", child);
+
 				return (
 					<PreStyles {...codeTheme} fonts={globalFonts} data-lang={lang}>
-						{child ? React.cloneElement(child) : null}
+						<code
+							className={`language-${lang}`}
+							dangerouslySetInnerHTML={{
+								__html: Prism.highlight(
+									(child.props?.children as string) ?? "",
+									Prism.languages[lang],
+									lang
+								),
+							}}
+						/>
 					</PreStyles>
 				);
 			})}

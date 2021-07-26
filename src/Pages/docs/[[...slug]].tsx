@@ -1,14 +1,14 @@
 import { GetStaticPropsContext } from "next";
-import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
+import { MDXRemote } from "next-mdx-remote";
 import path from "path";
 import React from "react";
 import styled from "styled-components";
 
 import { Dictionary } from "@andrew-r-king/react-kitchen";
 
-import { docsApi, MDXResult } from "Api";
 import { Page } from "Components";
-import { dynamic, handleStaticProps, recursiveDirectorySearch } from "Utility";
+import { markdownFiles, MDXResult } from "Server/MarkdownFiles";
+import { dynamic, recursiveDirectorySearch } from "Utility";
 
 type Props = MDXResult & {
 	children?: React.ReactNode;
@@ -22,7 +22,7 @@ const components: Dictionary<React.ComponentType<any>> = {
 	ThemeToggle: dynamic.component("ThemeToggle"),
 };
 
-const MarkdownTest = ({ meta, mdx, children }: Props) => {
+const MarkdownPage = ({ meta, mdx, children }: Props) => {
 	return (
 		<Page title={meta.title}>
 			<Styles>
@@ -32,11 +32,11 @@ const MarkdownTest = ({ meta, mdx, children }: Props) => {
 	);
 };
 
-export default MarkdownTest;
+export default MarkdownPage;
 
 const mdpages = "mdpages";
 
-export const getStaticPaths = async () => {
+export async function getStaticPaths() {
 	try {
 		const pathsRaw = await recursiveDirectorySearch(`${mdpages}/docs`, ["md", "mdx"]);
 		const paths = pathsRaw.map((inPath: string): string => {
@@ -57,31 +57,26 @@ export const getStaticPaths = async () => {
 		console.error(err.message);
 		throw err;
 	}
-};
+}
 
-export const getStaticProps = handleStaticProps(async (ctx?: GetStaticPropsContext) => {
-	try {
-		if (!!ctx && !!ctx.params) {
-			const navProps = await docsApi.getNavBar();
-
-			const { slug: slugRaw } = ctx.params;
-			const slug: string = path.join(
-				"docs",
-				typeof slugRaw === "string" ? slugRaw : slugRaw?.join(path.sep) ?? ""
-			);
-			const { meta, mdx } = await docsApi.getMdx(slug);
-			return {
-				...navProps,
-				meta,
-				mdx,
-			};
-		} else {
-			throw new Error("Params not found");
-		}
-	} catch (err) {
-		throw err;
+export const getStaticProps = async (ctx: GetStaticPropsContext) => {
+	if (!ctx || !ctx.params) {
+		throw new Error("Params not found");
 	}
-});
+
+	const navProps = await markdownFiles.getNavBar();
+
+	const { slug: slugRaw } = ctx.params;
+	const slug: string = path.join("docs", typeof slugRaw === "string" ? slugRaw : slugRaw?.join(path.sep) ?? "");
+	const { meta, mdx } = await markdownFiles.getMdx(slug);
+	return {
+		props: {
+			...navProps,
+			meta,
+			mdx,
+		},
+	};
+};
 
 const Styles = styled.div`
 	display: block;

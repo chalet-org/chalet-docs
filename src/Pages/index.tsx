@@ -1,23 +1,21 @@
-import React from "react";
+import { GetStaticPropsContext } from "next";
 
-import { docsApi } from "Api";
 import { withServerErrorPage } from "HighComponents";
 import { TestLayout } from "Layouts";
-import { handleStaticProps } from "Utility";
+import { getChaletSchema } from "Server/ChaletSchema";
+import { markdownFiles } from "Server/MarkdownFiles";
 
 const HomePage = withServerErrorPage(TestLayout);
 
-export const getStaticProps = handleStaticProps(async () => {
-	try {
-		const navProps = await docsApi.getNavBar();
-		const schema = await docsApi.getChaletSchema();
-		return {
+export const getStaticProps = async (ctx: GetStaticPropsContext) => {
+	const navProps = await markdownFiles.getNavBar();
+	const schema = await getChaletSchema();
+	return {
+		props: {
 			...navProps,
 			schema,
-		};
-	} catch (err) {
-		throw err;
-	}
-});
+		},
+	};
+};
 
 export default HomePage;

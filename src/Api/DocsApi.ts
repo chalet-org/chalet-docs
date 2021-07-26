@@ -1,9 +1,6 @@
 import { JSONSchema7 } from "json-schema";
-import { MDXRemoteSerializeResult } from "next-mdx-remote";
 
-import { BaseApi, Dictionary } from "@andrew-r-king/react-kitchen";
-
-import { NavProps } from "Components";
+import { BaseApi } from "@andrew-r-king/react-kitchen";
 
 export type Greeting = {
 	name: string;
@@ -11,14 +8,6 @@ export type Greeting = {
 
 export type ChaletSchema = {
 	schema: JSONSchema7;
-};
-
-export type MDXResult = {
-	meta: {
-		title: string;
-		author?: string;
-	};
-	mdx: MDXRemoteSerializeResult<Record<string, unknown>>;
 };
 
 class DocsApi extends BaseApi {
@@ -29,17 +18,6 @@ class DocsApi extends BaseApi {
 	getHello = () => this.GET<Greeting>("/hello");
 
 	getChaletSchema = (version: string = "main") => this.GET<ChaletSchema>(`/chalet-schema/${version}`);
-	getMdx = (slug: string) => this.GET<MDXResult>(`/get-mdx?slug=${slug}`);
-	getNavBar = async (): Promise<NavProps> => {
-		try {
-			const result = await this.GET<MDXResult>("/get-mdx?slug=_navbar");
-			return {
-				mdxNav: result.mdx,
-			};
-		} catch (err) {
-			throw err;
-		}
-	};
 }
 
 const docsApi = new DocsApi();

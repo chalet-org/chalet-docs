@@ -27,14 +27,14 @@ export function handleStaticProps<U extends object, T extends object = {}>(
 				},
 			};
 		} catch (err) {
-			// console.error(err);
+			console.log(err);
 			return {
 				props: {
 					...({} as T),
 					...data,
 					error: {
 						message: err.message,
-						status: err.status ?? 500,
+						status: 500,
 					},
 				},
 			};

@@ -2,9 +2,6 @@ import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import React from "react";
 import styled from "styled-components";
 
-import { Dictionary } from "@andrew-r-king/react-kitchen";
-
-import { MDXResult } from "Api";
 import { useKeyPress } from "Hooks";
 import { useUiStore } from "Stores";
 import { PageThemeType } from "Theme";

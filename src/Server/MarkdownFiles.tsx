@@ -4,8 +4,19 @@ import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
 import path from "path";
 
-import { MDXResult } from "Api";
-import { ApiReq, ApiRes } from "Utility";
+import { NavProps } from "Components";
+
+export type MarkdownResult = {
+	fileContent: string;
+};
+
+export type MDXResult = {
+	meta: {
+		title: string;
+		author?: string;
+	};
+	mdx: MDXRemoteSerializeResult<Record<string, unknown>>;
+};
 
 const getFirstExistingPath = (inPath: string, extensions: string[]): string => {
 	let arr: string[] = [];
@@ -22,17 +33,9 @@ const getFirstExistingPath = (inPath: string, extensions: string[]): string => {
 	return "";
 };
 
-const handler = async (
-	req: ApiReq<{
-		slug: string;
-	}>,
-	res: ApiRes<MDXResult>
-): Promise<void> => {
+const getMdx = async (slug: string): Promise<MDXResult> => {
 	try {
-		if (!req.query || !req.query.slug || req.query.slug.length === 0) {
-			throw new Error("Invalid query sent in request");
-		}
-		const filename: string = getFirstExistingPath(path.join("mdpages", req.query.slug), ["mdx", "md"]);
+		const filename: string = getFirstExistingPath(path.join("mdpages", slug), ["mdx", "md"]);
 		if (filename.length === 0) {
 			throw new Error(`File not found: ${filename}`);
 		}
@@ -47,19 +50,32 @@ const handler = async (
 		const mdx: MDXRemoteSerializeResult<Record<string, unknown>> = await serialize(content, {
 			target: ["esnext"],
 		});
-		const navProps: MDXResult = {
+		return {
 			meta: {
 				...meta,
-				title: meta.title ?? "Untitled",
+				title: meta?.title ?? "Untitled",
 			},
 			mdx,
 		};
-		res.status(200).json(navProps);
 	} catch (err) {
-		res.status(500).json({
-			...err,
-		});
+		throw err;
 	}
 };
 
-export default handler;
+const getNavBar = async (): Promise<NavProps> => {
+	try {
+		const result = await getMdx("_navbar");
+		return {
+			mdxNav: result.mdx,
+		};
+	} catch (err) {
+		throw err;
+	}
+};
+
+const markdownFiles = {
+	getMdx,
+	getNavBar,
+};
+
+export { markdownFiles };
