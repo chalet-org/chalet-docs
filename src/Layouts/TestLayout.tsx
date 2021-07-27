@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 
-import { ChaletSchema } from "Api";
 import { CodePre, Page, SchemaDocNode } from "Components";
+import { ResultChaletSchema } from "Server/ResultTypes";
 
-type Props = ChaletSchema;
+type Props = ResultChaletSchema;
 
 const TestLayout = ({ schema, ...props }: Props) => {
 	return (

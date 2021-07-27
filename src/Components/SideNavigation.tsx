@@ -3,6 +3,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { useKeyPress } from "Hooks";
+import { ResultMDXNav } from "Server/ResultTypes";
 import { useUiStore } from "Stores";
 import { getCssVariable } from "Theme";
 import { dynamic } from "Utility";
@@ -13,11 +14,7 @@ const components: Record<string, React.ReactNode> = {
 	ThemeToggle: dynamic.component("ThemeToggle"),
 };
 
-export type NavProps = {
-	mdxNav: MDXRemoteSerializeResult<Record<string, unknown>>;
-};
-
-type Props = NavProps & {
+type Props = ResultMDXNav & {
 	children?: React.ReactNode;
 };
 

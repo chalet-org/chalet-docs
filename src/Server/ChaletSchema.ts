@@ -1,6 +1,8 @@
 import { Optional } from "@andrew-r-king/react-kitchen";
 
-export const getChaletSchema = async (tag: string = "main") => {
+import { ResultChaletSchema } from "./ResultTypes";
+
+export const getChaletSchema = async (tag: string = "main"): Promise<ResultChaletSchema> => {
 	try {
 		// TODO: validate if tag is "main" or "v*.*.*"
 
@@ -19,7 +21,7 @@ export const getChaletSchema = async (tag: string = "main") => {
 		// const schema = await blob.text();
 		const schema = await response.json();
 
-		return schema;
+		return { schema };
 	} catch (err) {
 		throw err;
 	}

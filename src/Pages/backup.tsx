@@ -7,7 +7,7 @@ import { TestLayout } from "Layouts";
 const HomePage = withServerErrorPage(TestLayout);
 
 HomePage.getInitialProps = async (ctx: NextPageContext) => {
-	const navProps = await docsApi.getNavBar();
+	const navProps = await docsApi.getMdx("/");
 	const schema = await docsApi.getChaletSchema();
 	return {
 		...navProps,

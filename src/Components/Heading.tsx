@@ -1,17 +1,12 @@
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 
 import { Dictionary } from "@andrew-r-king/react-kitchen";
 
 import { Link } from "Components";
 import { getCssVariable } from "Theme";
-
-const toKebabCase = (str: string) => {
-	return str
-		.replace(/([a-z])([A-Z])/g, "$1-$2")
-		.replace(/\s+/g, "-")
-		.toLowerCase();
-};
+import { toKebabCase } from "Utility/ToKebabCase";
 
 type HeadingSize = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 
@@ -22,13 +17,24 @@ type Props = {
 };
 
 const HeadingInternal = ({ size, anchor, children }: Props) => {
+	const router = useRouter();
+	const id = toKebabCase(children);
+	const { id: routeId } = router.query;
+
+	const headerElement = useRef(null);
+
+	useEffect(() => {
+		if (!!headerElement && !!headerElement.current && !!routeId && typeof routeId === "string" && id === routeId) {
+			window.scrollTo({ behavior: "smooth", top: (headerElement.current as any)?.offsetTop ?? 0 });
+		}
+	}, [routeId, headerElement]);
+
 	const Tag = Styles[size];
 
 	if (!!anchor) {
-		const id = toKebabCase(children);
 		return (
-			<Tag id={id}>
-				<Link href={`#${id}`}>{children}</Link>
+			<Tag id={id} ref={headerElement}>
+				<Link href={`${router.asPath.split("?")[0]}?id=${id}`}>{children}</Link>
 			</Tag>
 		);
 	} else {

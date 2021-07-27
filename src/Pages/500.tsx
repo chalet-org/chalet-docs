@@ -18,10 +18,10 @@ const ServerErrorPage = (props: Props) => {
 };
 
 export const getStaticProps = async (ctx: GetStaticPropsContext) => {
-	const navProps = await markdownFiles.getNavBar();
+	const navigation = await markdownFiles.getNavBar();
 	return {
 		props: {
-			...navProps,
+			...navigation,
 		},
 	};
 };

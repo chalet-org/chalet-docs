@@ -6,18 +6,22 @@ import styled from "styled-components";
 
 import { Dictionary } from "@andrew-r-king/react-kitchen";
 
-import { docsApi, MDXResult } from "Api";
-import { Page } from "Components";
-import { AnchoredHeading, Heading } from "Components/Heading";
+import { docsApi } from "Api";
+import { Page, AnchoredHeading, Heading, SchemaTest } from "Components";
+import { useRouterScroll } from "Hooks";
+import { ResultMDXPage } from "Server/ResultTypes";
 import { dynamic, handleInitialProps, ServerProps } from "Utility";
 
 type Props = ServerProps<
-	MDXResult & {
-		children?: React.ReactNode;
-	}
+	Omit<
+		ResultMDXPage & {
+			children?: React.ReactNode;
+		},
+		"mdxNav"
+	>
 >;
 
-const components: Dictionary<React.ComponentType<any>> = {
+let components: Dictionary<React.ComponentType<any>> = {
 	...AnchoredHeading,
 	h1: Heading.h1,
 	a: dynamic.component("Link"),
@@ -27,8 +31,12 @@ const components: Dictionary<React.ComponentType<any>> = {
 	blockquote: dynamic.component("BlockQuote"),
 };
 
-const MarkdownPage = ({ meta, mdx, error, children }: Props) => {
+const MarkdownPage = ({ meta, mdx, error, children, schema }: Props) => {
 	const router = useRouter();
+
+	if (!!schema) {
+		components["SchemaTest"] = () => <SchemaTest {...{ schema }} />;
+	}
 
 	useEffect(() => {
 		if (!!error) {
@@ -37,6 +45,8 @@ const MarkdownPage = ({ meta, mdx, error, children }: Props) => {
 			});
 		}
 	}, [error]);
+
+	useRouterScroll();
 
 	if (!!error) return null;
 
@@ -51,14 +61,14 @@ const MarkdownPage = ({ meta, mdx, error, children }: Props) => {
 
 MarkdownPage.getInitialProps = handleInitialProps(async (ctx) => {
 	try {
-		const navProps = await docsApi.getNavBar();
 		const { slug: slugRaw } = ctx.query;
-		const slug: string = path.join("docs", typeof slugRaw === "string" ? slugRaw : slugRaw?.join(path.sep) ?? "");
-		const { meta, mdx } = await docsApi.getMdx(slug);
+		const slug: string = path.join(typeof slugRaw === "string" ? slugRaw : slugRaw?.join(path.sep) ?? "");
+		const { meta, mdx, mdxNav, schema } = await docsApi.getMdx(slug);
 		return {
-			...navProps,
+			mdxNav,
 			meta,
 			mdx,
+			schema,
 		};
 	} catch (err) {
 		throw err;
@@ -97,16 +107,14 @@ export const getStaticProps = async (ctx: GetStaticPropsContext) => {
 		throw new Error("Params not found");
 	}
 
-	const navProps = await markdownFiles.getNavBar();
-
 	const { slug: slugRaw } = ctx.params;
 	const slug: string = path.join("docs", typeof slugRaw === "string" ? slugRaw : slugRaw?.join(path.sep) ?? "");
-	const { meta, mdx } = await markdownFiles.getMdx(slug);
+	const { meta, mdx, mdxNav } = await markdownFiles.getMdx(slug);
 	return {
 		props: {
-			...navProps,
 			meta,
 			mdx,
+			mdxNav,
 		},
 	};
 };*/

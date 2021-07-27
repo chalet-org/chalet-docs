@@ -80,6 +80,7 @@ export const BaseStyle = createGlobalStyle`
     html {
         font-size: 16px;
         background-color: #111111;
+		scroll-behavior: smooth;
     }
 
     body {
