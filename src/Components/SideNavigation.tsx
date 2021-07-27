@@ -2,6 +2,7 @@ import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import React from "react";
 import styled from "styled-components";
 
+import { Link, ThemeToggle } from "Components";
 import { useKeyPress } from "Hooks";
 import { ResultMDXNav } from "Server/ResultTypes";
 import { useUiStore } from "Stores";
@@ -41,10 +42,18 @@ const SideNavigation = ({ mdxNav }: Props) => {
 					toggleNavigation();
 				}}
 			>
-				Toggle
+				<span />
+				<span />
+				<span />
 			</SidebarToggle>
 			<StyledAside className={`sidebar ${navOpen ? "open" : ""}`} width={navWidth}>
+				<Logo>
+					<Link href="/" showActive={false}>
+						Chalet
+					</Link>
+				</Logo>
 				<MDXRemote {...mdxNav} components={components} />
+				<ThemeToggle />
 			</StyledAside>
 		</>
 	);
@@ -52,12 +61,38 @@ const SideNavigation = ({ mdxNav }: Props) => {
 
 export { SideNavigation };
 
+const Logo = styled.h4`
+	text-align: center;
+	text-shadow: 0 0 0 transparent;
+	transition: text-shadow 0.125s linear;
+
+	> a {
+		text-decoration: none !important;
+	}
+
+	&:hover {
+		text-shadow: 0 0.125rem 0.5rem ${getCssVariable("Accent")};
+	}
+`;
+
 const SidebarToggle = styled.button`
 	display: block;
 	position: fixed;
 	bottom: 0;
 	left: 0;
 	z-index: 99;
+	padding: 1rem;
+	margin: 1rem;
+	cursor: pointer;
+	background: none;
+
+	> span {
+		background-color: ${getCssVariable("Accent")};
+		display: block;
+		margin-bottom: 0.5rem;
+		width: 2rem;
+		height: 0.125rem;
+	}
 `;
 
 type AsideProps = {
@@ -82,10 +117,6 @@ const StyledAside = styled.aside<AsideProps>`
 	&.open {
 		left: 0;
 		border-right: 0.125rem solid ${getCssVariable("Border")};
-	}
-
-	> h4 {
-		text-align: center;
 	}
 
 	ul,
@@ -148,7 +179,13 @@ const StyledAside = styled.aside<AsideProps>`
 	}
 
 	.theme-toggle {
-		width: 100%;
-		text-align: center;
+		display: block;
+		position: absolute;
+		width: 2rem;
+		height: 2rem;
+		top: auto;
+		bottom: 2.125rem;
+		left: auto;
+		right: 2.125rem;
 	}
 `;
