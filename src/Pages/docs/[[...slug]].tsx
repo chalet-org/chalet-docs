@@ -1,4 +1,3 @@
-import { GetStaticPropsContext, NextPageContext } from "next";
 import { MDXRemote } from "next-mdx-remote";
 import { useRouter } from "next/router";
 import path from "path";
@@ -9,8 +8,8 @@ import { Dictionary } from "@andrew-r-king/react-kitchen";
 
 import { docsApi, MDXResult } from "Api";
 import { Page } from "Components";
-import { ServerErrorLayout } from "Layouts";
-import { dynamic, handleInitialProps, recursiveDirectorySearch, ServerProps } from "Utility";
+import { AnchoredHeading, Heading } from "Components/Heading";
+import { dynamic, handleInitialProps, ServerProps } from "Utility";
 
 type Props = ServerProps<
 	MDXResult & {
@@ -19,6 +18,7 @@ type Props = ServerProps<
 >;
 
 const components: Dictionary<React.ComponentType<any>> = {
+	...AnchoredHeading,
 	a: dynamic.component("Link"),
 	pre: dynamic.component("CodePreFromMarkdown"),
 	inlineCode: dynamic.component("Code"),

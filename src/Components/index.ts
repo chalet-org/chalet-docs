@@ -8,3 +8,4 @@ export * from "./SchemaDocNode";
 export * from "./SideNavigation";
 export * from "./Stub";
 export * from "./ThemeToggle";
+export * from "./ThemeProvider";

@@ -6,13 +6,14 @@ import { Optional } from "@andrew-r-king/react-kitchen";
 import ProgressBar from "@badrap/bar-of-progress";
 
 import { BaseStyle, SideNavigation } from "Components";
+import { ThemeProvider } from "Components/ThemeProvider";
 import { Providers, useUiStore } from "Stores";
 
 type Props = AppProps;
 
 const Main = ({ Component, pageProps: { mdxNav, ...pageProps } }: Props) => {
 	const [progress, setProgress] = useState<Optional<ProgressBar>>(null);
-	const { codeTheme } = useUiStore();
+	const { theme } = useUiStore();
 
 	useEffect(() => {
 		if (!!progress) {
@@ -23,7 +24,7 @@ const Main = ({ Component, pageProps: { mdxNav, ...pageProps } }: Props) => {
 
 		const prog = new ProgressBar({
 			size: "0.25rem",
-			color: codeTheme.accent,
+			color: theme.accent,
 			className: "router-progress-bar",
 			delay: 100,
 		});
@@ -33,10 +34,11 @@ const Main = ({ Component, pageProps: { mdxNav, ...pageProps } }: Props) => {
 		Router.events.on("routeChangeError", prog.finish);
 
 		setProgress(prog);
-	}, [codeTheme]); // eslint-disable-line react-hooks/exhaustive-deps
+	}, [theme]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	return (
 		<Providers>
+			<ThemeProvider />
 			<BaseStyle />
 			{mdxNav && <SideNavigation mdxNav={mdxNav} />}
 			<Component {...pageProps} />

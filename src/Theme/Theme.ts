@@ -1,4 +1,4 @@
-export enum PageTheme {
+export enum Theme {
 	Light = "light",
 	Dark = "dark",
 }

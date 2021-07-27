@@ -7,6 +7,7 @@ const cssReset = css`
 	::after,
 	::before {
 		box-sizing: border-box;
+		outline: 0;
 	}
 
 	blockquote,
@@ -105,24 +106,24 @@ export const BaseStyle = createGlobalStyle`
     }
 
 	h1 {
-		font-size: 4rem;
+		font-size: 3rem;
 	}
 	h2 {
-		font-size: 3.25rem;
+		font-size: 2.375rem;
 	}
 	h3 {
-		font-size: 2.625rem;
+		font-size: 2rem;
 	}
 	h4 {
-		font-size: 2.125rem;
-		line-height: 1.5;
-	}
-	h5 {
 		font-size: 1.625rem;
 		line-height: 1.5;
 	}
+	h5 {
+		font-size: 1.375rem;
+		line-height: 1.5;
+	}
 	h6 {
-		font-size: 1.25rem;
+		font-size: 1.125rem;
 		line-height: 1.675;
 	}
 
@@ -137,7 +138,6 @@ export const BaseStyle = createGlobalStyle`
     }
 
 	button {
-		outline: 0;
 		border: none;
 	}
 

@@ -1,17 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 
-import { useUiStore } from "Stores";
-import { CodeThemeType } from "Theme";
+import { getCssVariable } from "Theme";
 
 type Props = {
 	children?: React.ReactNode;
 };
 
 const BlockQuote = (props: Props) => {
-	const { codeTheme } = useUiStore();
 	return (
-		<Styles {...codeTheme} className="quote">
+		<Styles className="quote">
 			<blockquote>{props.children}</blockquote>
 		</Styles>
 	);
@@ -19,19 +17,19 @@ const BlockQuote = (props: Props) => {
 
 export { BlockQuote };
 
-const Styles = styled.div<CodeThemeType>`
+const Styles = styled.div`
 	display: block;
 	margin: 0.75rem 0;
 	padding: 0;
-	background-color: ${(theme) => theme.background};
-	border: 0.125rem solid ${(theme) => theme.border};
+	background-color: ${getCssVariable("BackgroundCode")};
+	border: 0.125rem solid ${getCssVariable("Border")};
 	border-radius: 0.5rem;
 	overflow: hidden;
 
 	> blockquote {
 		padding: 0.75rem;
 		padding-left: 1.25rem;
-		border-left: 0.25rem solid ${(theme) => theme.accent};
+		border-left: 0.25rem solid ${getCssVariable("Accent")};
 
 		> p {
 			font-size: 1.25rem;

@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 import { useKeyPress } from "Hooks";
 import { useUiStore } from "Stores";
-import { PageThemeType } from "Theme";
+import { getCssVariable } from "Theme";
 import { dynamic } from "Utility";
 
 const components: Record<string, React.ReactNode> = {
@@ -21,7 +21,7 @@ type Props = NavProps & {
 };
 
 const SideNavigation = ({ mdxNav }: Props) => {
-	const { toggleNavigation, navOpen, navWidth, initialized, theme } = useUiStore();
+	const { toggleNavigation, navOpen, navWidth, initialized } = useUiStore();
 	useKeyPress(
 		(ev) => {
 			if (ev.key === "27") {
@@ -45,7 +45,7 @@ const SideNavigation = ({ mdxNav }: Props) => {
 			>
 				Toggle
 			</SidebarToggle>
-			<StyledAside className={`sidebar ${navOpen ? "open" : ""}`} width={navWidth} {...theme}>
+			<StyledAside className={`sidebar ${navOpen ? "open" : ""}`} width={navWidth}>
 				<MDXRemote {...mdxNav} components={components} />
 			</StyledAside>
 		</>
@@ -66,7 +66,7 @@ type AsideProps = {
 	width: string;
 };
 
-const StyledAside = styled.aside<Partial<PageThemeType> & AsideProps>`
+const StyledAside = styled.aside<AsideProps>`
 	display: flex;
 	flex-direction: column;
 	position: fixed;
@@ -78,10 +78,14 @@ const StyledAside = styled.aside<Partial<PageThemeType> & AsideProps>`
 	z-index: 90;
 	overflow: hidden;
 
-	background-color: ${(theme) => theme.bodyBackground ?? "#000000"};
-	color: ${(theme) => theme.mainText ?? "#232323"};
+	background-color: ${getCssVariable("BackgroundCode")};
+	color: ${getCssVariable("MainText")};
 
 	&.open {
 		left: 0;
+	}
+
+	> h4 {
+		text-align: center;
 	}
 `;

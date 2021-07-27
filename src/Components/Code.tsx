@@ -7,19 +7,15 @@ import styled, { css } from "styled-components";
 import { Dictionary } from "@andrew-r-king/react-kitchen";
 
 import { globalFonts } from "Components";
-import { useUiStore } from "Stores";
-import { CodeThemeType } from "Theme";
+import { getCssVariable } from "Theme";
 
 type Props = React.PropsWithChildren<{
 	lang: string;
 }>;
 
 const Code = ({ children, ...props }: Props) => {
-	const { codeTheme } = useUiStore();
-
 	return (
 		<CodeStyles
-			{...codeTheme}
 			onClick={() => {
 				if (children) {
 					copy(`${children}`);
@@ -36,10 +32,8 @@ type CodeProps = Props & {
 };
 
 const CodePre = ({ children, lang }: CodeProps) => {
-	const { codeTheme } = useUiStore();
-
 	return (
-		<PreStyles {...codeTheme} fonts={globalFonts} data-lang={lang}>
+		<PreStyles fonts={globalFonts} data-lang={lang}>
 			<code
 				className={`language-${lang}`}
 				dangerouslySetInnerHTML={{
@@ -53,8 +47,6 @@ const CodePre = ({ children, lang }: CodeProps) => {
 };
 
 const CodePreFromMarkdown = ({ children, ...props }: Props) => {
-	const { codeTheme } = useUiStore();
-
 	return (
 		<>
 			{React.Children.map(children, (child) => {
@@ -67,7 +59,7 @@ const CodePreFromMarkdown = ({ children, ...props }: Props) => {
 				const lang = props.lang ?? childProps?.className.replace?.(/( |language-)/g, "") ?? "";
 
 				return (
-					<PreStyles {...codeTheme} fonts={globalFonts} data-lang={lang}>
+					<PreStyles fonts={globalFonts} data-lang={lang}>
 						<code
 							className={`language-${lang}`}
 							dangerouslySetInnerHTML={{
@@ -91,17 +83,17 @@ export { Code, CodePre, CodePreFromMarkdown };
 
 const boldWeight: number = 800;
 
-type StyleProps = CodeThemeType & {
+type StyleProps = {
 	fonts?: Dictionary<string>;
 };
 
 const codeCss = css<StyleProps>`
 	position: relative;
 	overflow: auto;
-	background-color: ${(theme) => theme.background};
-	border: 0.125rem solid ${(theme) => theme.border};
+	background-color: ${getCssVariable("BackgroundCode")};
+	border: 0.125rem solid ${getCssVariable("Border")};
 	border-radius: 0.5rem;
-	color: ${(theme) => theme.white};
+	color: ${getCssVariable("White")};
 	font-size: 0.875rem;
 	font-weight: 400;
 	white-space: pre;
@@ -138,101 +130,101 @@ const codeCss = css<StyleProps>`
 		}
 
 		&.atrule {
-			color: ${(theme) => theme.blue};
+			color: ${getCssVariable("Blue")};
 		}
 		&.attr-name {
-			color: ${(theme) => theme.green};
+			color: ${getCssVariable("Green")};
 		}
 		&.attr-value {
-			color: ${(theme) => theme.lightYellow};
+			color: ${getCssVariable("LightYellow")};
 		}
 		&.boolean {
-			color: ${(theme) => theme.yellow};
+			color: ${getCssVariable("Yellow")};
 			font-weight: ${boldWeight};
 		}
 		&.builtin {
-			color: ${(theme) => theme.cyan};
+			color: ${getCssVariable("Cyan")};
 		}
 		&.cdata {
-			color: ${(theme) => theme.gray};
+			color: ${getCssVariable("Gray")};
 		}
 		&.char {
-			color: ${(theme) => theme.green};
+			color: ${getCssVariable("Green")};
 		}
 		&.class-name {
-			color: ${(theme) => theme.lightYellow};
+			color: ${getCssVariable("LightYellow")};
 		}
 		&.comment {
-			color: ${(theme) => theme.gray};
+			color: ${getCssVariable("Gray")};
 		}
 		&.constant {
-			color: ${(theme) => theme.red};
+			color: ${getCssVariable("Red")};
 		}
 		&.deleted {
-			color: ${(theme) => theme.red};
+			color: ${getCssVariable("Red")};
 		}
 		&.doctype {
-			color: ${(theme) => theme.gray};
+			color: ${getCssVariable("Gray")};
 		}
 		&.entity {
-			color: ${(theme) => theme.white};
+			color: ${getCssVariable("White")};
 		}
 		&.function {
-			color: ${(theme) => theme.blue};
+			color: ${getCssVariable("Blue")};
 		}
 		&.important {
-			color: ${(theme) => theme.yellow};
+			color: ${getCssVariable("Yellow")};
 		}
 		&.inserted {
-			color: ${(theme) => theme.green};
+			color: ${getCssVariable("Green")};
 		}
 		&.keyword {
-			color: ${(theme) => theme.yellow};
+			color: ${getCssVariable("Yellow")};
 			font-weight: ${boldWeight};
 		}
 		&.number {
-			color: ${(theme) => theme.cyan};
+			color: ${getCssVariable("Cyan")};
 		}
 		&.operator {
-			color: ${(theme) => theme.gray};
+			color: ${getCssVariable("Gray")};
 		}
 		&.prolog {
-			color: ${(theme) => theme.gray};
+			color: ${getCssVariable("Gray")};
 		}
 		&.property {
-			color: ${(theme) => theme.blue};
+			color: ${getCssVariable("Blue")};
 		}
 		&.punctuation {
-			color: ${(theme) => theme.gray};
+			color: ${getCssVariable("Gray")};
 		}
 		&.regex {
-			color: ${(theme) => theme.yellow};
+			color: ${getCssVariable("Yellow")};
 		}
 		&.selector {
-			color: ${(theme) => theme.green};
+			color: ${getCssVariable("Green")};
 		}
 		&.string {
-			color: ${(theme) => theme.green};
+			color: ${getCssVariable("Green")};
 		}
 		&.symbol {
-			color: ${(theme) => theme.red};
+			color: ${getCssVariable("Red")};
 		}
 		&.tag {
-			color: ${(theme) => theme.red};
+			color: ${getCssVariable("Red")};
 		}
 		&.url {
-			color: ${(theme) => theme.white};
+			color: ${getCssVariable("White")};
 		}
 		&.variable {
-			color: ${(theme) => theme.white};
+			color: ${getCssVariable("White")};
 		}
 	}
 
 	.language-css .token.string {
-		color: ${(theme) => theme.white};
+		color: ${getCssVariable("White")};
 	}
 	.style .token.string {
-		color: ${(theme) => theme.white};
+		color: ${getCssVariable("White")};
 	}
 `;
 
@@ -247,7 +239,7 @@ const CodeStyles = styled.code<StyleProps>`
 
 	${codeCss}
 
-	color: ${(theme) => theme.blue};
+	color: ${getCssVariable("Blue")};
 `;
 
 const PreStyles = styled.pre<StyleProps>`
@@ -260,7 +252,7 @@ const PreStyles = styled.pre<StyleProps>`
 
 	&:after {
 		content: attr(data-lang);
-		color: ${(theme) => theme.accent};
+		color: ${getCssVariable("Accent")};
 		display: block;
 		position: absolute;
 		top: 0.75rem;

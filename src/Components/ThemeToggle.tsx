@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { useUiStore } from "Stores";
-import { CodeTheme, PageTheme } from "Theme";
+import { Theme } from "Theme";
 
 type Props = {};
 
@@ -10,8 +10,8 @@ const ThemeToggle = (props: Props) => {
 	const { setTheme } = useUiStore();
 	return (
 		<Styles>
-			<button onClick={() => setTheme(PageTheme.Dark, CodeTheme.Dark)}>Dark</button>
-			<button onClick={() => setTheme(PageTheme.Light, CodeTheme.Light)}>Light</button>
+			<button onClick={() => setTheme(Theme.Dark)}>Dark</button>
+			<button onClick={() => setTheme(Theme.Light)}>Light</button>
 		</Styles>
 	);
 };

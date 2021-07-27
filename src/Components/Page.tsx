@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 
 import { useUiStore } from "Stores";
-import { PageThemeType } from "Theme";
+import { getCssVariable } from "Theme";
 
 type Props = {
 	children?: React.ReactNode;
@@ -33,7 +33,7 @@ const Page = ({ title, children }: Props) => {
 					content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
 				/>
 			</Head>
-			<Main {...(!initialized ? null : { ...theme })} {...{ navWidth }} className={navOpen ? "nav-open" : ""}>
+			<Main {...{ navWidth }} className={navOpen ? "nav-open" : ""}>
 				<Container>{!initialized ? "" : children}</Container>
 			</Main>
 			{/*<footer>
@@ -55,7 +55,7 @@ type NavBarProps = {
 	navWidth: string;
 };
 
-const Main = styled.main<Partial<PageThemeType> & NavBarProps>`
+const Main = styled.main<NavBarProps>`
 	display: block;
 	position: absolute;
 	min-height: 100vh;
@@ -65,8 +65,8 @@ const Main = styled.main<Partial<PageThemeType> & NavBarProps>`
 	left: 0;
 	transition: left 0.125s linear;
 
-	background-color: ${(theme) => theme.background ?? "#fde2e2"};
-	color: ${(theme) => theme.mainText ?? "#232323"};
+	background-color: ${getCssVariable("Background")};
+	color: ${getCssVariable("MainText")};
 
 	&.nav-open {
 		left: ${(props) => props.navWidth};

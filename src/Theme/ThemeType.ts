@@ -1,5 +1,9 @@
-export type CodeThemeType = {
+export type ThemeType = {
+	bodyBackground: string;
 	background: string;
+	mainText: string;
+	//
+	codeBackground: string;
 	border: string;
 	accent: string;
 	black: string;

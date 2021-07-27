@@ -1,7 +1,11 @@
-import { CodeThemeType } from "./CodeThemeType";
+import { ThemeType } from "./ThemeType";
 
-export const lightCodeTheme: CodeThemeType = {
-	background: "#f3f7f8",
+export const lightTheme: ThemeType = {
+	bodyBackground: "#f3f7f8",
+	background: "#ffffff",
+	mainText: "#111131",
+	//
+	codeBackground: "#f3f7f8",
 	border: "#e3eaea",
 	accent: "#7f83ff",
 	black: "#eef5f5",
