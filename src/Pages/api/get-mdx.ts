@@ -9,10 +9,11 @@ const handler = async (
 	res: ApiRes<ResultMDXPage>
 ): Promise<void> => {
 	try {
-		if (!req.query || !req.query.slug || req.query.slug.length === 0) {
+		const { slug } = req.query;
+		if (!slug || slug.length === 0) {
 			throw new Error("Invalid query sent in request");
 		}
-		const result = await markdownFiles.getMdxPage(req.query.slug);
+		const result = await markdownFiles.getMdxPage(slug);
 
 		res.status(200).json(result);
 	} catch (err) {
