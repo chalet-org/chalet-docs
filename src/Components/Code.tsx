@@ -57,9 +57,14 @@ const CodePreFromMarkdown = ({ children, ...props }: Props) => {
 
 	return (
 		<>
-			{React.Children.map(children, (child: any) => {
+			{React.Children.map(children, (child) => {
+				if (!child || typeof child == "number" || typeof child == "boolean" || typeof child == "string")
+					return null;
+
+				const { props: childProps } = child as any;
+
 				// This is weird, but next-mdx-remote does some funky stuff with the component
-				const lang = props.lang ?? child.props?.className.replaceAll(/( |language-)/g, "") ?? "";
+				const lang = props.lang ?? childProps?.className.replace?.(/( |language-)/g, "") ?? "";
 
 				return (
 					<PreStyles {...codeTheme} fonts={globalFonts} data-lang={lang}>
@@ -68,11 +73,11 @@ const CodePreFromMarkdown = ({ children, ...props }: Props) => {
 							dangerouslySetInnerHTML={{
 								__html: !!Prism.languages[lang]
 									? Prism.highlight(
-											(child.props?.children as string) ?? "",
+											(childProps?.children as string) ?? "",
 											Prism.languages[lang],
 											lang
 									  )
-									: child.props?.children,
+									: childProps?.children,
 							}}
 						/>
 					</PreStyles>

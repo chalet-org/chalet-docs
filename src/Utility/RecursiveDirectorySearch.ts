@@ -17,9 +17,9 @@ export const recursiveDirectorySearch = async (dir: string, extensions: string[]
 	try {
 		let result: string[] = [];
 		for await (const f of recursiveDirectorySearchIter(
-			path.join(process.cwd(), path.sep, dir.replaceAll(/\/\//g, path.sep))
+			path.join(process.cwd(), path.sep, dir.replace(/\/\//g, path.sep))
 		)) {
-			const relativePath = f.replace(process.cwd(), "").replaceAll(/\\/g, "/");
+			const relativePath = f.replace(process.cwd(), "").replace(/\\/g, "/");
 			if (extensions.length === 0) {
 				result.push(relativePath);
 			} else {
