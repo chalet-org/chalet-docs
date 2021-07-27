@@ -9,7 +9,7 @@ type Props = {};
 const ThemeToggle = (props: Props) => {
 	const { setTheme } = useUiStore();
 	return (
-		<Styles>
+		<Styles className="theme-toggle">
 			<button onClick={() => setTheme(Theme.Dark)}>Dark</button>
 			<button onClick={() => setTheme(Theme.Light)}>Light</button>
 		</Styles>

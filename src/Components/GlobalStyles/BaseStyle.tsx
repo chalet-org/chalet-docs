@@ -1,5 +1,7 @@
 import { createGlobalStyle, css } from "styled-components";
 
+import { getCssVariable } from "Theme";
+
 import { fontImports, globalFonts } from "./Fonts";
 
 const cssReset = css`
@@ -133,8 +135,14 @@ export const BaseStyle = createGlobalStyle`
 	}
 
     a {
-        color: inherit;
+		cursor: pointer;
         text-decoration: none;
+		color: ${getCssVariable("Accent")};
+		transition: color 0.125s linear;
+
+		&:hover {
+			color: ${getCssVariable("Cyan")};
+		}
     }
 
 	button {

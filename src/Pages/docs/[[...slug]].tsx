@@ -19,11 +19,12 @@ type Props = ServerProps<
 
 const components: Dictionary<React.ComponentType<any>> = {
 	...AnchoredHeading,
+	h1: Heading.h1,
 	a: dynamic.component("Link"),
+	p: dynamic.component("Paragraph"),
 	pre: dynamic.component("CodePreFromMarkdown"),
 	inlineCode: dynamic.component("Code"),
 	blockquote: dynamic.component("BlockQuote"),
-	ThemeToggle: dynamic.component("ThemeToggle"),
 };
 
 const MarkdownPage = ({ meta, mdx, error, children }: Props) => {

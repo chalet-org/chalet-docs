@@ -33,6 +33,11 @@ const getFirstExistingPath = (inPath: string, extensions: string[]): string => {
 	return "";
 };
 
+const parseCustomMarkdown = (text: string): string => {
+	text = text.replace(/!> (.*)/g, `<p className="tip">$1</p>`);
+	return text;
+};
+
 const getMdx = async (slug: string): Promise<MDXResult> => {
 	try {
 		const filename: string = getFirstExistingPath(path.join("mdpages", slug), ["mdx", "md"]);
@@ -43,7 +48,7 @@ const getMdx = async (slug: string): Promise<MDXResult> => {
 		const fileContent: string = fs.readFileSync(filename, {
 			encoding: "utf8",
 		});
-		const { data: meta, content } = matter(fileContent);
+		const { data: meta, content } = matter(parseCustomMarkdown(fileContent));
 		const mdx: MDXRemoteSerializeResult<Record<string, unknown>> = await serialize(content, {
 			target: ["esnext"],
 		});

@@ -8,8 +8,9 @@ import { getCssVariable } from "Theme";
 import { dynamic } from "Utility";
 
 const components: Record<string, React.ReactNode> = {
-	p: dynamic.component("Stub"),
+	// p: dynamic.component("Stub"),
 	a: dynamic.component("Link"),
+	ThemeToggle: dynamic.component("ThemeToggle"),
 };
 
 export type NavProps = {
@@ -83,9 +84,74 @@ const StyledAside = styled.aside<AsideProps>`
 
 	&.open {
 		left: 0;
+		border-right: 0.125rem solid ${getCssVariable("Border")};
 	}
 
 	> h4 {
+		text-align: center;
+	}
+
+	ul,
+	> p {
+		display: flex;
+		flex-direction: column;
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+		font-size: 1rem;
+	}
+
+	> p {
+		padding-left: 1rem;
+		font-weight: 600;
+		line-height: 2.5;
+	}
+
+	> ul {
+		padding-bottom: 2rem;
+	}
+
+	li {
+		width: 100%;
+	}
+
+	a {
+		display: block;
+		padding-left: 0.5rem;
+		line-height: 2.5;
+
+		&:hover {
+			text-decoration: underline;
+			text-decoration-color: ${getCssVariable("Accent")};
+		}
+
+		&.active {
+			background-color: ${getCssVariable("Background")};
+			border-right: 0.25rem solid ${getCssVariable("Accent")};
+		}
+	}
+
+	> ul > li > a {
+		padding-left: 2rem;
+	}
+
+	> ul > li > ul > li > a {
+		padding-left: 3.25rem;
+	}
+
+	a:not(.active) {
+		color: inherit;
+		font-weight: 400;
+	}
+
+	> ul > li > ul > li > a:before {
+		&:hover {
+			text-decoration: none;
+		}
+	}
+
+	.theme-toggle {
+		width: 100%;
 		text-align: center;
 	}
 `;
