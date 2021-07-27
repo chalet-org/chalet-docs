@@ -5,13 +5,13 @@ import React, { useEffect, useState } from "react";
 import { Optional } from "@andrew-r-king/react-kitchen";
 import ProgressBar from "@badrap/bar-of-progress";
 
-import { BaseStyle, SideNavigation } from "Components";
+import { BaseStyle } from "Components";
 import { ThemeProvider } from "Components/ThemeProvider";
 import { Providers, useUiStore } from "Stores";
 
 type Props = AppProps;
 
-const Main = ({ Component, pageProps: { mdxNav, ...pageProps } }: Props) => {
+const Main = ({ Component, pageProps }: Props) => {
 	const [progress, setProgress] = useState<Optional<ProgressBar>>(null);
 	const { theme } = useUiStore();
 
@@ -40,7 +40,6 @@ const Main = ({ Component, pageProps: { mdxNav, ...pageProps } }: Props) => {
 		<Providers>
 			<ThemeProvider />
 			<BaseStyle />
-			{mdxNav && <SideNavigation mdxNav={mdxNav} />}
 			<Component {...pageProps} />
 			{/* Modal */}
 		</Providers>

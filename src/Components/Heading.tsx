@@ -51,12 +51,18 @@ let AnchoredHeading: Dictionary<(props: HeadingProps) => JSX.Element> = {};
 let Styles: Dictionary<any> = {};
 
 for (const size of ["h1", "h2", "h3", "h4", "h5", "h6"] as HeadingSize[]) {
-	Heading[size] = ({ children }: HeadingProps) => <HeadingInternal size={size}>{children}</HeadingInternal>;
-	AnchoredHeading[size] = ({ children }: HeadingProps) => (
+	const HeadingComponent = ({ children }: HeadingProps) => <HeadingInternal size={size}>{children}</HeadingInternal>;
+	HeadingComponent.displayName = size.toUpperCase();
+	Heading[size] = HeadingComponent;
+
+	const AnchoredHeadingComponent = ({ children }: HeadingProps) => (
 		<HeadingInternal size={size} anchor>
 			{children}
 		</HeadingInternal>
 	);
+	AnchoredHeadingComponent.displayName = `Anchored${size.toUpperCase()}`;
+	AnchoredHeading[size] = AnchoredHeadingComponent;
+
 	Styles[size] = styled[size]`
 		display: block;
 

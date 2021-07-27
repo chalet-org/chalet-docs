@@ -1,5 +1,4 @@
 import { NextPageContext } from "next";
-import Router from "next/router";
 
 import { Optional } from "@andrew-r-king/react-kitchen";
 

@@ -1,5 +1,3 @@
-import { Optional } from "@andrew-r-king/react-kitchen";
-
 class LocalStorage {
 	private static storage = (): Storage => {
 		if (typeof window === "undefined") {

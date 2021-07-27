@@ -1,21 +1,17 @@
 import { GetStaticPropsContext } from "next";
 import React from "react";
 
-import { NotFoundLayout } from "Layouts";
+import { MarkdownLayout, Props } from "Layouts/MarkdownLayout";
 import { markdownFiles } from "Server/MarkdownFiles";
 
-type Props = {};
-
 const NotFoundPage = (props: Props) => {
-	return <NotFoundLayout />;
+	return <MarkdownLayout {...props} />;
 };
 
 export const getStaticProps = async (ctx: GetStaticPropsContext) => {
-	const navigation = await markdownFiles.getNavBar();
+	const props = await markdownFiles.getNotFoundPage();
 	return {
-		props: {
-			...navigation,
-		},
+		props,
 	};
 };
 

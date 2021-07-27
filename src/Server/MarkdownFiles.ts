@@ -9,19 +9,37 @@ import { toKebabCase } from "Utility/ToKebabCase";
 import { getChaletSchema } from "./ChaletSchema";
 import { ResultMDXPage, ResultMDX, ResultMDXNav } from "./ResultTypes";
 
-const getFirstExistingPath = (inPath: string, extensions: string[]): string => {
+const mdpages: string = "mdpages";
+const allowedExtensions: string[] = ["mdx", "md"];
+const notFoundPage: string = "_404.mdx";
+
+type FileResult = {
+	filename: string;
+	isNotFoundPage: boolean;
+};
+
+const getFirstExistingPath = (inPath: string, extensions: string[], internal: boolean): FileResult => {
 	let arr: string[] = [];
-	for (const ext of extensions) {
-		arr.push(path.join(process.cwd(), `${inPath}.${ext}`));
-		arr.push(path.join(process.cwd(), inPath, `index.${ext}`));
+	if (internal || !inPath.startsWith(path.join(mdpages, "_"))) {
+		for (const ext of extensions) {
+			arr.push(path.join(process.cwd(), `${inPath}.${ext}`));
+			arr.push(path.join(process.cwd(), inPath, `index.${ext}`));
+		}
 	}
+	arr.push(path.join(process.cwd(), mdpages, notFoundPage));
 	for (const p of arr) {
 		// console.log(p);
 		if (fs.existsSync(p)) {
-			return p;
+			return {
+				filename: p,
+				isNotFoundPage: p.endsWith(notFoundPage),
+			};
 		}
 	}
-	return "";
+	return {
+		filename: "",
+		isNotFoundPage: false,
+	};
 };
 
 const parseCustomMarkdown = (text: string): string => {
@@ -31,9 +49,9 @@ const parseCustomMarkdown = (text: string): string => {
 
 type GetContentCallback = (content: string) => string;
 
-const getPlainMdx = async (slug: string, onGetContent?: GetContentCallback): Promise<ResultMDX> => {
+const getPlainMdx = async (slug: string, internal: boolean, onGetContent?: GetContentCallback): Promise<ResultMDX> => {
 	try {
-		const filename: string = getFirstExistingPath(path.join("mdpages", slug), ["mdx"]);
+		const { filename } = getFirstExistingPath(path.join(mdpages, slug), allowedExtensions, internal);
 		if (filename.length === 0) {
 			throw new Error(`File not found: ${filename}`);
 		}
@@ -56,7 +74,7 @@ const getPlainMdx = async (slug: string, onGetContent?: GetContentCallback): Pro
 
 const getNavBar = async (onGetContent?: GetContentCallback): Promise<ResultMDXNav> => {
 	try {
-		const mdxNav = await getPlainMdx("_navbar", onGetContent);
+		const mdxNav = await getPlainMdx("_navbar", true, onGetContent);
 		return {
 			mdxNav,
 		};
@@ -90,9 +108,13 @@ const getPageAnchors = (fileContent: string): PageAnchor[] => {
 	return anchors;
 };
 
-const getMdxPage = async (slug: string): Promise<ResultMDXPage> => {
+const getMdxPage = async (slug: string, internal: boolean = false): Promise<ResultMDXPage> => {
 	try {
-		const filename: string = getFirstExistingPath(path.join("mdpages", slug), ["mdx", "md"]);
+		const { filename, isNotFoundPage } = getFirstExistingPath(
+			path.join(mdpages, slug),
+			allowedExtensions,
+			internal
+		);
 		if (filename.length === 0) {
 			throw new Error(`File not found: ${filename}`);
 		}
@@ -108,6 +130,9 @@ const getMdxPage = async (slug: string): Promise<ResultMDXPage> => {
 		});
 
 		const { mdxNav } = await getNavBar((content) => {
+			if (isNotFoundPage) {
+				return content;
+			}
 			return content.replace(/\n\* \[([\w\s]+)\]\((.+)\)/g, (match: string, p1: string, p2: string) => {
 				if (p2.substr(1) === slug) {
 					if (anchors.length > 0) {
@@ -142,9 +167,12 @@ const getMdxPage = async (slug: string): Promise<ResultMDXPage> => {
 	}
 };
 
+const getNotFoundPage = () => getMdxPage("_404", true);
+
 const markdownFiles = {
 	getNavBar,
 	getMdxPage,
+	getNotFoundPage,
 };
 
 export { markdownFiles };
