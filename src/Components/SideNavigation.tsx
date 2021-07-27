@@ -23,7 +23,7 @@ const SideNavigation = ({ mdxNav }: Props) => {
 	const { toggleNavigation, navOpen, navWidth, initialized } = useUiStore();
 	useKeyPress(
 		(ev) => {
-			if (ev.key === "27") {
+			if (ev.key === "Escape") {
 				ev.preventDefault();
 				toggleNavigation();
 			}
