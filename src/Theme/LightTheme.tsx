@@ -4,9 +4,10 @@ export const lightTheme: ThemeType = {
 	bodyBackground: "#f3f7f8",
 	background: "#ffffff",
 	mainText: "#111131",
+	header: "#d2dcec",
 	//
 	codeBackground: "#f3f7f8",
-	border: "#e3eaea",
+	border: "#e3eaef",
 	accent: "#7f83ff",
 	black: "#eef5f5",
 	white: "#000000",

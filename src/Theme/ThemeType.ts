@@ -2,6 +2,7 @@ export type ThemeType = {
 	bodyBackground: string;
 	background: string;
 	mainText: string;
+	header: string;
 	//
 	codeBackground: string;
 	border: string;

@@ -20,6 +20,7 @@ const GlobalCssVariables = createGlobalStyle<ThemeType>`
 		--th-bg-code: ${(theme) => theme.codeBackground};
 		--th-bg: ${(theme) => theme.background};
 		--th-main-text: ${(theme) => theme.mainText};
+		--th-header: ${(theme) => theme.header};
 		--th-border: ${(theme) => theme.border};
 		--th-accent: ${(theme) => theme.accent};
 		--th-black: ${(theme) => theme.black};

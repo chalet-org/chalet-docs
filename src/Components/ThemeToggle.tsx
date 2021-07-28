@@ -6,7 +6,7 @@ import { getCssVariable, Theme } from "Theme";
 
 import { Icon } from "./Icon";
 
-const color = getCssVariable("MainText");
+const color = getCssVariable("Header");
 
 type Props = {};
 
@@ -24,8 +24,6 @@ export { ThemeToggle };
 const Styles = styled.button`
 	background: none;
 	cursor: pointer;
-	opacity: 0.25;
-	transition: opacity 0.125s linear;
 
 	> i > svg {
 		> path,
@@ -35,8 +33,6 @@ const Styles = styled.button`
 	}
 
 	&:hover {
-		opacity: 1;
-
 		> i > svg {
 			> path,
 			> circle {

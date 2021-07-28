@@ -3,6 +3,7 @@ enum ThemeCSS {
 	BackgroundCode = "--th-bg-code",
 	Background = "--th-bg",
 	MainText = "--th-main-text",
+	Header = "--th-header",
 	Border = "--th-border",
 	Accent = "--th-accent",
 	Black = "--th-black",

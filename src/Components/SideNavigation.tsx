@@ -12,7 +12,6 @@ import { dynamic } from "Utility";
 const components: Record<string, React.ReactNode> = {
 	// p: dynamic.component("Stub"),
 	a: dynamic.component("Link"),
-	ThemeToggle: dynamic.component("ThemeToggle"),
 };
 
 type Props = ResultMDXNav & {
@@ -65,6 +64,9 @@ const Logo = styled.h4`
 	text-align: center;
 	text-shadow: 0 0 0 transparent;
 	transition: text-shadow 0.125s linear;
+	text-transform: uppercase;
+	letter-spacing: 0.625rem;
+	word-spacing: 0.25rem;
 
 	> a {
 		text-decoration: none !important;
@@ -130,7 +132,7 @@ const StyledAside = styled.aside<AsideProps>`
 	}
 
 	> p {
-		padding-left: 1rem;
+		padding-left: 2rem;
 		font-weight: 600;
 		line-height: 2.5;
 	}
@@ -160,11 +162,11 @@ const StyledAside = styled.aside<AsideProps>`
 	}
 
 	> ul > li > a {
-		padding-left: 2rem;
+		padding-left: 3rem;
 	}
 
 	> ul > li > ul > li > a {
-		padding-left: 3.25rem;
+		padding-left: 4.25rem;
 	}
 
 	a:not(.active) {

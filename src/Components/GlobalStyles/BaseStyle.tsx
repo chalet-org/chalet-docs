@@ -100,9 +100,6 @@ export const BaseStyle = createGlobalStyle`
     h1, h2, h3, h4, h5, h6 {
 		font-family: ${globalFonts.header};
 		font-weight: 500;
-		text-transform: uppercase;
-		letter-spacing: 0.625rem;
-		word-spacing: 0.25rem;
         margin: 0;
 		padding-top: 0.5rem;
 		padding-bottom: 1rem;

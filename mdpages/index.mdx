@@ -1,9 +1,66 @@
 ---
-title: Home
+title: Chalet
 ---
 
-# Home
+!# Chalet
 
-### Schema Reference
+A modern cross-platform project format and build system for C/C++ with a focus on readability and interoperability.
 
-<SchemaTest />
+---
+#### [What does it do?]
+
+Chalet is a command-line application that reads in a JSON project file (ie. chalet.json), finds a usable compiler in PATH, and builds your C/C++ projects. Behind the scenes, Chalet generates either a [Make](https://en.wikipedia.org/wiki/Make_(software)) or [Ninja](https://ninja-build.org/) build file, does some caching, builds, and optionally runs your executable. Chalet project files are designed to be easy to understand, focusing on GNU-like language, and translating that down to the compiler. Because the projects are JSON, they can be easily integrated with IDEs, requiring only a JSON parser, available in practically every language.
+
+In addition to building your projects during the development process, Chalet has numerous other features designed to make working with C/C++ as smooth as possible, including (but not limited to):
+
+* Bundling your applications & libraries for distribution
+* Fetch & manage external git repositories based on commits, tags or branches
+* Profiler integrations - Instruments on macOS, gprof in Linux/MinGW
+* Support for cross-compiling & multiple toolchain definitions
+* CI support (tested with Github Actions)
+* Include other Chalet projects as build steps
+* Include [CMake](https://cmake.org/) projects as build steps
+* Run scripts as build steps (so far: bash, powershell (Win / Core), Batch (Win), python, ruby, lua, perl)
+* Define abstract build steps in order to tune the build
+* A wizard for generating new projects: `chalet init`
+* CLI Commands for manipulating the settings & build file (ie. from the CI)
+* MSVC Support on Windows (VS 2019 & 2022 Previews currently)
+* Objective-C/C++ support on macOS
+* Universal binary support on macOS (Intel & M1)
+* A Visual Studio Code extension
+
+---
+#### [Anything planned?]
+
+Lots of stuff...
+
+* Support for more compilers: Intel, CUDA, Emscripten to name a few
+* iOS Support, which ultimately means working with the Swift compiler or XCode in some way. There's partial support already
+* Android support
+* A "native" build strategy to optionally try instead of Make/Ninja
+* Generate other project file types
+* Optional YAML project files possibly?
+* Support for more languages one day
+
+---
+#### [Anything not planned?]
+
+Package manager integrations. This would be nice to do in the future, but it's very low priority right now. Just installing & using them is a hassle, much less integrating them.
+
+---
+#### [Why Chalet?]
+
+It's a beautifully constructed home. It also starts with 'C'.
+
+---
+#### [Examples]
+
+* [A basic shared library](https://github.com/chalet-org/chalet-example-sharedlib)
+* [An SFML / OpenGL project (integrates with CMake)](https://github.com/chalet-org/chalet-example-sfml)
+* [Interacting with another language (Mono C#)](https://github.com/chalet-org/chalet-example-mono)
+* [Call other Chalet projects (builds all of the above)](https://github.com/chalet-org/chalet-examples)
+
+---
+#### [Discussions]
+
+At the moment, discussions are setup using [on Github](https://github.com/chalet-org/chalet-dev/discussions)

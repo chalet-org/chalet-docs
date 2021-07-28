@@ -11,14 +11,14 @@ import { toKebabCase } from "Utility/ToKebabCase";
 type HeadingSize = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 
 type Props = {
-	children: string;
+	children?: string;
 	size: HeadingSize;
 	anchor?: boolean;
 };
 
-const HeadingInternal = ({ size, anchor, children }: Props) => {
+const Heading = ({ size, anchor, children }: Props) => {
 	const router = useRouter();
-	const id = toKebabCase(children);
+	const id = children ? toKebabCase(children) : "";
 	const { id: routeId } = router.query;
 
 	const headerElement = useRef(null);
@@ -46,22 +46,22 @@ type HeadingProps = {
 	children: string;
 };
 
-let Heading: Dictionary<(props: HeadingProps) => JSX.Element> = {};
-let AnchoredHeading: Dictionary<(props: HeadingProps) => JSX.Element> = {};
+let HeadingObject: Dictionary<(props: HeadingProps) => JSX.Element> = {};
+let AnchoredHeadingObject: Dictionary<(props: HeadingProps) => JSX.Element> = {};
 let Styles: Dictionary<any> = {};
 
 for (const size of ["h1", "h2", "h3", "h4", "h5", "h6"] as HeadingSize[]) {
-	const HeadingComponent = ({ children }: HeadingProps) => <HeadingInternal size={size}>{children}</HeadingInternal>;
+	const HeadingComponent = ({ children }: HeadingProps) => <Heading size={size}>{children}</Heading>;
 	HeadingComponent.displayName = size.toUpperCase();
-	Heading[size] = HeadingComponent;
+	HeadingObject[size] = HeadingComponent;
 
 	const AnchoredHeadingComponent = ({ children }: HeadingProps) => (
-		<HeadingInternal size={size} anchor>
+		<Heading size={size} anchor>
 			{children}
-		</HeadingInternal>
+		</Heading>
 	);
 	AnchoredHeadingComponent.displayName = `Anchored${size.toUpperCase()}`;
-	AnchoredHeading[size] = AnchoredHeadingComponent;
+	AnchoredHeadingObject[`Anchored${size.toUpperCase()}`] = AnchoredHeadingComponent;
 
 	Styles[size] = styled[size]`
 		display: block;
@@ -73,4 +73,4 @@ for (const size of ["h1", "h2", "h3", "h4", "h5", "h6"] as HeadingSize[]) {
 	`;
 }
 
-export { Heading, AnchoredHeading };
+export { Heading, HeadingObject, AnchoredHeadingObject };

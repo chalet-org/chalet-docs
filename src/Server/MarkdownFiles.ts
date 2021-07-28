@@ -44,6 +44,10 @@ const getFirstExistingPath = (inPath: string, extensions: string[], internal: bo
 
 const parseCustomMarkdown = (text: string): string => {
 	text = text.replace(/!> (.*)/g, `<p className="tip">$1</p>`);
+	text = text.replace(/!# (.+)/g, `<PageHeading>$1</PageHeading>`);
+	text = text.replace(/(#{1,6}) \[(.+)\]/g, (match: string, p1: string, p2: string) => {
+		return `<AnchoredH${p1.length}>${p2}</AnchoredH${p1.length}>`;
+	});
 	return text;
 };
 
@@ -92,7 +96,7 @@ const getPageAnchors = (fileContent: string): PageAnchor[] => {
 	let matches: string[] = [];
 	const split = fileContent.split("\n");
 	for (const line of split) {
-		const m = line.match(/^(##|###|####) (.+)$/);
+		const m = line.match(/^(#{1,6}) \[(.+)\]$/);
 		if (m && m.length === 3) {
 			matches.push(m[2]);
 		}

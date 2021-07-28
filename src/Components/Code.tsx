@@ -91,8 +91,6 @@ const codeCss = css<StyleProps>`
 	position: relative;
 	overflow: auto;
 	background-color: ${getCssVariable("BackgroundCode")};
-	border: 0.125rem solid ${getCssVariable("Border")};
-	border-radius: 0.5rem;
 	color: ${getCssVariable("White")};
 	font-size: 0.875rem;
 	font-weight: 400;
@@ -230,7 +228,7 @@ const codeCss = css<StyleProps>`
 
 const CodeStyles = styled.code<StyleProps>`
 	display: inline;
-	padding: 0 0.5rem;
+	padding: 0 0.75rem;
 	padding-top: 0.325rem;
 	padding-bottom: 0.175rem;
 	margin: 0 0.25rem;
@@ -239,7 +237,7 @@ const CodeStyles = styled.code<StyleProps>`
 
 	${codeCss}
 
-	color: ${getCssVariable("Blue")};
+	color: ${getCssVariable("Cyan")};
 `;
 
 const PreStyles = styled.pre<StyleProps>`
@@ -247,6 +245,8 @@ const PreStyles = styled.pre<StyleProps>`
 	/* max-height: 24rem; */
 	margin: 0.75rem 0;
 	padding: 1rem 1.25rem;
+	border-radius: 0.5rem;
+	border: 0.125rem solid ${getCssVariable("Border")};
 
 	${codeCss}
 
@@ -255,9 +255,9 @@ const PreStyles = styled.pre<StyleProps>`
 		color: ${getCssVariable("Accent")};
 		display: block;
 		position: absolute;
-		top: 0.75rem;
+		top: 0.875rem;
 		right: 1.25rem;
 		font-family: ${(props) => props.fonts?.paragraph ?? "inherit"};
-		font-size: 1rem;
+		font-size: 0.875rem;
 	}
 `;

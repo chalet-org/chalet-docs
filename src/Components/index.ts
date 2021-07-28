@@ -7,6 +7,7 @@ export * from "./Icon";
 export * from "./Link";
 export * from "./ImportantNote";
 export * from "./Page";
+export * from "./PageHeading";
 export * from "./Paragraph";
 export * from "./SchemaDocNode";
 export * from "./SchemaTest";

@@ -1,13 +1,13 @@
 import { default as nextDynamic } from "next/dynamic";
 
 type Components =
+	| "BlockQuote"
 	| "Code"
 	| "CodePre"
 	| "CodePreFromMarkdown"
 	| "Link"
-	| "BlockQuote"
+	| "PageHeading"
 	| "Paragraph"
-	| "ThemeToggle"
 	| "Stub";
 
 export const dynamic = {

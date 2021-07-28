@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 import { Dictionary } from "@andrew-r-king/react-kitchen";
 
-import { AnchoredHeading, Heading, Page, SchemaTest, SideNavigation } from "Components";
+import { AnchoredHeadingObject, HeadingObject, Page, SchemaTest, SideNavigation } from "Components";
 import { useRouterScroll } from "Hooks";
 import { ResultMDXPage } from "Server/ResultTypes";
 import { dynamic } from "Utility";
@@ -14,13 +14,14 @@ export type Props = ResultMDXPage & {
 };
 
 let components: Dictionary<React.ComponentType<any>> = {
-	...AnchoredHeading,
-	h1: Heading.h1,
+	...AnchoredHeadingObject,
+	...HeadingObject,
 	a: dynamic.component("Link"),
 	p: dynamic.component("Paragraph"),
 	pre: dynamic.component("CodePreFromMarkdown"),
 	inlineCode: dynamic.component("Code"),
 	blockquote: dynamic.component("BlockQuote"),
+	PageHeading: dynamic.component("PageHeading"),
 };
 
 const MarkdownLayout = ({ meta, mdx, mdxNav, children, schema }: Props) => {

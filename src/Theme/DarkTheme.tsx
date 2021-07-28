@@ -4,9 +4,10 @@ export const darkTheme: ThemeType = {
 	bodyBackground: "#000000",
 	background: "#111111",
 	mainText: "#d9d9d9",
+	header: "#2e3044",
 	//
 	codeBackground: "#0a0a0a",
-	border: "#1d1d1f",
+	border: "#1d1d24",
 	accent: "#7f83ff",
 	black: "#0a0a0a",
 	white: "#dedede",
