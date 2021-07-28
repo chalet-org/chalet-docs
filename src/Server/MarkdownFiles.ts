@@ -2,6 +2,7 @@ import fs from "fs";
 import matter from "gray-matter";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
+import os from "os";
 import path from "path";
 
 import { toKebabCase } from "Utility/ToKebabCase";
@@ -94,7 +95,7 @@ type PageAnchor = {
 
 const getPageAnchors = (fileContent: string): PageAnchor[] => {
 	let matches: string[] = [];
-	const split = fileContent.split("\n");
+	const split = fileContent.split(os.EOL);
 	for (const line of split) {
 		const m = line.match(/^(#{1,6}) \[(.+)\]$/);
 		if (m && m.length === 3) {
@@ -137,14 +138,14 @@ const getMdxPage = async (slug: string, internal: boolean = false): Promise<Resu
 			if (isNotFoundPage) {
 				return content;
 			}
-			return content.replace(/\n\* \[([\w\s]+)\]\((.+)\)/g, (match: string, p1: string, p2: string) => {
+			return content.replace(/[\n\r]\* \[([\w\s]+)\]\((.+)\)/g, (match: string, p1: string, p2: string) => {
 				if (p2.substr(1) === slug) {
 					if (anchors.length > 0) {
 						const pageAnchors = anchors
 							.map((anchor) => `    * [${anchor.text}](${p2}?id=${anchor.to})`)
-							.join("\n");
+							.join(os.EOL);
 
-						return `\n* [${p1}](${p2})\n${pageAnchors}`;
+						return `${os.EOL}* [${p1}](${p2})${os.EOL}${pageAnchors}`;
 					}
 				}
 				return match;
