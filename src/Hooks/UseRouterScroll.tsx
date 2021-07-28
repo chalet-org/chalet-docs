@@ -6,7 +6,7 @@ export const useRouterScroll = () => {
 
 	const handler = useCallback(() => {
 		if (window.location.search.length === 0) {
-			window.scrollTo(0, 0);
+			setTimeout(() => window.scrollTo(0, 0), 25);
 		}
 	}, []);
 

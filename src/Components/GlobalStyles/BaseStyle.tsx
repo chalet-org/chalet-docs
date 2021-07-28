@@ -101,7 +101,7 @@ export const BaseStyle = createGlobalStyle`
 		font-family: ${globalFonts.header};
 		font-weight: 500;
         margin: 0;
-		padding-top: 0.5rem;
+		padding-top: 0;
 		padding-bottom: 1rem;
     }
 
@@ -132,6 +132,14 @@ export const BaseStyle = createGlobalStyle`
 		padding-bottom: 0.75rem;
 	}
 
+	hr {
+		outline: 0;
+		color: ${getCssVariable("Border")};
+		margin: 0;
+		margin-top: 1rem;
+		margin-bottom: 2rem;
+	}
+
     a {
 		cursor: pointer;
         text-decoration: none;
@@ -142,6 +150,12 @@ export const BaseStyle = createGlobalStyle`
 			color: ${getCssVariable("Cyan")};
 		}
     }
+
+	ul {
+		margin: 0;
+		padding-top: 0.25rem;
+		padding-bottom: 0.75rem;
+	}
 
 	button {
 		border: none;
