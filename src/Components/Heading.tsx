@@ -18,7 +18,7 @@ type Props = {
 
 const Heading = ({ size, anchor, children }: Props) => {
 	const router = useRouter();
-	const id = children ? toKebabCase(children) : "";
+	const id = !!children && typeof children === "string" ? toKebabCase(children) : "";
 	const { id: routeId } = router.query;
 
 	const headerElement = useRef(null);
