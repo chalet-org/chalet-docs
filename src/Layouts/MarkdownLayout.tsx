@@ -1,3 +1,4 @@
+import debounce from "lodash/debounce";
 import { MDXRemote } from "next-mdx-remote";
 import React, { useCallback, useEffect, useRef } from "react";
 import styled from "styled-components";
@@ -41,52 +42,55 @@ const MarkdownLayout = ({ meta, mdx, mdxNav, children, schema }: Props) => {
 
 	useRouterScroll();
 
-	const setFocusedLink = useCallback(() => {
-		if (pageLayout.current === null) return;
+	const setFocusedLink = useCallback(
+		debounce(() => {
+			if (pageLayout.current === null) return;
 
-		const windowHeight = getWindowHeight();
-		const pageLayoutHeight = pageLayout.current.getBoundingClientRect().height ?? 0;
-		const scrollPercent = (window.scrollY + windowHeight * 0.5) / pageLayoutHeight;
+			const windowHeight = getWindowHeight();
+			const pageLayoutHeight = pageLayout.current.getBoundingClientRect().height ?? 0;
+			const scrollPercent = (window.scrollY + windowHeight * 0.5) / pageLayoutHeight;
 
-		const links = pageLayout.current.getElementsByTagName("a");
+			const links = pageLayout.current.getElementsByTagName("a");
 
-		let setDataId: boolean = false;
-		if (!!links && links.length > 0) {
-			const firstLinkTop = links[0].offsetTop;
+			let setDataId: boolean = false;
+			if (!!links && links.length > 0) {
+				const firstLinkTop = links[0].offsetTop;
 
-			let arr: AnchorData[] = [];
-			for (let i = 0; i < links.length; ++i) {
-				// if (!isElementInViewport(links[i + 1])) {
-				// 	continue;
-				// }
-				const dataId = links[i].getAttribute("data-id");
-				if (!!dataId) {
-					arr.push({
-						el: links[i],
-						id: dataId,
-					});
+				let arr: AnchorData[] = [];
+				for (let i = 0; i < links.length; ++i) {
+					// if (!isElementInViewport(links[i + 1])) {
+					// 	continue;
+					// }
+					const dataId = links[i].getAttribute("data-id");
+					if (!!dataId) {
+						arr.push({
+							el: links[i],
+							id: dataId,
+						});
+					}
 				}
-			}
 
-			for (let i = 0; i < arr.length; ++i) {
-				const { id } = arr[i];
-				const { el } = arr[i + 1] ?? {};
+				for (let i = 0; i < arr.length; ++i) {
+					const { id } = arr[i];
+					const { el } = arr[i + 1] ?? {};
 
-				const nextTop = el?.offsetTop ?? pageLayoutHeight;
+					const nextTop = el?.offsetTop ?? pageLayoutHeight;
 
-				if (window.scrollY > firstLinkTop) {
-					if (nextTop - windowHeight * scrollPercent >= window.scrollY) {
-						setDataId = true;
-						setFocusedId(id);
-						return;
+					if (window.scrollY > firstLinkTop) {
+						if (nextTop - windowHeight * scrollPercent >= window.scrollY) {
+							setDataId = true;
+							setFocusedId(id);
+							return;
+						}
 					}
 				}
 			}
-		}
-		if (!setDataId && scrollPercent < 0.33) {
-			setFocusedId("");
-		}
-	}, []);
+			if (!setDataId && scrollPercent < 0.33) {
+				setFocusedId("");
+			}
+		}, 10),
+		[]
+	);
 
 	useWheelScroll((ev) => setFocusedLink(), []);
 
