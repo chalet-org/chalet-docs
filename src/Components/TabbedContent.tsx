@@ -39,6 +39,8 @@ const Styles = styled.div`
 	display: flex;
 	flex-wrap: wrap;
 	position: relative;
+	padding-top: 1rem;
+	padding-bottom: 2rem;
 
 	> button {
 		order: -1;
@@ -53,7 +55,7 @@ const Styles = styled.div`
 		border: 0.0625rem solid ${getCssVariable("Border")};
 		cursor: pointer;
 		z-index: 4;
-		transition: color 0.125s linear, background-color 0.125s linear;
+		transition: color 0.125s linear;
 
 		&:not(.active):hover {
 			color: ${getCssVariable("MainText")};
@@ -80,6 +82,7 @@ const Styles = styled.div`
 		background-color: ${getCssVariable("Background")};
 		margin-top: -0.0625rem;
 	}
+
 	> button.active + div.tab {
 		display: block;
 	}
