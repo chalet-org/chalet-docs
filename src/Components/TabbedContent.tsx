@@ -21,13 +21,11 @@ const TabbedContent = ({ children }: Props) => {
 					className: i === activeTab ? "active" : undefined,
 					onClick: (ev: any) => {
 						ev.preventDefault();
-						console.log("i:", index);
 						setActiveTab(index);
 					},
 				},
 			};
 		}
-		console.log(child.props);
 		return child;
 	});
 	return <Styles>{children}</Styles>;
@@ -67,6 +65,10 @@ const Styles = styled.div`
 			border-top: 0.25rem solid ${getCssVariable("Accent")};
 			border-bottom-color: ${getCssVariable("Background")};
 			padding-top: 0.125rem;
+		}
+
+		& ~ button {
+			margin-left: -0.0625rem;
 		}
 	}
 

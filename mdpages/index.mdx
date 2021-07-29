@@ -9,17 +9,17 @@ A modern cross-platform project format and build system for C/C++ with a focus o
 ---
 #### [What does it do?]
 
-Chalet is a command-line application that reads in a JSON project file (ie. chalet.json), finds a usable compiler in PATH, and builds your C/C++ projects. Behind the scenes, Chalet generates either a [Make](https://en.wikipedia.org/wiki/Make_(software)) or [Ninja](https://ninja-build.org/) build file, does some caching, builds, and optionally runs your executable. Chalet project files are designed to be easy to understand, focusing on GNU-like language, and translating that down to the compiler. Because the projects are JSON, they can be easily integrated with IDEs, requiring only a JSON parser, available in practically every language.
+Chalet is a command-line application that reads in a JSON project file (ie. chalet.json), finds a usable compiler in PATH, and builds your C/C++ projects. Behind the scenes, Chalet generates either a [Make](//en.wikipedia.org/wiki/Make_(software)) or [Ninja](//ninja-build.org/) build file, does some caching, builds, and optionally runs your executable. Chalet project files are designed to be easy to understand, focusing on GNU-like language, and translating that down to the compiler. Because the projects are JSON, they can be easily integrated with IDEs, requiring only a JSON parser, available in practically every language.
 
-In addition to building your projects during the development process, Chalet has numerous other features designed to make working with C/C++ as smooth as possible, including (but not limited to):
+In addition to building your projects during the development process, Chalet has numerous other features designed to make working with C/C++ as smooth as possible:
 
-* Bundling your applications & libraries for distribution
+* Bundle your applications & libraries for distribution
 * Fetch & manage external git repositories based on commits, tags or branches
-* Profiler integrations - Instruments on macOS, gprof in Linux/MinGW
-* Support for cross-compiling & multiple toolchain definitions
+* Profiling tool integrations - Instruments on macOS, gprof in Linux/MinGW
+* Support for cross-compiling
 * CI support (tested with Github Actions)
 * Include other Chalet projects as build steps
-* Include [CMake](https://cmake.org/) projects as build steps
+* Include [CMake](//cmake.org/) projects as build steps
 * Run scripts as build steps (so far: bash, powershell (Win / Core), Batch (Win), python, ruby, lua, perl)
 * Define abstract build steps in order to tune the build
 * A wizard for generating new projects: `chalet init`
@@ -30,9 +30,12 @@ In addition to building your projects during the development process, Chalet has
 * A Visual Studio Code extension
 
 ---
-#### [Anything planned?]
+#### [Why Chalet?]
 
-Lots of stuff...
+It's a beautifully constructed home. It also starts with 'C'.
+
+---
+#### [Future Plans]
 
 * Support for more compilers: Intel, CUDA, Emscripten to name a few
 * iOS Support, which ultimately means working with the Swift compiler or XCode in some way. There's partial support already
@@ -43,24 +46,14 @@ Lots of stuff...
 * Support for more languages one day
 
 ---
-#### [Anything not planned?]
-
-Package manager integrations. This would be nice to do in the future, but it's very low priority right now. Just installing & using them is a hassle, much less integrating them.
-
----
-#### [Why Chalet?]
-
-It's a beautifully constructed home. It also starts with 'C'.
-
----
 #### [Examples]
 
-* [A basic shared library](https://github.com/chalet-org/chalet-example-sharedlib)
-* [An SFML / OpenGL project (integrates with CMake)](https://github.com/chalet-org/chalet-example-sfml)
-* [Interacting with another language (Mono C#)](https://github.com/chalet-org/chalet-example-mono)
-* [Call other Chalet projects (builds all of the above)](https://github.com/chalet-org/chalet-examples)
+* [A basic shared library](//github.com/chalet-org/chalet-example-sharedlib)
+* [An SFML / OpenGL project (integrates with CMake)](//github.com/chalet-org/chalet-example-sfml)
+* [Interacting with another language (Mono C#)](//github.com/chalet-org/chalet-example-mono)
+* [Call other Chalet projects (builds all of the above)](//github.com/chalet-org/chalet-examples)
 
 ---
 #### [Discussions]
 
-At the moment, discussions are setup using [on Github](https://github.com/chalet-org/chalet-dev/discussions)
+At the moment, discussions are on [Github](//github.com/chalet-org/chalet-dev/discussions)

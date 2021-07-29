@@ -138,7 +138,7 @@ const StyledAside = styled.aside<AsideProps>`
 	}
 
 	> ul {
-		padding-bottom: 2rem;
+		padding-bottom: 1rem;
 	}
 
 	li {

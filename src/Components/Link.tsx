@@ -11,10 +11,16 @@ const Link = ({ children, ...props }: Props) => {
 	const router = useRouter();
 
 	const showActive = props.showActive ?? true;
+	const targetBlank = typeof props.href === "string" && props.href.startsWith("//");
 
 	return (
 		<NextLink {...props} passHref scroll={false}>
-			<Styles className={router.asPath === props.href && showActive ? "active" : ""}>{children}</Styles>
+			<Styles
+				className={router.asPath === props.href && showActive ? "active" : ""}
+				target={targetBlank ? "_blank" : undefined}
+			>
+				{children}
+			</Styles>
 		</NextLink>
 	);
 };
