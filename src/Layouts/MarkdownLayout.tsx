@@ -22,6 +22,7 @@ let components: Dictionary<React.ComponentType<any>> = {
 	inlineCode: dynamic.component("Code"),
 	blockquote: dynamic.component("BlockQuote"),
 	PageHeading: dynamic.component("PageHeading"),
+	TabbedContent: dynamic.component("TabbedContent"),
 };
 
 const MarkdownLayout = ({ meta, mdx, mdxNav, children, schema }: Props) => {
@@ -47,4 +48,5 @@ export { MarkdownLayout };
 
 const Styles = styled.div`
 	display: block;
+	padding-bottom: 8rem;
 `;

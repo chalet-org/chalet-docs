@@ -7,10 +7,10 @@ type Props = React.PropsWithChildren<{}>;
 
 const PageHeading = ({ children }: Props) => {
 	return (
-		<Styles>
-			{children}
+		<>
+			<Styles>{children}</Styles>
 			<hr />
-		</Styles>
+		</>
 	);
 };
 

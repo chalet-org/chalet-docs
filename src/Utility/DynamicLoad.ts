@@ -8,7 +8,8 @@ type Components =
 	| "Link"
 	| "PageHeading"
 	| "Paragraph"
-	| "Stub";
+	| "Stub"
+	| "TabbedContent";
 
 export const dynamic = {
 	component: (component: Components) => nextDynamic(async () => (await import("Components"))[component] as any),

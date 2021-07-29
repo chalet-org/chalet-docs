@@ -23,5 +23,5 @@ export { Link };
 
 const Styles = styled.a`
 	display: inline-block;
-	font-weight: 600;
+	font-weight: 400;
 `;

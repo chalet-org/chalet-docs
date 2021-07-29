@@ -133,11 +133,36 @@ export const BaseStyle = createGlobalStyle`
 	}
 
 	hr {
+		border: none;
 		outline: 0;
-		color: ${getCssVariable("Border")};
-		margin: 0;
-		margin-top: 1rem;
+		background-color: ${getCssVariable("Border")};
+		margin: 1rem auto;
 		margin-bottom: 2rem;
+		height: 0.0625rem;
+		width: 100%;
+		text-align: center;
+
+		&:before {
+			content: ' ';
+			display: block;
+			position: relative;
+			top: 0.325rem;
+			height: 0.0625rem;
+			width: 100%;
+			background-color: ${getCssVariable("Border")};
+		}
+
+		&:after {
+			content: 'Λ';
+			display: inline-block;
+			position: relative;
+			top: -1.0675rem;
+			padding: 0 0;
+			background: ${getCssVariable("Background")};
+			color: ${getCssVariable("Border")};
+			font-size: 0.675rem;
+			transform: scaleX(150%);
+		}
 	}
 
     a {

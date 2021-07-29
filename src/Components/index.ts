@@ -13,5 +13,6 @@ export * from "./SchemaDocNode";
 export * from "./SchemaTest";
 export * from "./SideNavigation";
 export * from "./Stub";
+export * from "./TabbedContent";
 export * from "./ThemeToggle";
 export * from "./ThemeProvider";
