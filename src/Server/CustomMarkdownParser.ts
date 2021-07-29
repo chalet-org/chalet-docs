@@ -34,11 +34,7 @@ const parseTabs = (text: string): string => {
 
 			let retString: string = `<TabbedContent>`;
 			for (let i = 0; i < tabArray.length; i += 2) {
-				retString += `<button>
-
-${tabArray[i]}
-
-</button><div className="tab">
+				retString += `<button>${tabArray[i]}</button><div className="tab">
 
 ${tabArray[i + 1]}
 
