@@ -1,12 +1,16 @@
 import { useRouter, NextRouter } from "next/router";
 import { useEffect, useCallback } from "react";
 
+import { useUiStore } from "Stores";
+
 export const useRouterScroll = () => {
 	const router = useRouter();
 
 	const handler = useCallback(() => {
 		if (window.location.search.length === 0) {
-			setTimeout(() => window.scrollTo(0, 0), 25);
+			setTimeout(() => {
+				window.scrollTo(0, 0);
+			}, 25);
 		}
 	}, []);
 

@@ -53,6 +53,53 @@ const someFunction = (): string => {
 > Note: This is a very serious blockquote!
 
 
+<!-- tabs:start -->
+|Windows|
+Something for Windows
+
+|MacOS|
+Mac stuff!
+
+|Linux|
+Something for Linux.
+
+Lots of linux stuff
+<!-- tabs:end -->
+
+
+<!-- tabs:start -->
+|Foo|
+```cpp
+bool someValue = false;
+int someInt = 7;
+```
+
+|Bar|
+#### Mac stuff!
+
+|Zip|
+```cpp
+struct MyStruct
+{
+    int value() const;
+    void setValue(const int inValue);
+
+private:
+    int m_value = 8;
+};
+```
+```cpp
+int MyStruct::value() const
+{
+    return m_value;
+}
+void MyStruct::setValue(const int inValue)
+{
+    m_value = inValue;
+}
+```
+<!-- tabs:end -->
+
 
 <!-- # Heading 1 -->
 ## [Heading 2]

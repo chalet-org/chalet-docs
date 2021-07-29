@@ -150,7 +150,7 @@ const codeCss = css<StyleProps>`
 			color: ${getCssVariable("Green")};
 		}
 		&.class-name {
-			color: ${getCssVariable("Blue")};
+			color: ${getCssVariable("Accent")};
 		}
 		&.comment {
 			color: ${getCssVariable("Gray")};

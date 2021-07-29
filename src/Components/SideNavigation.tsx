@@ -10,8 +10,9 @@ import { getCssVariable } from "Theme";
 import { dynamic } from "Utility";
 
 const components: Record<string, React.ReactNode> = {
-	// p: dynamic.component("Stub"),
+	p: dynamic.component("Stub"),
 	a: dynamic.component("Link"),
+	Link: dynamic.component("Link"),
 };
 
 type Props = ResultMDXNav & {
@@ -132,7 +133,6 @@ const StyledAside = styled.aside<AsideProps>`
 	}
 
 	> p {
-		padding-left: 2rem;
 		font-weight: 600;
 		line-height: 2.5;
 	}
@@ -143,6 +143,11 @@ const StyledAside = styled.aside<AsideProps>`
 
 	li {
 		width: 100%;
+
+		strong {
+			padding: 0;
+			line-height: 2.5;
+		}
 	}
 
 	a {
@@ -161,12 +166,22 @@ const StyledAside = styled.aside<AsideProps>`
 		}
 	}
 
-	> ul > li > a {
-		padding-left: 3rem;
+	> ul > li > a,
+	> ul > li > strong {
+		padding-left: 2rem;
 	}
 
 	> ul > li > ul > li > a {
-		padding-left: 4.25rem;
+		padding-left: 3.25rem;
+	}
+
+	> ul > li > ul > li > ul > li > a {
+		padding-left: 4.5rem;
+	}
+
+	> ul > li > strong {
+		color: ${getCssVariable("Header")};
+		font-weight: 400;
 	}
 
 	a:not(.active) {

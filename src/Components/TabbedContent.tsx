@@ -32,7 +32,9 @@ const TabbedContent = ({ children }: Props) => {
 	let i: number = -1;
 	let activeTabSet: boolean = false;
 	children = React.Children.map(children, (child: any, index: number) => {
-		if (!child || typeof child == "number" || typeof child == "boolean" || typeof child == "string") return child;
+		if (!child || typeof child == "number" || typeof child == "boolean" || typeof child == "string") {
+			return child;
+		}
 
 		if (child.props?.mdxType) {
 			if (child.props?.mdxType === "button") {

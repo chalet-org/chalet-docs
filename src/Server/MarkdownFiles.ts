@@ -71,7 +71,7 @@ const getPlainMdx = async (slug: string, internal: boolean, onGetContent?: GetCo
 
 const getNavBar = async (onGetContent?: GetContentCallback): Promise<ResultMDXNav> => {
 	try {
-		const mdxNav = await getPlainMdx("_navbar", true, onGetContent);
+		const mdxNav = await getPlainMdx("_sidebar", true, onGetContent);
 		return {
 			mdxNav,
 		};
@@ -95,7 +95,7 @@ const getPageAnchors = (fileContent: string): PageAnchor[] => {
 		}
 	}
 
-	let anchors: PageAnchor[] = matches.map((match) => {
+	const anchors: PageAnchor[] = matches.map((match) => {
 		return {
 			text: match,
 			to: toKebabCase(match),
@@ -130,18 +130,24 @@ const getMdxPage = async (slug: string, internal: boolean = false): Promise<Resu
 			if (isNotFoundPage) {
 				return content;
 			}
-			return content.replace(/[\n\r]{1,2}\* \[([\w\s]+)\]\((.+)\)/g, (match: string, p1: string, p2: string) => {
-				if (p2.substr(1) === slug || (slug === "." && p2 === "/")) {
-					if (anchors.length > 0) {
-						const pageAnchors = anchors
-							.map((anchor) => `    * [${anchor.text}](${p2}?id=${anchor.to})`)
-							.join(os.EOL);
+			return content.replace(
+				/[\n\r]{1,2}(\s*)\* \[([\w\s]+)\]\((.+)\)/g,
+				(match: string, p1: string, p2: string, p3: string) => {
+					if (p3.substr(1) === slug || (slug === "." && p3 === "/")) {
+						if (anchors.length > 0) {
+							const pageAnchors = anchors
+								.map(
+									(anchor) =>
+										`${p1}    * <Link href="${p3}?id=${anchor.to}" dataId="${anchor.to}">${anchor.text}</Link>`
+								)
+								.join(os.EOL);
 
-						return `${os.EOL}* [${p1}](${p2})${os.EOL}${pageAnchors}`;
+							return `${os.EOL}${p1}* [${p2}](${p3})${os.EOL}${pageAnchors}`;
+						}
 					}
+					return match;
 				}
-				return match;
-			});
+			);
 		});
 
 		let other: object = {};

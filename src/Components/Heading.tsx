@@ -5,6 +5,8 @@ import styled from "styled-components";
 import { Dictionary } from "@andrew-r-king/react-kitchen";
 
 import { Link } from "Components";
+import { useScroll } from "Hooks";
+import { useUiStore } from "Stores";
 import { getCssVariable } from "Theme";
 import { toKebabCase } from "Utility/ToKebabCase";
 
@@ -23,6 +25,21 @@ const Heading = ({ size, anchor, children }: Props) => {
 
 	const headerElement = useRef(null);
 
+	/*useScroll(
+		(ev) => {
+			const offset = 0;
+			const top = (headerElement.current as any)?.getBoundingClientRect().top ?? 0;
+			// const height = (headerElement.current as any)?.offsetTop ?? 0;
+			// if (id === "what-does-it-do") {
+			// 	console.log(top, window.scrollY, height);
+			// }
+			if (window.scrollY > 0 && top + offset > 0 && top - offset <= window.innerHeight) {
+				setFocusedId(id);
+			}
+		},
+		[headerElement]
+	);*/
+
 	useEffect(() => {
 		if (!!headerElement && !!headerElement.current && !!routeId && typeof routeId === "string" && id === routeId) {
 			window.scrollTo({ behavior: "smooth", top: (headerElement.current as any)?.offsetTop ?? 0 });
@@ -34,7 +51,9 @@ const Heading = ({ size, anchor, children }: Props) => {
 	if (!!anchor) {
 		return (
 			<Tag id={id} ref={headerElement}>
-				<Link href={`${router.asPath.split("?")[0]}?id=${id}`}>{children}</Link>
+				<Link href={`${router.asPath.split("?")[0]}?id=${id}`} dataId={id}>
+					{children}
+				</Link>
 			</Tag>
 		);
 	} else {

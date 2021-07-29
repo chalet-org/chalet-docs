@@ -6,11 +6,13 @@ import { LocalStorage } from "Utility";
 class UiState extends BaseState {
 	initialized: boolean = false;
 
-	themeID: Theme = Theme.Dark;
+	themeId: Theme = Theme.Dark;
 	theme: ThemeType = darkTheme;
 
 	navOpen: boolean = false;
 	navWidth: string = "20rem";
+
+	focusedId: string = "examples";
 
 	@Action
 	initialize = () => {
@@ -25,8 +27,8 @@ class UiState extends BaseState {
 
 	@Action
 	setTheme = (theme: Theme) => {
-		this.themeID = theme;
-		LocalStorage.set("themeId", this.themeID);
+		this.themeId = theme;
+		LocalStorage.set("themeId", this.themeId);
 		switch (theme) {
 			case Theme.Dark:
 				return this.setThemeInternal(darkTheme);
@@ -41,6 +43,17 @@ class UiState extends BaseState {
 	setNavOpen = (inValue: boolean) => {
 		this.navOpen = inValue;
 		LocalStorage.set("navOpen", this.navOpen ? "true" : "false");
+	};
+
+	@Action
+	private setFocusedIdInternal = (inValue: string) => {
+		this.focusedId = inValue;
+	};
+
+	setFocusedId = (inValue: string) => {
+		if (this.focusedId !== inValue) {
+			this.setFocusedIdInternal(inValue);
+		}
 	};
 
 	toggleNavigation = () => this.setNavOpen(!this.navOpen);

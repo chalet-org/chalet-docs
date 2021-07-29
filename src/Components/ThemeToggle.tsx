@@ -11,10 +11,10 @@ const color = getCssVariable("Header");
 type Props = {};
 
 const ThemeToggle = (props: Props) => {
-	const { setTheme, themeID } = useUiStore();
+	const { setTheme, themeId } = useUiStore();
 	return (
-		<Styles className="theme-toggle" onClick={() => setTheme(themeID === Theme.Light ? Theme.Dark : Theme.Light)}>
-			<Icon id={themeID === Theme.Light ? "night" : "day"} size="2rem" color={color} />
+		<Styles className="theme-toggle" onClick={() => setTheme(themeId === Theme.Light ? Theme.Dark : Theme.Light)}>
+			<Icon id={themeId === Theme.Light ? "night" : "day"} size="2rem" color={color} />
 		</Styles>
 	);
 };
