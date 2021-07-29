@@ -14,4 +14,18 @@ const useScroll = (inCallback: (ev: Event) => void, dependencies: React.Dependen
 	return callback;
 };
 
-export { useScroll };
+const useWheelScroll = (inCallback: (ev: MouseEvent) => void, dependencies: React.DependencyList = []) => {
+	const callback = useCallback(inCallback, dependencies);
+
+	useEffect(() => {
+		document.addEventListener("wheel", callback, false);
+
+		return () => {
+			document.removeEventListener("wheel", callback, false);
+		};
+	}, [callback]);
+
+	return callback;
+};
+
+export { useScroll, useWheelScroll };

@@ -4,3 +4,4 @@ export * from "./Hash";
 export * from "./LocalStorage";
 export * from "./RecursiveDirectorySearch";
 export * from "./DynamicLoad";
+export * from "./Window";

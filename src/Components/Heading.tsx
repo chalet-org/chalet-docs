@@ -8,6 +8,7 @@ import { Link } from "Components";
 import { useScroll } from "Hooks";
 import { useUiStore } from "Stores";
 import { getCssVariable } from "Theme";
+import { getWindowHeight } from "Utility";
 import { toKebabCase } from "Utility/ToKebabCase";
 
 type HeadingSize = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
@@ -25,26 +26,12 @@ const Heading = ({ size, anchor, children }: Props) => {
 
 	const headerElement = useRef(null);
 
-	/*useScroll(
-		(ev) => {
-			const offset = 0;
-			const top = (headerElement.current as any)?.getBoundingClientRect().top ?? 0;
-			// const height = (headerElement.current as any)?.offsetTop ?? 0;
-			// if (id === "what-does-it-do") {
-			// 	console.log(top, window.scrollY, height);
-			// }
-			if (window.scrollY > 0 && top + offset > 0 && top - offset <= window.innerHeight) {
-				setFocusedId(id);
-			}
-		},
-		[headerElement]
-	);*/
-
 	useEffect(() => {
 		if (!!headerElement && !!headerElement.current && !!routeId && typeof routeId === "string" && id === routeId) {
-			window.scrollTo({ behavior: "smooth", top: (headerElement.current as any)?.offsetTop ?? 0 });
+			const top = (headerElement.current as any)?.offsetTop ?? 0;
+			window.scrollTo({ behavior: "smooth", top });
 		}
-	}, [routeId, headerElement]);
+	}, [routeId, headerElement.current]);
 
 	const Tag = Styles[size];
 
