@@ -1,5 +1,6 @@
 import { Dictionary } from "@andrew-r-king/react-kitchen";
 
+import { isDevelopment } from "Server/IsDevelopment";
 import { getPagesCache, PageCache } from "Server/MarkdownCache";
 import { ResultSearchResults } from "Server/ResultTypes";
 import { ApiReq, ApiRes } from "Utility";
@@ -7,8 +8,6 @@ import { ApiReq, ApiRes } from "Utility";
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
 let pages: PageCache[] = [];
-
-const isDevelopment: boolean = process.env.NODE_ENV === "development";
 
 const getSearchResults = (search: string, text: PageCache[], resultLength: number = 80): ResultSearchResults => {
 	let result: ResultSearchResults = [];
@@ -43,7 +42,6 @@ const handler = async (req: ApiReq, res: ApiRes<ResultSearchResults>): Promise<v
 			search = search.join("");
 		}
 		search = search.replace(/\n\r/g, "");
-		console.log(search);
 
 		if (pages.length === 0 || isDevelopment) {
 			pages = await getPagesCache();
