@@ -56,7 +56,7 @@ const CodePreFromMarkdown = ({ children, ...props }: Props) => {
 				const { props: childProps } = child as any;
 
 				// This is weird, but next-mdx-remote does some funky stuff with the component
-				const lang = props.lang ?? childProps?.className.replace?.(/( |language-)/g, "") ?? "";
+				const lang = props.lang ?? childProps?.className?.replace?.(/( |language-)/g, "") ?? "";
 
 				return (
 					<PreStyles fonts={globalFonts} data-lang={lang}>

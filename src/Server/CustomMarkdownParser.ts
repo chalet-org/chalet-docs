@@ -1,4 +1,9 @@
+import { JSONSchema7 } from "json-schema";
 import os from "os";
+
+import { Optional } from "@andrew-r-king/react-kitchen";
+
+import { getChaletSchema } from "./ChaletSchema";
 
 const trimLineBreaksFromEdges = (text: string) => {
 	while (text.endsWith("\n") || text.endsWith("\r")) {
@@ -46,20 +51,88 @@ ${tabArray[i + 1]}
 	);
 };
 
-const parseCustomMarkdown = (text: string): string => {
-	// First, ensure consistent line endings to make regex patterns easier
-	text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+let nameCache: object = {};
 
-	// Parse the things
-	text = parseImportantNotes(text);
-	text = parsePageHeaders(text);
-	text = parseAnchoredHeaders(text);
-	text = parseTabs(text);
+const parseJsonNodeToMarkdown = (name: string, schema: Optional<JSONSchema7>): string => {
+	let result: string = "";
+	if (!schema) return result;
 
-	// Set line endings back
-	text = text.replace(/\n/g, os.EOL);
+	const { type, description, properties, patternProperties, default: defaultValue } = schema;
 
-	return text;
+	const cleanName = name
+		.replace(/\^(.+?)[\(\:].+?\$/g, (_: string, p1: string) => {
+			return p1;
+		})
+		.replace(/\^\[.+?\$/g, "$any");
+
+	if (!nameCache[cleanName]) {
+		nameCache[cleanName] = true;
+
+		result += `\n\n#### [${cleanName}]\n\n`;
+		if (!!type) {
+			result += `type: \`${type}\`\n\n`;
+		}
+		if (!!defaultValue) {
+			result += `default: \`${defaultValue}\`\n\n`;
+		}
+		if (!!description) {
+			result += `> ${description.replace(/\n/g, "\n> ")}\n\n`;
+		}
+		result += "<br />\n\n";
+	}
+
+	if (!!properties) {
+		result += Object.entries(properties)
+			.map(([key, value], i) => parseJsonNodeToMarkdown(key, value as JSONSchema7))
+			.join("");
+	}
+	if (!!patternProperties) {
+		result += Object.entries(patternProperties)
+			.map(([key, value], i) => parseJsonNodeToMarkdown(key, value as JSONSchema7))
+			.join("");
+	}
+
+	return result;
+};
+
+let otherData: Optional<object> = null;
+
+const parseSchemaReference = async (text: string): Promise<string> => {
+	try {
+		if (!otherData) {
+			otherData = {};
+
+			const { schema } = await getChaletSchema();
+			otherData["schema"] = schema;
+		}
+		nameCache = {};
+		return text.replace(/\!\!SchemaReference:(\w+)\!\!/g, (match: string, p1: string) => {
+			return parseJsonNodeToMarkdown("$root", otherData?.["schema"] ?? null);
+		});
+	} catch (err) {
+		throw err;
+	}
+};
+
+const parseCustomMarkdown = async (text: string): Promise<string> => {
+	try {
+		// First, ensure consistent line endings to make regex patterns easier
+		text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+
+		// Parse the things
+		text = await parseSchemaReference(text);
+		text = parseImportantNotes(text);
+		text = parsePageHeaders(text);
+		text = parseAnchoredHeaders(text);
+		text = parseTabs(text);
+
+		// Set line endings back
+		text = text.replace(/\n/g, os.EOL);
+
+		return text;
+	} catch (err) {
+		throw err;
+	}
 };
 
 export { parseCustomMarkdown };

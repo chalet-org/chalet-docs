@@ -7,7 +7,6 @@ import path from "path";
 
 import { toKebabCase } from "Utility/ToKebabCase";
 
-import { getChaletSchema } from "./ChaletSchema";
 import { parseCustomMarkdown } from "./CustomMarkdownParser";
 import { ResultMDXPage, ResultMDX, ResultMDXNav } from "./ResultTypes";
 
@@ -87,9 +86,9 @@ const getPageAnchors = (fileContent: string): PageAnchor[] => {
 	let matches: string[] = [];
 	const split = fileContent.split(os.EOL);
 	for (const line of split) {
-		const m = line.match(/^(#{2,6}) \[(.+)\]$/);
-		if (m && m.length === 3) {
-			matches.push(m[2]);
+		const m = line.match(/^<AnchoredH\d>(.+?)<\/AnchoredH\d>$/);
+		if (m && m.length === 2) {
+			matches.push(m[1]);
 		}
 	}
 
@@ -115,9 +114,9 @@ const getMdxPage = async (slug: string, internal: boolean = false): Promise<Resu
 		}
 
 		const fileContent: string = fs.readFileSync(filename, "utf8");
-		const anchors = getPageAnchors(fileContent);
 
-		const { data: meta, content } = matter(parseCustomMarkdown(fileContent));
+		const { data: meta, content } = matter(await parseCustomMarkdown(fileContent));
+		const anchors = getPageAnchors(content);
 		const mdx: MDXRemoteSerializeResult<Record<string, unknown>> = await serialize(content, {
 			target: ["esnext"],
 		});
@@ -146,12 +145,6 @@ const getMdxPage = async (slug: string, internal: boolean = false): Promise<Resu
 			);
 		});
 
-		let other: object = {};
-		if (slug === ".") {
-			const { schema } = await getChaletSchema();
-			other["schema"] = schema;
-		}
-
 		return {
 			meta: {
 				...meta,
@@ -159,7 +152,6 @@ const getMdxPage = async (slug: string, internal: boolean = false): Promise<Resu
 			},
 			mdx,
 			mdxNav,
-			...other,
 		};
 	} catch (err) {
 		throw err;

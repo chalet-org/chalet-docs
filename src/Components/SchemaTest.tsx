@@ -10,8 +10,8 @@ type Props = ResultChaletSchema;
 const SchemaTest = ({ schema }: Props) => {
 	return !!schema ? (
 		<>
-			<CodePre lang="json">{JSON.stringify(schema, undefined, 2)}</CodePre>
-			<SchemaDocNode name="$root" schema={schema} />
+			{/* <CodePre lang="json">{JSON.stringify(schema, undefined, 2)}</CodePre> */}
+			{/* <SchemaDocNode name="$root" schema={schema} /> */}
 		</>
 	) : null;
 };

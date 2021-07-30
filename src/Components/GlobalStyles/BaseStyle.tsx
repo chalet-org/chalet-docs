@@ -182,6 +182,10 @@ export const BaseStyle = createGlobalStyle`
 		padding-bottom: 0.75rem;
 	}
 
+	br {
+		line-height: 2.5;
+	}
+
 	button {
 		border: none;
 	}

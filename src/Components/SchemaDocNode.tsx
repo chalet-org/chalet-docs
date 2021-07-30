@@ -1,6 +1,6 @@
+import { JSONSchema7 } from "json-schema";
 import React from "react";
 import styled from "styled-components";
-import { JSONSchema7 } from "json-schema";
 
 import { hashString } from "Utility";
 
@@ -13,7 +13,7 @@ const SchemaDocNode = ({ name, schema }: Props) => {
 	const { type, description, properties, patternProperties } = schema;
 	return (
 		<Styles>
-			<div>{name}</div>
+			<h4>{name}</h4>
 			{!!type && <div>type: {type}</div>}
 			{!!description && <div>{description}</div>}{" "}
 			{!!properties &&
