@@ -5,14 +5,15 @@
 
 ```
 NODE_ENV=development
-GITHUB_TOKEN=(your token)
 ```
 
-3. run:
+3. Add `export GITHUB_TOKEN=(your token)` to your shell somewhere ( in `.zshrc` or `.bashrc`). `source` the file, or restart your shell afterwards
+
+4. run:
 
 ```
 yarn install
 yarn dev
 ```
 
-4. Test GITHUB_TOKEN by going to `localhost:3000/api/chalet-schema/main`
+5. Test GITHUB_TOKEN by going to `localhost:3000/api/chalet-schema/main`
