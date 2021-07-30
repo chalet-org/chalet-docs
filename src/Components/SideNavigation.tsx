@@ -7,7 +7,7 @@ import { useKeyPress } from "Hooks";
 import { ResultMDXNav } from "Server/ResultTypes";
 import { useUiStore } from "Stores";
 import { getCssVariable } from "Theme";
-import { dynamic } from "Utility";
+import { dynamic, makeLinearGradient } from "Utility";
 
 const components: Record<string, React.ReactNode> = {
 	p: dynamic.component("Stub"),
@@ -54,7 +54,10 @@ const SideNavigation = ({ mdxNav }: Props) => {
 				</Logo>
 				<SearchInput />
 				<MDXRemote {...mdxNav} components={components} />
-				<ThemeToggle />
+				<div className="nav-spacer" />
+				<div className="nav-fade">
+					<ThemeToggle />
+				</div>
 			</StyledAside>
 		</>
 	);
@@ -113,15 +116,11 @@ const StyledAside = styled.aside<AsideProps>`
 	width: ${(props) => props.width};
 	transition: left 0.125s linear;
 	z-index: 90;
-	overflow: hidden;
+	overflow-x: hidden;
+	overflow-y: auto;
 
 	background-color: ${getCssVariable("BackgroundCode")};
 	color: ${getCssVariable("MainText")};
-
-	&.open {
-		left: 0;
-		border-right: 0.125rem solid ${getCssVariable("Border")};
-	}
 
 	ul,
 	> p {
@@ -196,14 +195,45 @@ const StyledAside = styled.aside<AsideProps>`
 		}
 	}
 
-	.theme-toggle {
+	> div.nav-spacer {
 		display: block;
-		position: absolute;
-		width: 2rem;
-		height: 2rem;
-		top: auto;
-		bottom: 2.125rem;
-		left: auto;
-		right: 2.125rem;
+		position: relative;
+		width: 100%;
+		padding: 4rem;
+	}
+
+	> div.nav-fade {
+		display: block;
+		position: fixed;
+		width: ${(props) => props.width};
+		height: 6rem;
+		bottom: 0;
+
+		${makeLinearGradient("transparent", getCssVariable("BackgroundCode"), 180)}
+		background: ${getCssVariable("BackgroundCode")};
+		background: linear-gradient(180deg, transparent 0%, ${getCssVariable("BackgroundCode")} 30%);
+
+		> .theme-toggle {
+			display: block;
+			position: fixed;
+			width: 2rem;
+			height: 2rem;
+			top: auto;
+			bottom: 2.125rem;
+			left: -4.125rem;
+			right: auto;
+			transition: left 0.125s linear;
+		}
+	}
+
+	&.open {
+		left: 0;
+		border-right: 0.125rem solid ${getCssVariable("Border")};
+
+		> div.nav-fade {
+			> .theme-toggle {
+				left: calc(${(props) => props.width} - 4.125rem);
+			}
+		}
 	}
 `;

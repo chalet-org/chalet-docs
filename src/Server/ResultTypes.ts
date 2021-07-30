@@ -28,5 +28,6 @@ export type ResultMDXPage = ResultMDXNav &
 
 export type ResultSearchResults = {
 	url: string;
+	title: string;
 	text: string;
 }[];

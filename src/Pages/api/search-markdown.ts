@@ -6,23 +6,27 @@ import { ApiReq, ApiRes } from "Utility";
 
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
-// let cache: string = "";
+let pages: PageCache[] = [];
 
-const getSearchResults = (search: string, text: PageCache[], resultLength: number = 120): ResultSearchResults => {
+const isDevelopment: boolean = process.env.NODE_ENV === "development";
+
+const getSearchResults = (search: string, text: PageCache[], resultLength: number = 80): ResultSearchResults => {
 	let result: ResultSearchResults = [];
 
 	let lastPosition: number = 0;
 	for (const page of text) {
+		const contentLowerCase = page.content.toLowerCase();
 		while (true) {
-			lastPosition = page.content.indexOf(search, lastPosition);
+			lastPosition = contentLowerCase.indexOf(search, lastPosition);
 			if (lastPosition === -1) {
 				break;
 			} else {
 				result.push({
 					url: page.url,
+					title: page.title,
 					text: page.content.substr(lastPosition, search.length + resultLength).split("\n")[0],
 				});
-				lastPosition++;
+				lastPosition += search.length;
 			}
 		}
 	}
@@ -39,13 +43,13 @@ const handler = async (req: ApiReq, res: ApiRes<ResultSearchResults>): Promise<v
 			search = search.join("");
 		}
 		search = search.replace(/\n\r/g, "");
-		// console.log(search);
+		console.log(search);
 
-		// if (cache === "") {
-		const pages = await getPagesCache();
-		let cache = JSON.stringify(pages);
-		const results = getSearchResults(search, pages);
-		// }
+		if (pages.length === 0 || isDevelopment) {
+			pages = await getPagesCache();
+		}
+		const results = getSearchResults(search.toLowerCase(), pages);
+		console.log(results);
 		res.status(200).json(results);
 	} catch (err) {
 		res.status(404).json({

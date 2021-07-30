@@ -15,8 +15,10 @@ class DocsApi extends BaseApi {
 
 	searchMarkdown = async (search: string): Promise<ResultSearchResults> => {
 		try {
-			if (search.length > 3) {
-				const results = await this.GET<ResultSearchResults>(`/search-markdown?search=${search}`);
+			if (search.length >= 3) {
+				const results = await this.GET<ResultSearchResults>(
+					`/search-markdown?search=${encodeURIComponent(search)}`
+				);
 				return results;
 			} else {
 				return [];
