@@ -5,10 +5,7 @@ import styled from "styled-components";
 import { Dictionary } from "@andrew-r-king/react-kitchen";
 
 import { Link } from "Components";
-import { useScroll } from "Hooks";
-import { useUiStore } from "Stores";
 import { getCssVariable } from "Theme";
-import { getWindowHeight } from "Utility";
 import { toKebabCase } from "Utility/ToKebabCase";
 
 type HeadingSize = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";

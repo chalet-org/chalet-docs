@@ -8,9 +8,10 @@ import { useUiStore } from "Stores";
 type Props = React.PropsWithChildren<NextLinkProps> & {
 	showActive?: boolean;
 	dataId?: string;
+	onClick?: React.MouseEventHandler;
 };
 
-const Link = ({ children, dataId, ...props }: Props) => {
+const Link = ({ children, dataId, onClick, ...props }: Props) => {
 	const router = useRouter();
 
 	const { focusedId, setFocusedId } = useUiStore();
@@ -32,8 +33,9 @@ const Link = ({ children, dataId, ...props }: Props) => {
 				}
 				target={targetBlank ? "_blank" : undefined}
 				data-id={dataId}
-				onClick={() => {
+				onClick={(ev) => {
 					setFocusedId(dataId ?? "");
+					onClick?.(ev);
 				}}
 			>
 				{children}

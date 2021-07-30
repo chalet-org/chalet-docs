@@ -1,6 +1,8 @@
 import { JSONSchema7 } from "json-schema";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 
+import { Dictionary } from "@andrew-r-king/react-kitchen";
+
 export type ResultGreeting = {
 	name: string;
 };
@@ -23,3 +25,8 @@ export type ResultMDXPage = ResultMDXNav &
 		};
 		mdx: ResultMDX;
 	};
+
+export type ResultSearchResults = {
+	url: string;
+	text: string;
+}[];

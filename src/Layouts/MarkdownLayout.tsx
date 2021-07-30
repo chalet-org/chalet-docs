@@ -37,7 +37,7 @@ const MarkdownLayout = ({ meta, mdx, mdxNav, children, schema }: Props) => {
 		components["SchemaTest"] = () => <SchemaTest {...{ schema }} />;
 	}
 
-	const { setFocusedId } = useUiStore();
+	const { setFocusedId, navOpen } = useUiStore();
 	const pageLayout = useRef<HTMLDivElement>(null);
 
 	useRouterScroll();
@@ -89,10 +89,17 @@ const MarkdownLayout = ({ meta, mdx, mdxNav, children, schema }: Props) => {
 				setFocusedId("");
 			}
 		}, 10),
-		[]
+		[pageLayout.current]
 	);
 
-	useWheelScroll((ev) => setFocusedLink(), []);
+	useWheelScroll(
+		(ev) => {
+			if (navOpen) {
+				setFocusedLink();
+			}
+		},
+		[navOpen]
+	);
 
 	return (
 		<>

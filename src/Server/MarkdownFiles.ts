@@ -53,9 +53,7 @@ const getPlainMdx = async (slug: string, internal: boolean, onGetContent?: GetCo
 			throw new Error(`File not found: ${filename}`);
 		}
 
-		let content: string = fs.readFileSync(filename, {
-			encoding: "utf8",
-		});
+		let content: string = fs.readFileSync(filename, "utf8");
 		if (!!onGetContent) {
 			content = onGetContent(content);
 		}
@@ -116,9 +114,7 @@ const getMdxPage = async (slug: string, internal: boolean = false): Promise<Resu
 			throw new Error(`File not found: ${filename}`);
 		}
 
-		const fileContent: string = fs.readFileSync(filename, {
-			encoding: "utf8",
-		});
+		const fileContent: string = fs.readFileSync(filename, "utf8");
 		const anchors = getPageAnchors(fileContent);
 
 		const { data: meta, content } = matter(parseCustomMarkdown(fileContent));
@@ -178,4 +174,4 @@ const markdownFiles = {
 	getNotFoundPage,
 };
 
-export { markdownFiles };
+export { markdownFiles, mdpages };

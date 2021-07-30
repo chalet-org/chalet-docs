@@ -2,7 +2,7 @@ import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import React from "react";
 import styled from "styled-components";
 
-import { Link, ThemeToggle } from "Components";
+import { Link, SearchInput, ThemeToggle } from "Components";
 import { useKeyPress } from "Hooks";
 import { ResultMDXNav } from "Server/ResultTypes";
 import { useUiStore } from "Stores";
@@ -52,6 +52,7 @@ const SideNavigation = ({ mdxNav }: Props) => {
 						Chalet
 					</Link>
 				</Logo>
+				<SearchInput />
 				<MDXRemote {...mdxNav} components={components} />
 				<ThemeToggle />
 			</StyledAside>
