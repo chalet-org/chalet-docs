@@ -18,7 +18,7 @@ export { PageHeading };
 
 const Styles = styled.h1`
 	display: block;
-	font-size: 6rem;
+	font-size: 5rem;
 	line-height: 1;
 	margin-left: -0.25rem;
 	color: ${getCssVariable("Header")};

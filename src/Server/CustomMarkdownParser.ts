@@ -4,6 +4,7 @@ import path from "path";
 
 import { Dictionary, Optional } from "@andrew-r-king/react-kitchen";
 
+import { hashString } from "Utility";
 import { toKebabCase, toPascalCase } from "Utility/TextCaseConversions";
 
 import { getChaletSchema } from "./ChaletSchema";
@@ -25,7 +26,7 @@ const parsePageHeaders = (text: string): string => {
 
 const parseAnchoredHeaders = (text: string): string => {
 	return text.replace(/(#{1,6}) \[(.+)\](?!\()\n/g, (match: string, p1: string, p2: string) => {
-		return `<AnchoredH${p1.length}>${p2}</AnchoredH${p1.length}>\n`;
+		return `<AnchoredH${p1.length}>${p2.replace(/\{/g, '{"{').replace(/\}/g, '}"}')}</AnchoredH${p1.length}>\n`;
 	});
 };
 
@@ -54,8 +55,6 @@ ${tabArray[i + 1]}
 	);
 };
 
-let nameCache: object = {};
-
 const parseJsonNodeToMarkdown = (
 	name: Optional<string>,
 	schema: Optional<JSONSchema7>,
@@ -83,13 +82,13 @@ const parseJsonNodeToMarkdown = (
 		definitions: schemaDefinitions,
 	} = schema;
 
-	const cleanName = name
-		? name
-				.replace(/\^(.+?)[\(\:].+?\$/g, (_: string, p1: string) => {
-					return p1;
-				})
-				.replace(/\^\[.+?\$/g, "$any")
-		: null;
+	const cleanName = !!name ? name.replace(/^\^(.+?)\$$/g, "$1") : null;
+	// ? name
+	// 		.replace(/\^(.+?)[\(\:].+?\$/g, (_: string, p1: string) => {
+	// 			return p1;
+	// 		})
+	// 		.replace(/\^\[.+?\$/g, "$any")
+	// : null;
 
 	if (!!schemaDefinitions) {
 		definitions = schemaDefinitions;
@@ -109,11 +108,8 @@ const parseJsonNodeToMarkdown = (
 	if (!!reference) {
 		let definitionName = reference.replace(/^#\/definitions\/(.+)$/g, "$1");
 
-		if (!cleanName || !nameCache[cleanName]) {
-			if (!!cleanName) {
-				// nameCache[cleanName] = true;
-				result += `#### [${cleanName}]\n\n`;
-			}
+		if (!!cleanName) {
+			result += `###### [${cleanName}]\n\n`;
 		}
 		if (
 			!!definitions &&
@@ -126,7 +122,7 @@ const parseJsonNodeToMarkdown = (
 			result += parseJsonNodeToMarkdown(null, definitions[definitionName] as JSONSchema7, definitions);
 		} else {
 			const displayName = toPascalCase(definitionName);
-			result += `${cleanName ?? ""}: [${displayName}](/schema-reference?definition=${definitionName})  \n`;
+			result += `type: [${displayName}](/schema-reference?definition=${definitionName})  \n`;
 		}
 	}
 
@@ -144,7 +140,7 @@ ${JSON.stringify(defaultValue, undefined, 3)}
 		}
 	}
 	if (!!pattern) {
-		result += `pattern: \`${pattern}\`  \n`;
+		result += `pattern: \`${pattern.replace(/^\^(.+?)\$$/g, "$1")}\`  \n`;
 	}
 	if (!!uniqueItems) {
 		result += `uniqueItems: \`${uniqueItems ? "true" : "false"}\`  \n`;
@@ -230,14 +226,14 @@ type PageAnchor = {
 	to: string;
 };
 
-const getPageAnchors = async (fileContent: string, branch?: string, definition?: string): Promise<PageAnchor[]> => {
+const getPageAnchors = async (fileContent: string, slug: string, branch?: string): Promise<PageAnchor[]> => {
 	try {
 		const schema = await initializeSchema(branch ?? "main");
 		const definitions = (schema?.["definitions"] as Dictionary<JSONSchema7> | undefined) ?? {};
 
 		let anchors: PageAnchor[] = [];
 		const split = fileContent.split(os.EOL);
-		if (!!branch) {
+		if (!!branch && slug === "schema-reference") {
 			for (const [key, value] of Object.entries(definitions)) {
 				if (!!value && !!value["type"] && (value["type"] === "object" || value["type"] === undefined)) {
 					anchors.push({
@@ -271,7 +267,6 @@ const parseSchemaReference = async (text: string, branch: string): Promise<strin
 	try {
 		const schema = await initializeSchema(branch);
 
-		nameCache = {};
 		return text.replace(`!!SchemaReference!!`, (match: string) => {
 			let result: string = "";
 			if (!!schema) {
@@ -291,12 +286,12 @@ const parseSchemaDefinition = async (text: string, branch: string, definition: s
 	try {
 		const schema = await initializeSchema(branch);
 
-		nameCache = {};
 		return text.replace(`!!SchemaReference!!`, (match: string) => {
 			let result: string = "";
 			if (!!schema) {
 				const definitions = schema["definitions"] as Dictionary<JSONSchema7> | undefined;
 
+				result += `#### [${toPascalCase(definition)}]\n\n`;
 				result += parseJsonNodeToMarkdown(definition, definitions?.[definition] ?? null, definitions);
 			}
 			return result;

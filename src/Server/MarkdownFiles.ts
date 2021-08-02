@@ -114,7 +114,7 @@ const getMdxPage = async (
 		const branch = typeof branchRaw === "string" && branchRaw !== "" ? branchRaw : undefined;
 
 		const { data: meta, content } = matter(await parseCustomMarkdown(fileContent, branch, definition));
-		const anchors = await getPageAnchors(content, branch, definition);
+		const anchors = await getPageAnchors(content, slug, branch);
 
 		const mdx: MDXRemoteSerializeResult<Record<string, unknown>> = await serialize(content, {
 			target: ["esnext"],

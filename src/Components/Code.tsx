@@ -90,7 +90,6 @@ type StyleProps = {
 
 const codeCss = css<StyleProps>`
 	position: relative;
-	overflow: auto;
 	background-color: ${getCssVariable("BackgroundCode")};
 	color: ${getCssVariable("White")};
 	font-size: 0.875rem;
@@ -235,6 +234,7 @@ const CodeStyles = styled.code<StyleProps>`
 	vertical-align: middle;
 	white-space: pre-wrap;
 	line-height: inherit;
+	overflow: hidden;
 
 	${codeCss}
 
@@ -250,6 +250,7 @@ const PreStyles = styled.pre<StyleProps>`
 	border: 0.125rem solid ${getCssVariable("Border")};
 	white-space: pre;
 	line-height: 1.5;
+	overflow: auto;
 
 	${codeCss}
 
