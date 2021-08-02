@@ -1,6 +1,6 @@
 import debounce from "lodash/debounce";
 import { MDXRemote } from "next-mdx-remote";
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 import { Dictionary } from "@andrew-r-king/react-kitchen";
@@ -37,7 +37,7 @@ const MarkdownLayout = ({ meta, mdx, mdxNav, children, schema }: Props) => {
 		components["SchemaTest"] = () => <SchemaTest {...{ schema }} />;
 	}
 
-	const { setFocusedId, navOpen } = useUiStore();
+	const { focusedId, setFocusedId, navOpen } = useUiStore();
 	const pageLayout = useRef<HTMLDivElement>(null);
 
 	useRouterScroll();
@@ -94,11 +94,11 @@ const MarkdownLayout = ({ meta, mdx, mdxNav, children, schema }: Props) => {
 
 	useWheelScroll(
 		(ev) => {
-			if (navOpen) {
+			if (navOpen && focusedId === "") {
 				setFocusedLink();
 			}
 		},
-		[navOpen]
+		[navOpen, focusedId]
 	);
 
 	return (

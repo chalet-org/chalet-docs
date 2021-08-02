@@ -11,7 +11,8 @@ class DocsApi extends BaseApi {
 
 	getChaletSchema = (version: string = "main") => this.GET<ResultChaletSchema>(`/chalet-schema/${version}`);
 
-	getMdx = (slug: string) => this.GET<ResultMDXPage>(`/get-mdx?slug=${slug}`);
+	getMdx = (slug: string, definition: string, branch: string = "development") =>
+		this.GET<ResultMDXPage>(`/get-mdx?slug=${slug}&definition=${definition}&branch=${branch}`);
 
 	searchMarkdown = async (search: string): Promise<ResultSearchResults> => {
 		try {

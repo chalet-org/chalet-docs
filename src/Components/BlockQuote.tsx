@@ -32,7 +32,7 @@ const Styles = styled.div`
 		border-left: 0.25rem solid ${getCssVariable("Accent")};
 
 		> p {
-			font-size: 1.25rem;
+			font-size: 1rem;
 			padding-top: 0.25rem;
 			padding-bottom: 0.5rem;
 		}

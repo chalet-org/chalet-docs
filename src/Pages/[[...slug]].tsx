@@ -11,9 +11,13 @@ const MarkdownPage = withServerErrorPage((props: Props) => {
 });
 
 MarkdownPage.getInitialProps = handleInitialProps(async (ctx) => {
-	const { slug: slugRaw } = ctx.query;
+	const { slug: slugRaw, definition: definitionRaw, branch: branchRaw } = ctx.query;
+
 	const slug: string = path.join(typeof slugRaw === "string" ? slugRaw : slugRaw?.join(path.sep) ?? "");
-	const page = await docsApi.getMdx(slug);
+	const definition: string = typeof definitionRaw === "string" ? definitionRaw : definitionRaw?.join("") ?? "";
+	const branch: string = typeof branchRaw === "string" ? branchRaw : branchRaw?.join("") ?? "development";
+
+	const page = await docsApi.getMdx(slug, definition, branch);
 	return {
 		...page,
 	};

@@ -13,7 +13,7 @@ const handler = async (
 		if (!slug || slug.length === 0) {
 			throw new Error("Invalid query sent in request");
 		}
-		const result = await markdownFiles.getMdxPage(slug);
+		const result = await markdownFiles.getMdxPage(slug, req.query);
 
 		res.status(200).json(result);
 	} catch (err) {

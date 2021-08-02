@@ -5,9 +5,12 @@ import { serialize } from "next-mdx-remote/serialize";
 import os from "os";
 import path from "path";
 
-import { toKebabCase } from "Utility/ToKebabCase";
+import { Dictionary, Optional } from "@andrew-r-king/react-kitchen";
 
-import { parseCustomMarkdown } from "./CustomMarkdownParser";
+import { toKebabCase } from "Utility/TextCaseConversions";
+
+import { getChaletSchema } from "./ChaletSchema";
+import { getPageAnchors, parseCustomMarkdown } from "./CustomMarkdownParser";
 import { ResultMDXPage, ResultMDX, ResultMDXNav } from "./ResultTypes";
 
 const mdpages: string = "mdpages";
@@ -25,9 +28,11 @@ const getFirstExistingPath = (inPath: string, extensions: string[], internal: bo
 		for (const ext of extensions) {
 			arr.push(path.join(process.cwd(), `${inPath}.${ext}`));
 			arr.push(path.join(process.cwd(), inPath, `index.${ext}`));
+			arr.push(path.join(process.cwd(), inPath, "..", `[id].${ext}`));
 		}
 	}
 	arr.push(path.join(process.cwd(), mdpages, notFoundPage));
+
 	for (const p of arr) {
 		// console.log(p);
 		if (fs.existsSync(p)) {
@@ -37,6 +42,7 @@ const getFirstExistingPath = (inPath: string, extensions: string[], internal: bo
 			};
 		}
 	}
+
 	return {
 		filename: "",
 		isNotFoundPage: false,
@@ -77,32 +83,13 @@ const getNavBar = async (onGetContent?: GetContentCallback): Promise<ResultMDXNa
 	}
 };
 
-type PageAnchor = {
-	text: string;
-	to: string;
-};
+let otherData: Optional<object> = null;
 
-const getPageAnchors = (fileContent: string): PageAnchor[] => {
-	let matches: string[] = [];
-	const split = fileContent.split(os.EOL);
-	for (const line of split) {
-		const m = line.match(/^<AnchoredH\d>(.+?)<\/AnchoredH\d>$/);
-		if (m && m.length === 2) {
-			matches.push(m[1]);
-		}
-	}
-
-	const anchors: PageAnchor[] = matches.map((match) => {
-		return {
-			text: match,
-			to: toKebabCase(match),
-		};
-	});
-
-	return anchors;
-};
-
-const getMdxPage = async (slug: string, internal: boolean = false): Promise<ResultMDXPage> => {
+const getMdxPage = async (
+	slug: string,
+	query: Dictionary<string[] | string>,
+	internal: boolean = false
+): Promise<ResultMDXPage> => {
 	try {
 		const { filename, isNotFoundPage } = getFirstExistingPath(
 			path.join(mdpages, slug),
@@ -115,8 +102,20 @@ const getMdxPage = async (slug: string, internal: boolean = false): Promise<Resu
 
 		const fileContent: string = fs.readFileSync(filename, "utf8");
 
-		const { data: meta, content } = matter(await parseCustomMarkdown(fileContent));
-		const anchors = getPageAnchors(content);
+		if (!otherData) {
+			otherData = {};
+
+			const { schema } = await getChaletSchema("development");
+			otherData["schema"] = schema;
+		}
+
+		const { definition: definitionRaw, branch: branchRaw } = query;
+		const definition = typeof definitionRaw === "string" && definitionRaw !== "" ? definitionRaw : undefined;
+		const branch = typeof branchRaw === "string" && branchRaw !== "" ? branchRaw : undefined;
+
+		const { data: meta, content } = matter(await parseCustomMarkdown(fileContent, branch, definition));
+		const anchors = await getPageAnchors(content, branch, definition);
+
 		const mdx: MDXRemoteSerializeResult<Record<string, unknown>> = await serialize(content, {
 			target: ["esnext"],
 		});
@@ -133,7 +132,7 @@ const getMdxPage = async (slug: string, internal: boolean = false): Promise<Resu
 							const pageAnchors = anchors
 								.map(
 									(anchor) =>
-										`${p1}    * <Link href="${p3}?id=${anchor.to}" dataId="${anchor.to}">${anchor.text}</Link>`
+										`${p1}    * <Link href="${p3}?${anchor.to}" dataId="${anchor.to}">${anchor.text}</Link>`
 								)
 								.join(os.EOL);
 
@@ -146,6 +145,7 @@ const getMdxPage = async (slug: string, internal: boolean = false): Promise<Resu
 		});
 
 		return {
+			...otherData,
 			meta: {
 				...meta,
 				title: meta?.title ?? "Untitled",
@@ -158,7 +158,7 @@ const getMdxPage = async (slug: string, internal: boolean = false): Promise<Resu
 	}
 };
 
-const getNotFoundPage = () => getMdxPage("_404", true);
+const getNotFoundPage = () => getMdxPage("_404", {}, true);
 
 const markdownFiles = {
 	getNavBar,

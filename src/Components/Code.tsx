@@ -10,7 +10,7 @@ import { globalFonts } from "Components";
 import { getCssVariable } from "Theme";
 
 type Props = React.PropsWithChildren<{
-	lang: string;
+	lang?: string;
 }>;
 
 const Code = ({ children, ...props }: Props) => {
@@ -28,6 +28,7 @@ const Code = ({ children, ...props }: Props) => {
 };
 
 type CodeProps = Props & {
+	lang: string;
 	children: string;
 };
 
@@ -94,11 +95,9 @@ const codeCss = css<StyleProps>`
 	color: ${getCssVariable("White")};
 	font-size: 0.875rem;
 	font-weight: 400;
-	white-space: pre;
 	word-spacing: normal;
 	word-break: normal;
 	word-wrap: normal;
-	line-height: 1.5;
 	tab-size: 4;
 	hyphens: none;
 	outline: 0;
@@ -227,13 +226,15 @@ const codeCss = css<StyleProps>`
 `;
 
 const CodeStyles = styled.code<StyleProps>`
-	display: inline;
-	padding: 0 0.75rem;
-	padding-top: 0.325rem;
-	padding-bottom: 0.175rem;
-	margin: 0 0.25rem;
+	display: inline-block;
+	padding: 0 0.25rem;
+	padding-top: 0.125rem;
+	padding-bottom: 0;
+	margin: 0;
 	font-size: 0.75rem;
 	vertical-align: middle;
+	white-space: pre-wrap;
+	line-height: inherit;
 
 	${codeCss}
 
@@ -247,6 +248,8 @@ const PreStyles = styled.pre<StyleProps>`
 	padding: 1rem 1.25rem;
 	border-radius: 0.5rem;
 	border: 0.125rem solid ${getCssVariable("Border")};
+	white-space: pre;
+	line-height: 1.5;
 
 	${codeCss}
 

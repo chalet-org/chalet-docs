@@ -205,7 +205,7 @@ const StyledAside = styled.aside<AsideProps>`
 	> div.nav-fade {
 		display: block;
 		position: fixed;
-		width: ${(props) => props.width};
+		width: calc(${(props) => props.width} - 0.125rem);
 		height: 7.5rem;
 		bottom: 0;
 

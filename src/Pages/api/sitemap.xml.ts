@@ -20,7 +20,7 @@ const gunzipPromise = (sm: Buffer) =>
 
 let sitemap: Optional<Buffer> = null;
 
-export default async (req: ApiReq, res: ApiRes<any>) => {
+const handler = async (req: ApiReq, res: ApiRes<any>) => {
 	try {
 		res.setHeader("Content-Type", "application/xml");
 
@@ -69,3 +69,5 @@ export default async (req: ApiReq, res: ApiRes<any>) => {
 		});
 	}
 };
+
+export default handler;

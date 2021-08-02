@@ -5,8 +5,9 @@ import styled from "styled-components";
 import { Dictionary } from "@andrew-r-king/react-kitchen";
 
 import { Link } from "Components";
+import { useUiStore } from "Stores";
 import { getCssVariable } from "Theme";
-import { toKebabCase } from "Utility/ToKebabCase";
+import { toKebabCase } from "Utility/TextCaseConversions";
 
 type HeadingSize = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 
@@ -19,23 +20,34 @@ type Props = {
 const Heading = ({ size, anchor, children }: Props) => {
 	const router = useRouter();
 	const id = !!children && typeof children === "string" ? toKebabCase(children) : "";
-	const { id: routeId } = router.query;
+	const { id: routeId, definition } = router.query;
+
+	const { focusedId } = useUiStore();
 
 	const headerElement = useRef(null);
 
 	useEffect(() => {
-		if (!!headerElement && !!headerElement.current && !!routeId && typeof routeId === "string" && id === routeId) {
+		if (
+			!!headerElement &&
+			!!headerElement.current &&
+			!!routeId &&
+			typeof routeId === "string" &&
+			id === routeId &&
+			id === focusedId
+		) {
 			const top = (headerElement.current as any)?.offsetTop ?? 0;
 			window.scrollTo({ behavior: "smooth", top });
 		}
-	}, [routeId, headerElement.current]);
+	}, [routeId, focusedId, headerElement.current, window]);
 
 	const Tag = Styles[size];
 
 	if (!!anchor) {
+		const basePath = router.asPath.split("?")[0];
+		const href = !!definition ? `${basePath}?definition=${definition}&id=${id}` : `${basePath}?id=${id}`;
 		return (
 			<Tag id={id} ref={headerElement}>
-				<Link href={`${router.asPath.split("?")[0]}?id=${id}`} dataId={id}>
+				<Link href={href} dataId={id}>
 					{children}
 				</Link>
 			</Tag>

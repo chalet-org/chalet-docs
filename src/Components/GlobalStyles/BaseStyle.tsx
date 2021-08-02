@@ -88,7 +88,7 @@ export const BaseStyle = createGlobalStyle`
         padding: 0;
 		font-family: ${globalFonts.paragraph};
 		font-size: 1.125rem;
-		line-height: 1.625;
+		line-height: 1.25;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
     }
@@ -180,10 +180,7 @@ export const BaseStyle = createGlobalStyle`
 		margin: 0;
 		padding-top: 0.25rem;
 		padding-bottom: 0.75rem;
-	}
-
-	br {
-		line-height: 2.5;
+		line-height: 1.625;
 	}
 
 	button {
