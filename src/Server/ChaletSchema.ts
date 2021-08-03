@@ -2,7 +2,7 @@ import { Optional } from "@andrew-r-king/react-kitchen";
 
 import { ResultChaletSchema } from "./ResultTypes";
 
-export const getChaletSchema = async (tag: string = "main"): Promise<ResultChaletSchema> => {
+const getChaletSchema = async (tag: string = "main"): Promise<ResultChaletSchema> => {
 	try {
 		// TODO: validate if tag is "main" or "v*.*.*"
 
@@ -26,3 +26,5 @@ export const getChaletSchema = async (tag: string = "main"): Promise<ResultChale
 		throw err;
 	}
 };
+
+export { getChaletSchema };

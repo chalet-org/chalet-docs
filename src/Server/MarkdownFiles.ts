@@ -2,16 +2,14 @@ import fs from "fs";
 import matter from "gray-matter";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
-import os from "os";
-import path from "path";
+import nodePath from "path";
 
 import { Dictionary, Optional } from "@andrew-r-king/react-kitchen";
 
-import { toKebabCase } from "Utility/TextCaseConversions";
-
-import { getChaletSchema } from "./ChaletSchema";
+import { getChaletBranches } from "./ChaletBranches";
+import { getChaletTags } from "./ChaletTags";
 import { getPageAnchors, parseCustomMarkdown } from "./CustomMarkdownParser";
-import { ResultMDXPage, ResultMDX, ResultMDXNav } from "./ResultTypes";
+import { ResultMDXPage, ResultMDX, ResultNavigation } from "./ResultTypes";
 
 const mdpages: string = "mdpages";
 const allowedExtensions: string[] = ["mdx", "md"];
@@ -24,14 +22,14 @@ type FileResult = {
 
 const getFirstExistingPath = (inPath: string, extensions: string[], internal: boolean): FileResult => {
 	let arr: string[] = [];
-	if (internal || !inPath.startsWith(path.join(mdpages, "_"))) {
+	if (internal || !inPath.startsWith(nodePath.join(mdpages, "_"))) {
 		for (const ext of extensions) {
-			arr.push(path.join(process.cwd(), `${inPath}.${ext}`));
-			arr.push(path.join(process.cwd(), inPath, `index.${ext}`));
-			arr.push(path.join(process.cwd(), inPath, "..", `[id].${ext}`));
+			arr.push(nodePath.join(process.cwd(), `${inPath}.${ext}`));
+			arr.push(nodePath.join(process.cwd(), inPath, `index.${ext}`));
+			arr.push(nodePath.join(process.cwd(), inPath, "..", `[id].${ext}`));
 		}
 	}
-	arr.push(path.join(process.cwd(), mdpages, notFoundPage));
+	arr.push(nodePath.join(process.cwd(), mdpages, notFoundPage));
 
 	for (const p of arr) {
 		// console.log(p);
@@ -49,11 +47,12 @@ const getFirstExistingPath = (inPath: string, extensions: string[], internal: bo
 	};
 };
 
-type GetContentCallback = (content: string) => string;
+// Originally used to get navigation from _sidebar.mdx
+// type GetContentCallback = (content: string) => string;
 
-const getPlainMdx = async (slug: string, internal: boolean, onGetContent?: GetContentCallback): Promise<ResultMDX> => {
+/*const getPlainMdx = async (slug: string, internal: boolean, onGetContent?: GetContentCallback): Promise<ResultMDX> => {
 	try {
-		const { filename } = getFirstExistingPath(path.join(mdpages, slug), allowedExtensions, internal);
+		const { filename } = getFirstExistingPath(nodePath.join(mdpages, slug), allowedExtensions, internal);
 		if (filename.length === 0) {
 			throw new Error(`File not found: ${filename}`);
 		}
@@ -70,29 +69,37 @@ const getPlainMdx = async (slug: string, internal: boolean, onGetContent?: GetCo
 	} catch (err) {
 		throw err;
 	}
-};
+};*/
 
-const getNavBar = async (onGetContent?: GetContentCallback): Promise<ResultMDXNav> => {
+let otherData: Optional<{
+	refs?: string[];
+}> = null;
+
+const getNavBar = async (): Promise<Omit<ResultNavigation, "anchors">> => {
 	try {
-		const mdxNav = await getPlainMdx("_sidebar", true, onGetContent);
+		if (!otherData || !otherData.refs) {
+			otherData = {};
+
+			const branches = await getChaletBranches();
+			const tags = await getChaletTags();
+			otherData.refs = [...branches, ...tags];
+		}
 		return {
-			mdxNav,
+			refs: otherData.refs,
 		};
 	} catch (err) {
 		throw err;
 	}
 };
 
-let otherData: Optional<object> = null;
-
 const getMdxPage = async (
 	slug: string,
-	query: Dictionary<string[] | string>,
+	query: Dictionary<string | undefined>,
 	internal: boolean = false
 ): Promise<ResultMDXPage> => {
 	try {
 		const { filename, isNotFoundPage } = getFirstExistingPath(
-			path.join(mdpages, slug),
+			nodePath.join(mdpages, slug === "schema-dev" ? "schema" : slug),
 			allowedExtensions,
 			internal
 		);
@@ -102,56 +109,25 @@ const getMdxPage = async (
 
 		const fileContent: string = fs.readFileSync(filename, "utf8");
 
-		if (!otherData) {
-			otherData = {};
-
-			const { schema } = await getChaletSchema("development");
-			otherData["schema"] = schema;
-		}
-
-		const { definition: definitionRaw, branch: branchRaw } = query;
-		const definition = typeof definitionRaw === "string" && definitionRaw !== "" ? definitionRaw : undefined;
-		const branch = typeof branchRaw === "string" && branchRaw !== "" ? branchRaw : undefined;
-
-		const { data: meta, content } = matter(await parseCustomMarkdown(fileContent, branch, definition));
+		const { definition, branch } = query;
+		const { data: meta, content } = matter(await parseCustomMarkdown(fileContent, slug, branch, definition));
 		const anchors = await getPageAnchors(content, slug, branch);
 
 		const mdx: MDXRemoteSerializeResult<Record<string, unknown>> = await serialize(content, {
 			target: ["esnext"],
 		});
 
-		const { mdxNav } = await getNavBar((content) => {
-			if (isNotFoundPage) {
-				return content;
-			}
-			return content.replace(
-				/[\n\r]{1,2}(\s*)\* \[([\w\s]+)\]\((.+)\)/g,
-				(match: string, p1: string, p2: string, p3: string) => {
-					if (p3.substr(1) === slug || (slug === "." && p3 === "/")) {
-						if (anchors.length > 0) {
-							const pageAnchors = anchors
-								.map(
-									(anchor) =>
-										`${p1}    * <Link href="${p3}?${anchor.to}" dataId="${anchor.to}">${anchor.text}</Link>`
-								)
-								.join(os.EOL);
-
-							return `${os.EOL}${p1}* [${p2}](${p3})${os.EOL}${pageAnchors}`;
-						}
-					}
-					return match;
-				}
-			);
-		});
+		const navData = await getNavBar();
 
 		return {
 			...otherData,
+			...navData,
+			anchors,
 			meta: {
 				...meta,
 				title: meta?.title ?? "Untitled",
 			},
 			mdx,
-			mdxNav,
 		};
 	} catch (err) {
 		throw err;

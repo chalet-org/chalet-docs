@@ -8,6 +8,7 @@ import { hashString } from "Utility";
 import { toKebabCase, toPascalCase } from "Utility/TextCaseConversions";
 
 import { getChaletSchema } from "./ChaletSchema";
+import { ResultPageAnchor } from "./ResultTypes";
 
 const trimLineBreaksFromEdges = (text: string) => {
 	while (text.endsWith("\n") || text.endsWith("\r")) {
@@ -55,10 +56,12 @@ ${tabArray[i + 1]}
 	);
 };
 
-const parseJsonNodeToMarkdown = (
+const jsonNodeToMarkdown = (
 	name: Optional<string>,
+	slug: string,
 	schema: Optional<JSONSchema7>,
-	definitions?: Dictionary<JSONSchema7Definition>
+	definitions?: Dictionary<JSONSchema7Definition>,
+	indented: boolean = false
 ): string => {
 	let result: string = "";
 	if (!schema) return result;
@@ -80,6 +83,8 @@ const parseJsonNodeToMarkdown = (
 		oneOf,
 		$ref: reference,
 		definitions: schemaDefinitions,
+		additionalProperties,
+		required,
 	} = schema;
 
 	const cleanName = !!name ? name.replace(/^\^(.+?)\$$/g, "$1") : null;
@@ -97,32 +102,34 @@ const parseJsonNodeToMarkdown = (
 			.map(([key, value]) => {
 				if (value["type"] && value["type"] !== "object" && value["type"] !== undefined) return "";
 
-				const split = key.split("-");
-				let displayName = split[split.length - 1];
+				let displayName = definitionName.split("-").pop() ?? "";
 				displayName = displayName.charAt(0).toUpperCase() + displayName.substr(1);
 				return `<!-- ${displayName}:definition=${key} -->\n\n`;
 			})
 			.join("");*/
 	}
 
+	if (!!cleanName) {
+		result += `###### [${cleanName}]\n\n`;
+	}
+
+	let isNotDefinition: boolean = false;
+
 	if (!!reference) {
 		let definitionName = reference.replace(/^#\/definitions\/(.+)$/g, "$1");
-
-		if (!!cleanName) {
-			result += `###### [${cleanName}]\n\n`;
-		}
-		if (
+		isNotDefinition =
 			!!definitions &&
 			!!definitions[definitionName] &&
 			(!definitions[definitionName]["type"] ||
 				(!!definitions[definitionName]["type"] &&
 					definitions[definitionName]["type"] !== "object" &&
-					definitions[definitionName]["type"] !== undefined))
-		) {
-			result += parseJsonNodeToMarkdown(null, definitions[definitionName] as JSONSchema7, definitions);
+					definitions[definitionName]["type"] !== undefined));
+
+		if (isNotDefinition) {
+			result += jsonNodeToMarkdown(null, slug, definitions![definitionName] as JSONSchema7, definitions);
 		} else {
 			const displayName = toPascalCase(definitionName);
-			result += `type: [${displayName}](/schema-reference?definition=${definitionName})  \n`;
+			result += `type: [${displayName}](/${slug}/${definitionName})  \n`;
 		}
 	}
 
@@ -157,123 +164,152 @@ ${JSON.stringify(defaultValue, undefined, 3)}
 	if (!!examples && Array.isArray(examples)) {
 		result += `examples: \`${examples.join("` `")}\`  \n`;
 	}
+	if (!!required) {
+		result += `required: \`${required.join("` `")}\`  \n`;
+	}
 	if (!!description) {
 		result += `\n${description}\n\n`;
 	}
 	if (!!anyOf) {
 		result +=
-			`\nanyOf:\n\n` +
-			anyOf.map((value, i) => parseJsonNodeToMarkdown(null, value as JSONSchema7, definitions)).join("\n\n");
+			`\n<IndentGroup label="anyOf">\n\n` +
+			anyOf
+				.map((value, i) => jsonNodeToMarkdown(null, slug, value as JSONSchema7, definitions, true))
+				.join("\n\n") +
+			`\n\n</IndentGroup>\n\n`;
 	}
 	if (!!oneOf) {
 		result +=
-			`\noneOf:\n\n` +
-			oneOf.map((value, i) => parseJsonNodeToMarkdown(null, value as JSONSchema7, definitions)).join("\n\n");
+			`\n<IndentGroup label="oneOf">\n\n` +
+			oneOf
+				.map((value, i) => jsonNodeToMarkdown(null, slug, value as JSONSchema7, definitions, true))
+				.join("\n\n") +
+			`\n\n</IndentGroup>\n\n`;
 	}
 	if (!!items) {
-		result += `\nitems:\n\n`;
+		result += `\n<IndentGroup label="items">\n\n`;
 		if (Array.isArray(items)) {
 			result += items
-				.map((value, i) => parseJsonNodeToMarkdown(null, value as JSONSchema7, definitions))
+				.map((value, i) => jsonNodeToMarkdown(null, slug, value as JSONSchema7, definitions, true))
 				.join("");
 		} else if (typeof items === "object") {
-			result += parseJsonNodeToMarkdown(null, items as JSONSchema7, definitions);
+			result += jsonNodeToMarkdown(null, slug, items as JSONSchema7, definitions);
 		}
-	}
-	if (!!cleanName) {
-		result += "\n\n---\n\n";
+		result += `\n\n</IndentGroup>\n\n`;
 	}
 
+	if (!!cleanName) {
+		result += `\n\n<Spacer />\n\n`;
+	}
+
+	if (!!additionalProperties && typeof additionalProperties === "boolean") {
+		result += `additionalProperties: \`${additionalProperties ? "true" : "false"}\`  \n`;
+	}
 	if (!!properties) {
 		result +=
-			`\nproperties:\n\n` +
+			`\n<IndentGroup label="properties">\n\n` +
 			Object.entries(properties)
-				.map(([key, value], i) => parseJsonNodeToMarkdown(key, value as JSONSchema7, definitions))
-				.join("");
+				.map(([key, value], i) => jsonNodeToMarkdown(key, slug, value as JSONSchema7, definitions, indented))
+				.join("") +
+			`\n\n</IndentGroup>\n\n`;
 	}
 	if (!!patternProperties) {
 		result +=
-			`\npatternProperties:\n\n` +
+			`\n<IndentGroup label="patternProperties">\n\n` +
 			Object.entries(patternProperties)
-				.map(([key, value], i) => parseJsonNodeToMarkdown(key, value as JSONSchema7, definitions))
-				.join("");
+				.map(([key, value], i) => jsonNodeToMarkdown(key, slug, value as JSONSchema7, definitions, indented))
+				.join("") +
+			`\n\n</IndentGroup>\n\n`;
 	}
 
 	return result;
 };
 
-let otherData: object = {};
+let schemaCache: Dictionary<JSONSchema7 | undefined> = {};
 
-const initializeSchema = async (branch: string): Promise<JSONSchema7 | undefined> => {
+const initializeSchema = async (ref: string): Promise<JSONSchema7 | undefined> => {
 	try {
-		if (otherData["schema"] === undefined) {
-			otherData["schema"] = {};
+		if (schemaCache[ref] === undefined) {
+			const { schema } = await getChaletSchema(ref);
+			schemaCache[ref] = schema;
 		}
 
-		if (otherData["schema"][branch] === undefined) {
-			const { schema } = await getChaletSchema(branch);
-			otherData["schema"][branch] = schema;
-		}
-
-		return otherData["schema"][branch];
+		return schemaCache[ref];
 	} catch (err) {
 		throw err;
 	}
 };
 
-type PageAnchor = {
-	text: string;
-	to: string;
-};
-
-const getPageAnchors = async (fileContent: string, slug: string, branch?: string): Promise<PageAnchor[]> => {
+const getSchemaPageDefinitions = async (ref?: string): Promise<string[]> => {
 	try {
-		const schema = await initializeSchema(branch ?? "main");
+		const schema = await initializeSchema(ref ?? "main");
 		const definitions = (schema?.["definitions"] as Dictionary<JSONSchema7> | undefined) ?? {};
 
-		let anchors: PageAnchor[] = [];
-		const split = fileContent.split(os.EOL);
-		if (!!branch && slug === "schema-reference") {
-			for (const [key, value] of Object.entries(definitions)) {
-				if (!!value && !!value["type"] && (value["type"] === "object" || value["type"] === undefined)) {
-					anchors.push({
-						text: toPascalCase(key),
-						to: `definition=${key}`,
-					});
-				}
-			}
-			anchors.sort((a, b) => {
-				return a.text > b.text ? 1 : -1;
-			});
-		} else {
-			for (const line of split) {
-				let m = line.match(/^<AnchoredH\d>(.+?)<\/AnchoredH\d>$/);
-				if (m && m.length === 2) {
-					anchors.push({
-						text: m[1],
-						to: `id=${toKebabCase(m[1])}`,
-					});
-				}
+		let ret: string[] = [];
+		for (const [key, value] of Object.entries(definitions)) {
+			if (!!value && !!value["type"] && (value["type"] === "object" || value["type"] === undefined)) {
+				ret.push(key);
 			}
 		}
+		return ret;
+	} catch (err) {
+		throw err;
+	}
+};
 
+const getSchemaPageAnchors = async (branch?: string): Promise<ResultPageAnchor[]> => {
+	try {
+		const keys = await getSchemaPageDefinitions(branch);
+		let anchors: ResultPageAnchor[] = keys.map((key) => {
+			return {
+				text: toPascalCase(key),
+				to: `/${key}`,
+			};
+		});
+		anchors.sort((a, b) => {
+			return a.text > b.text ? 1 : -1;
+		});
 		return anchors;
 	} catch (err) {
 		throw err;
 	}
 };
 
-const parseSchemaReference = async (text: string, branch: string): Promise<string> => {
+const getPageAnchors = async (fileContent: string, slug: string, branch?: string): Promise<ResultPageAnchor[]> => {
+	try {
+		if (slug === "schema" || slug === "schema-dev") {
+			return await getSchemaPageAnchors(branch);
+		} else {
+			let anchors: ResultPageAnchor[] = [];
+
+			const split = fileContent.split(os.EOL);
+			for (const line of split) {
+				let m = line.match(/^<AnchoredH\d>(.+?)<\/AnchoredH\d>$/);
+				if (m && m.length === 2) {
+					anchors.push({
+						text: m[1],
+						to: `?id=${toKebabCase(m[1])}`,
+					});
+				}
+			}
+			return anchors;
+		}
+	} catch (err) {
+		throw err;
+	}
+};
+
+const parseSchemaReference = async (text: string, slug: string, branch: string): Promise<string> => {
 	try {
 		const schema = await initializeSchema(branch);
 
 		return text.replace(`!!SchemaReference!!`, (match: string) => {
 			let result: string = "";
 			if (!!schema) {
-				/*result = `\`\`\`json
-${JSON.stringify(schema, undefined, 3)}
-\`\`\`\n\n`;*/
-				result += parseJsonNodeToMarkdown("$root", schema);
+				result += jsonNodeToMarkdown("$root", `${slug}/${branch}`, schema);
+				result += `\`\`\`json
+${JSON.stringify({ ...schema, definitions: undefined }, undefined, 3)}
+\`\`\`\n\n`;
 			}
 			return result;
 		});
@@ -282,7 +318,12 @@ ${JSON.stringify(schema, undefined, 3)}
 	}
 };
 
-const parseSchemaDefinition = async (text: string, branch: string, definition: string): Promise<string> => {
+const parseSchemaDefinition = async (
+	text: string,
+	slug: string,
+	branch: string,
+	definition: string
+): Promise<string> => {
 	try {
 		const schema = await initializeSchema(branch);
 
@@ -292,7 +333,10 @@ const parseSchemaDefinition = async (text: string, branch: string, definition: s
 				const definitions = schema["definitions"] as Dictionary<JSONSchema7> | undefined;
 
 				result += `#### [${toPascalCase(definition)}]\n\n`;
-				result += parseJsonNodeToMarkdown(definition, definitions?.[definition] ?? null, definitions);
+				result += jsonNodeToMarkdown(null, `${slug}/${branch}`, definitions?.[definition] ?? null, definitions);
+				result += `\`\`\`json
+${JSON.stringify(definitions?.[definition] ?? {}, undefined, 3)}
+\`\`\`\n\n`;
 			}
 			return result;
 		});
@@ -301,7 +345,27 @@ const parseSchemaDefinition = async (text: string, branch: string, definition: s
 	}
 };
 
-const parseCustomMarkdown = async (text: string, branch?: string, definition?: string): Promise<string> => {
+let definitionsCache: Dictionary<string[]> = {};
+
+const getSchemaReferencePaths = async (branch: string): Promise<string[]> => {
+	try {
+		if (!definitionsCache[branch]) {
+			definitionsCache[branch] = await getSchemaPageDefinitions(branch);
+		}
+		const paths = definitionsCache[branch].map((def) => `${branch}/${def}`);
+		const result: string[] = [branch, ...paths];
+		return result;
+	} catch (err) {
+		throw err;
+	}
+};
+
+const parseCustomMarkdown = async (
+	text: string,
+	slug: string,
+	branch?: string,
+	definition?: string
+): Promise<string> => {
 	try {
 		// First, ensure consistent line endings to make regex patterns easier
 		text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
@@ -309,9 +373,9 @@ const parseCustomMarkdown = async (text: string, branch?: string, definition?: s
 		// Parse the things
 		if (!!branch) {
 			if (!!definition) {
-				text = await parseSchemaDefinition(text, branch, definition);
+				text = await parseSchemaDefinition(text, slug, branch, definition);
 			} else {
-				text = await parseSchemaReference(text, branch);
+				text = await parseSchemaReference(text, slug, branch);
 			}
 		}
 
@@ -330,4 +394,4 @@ const parseCustomMarkdown = async (text: string, branch?: string, definition?: s
 	}
 };
 
-export { parseCustomMarkdown, getPageAnchors };
+export { parseCustomMarkdown, getPageAnchors, getSchemaReferencePaths, getSchemaPageAnchors };

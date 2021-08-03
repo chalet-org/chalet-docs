@@ -1,3 +1,5 @@
+import { Dictionary } from "@andrew-r-king/react-kitchen";
+
 import { markdownFiles } from "Server/MarkdownFiles";
 import { ResultMDXPage } from "Server/ResultTypes";
 import { ApiReq, ApiRes } from "Utility";
@@ -13,7 +15,7 @@ const handler = async (
 		if (!slug || slug.length === 0) {
 			throw new Error("Invalid query sent in request");
 		}
-		const result = await markdownFiles.getMdxPage(slug, req.query);
+		const result = await markdownFiles.getMdxPage(slug, req.query as Dictionary<string | undefined>);
 
 		res.status(200).json(result);
 	} catch (err) {

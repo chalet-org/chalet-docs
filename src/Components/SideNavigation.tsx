@@ -1,25 +1,20 @@
-import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import React from "react";
 import styled from "styled-components";
 
 import { Link, SearchInput, ThemeToggle } from "Components";
 import { useKeyPress } from "Hooks";
-import { ResultMDXNav } from "Server/ResultTypes";
+import { ResultNavigation } from "Server/ResultTypes";
 import { useUiStore } from "Stores";
 import { getCssVariable } from "Theme";
-import { dynamic, makeLinearGradient } from "Utility";
+import { makeLinearGradient } from "Utility";
 
-const components: Record<string, React.ReactNode> = {
-	p: dynamic.component("Stub"),
-	a: dynamic.component("Link"),
-	Link: dynamic.component("Link"),
-};
+import { NavigationLinks } from "./NavigationLinks";
 
-type Props = ResultMDXNav & {
+type Props = ResultNavigation & {
 	children?: React.ReactNode;
 };
 
-const SideNavigation = ({ mdxNav }: Props) => {
+const SideNavigation = ({ children, ...navigationProps }: Props) => {
 	const { toggleNavigation, navOpen, navWidth, initialized } = useUiStore();
 	useKeyPress(
 		(ev) => {
@@ -30,7 +25,6 @@ const SideNavigation = ({ mdxNav }: Props) => {
 		},
 		[toggleNavigation]
 	);
-
 	if (!initialized) {
 		return null;
 	}
@@ -53,7 +47,9 @@ const SideNavigation = ({ mdxNav }: Props) => {
 					</Link>
 				</Logo>
 				<SearchInput />
-				<MDXRemote {...mdxNav} components={components} />
+				<NavGroup>
+					<NavigationLinks {...navigationProps} />
+				</NavGroup>
 				<div className="nav-spacer" />
 				<div className="nav-fade">
 					<ThemeToggle />
@@ -137,10 +133,6 @@ const StyledAside = styled.aside<AsideProps>`
 		line-height: 2.5;
 	}
 
-	> ul {
-		padding-bottom: 1rem;
-	}
-
 	li {
 		width: 100%;
 
@@ -166,33 +158,9 @@ const StyledAside = styled.aside<AsideProps>`
 		}
 	}
 
-	> ul > li > a,
-	> ul > li > strong {
-		padding-left: 2rem;
-	}
-
-	> ul > li > ul > li > a {
-		padding-left: 3.25rem;
-	}
-
-	> ul > li > ul > li > ul > li > a {
-		padding-left: 4.5rem;
-	}
-
-	> ul > li > strong {
-		color: ${getCssVariable("Header")};
-		font-weight: 400;
-	}
-
 	a:not(.active) {
 		color: inherit;
 		font-weight: 400;
-	}
-
-	> ul > li > ul > li > a:before {
-		&:hover {
-			text-decoration: none;
-		}
 	}
 
 	> div.nav-spacer {
@@ -234,6 +202,34 @@ const StyledAside = styled.aside<AsideProps>`
 			> .theme-toggle {
 				left: calc(${(props) => props.width} - 4.125rem);
 			}
+		}
+	}
+`;
+
+const NavGroup = styled.div`
+	padding-bottom: 1rem;
+
+	> ul > li > a,
+	> ul > li > strong {
+		padding-left: 2rem;
+	}
+
+	> ul > li > ul > li > a {
+		padding-left: 3.25rem;
+	}
+
+	> ul > li > ul > li > ul > li > a {
+		padding-left: 4.5rem;
+	}
+
+	> ul > li > strong {
+		color: ${getCssVariable("Header")};
+		font-weight: 400;
+	}
+
+	> ul > li > ul > li > a:before {
+		&:hover {
+			text-decoration: none;
 		}
 	}
 `;

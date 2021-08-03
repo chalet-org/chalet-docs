@@ -5,9 +5,11 @@ type Components =
 	| "Code"
 	| "CodePre"
 	| "CodePreFromMarkdown"
+	| "IndentGroup"
 	| "Link"
 	| "PageHeading"
 	| "Paragraph"
+	| "Spacer"
 	| "Stub"
 	| "TabbedContent";
 

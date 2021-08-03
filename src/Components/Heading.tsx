@@ -27,14 +27,7 @@ const Heading = ({ size, anchor, children }: Props) => {
 	const headerElement = useRef(null);
 
 	useEffect(() => {
-		if (
-			!!headerElement &&
-			!!headerElement.current &&
-			!!routeId &&
-			typeof routeId === "string" &&
-			id === routeId &&
-			id === focusedId
-		) {
+		if (!!headerElement && !!headerElement.current && !!routeId && typeof routeId === "string" && id === routeId) {
 			const top = (headerElement.current as any)?.offsetTop ?? 0;
 			window.scrollTo({ behavior: "smooth", top });
 		}

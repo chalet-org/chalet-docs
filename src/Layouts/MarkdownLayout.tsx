@@ -1,11 +1,11 @@
 import debounce from "lodash/debounce";
 import { MDXRemote } from "next-mdx-remote";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useRef } from "react";
 import styled from "styled-components";
 
 import { Dictionary } from "@andrew-r-king/react-kitchen";
 
-import { AnchoredHeadingObject, HeadingObject, Page, SchemaTest, SideNavigation } from "Components";
+import { AnchoredHeadingObject, HeadingObject, Page, SideNavigation } from "Components";
 import { useRouterScroll, useWheelScroll } from "Hooks";
 import { ResultMDXPage } from "Server/ResultTypes";
 import { useUiStore } from "Stores";
@@ -23,8 +23,10 @@ let components: Dictionary<React.ComponentType<any>> = {
 	pre: dynamic.component("CodePreFromMarkdown"),
 	inlineCode: dynamic.component("Code"),
 	blockquote: dynamic.component("BlockQuote"),
+	IndentGroup: dynamic.component("IndentGroup"),
 	PageHeading: dynamic.component("PageHeading"),
 	TabbedContent: dynamic.component("TabbedContent"),
+	Spacer: dynamic.component("Spacer"),
 };
 
 type AnchorData = {
@@ -32,11 +34,7 @@ type AnchorData = {
 	id: string;
 };
 
-const MarkdownLayout = ({ meta, mdx, mdxNav, children, schema }: Props) => {
-	if (!!schema) {
-		components["SchemaTest"] = () => <SchemaTest {...{ schema }} />;
-	}
-
+const MarkdownLayout = ({ meta, mdx, children, ...navProps }: Props) => {
 	const { focusedId, setFocusedId, navOpen } = useUiStore();
 	const pageLayout = useRef<HTMLDivElement>(null);
 
@@ -103,7 +101,7 @@ const MarkdownLayout = ({ meta, mdx, mdxNav, children, schema }: Props) => {
 
 	return (
 		<>
-			<SideNavigation mdxNav={mdxNav} />
+			<SideNavigation {...navProps} />
 			<Page title={meta.title}>
 				<Styles ref={pageLayout}>
 					<MDXRemote {...mdx} components={components} />
