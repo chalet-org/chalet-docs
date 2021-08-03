@@ -13,12 +13,14 @@ const searchColor = getCssVariable("Header");
 
 const SearchInput = ({ children }: Props) => {
 	const [value, setValue] = useState<string>("");
+	const [resultsFetched, setResultsFetched] = useState<boolean>(false);
 	const [results, setResults] = useState<ResultSearchResults>([]);
 
 	const doApiCall = useCallback(
 		debounce(async (value: string) => {
 			const res = await docsApi.searchMarkdown(value);
 			setResults(res);
+			setResultsFetched(true);
 		}, 250),
 		[]
 	);
@@ -30,6 +32,7 @@ const SearchInput = ({ children }: Props) => {
 					value={value}
 					onChange={(ev) => {
 						ev.preventDefault();
+						setResultsFetched(false);
 						doApiCall(ev.target.value);
 						setValue(ev.target.value);
 					}}
@@ -51,7 +54,7 @@ const SearchInput = ({ children }: Props) => {
 					/>
 				)}
 			</div>
-			{results.length > 0 && (
+			{results.length > 0 ? (
 				<div className="search-results">
 					<p className="search-result-count">{results.length} results</p>
 					{results.map(({ url, title, text }, i) => {
@@ -72,6 +75,13 @@ const SearchInput = ({ children }: Props) => {
 						);
 					})}
 				</div>
+			) : (
+				value.length > 0 &&
+				resultsFetched && (
+					<div className="search-results">
+						<p className="search-result-count">No results found</p>
+					</div>
+				)
 			)}
 		</Styles>
 	);
