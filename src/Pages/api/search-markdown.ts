@@ -9,26 +9,32 @@ import { ApiReq, ApiRes } from "Utility";
 
 let pages: PageCache[] = [];
 
-const getSearchResults = (search: string, text: PageCache[], resultLength: number = 80): ResultSearchResults => {
+const getSearchResults = (search: string, pages: PageCache[], resultLength: number = 80): ResultSearchResults => {
 	let result: ResultSearchResults = [];
 
-	let lastPosition: number = 0;
-	for (const page of text) {
-		const contentLowerCase = page.content.toLowerCase();
+	const getResultFromText = (inText: string, page: PageCache, outputText: boolean = true) => {
+		const textLowerCase = inText.toLowerCase();
 		while (true) {
-			lastPosition = contentLowerCase.indexOf(search, lastPosition);
+			lastPosition = textLowerCase.indexOf(search, lastPosition);
 			if (lastPosition === -1) {
 				break;
 			} else {
 				result.push({
 					url: page.url,
 					title: page.title,
-					text: page.content.substr(lastPosition, search.length + resultLength).split("\n")[0],
+					text: outputText ? inText.substr(lastPosition, search.length + resultLength).split("\n")[0] : "",
 				});
 				lastPosition += search.length;
 			}
 		}
+	};
+
+	let lastPosition: number = 0;
+	for (const page of pages) {
+		getResultFromText(page.title, page, false);
+		getResultFromText(page.content, page);
 	}
+
 	return result;
 };
 

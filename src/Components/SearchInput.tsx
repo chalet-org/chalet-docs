@@ -21,7 +21,7 @@ const SearchInput = ({ children }: Props) => {
 			const res = await docsApi.searchMarkdown(value);
 			setResults(res);
 			setResultsFetched(true);
-		}, 250),
+		}, 500),
 		[]
 	);
 	return (
