@@ -29,6 +29,7 @@ const IndentLabel = styled.div`
 	display: block;
 	position: relative;
 	color: ${getCssVariable("Header")};
-	padding-top: 0.25rem;
+	/* padding-top: 0.25rem; */
+	padding-top: 0;
 	padding-bottom: 0.5rem;
 `;

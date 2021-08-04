@@ -56,6 +56,8 @@ ${tabArray[i + 1]}
 	);
 };
 
+const spacer = `\n\n<Spacer />\n\n`;
+
 const jsonNodeToMarkdown = (
 	name: Optional<string>,
 	slug: string,
@@ -129,45 +131,45 @@ const jsonNodeToMarkdown = (
 			result += jsonNodeToMarkdown(null, slug, definitions![definitionName] as JSONSchema7, definitions);
 		} else {
 			const displayName = toPascalCase(definitionName);
-			result += `type: [${displayName}](/${slug}/${definitionName})  \n`;
+			result += `* type: [${displayName}](/${slug}/${definitionName})\n`;
 		}
 	}
 
 	if (!!type) {
-		result += `type: \`${type}\`  \n`;
+		result += `* type: \`${type}\`\n`;
 	}
 	if (!!defaultValue) {
 		if (typeof defaultValue === "string") {
-			result += `default: \`${defaultValue}\`  \n`;
+			result += `* default: \`${defaultValue}\`\n`;
 		} else if (typeof defaultValue === "string") {
-			result += `default:
+			result += `* default:
 \`\`\`json
 ${JSON.stringify(defaultValue, undefined, 3)}
 \`\`\`  \n`;
 		}
 	}
 	if (!!pattern) {
-		result += `pattern: \`${pattern.replace(/^\^(.+?)\$$/g, "$1")}\`  \n`;
+		result += `* pattern: \`${pattern.replace(/^\^(.+?)\$$/g, "$1")}\`\n`;
 	}
 	if (!!uniqueItems) {
-		result += `uniqueItems: \`${uniqueItems ? "true" : "false"}\`  \n`;
+		result += `* uniqueItems: \`${uniqueItems ? "true" : "false"}\`\n`;
 	}
 	if (!!minItems) {
-		result += `minItems: \`${minItems}\`  \n`;
+		result += `* minItems: \`${minItems}\`\n`;
 	}
 	if (!!maxItems) {
-		result += `maxItems: \`${maxItems}\`  \n`;
+		result += `* maxItems: \`${maxItems}\`\n`;
 	}
 	if (!!enumValue) {
-		result += `enum: \`${enumValue.join("` `")}\`  \n`;
+		result += `* enum: \`${enumValue.join("` `")}\`\n`;
 	}
 	if (!!examples && Array.isArray(examples)) {
-		result += `examples: \`${examples.join("` `")}\`  \n`;
+		result += `* examples: \`${examples.join("` `")}\`\n`;
 	}
 	if (!!required) {
-		result += `required: \`${required.join("` `")}\`  \n`;
+		result += `* required: \`${required.join("` `")}\`\n`;
 	}
-	if (!!description) {
+	if (!!description && description.length > 0) {
 		result += `\n${description}\n\n`;
 	}
 	if (!!anyOf) {
@@ -175,32 +177,32 @@ ${JSON.stringify(defaultValue, undefined, 3)}
 			`\n<IndentGroup label="anyOf">\n\n` +
 			anyOf
 				.map((value, i) => jsonNodeToMarkdown(null, slug, value as JSONSchema7, definitions, true))
-				.join("\n\n") +
-			`\n\n</IndentGroup>\n\n`;
+				.join(spacer) +
+			`\n</IndentGroup>\n\n`;
 	}
 	if (!!oneOf) {
 		result +=
 			`\n<IndentGroup label="oneOf">\n\n` +
 			oneOf
 				.map((value, i) => jsonNodeToMarkdown(null, slug, value as JSONSchema7, definitions, true))
-				.join("\n\n") +
-			`\n\n</IndentGroup>\n\n`;
+				.join(spacer) +
+			`\n</IndentGroup>\n\n`;
 	}
 	if (!!items) {
 		result += `\n<IndentGroup label="items">\n\n`;
 		if (Array.isArray(items)) {
 			result += items
 				.map((value, i) => jsonNodeToMarkdown(null, slug, value as JSONSchema7, definitions, true))
-				.join("");
+				.join(spacer);
 		} else if (typeof items === "object") {
 			result += jsonNodeToMarkdown(null, slug, items as JSONSchema7, definitions);
 		}
-		result += `\n\n</IndentGroup>\n\n`;
+		result += `\n</IndentGroup>\n\n`;
 	}
 
-	if (!!cleanName) {
-		result += `\n\n<Spacer />\n\n`;
-	}
+	/*if (!!cleanName) {
+		result += spacer;
+	}*/
 
 	if (!!additionalProperties && typeof additionalProperties === "boolean") {
 		result += `additionalProperties: \`${additionalProperties ? "true" : "false"}\`  \n`;
@@ -210,16 +212,19 @@ ${JSON.stringify(defaultValue, undefined, 3)}
 			`\n<IndentGroup label="properties">\n\n` +
 			Object.entries(properties)
 				.map(([key, value], i) => jsonNodeToMarkdown(key, slug, value as JSONSchema7, definitions, indented))
-				.join("") +
-			`\n\n</IndentGroup>\n\n`;
+				.join(spacer) +
+			`\n</IndentGroup>\n\n`;
+	}
+	if (!!properties && !!patternProperties) {
+		result += `\n\n<Spacer />\n\n`;
 	}
 	if (!!patternProperties) {
 		result +=
 			`\n<IndentGroup label="patternProperties">\n\n` +
 			Object.entries(patternProperties)
 				.map(([key, value], i) => jsonNodeToMarkdown(key, slug, value as JSONSchema7, definitions, indented))
-				.join("") +
-			`\n\n</IndentGroup>\n\n`;
+				.join(spacer) +
+			`\n</IndentGroup>\n\n`;
 	}
 
 	return result;
@@ -307,6 +312,7 @@ const parseSchemaReference = async (text: string, slug: string, branch: string):
 			let result: string = "";
 			if (!!schema) {
 				result += jsonNodeToMarkdown("$root", `${slug}/${branch}`, schema);
+				console.log(result);
 				result += `\`\`\`json
 ${JSON.stringify({ ...schema, definitions: undefined }, undefined, 3)}
 \`\`\`\n\n`;
