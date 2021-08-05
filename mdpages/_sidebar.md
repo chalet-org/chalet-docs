@@ -1,7 +1,6 @@
+Guides
 [Introduction](/)
-
-Getting Started
-[Installation](/installation)
+[Getting Started](/getting-started)
 
 Dev
 [Sandbox](/docs/sandbox)

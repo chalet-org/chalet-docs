@@ -16,7 +16,14 @@ class UiState extends BaseState {
 
 	@Action
 	initialize = () => {
-		this.setTheme(LocalStorage.get<Theme>("themeId", Theme.Dark));
+		let themeId: Theme;
+		if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+			themeId = Theme.Dark;
+		} else {
+			themeId = Theme.Light;
+		}
+
+		this.setTheme(LocalStorage.get<Theme>("themeId", themeId));
 		this.navOpen = LocalStorage.get("navOpen", "true") == "true";
 		this.initialized = true;
 	};

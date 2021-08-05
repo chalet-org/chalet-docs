@@ -3,7 +3,7 @@ import { ThemeType } from "./ThemeType";
 export const lightTheme: ThemeType = {
 	bodyBackground: "#f3f7f8",
 	background: "#ffffff",
-	mainText: "#111131",
+	mainText: "#585565",
 	header: "#c7ccdc",
 	//
 	codeBackground: "#f3f7f8",
