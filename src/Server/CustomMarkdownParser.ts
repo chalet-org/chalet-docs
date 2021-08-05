@@ -142,6 +142,18 @@ const parseChangelog = async (text: string): Promise<string> => {
 			if (!!text) {
 				text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
 
+				text = text.replace(/\[commit\]\((.+?)\)/g, (result: string, p1: string) => {
+					const commit = p1.split("/").pop();
+					if (!commit) return p1;
+
+					return `([${commit?.substr(0, 7)}](${p1}))`;
+				});
+				text = text.replace(/\[issue\]\((.+?)\)/g, (result: string, p1: string) => {
+					const issue = p1.split("/").pop();
+					if (!issue) return p1;
+
+					return `([#${issue}](${p1}))`;
+				});
 				text = text.replace(/## \[(.+?)\] \[(.+?)\]/g, "---\n\n## [$1]\n\n$2");
 
 				text = text.replace(/\n/g, os.EOL);
