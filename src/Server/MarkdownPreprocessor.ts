@@ -54,7 +54,7 @@ const jsonNodeToMarkdown = (
 	}
 
 	if (!!cleanName) {
-		result += `###### [${cleanName}]\n\n`;
+		result += `##### [${cleanName}]\n\n`;
 	}
 
 	let isNotDefinition: boolean = false;
