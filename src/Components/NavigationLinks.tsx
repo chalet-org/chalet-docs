@@ -41,42 +41,42 @@ const LinkWithAnchors = ({ href, anchors, children }: LinkWithAnchorProps) => {
 
 type Props = Omit<ResultNavigation, "mdxNav">;
 
-const NavigationLinks = ({ refs, anchors }: Props) => {
-	// const pageSlug = !!slug ? (typeof slug === "string" ? slug : slug[0]) : null;
-
+const NavigationLinks = ({ branches, tags, sidebarLinks, anchors }: Props) => {
 	return (
-		<>
-			<ul>
-				<LinkWithAnchors href="/" anchors={anchors}>
-					Introduction
-				</LinkWithAnchors>
-				<li>
-					<strong>Getting Started</strong>
-				</li>
-				<LinkWithAnchors href="/installation" anchors={anchors}>
-					Installation
-				</LinkWithAnchors>
-				<li>
-					<strong>Schema</strong>
-				</li>
-				{refs.map((br, i) => {
+		<ul>
+			{sidebarLinks.map((link, i) => {
+				if (typeof link === "string") {
+					const isBranches: boolean = link === "branches";
+					if (isBranches || link === "tags") {
+						const href = isBranches ? "schema-dev" : "schema";
+						const arr = isBranches ? branches : tags;
+						return (
+							<React.Fragment key={i}>
+								{arr.map((br, j) => {
+									return (
+										<LinkWithAnchors key={j} href={`/${href}/${br}`} anchors={anchors}>
+											{br}
+										</LinkWithAnchors>
+									);
+								})}
+							</React.Fragment>
+						);
+					} else {
+						return (
+							<li key={i}>
+								<strong>{link}</strong>
+							</li>
+						);
+					}
+				} else {
 					return (
-						<LinkWithAnchors key={i} href={`/schema-dev/${br}`} anchors={anchors}>
-							{br}
+						<LinkWithAnchors href={link.href} anchors={anchors} key={i}>
+							{link.label}
 						</LinkWithAnchors>
 					);
-				})}
-				<li>
-					<strong>Dev</strong>
-				</li>
-				<LinkWithAnchors href="/docs/sandbox" anchors={anchors}>
-					Sandbox
-				</LinkWithAnchors>
-				<LinkWithAnchors href="/docs/sandbox2" anchors={anchors}>
-					Sandbox2
-				</LinkWithAnchors>
-			</ul>
-		</>
+				}
+			})}
+		</ul>
 	);
 };
 

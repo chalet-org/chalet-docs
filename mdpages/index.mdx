@@ -9,7 +9,7 @@ A modern cross-platform project format and build system for C/C++ with a focus o
 ---
 #### [What does it do?]
 
-Chalet is a command-line application that reads in a JSON project file (ie. chalet.json), finds a usable compiler in PATH, and builds your C/C++ projects. Behind the scenes, Chalet generates either a [Make](//en.wikipedia.org/wiki/Make_(software)) or [Ninja](//ninja-build.org/) build file, does some caching, builds, and optionally runs your executable. Chalet project files are designed to be easy to understand, focusing on GNU-like language, and translating that down to the compiler. Because the projects are JSON, they can be easily integrated with IDEs, requiring only a JSON parser, available in practically every language.
+Chalet is a command-line application that reads in a JSON project file (ie. chalet.json), finds a usable compiler in PATH if the project isn't already configured, and builds your C/C++ projects. Behind the scenes, Chalet generates either a [Make](//en.wikipedia.org/wiki/Make_(software)) or [Ninja](//ninja-build.org/) build file, does some caching itself, builds the project, and optionally it if it's an executable. Chalet project files are designed to be easy to understand, focusing on GNU-like language, and translating that down to the compiler. Because the projects are JSON, they can be easily integrated with IDEs.
 
 In addition to building your projects during the development process, Chalet has numerous other features designed to make working with C/C++ as smooth as possible:
 
@@ -20,8 +20,7 @@ In addition to building your projects during the development process, Chalet has
 * CI support (tested with Github Actions)
 * Include other Chalet projects as build steps
 * Include [CMake](//cmake.org/) projects as build steps
-* Run scripts as build steps (so far: bash, powershell (Win / Core), Batch (Win), python, ruby, lua, perl)
-* Define abstract build steps in order to tune the build
+* Run scripts as build steps (so far: bash, powershell (Win/Core), Batch (Win), python, ruby, lua, perl)
 * A wizard for generating new projects: `chalet init`
 * CLI Commands for manipulating the settings & build file (ie. from the CI)
 * MSVC Support on Windows (VS 2019 & 2022 Previews currently)

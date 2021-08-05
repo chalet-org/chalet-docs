@@ -88,7 +88,7 @@ export const BaseStyle = createGlobalStyle`
         padding: 0;
 		font-family: ${globalFonts.paragraph};
 		font-size: 1.125rem;
-		line-height: 1.25;
+		line-height: 1.625;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
     }

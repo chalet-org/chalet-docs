@@ -2,6 +2,7 @@ import fs from "fs";
 import matter from "gray-matter";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
+import os from "os";
 import nodePath from "path";
 
 import { Dictionary, Optional } from "@andrew-r-king/react-kitchen";
@@ -9,7 +10,7 @@ import { Dictionary, Optional } from "@andrew-r-king/react-kitchen";
 import { getChaletBranches } from "./ChaletBranches";
 import { getChaletTags } from "./ChaletTags";
 import { getPageAnchors, parseCustomMarkdown } from "./CustomMarkdownParser";
-import { ResultMDXPage, ResultMDX, ResultNavigation } from "./ResultTypes";
+import { ResultMDXPage, ResultMDX, ResultNavigation, SidebarLink } from "./ResultTypes";
 
 const mdpages: string = "mdpages";
 const allowedExtensions: string[] = ["mdx", "md"];
@@ -71,21 +72,55 @@ const getFirstExistingPath = (inPath: string, extensions: string[], internal: bo
 	}
 };*/
 
+type SidebarResult = SidebarLink | string;
+
+const getSidebarLinks = (): SidebarResult[] => {
+	const sidebarFile: string = nodePath.join(process.cwd(), mdpages, "_sidebar.md");
+	if (!fs.existsSync(sidebarFile)) {
+		throw new Error("Critical: _sidebar.md was not found");
+	}
+	const fileContent: string = fs.readFileSync(sidebarFile, "utf8");
+
+	const split = fileContent.split(os.EOL);
+	let result: (SidebarLink | string)[] = [];
+	for (const line of split) {
+		if (line.startsWith("<!--")) continue;
+
+		if (line.startsWith(":")) {
+			result.push(line.substr(1));
+		} else if (line.startsWith("[")) {
+			let matches = line.match(/^\[(.+?)\]\((.+?)\)$/);
+			if (!!matches && matches.length === 3) {
+				result.push({
+					label: matches[1],
+					href: matches[2],
+				});
+			}
+		} else if (line.length > 0) {
+			result.push(line);
+		}
+	}
+	return result;
+};
+
 let otherData: Optional<{
-	refs?: string[];
+	branches?: string[];
+	tags?: string[];
 }> = null;
 
 const getNavBar = async (): Promise<Omit<ResultNavigation, "anchors">> => {
 	try {
-		if (!otherData || !otherData.refs) {
+		if (!otherData || !otherData.branches || !otherData.tags) {
 			otherData = {};
 
-			const branches = await getChaletBranches();
-			const tags = await getChaletTags();
-			otherData.refs = [...branches, ...tags];
+			otherData.branches = await getChaletBranches();
+			otherData.tags = await getChaletTags();
 		}
+		const sidebarLinks = getSidebarLinks();
 		return {
-			refs: otherData.refs,
+			branches: otherData.branches,
+			tags: otherData.tags,
+			sidebarLinks,
 		};
 	} catch (err) {
 		throw err;

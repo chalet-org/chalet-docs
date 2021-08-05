@@ -53,7 +53,7 @@ const handler = async (req: ApiReq, res: ApiRes<ResultSearchResults>): Promise<v
 			pages = await getPagesCache();
 		}
 		const results = getSearchResults(search.toLowerCase(), pages);
-		console.log(results);
+		// console.log(results);
 		res.status(200).json(results);
 	} catch (err) {
 		res.status(404).json({

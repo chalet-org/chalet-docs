@@ -4,7 +4,7 @@ export const lightTheme: ThemeType = {
 	bodyBackground: "#f3f7f8",
 	background: "#ffffff",
 	mainText: "#111131",
-	header: "#d2dcec",
+	header: "#c7ccdc",
 	//
 	codeBackground: "#f3f7f8",
 	border: "#e3eaef",

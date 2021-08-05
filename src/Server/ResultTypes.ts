@@ -19,8 +19,15 @@ export type ResultChaletSchema = {
 
 export type ResultMDX = MDXRemoteSerializeResult<Record<string, unknown>>;
 
+export type SidebarLink = {
+	href: string;
+	label: string;
+};
+
 export type ResultNavigation = {
-	refs: string[];
+	branches: string[];
+	tags: string[];
+	sidebarLinks: (SidebarLink | string)[];
 	anchors: ResultPageAnchor[];
 };
 
