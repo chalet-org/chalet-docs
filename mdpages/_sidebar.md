@@ -1,8 +1,11 @@
 [Introduction](/)
-[Changelog](/changelog)
 
 Getting Started
 [Installation](/installation)
+
+Other
+[Contact](/contact)
+[Changelog](/changelog)
 
 Schema
 :branches

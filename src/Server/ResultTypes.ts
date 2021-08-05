@@ -17,6 +17,10 @@ export type ResultChaletSchema = {
 	schema?: JSONSchema7;
 };
 
+export type ResultChaletChangelog = {
+	changelog?: string;
+};
+
 export type ResultMDX = MDXRemoteSerializeResult<Record<string, unknown>>;
 
 export type SidebarLink = {

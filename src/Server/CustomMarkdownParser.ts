@@ -1,10 +1,11 @@
 import { JSONSchema7 } from "json-schema";
 import os from "os";
 
-import { Dictionary } from "@andrew-r-king/react-kitchen";
+import { Dictionary, Optional } from "@andrew-r-king/react-kitchen";
 
 import { toKebabCase, toPascalCase } from "Utility/TextCaseConversions";
 
+import { getChaletChangelog } from "./ChaletChangelog";
 import { getChaletSchema } from "./ChaletSchema";
 import { jsonNodeToMarkdown } from "./MarkdownPreprocessor";
 import { ResultPageAnchor } from "./ResultTypes";
@@ -25,7 +26,7 @@ const parsePageHeaders = (text: string): string => {
 };
 
 const parseAnchoredHeaders = (text: string): string => {
-	return text.replace(/(#{1,6}) \[(.+)\](?!\()\n/g, (match: string, p1: string, p2: string) => {
+	return text.replace(/(#{1,6}) \[(.+)\](?!\()(.*?)\n/g, (match: string, p1: string, p2: string) => {
 		return `<AnchoredH${p1.length}>${p2.replace(/\{/g, '{"{').replace(/\}/g, '}"}')}</AnchoredH${p1.length}>\n`;
 	});
 };
@@ -132,11 +133,39 @@ const getPageAnchors = async (fileContent: string, slug: string, branch?: string
 	}
 };
 
+let changelogCache: Optional<string> = null;
+
+const parseChangelog = async (text: string): Promise<string> => {
+	try {
+		if (!changelogCache) {
+			let { changelog: text } = await getChaletChangelog();
+			if (!!text) {
+				text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+
+				text = text.replace(/## \[(.+?)\] \[(.+?)\]/g, "---\n\n## [$1]\n\n$2");
+
+				text = text.replace(/\n/g, os.EOL);
+				changelogCache = text;
+			}
+		}
+
+		return text.replace(`!!ChaletChangelog!!`, (match: string) => {
+			let result: string = "";
+			if (!!changelogCache) {
+				result += changelogCache;
+			}
+			return result;
+		});
+	} catch (err) {
+		throw err;
+	}
+};
+
 const parseSchemaReference = async (text: string, slug: string, branch: string): Promise<string> => {
 	try {
 		const schema = await initializeSchema(branch);
 
-		return text.replace(`!!SchemaReference!!`, (match: string) => {
+		return text.replace(`!!ChaletSchemaReference!!`, (match: string) => {
 			let result: string = "";
 			if (!!schema) {
 				result += jsonNodeToMarkdown("$root", `${slug}/${branch}`, schema);
@@ -160,7 +189,7 @@ const parseSchemaDefinition = async (
 	try {
 		const schema = await initializeSchema(branch);
 
-		return text.replace(`!!SchemaReference!!`, (match: string) => {
+		return text.replace(`!!ChaletSchemaReference!!`, (match: string) => {
 			let result: string = "";
 			if (!!schema) {
 				const definitions = schema["definitions"] as Dictionary<JSONSchema7> | undefined;
@@ -202,6 +231,10 @@ const parseCustomMarkdown = async (
 	try {
 		// First, ensure consistent line endings to make regex patterns easier
 		text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+
+		if (slug === "changelog") {
+			text = await parseChangelog(text);
+		}
 
 		// Parse the things
 		if (!!branch) {

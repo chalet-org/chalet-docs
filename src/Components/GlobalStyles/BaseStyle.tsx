@@ -106,24 +106,24 @@ export const BaseStyle = createGlobalStyle`
     }
 
 	h1 {
-		font-size: 3rem;
+		font-size: 2.25rem;
 	}
 	h2 {
-		font-size: 2.375rem;
+		font-size: 1.825rem;
 	}
 	h3 {
-		font-size: 2rem;
+		font-size: 1.5rem;
 	}
 	h4 {
-		font-size: 1.625rem;
+		font-size: 1.25rem;
 		line-height: 1.5;
 	}
 	h5 {
-		font-size: 1.375rem;
+		font-size: 1.125rem;
 		line-height: 1.5;
 	}
 	h6 {
-		font-size: 1.125rem;
+		font-size: 0.875rem;
 		line-height: 1.675;
 	}
 

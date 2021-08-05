@@ -14,6 +14,7 @@ import { getSchemaReferencePaths } from "./CustomMarkdownParser";
 
 const removeIrrelevantMarkdown = (text: string): string => {
 	text = text.replace(/<!--(.+?)-->/g, " ");
+	text = text.replace(/!!(.+?)!!/g, " ");
 	text = text.replace(/\[(.*?)\]\((.*?)\)+/g, (_: string, p1: string, p2: string) => p1);
 	text = text.replace(/```((.|[\r\n])*?)```/g, " ");
 	text = text.replace(/`(([.\r\n])*?)`/g, (_: string, p1: string, p2: string) => ` ${p2} `);
