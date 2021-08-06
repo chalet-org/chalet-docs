@@ -24,6 +24,7 @@ let components: Dictionary<React.ComponentType<any>> = {
 	ul: dynamic.component("UnorderedList"),
 	inlineCode: dynamic.component("Code"),
 	blockquote: dynamic.component("BlockQuote"),
+	Accordion: dynamic.component("Accordion"),
 	IndentGroup: dynamic.component("IndentGroup"),
 	PageHeading: dynamic.component("PageHeading"),
 	TabbedContent: dynamic.component("TabbedContent"),

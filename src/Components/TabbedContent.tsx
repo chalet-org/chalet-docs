@@ -136,20 +136,20 @@ const Styles = styled.div`
 		}
 	}
 
-	> div.tab {
+	> div.tab-content {
 		display: none;
 		visibility: visible;
 		position: relative;
 		overflow: auto;
 		height: auto;
 		width: 100%;
-		padding: 1.125rem;
+		padding: 1.125rem 1.5rem;
 		border: 0.0625rem solid ${getCssVariable("Border")};
 		background-color: ${getCssVariable("Background")};
 		margin-top: -0.0625rem;
 	}
 
-	> button.active + div.tab {
+	> button.active + div.tab-content {
 		display: block;
 	}
 `;

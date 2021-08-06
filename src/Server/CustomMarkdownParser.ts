@@ -44,13 +44,25 @@ const parseTabs = (text: string): string => {
 
 			let retString: string = `<TabbedContent>`;
 			for (let i = 0; i < tabArray.length; i += 2) {
-				retString += `<button>${tabArray[i]}</button><div className="tab">
+				retString += `<button>${tabArray[i]}</button><div className="tab-content">
 
 ${tabArray[i + 1]}
 
 </div>`;
 			}
 			retString += `</TabbedContent>`;
+			return retString;
+		}
+	);
+};
+
+const parseAccordions = (text: string): string => {
+	return text.replace(
+		/<!-- accordion:start(.*?) -->((.|\n)*?)<!-- accordion:end -->/g,
+		(match: string, p1: string, p2: string) => {
+			let retString: string = p1.length > 0 ? `<Accordion label=${p1}>` : `<Accordion>`;
+			retString += p2;
+			retString += `</Accordion>`;
 			return retString;
 		}
 	);
@@ -260,6 +272,7 @@ const parseCustomMarkdown = async (
 		text = parseImportantNotes(text);
 		text = parsePageHeaders(text);
 		text = parseAnchoredHeaders(text);
+		text = parseAccordions(text);
 		text = parseTabs(text);
 
 		// Set line endings back

@@ -1,3 +1,4 @@
+export * from "./Accordion";
 export * from "./BlockQuote";
 export * from "./Button";
 export * from "./NavigationLinks";

@@ -176,11 +176,15 @@ export const BaseStyle = createGlobalStyle`
 		}
     }
 
-	ul {
+	ul,ol {
 		margin: 0;
 		padding-top: 0.25rem;
 		padding-bottom: 0.75rem;
 		line-height: 1.625;
+	}
+
+	ol {
+		padding-left: 1rem;
 	}
 
 	button {

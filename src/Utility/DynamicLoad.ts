@@ -1,6 +1,7 @@
 import { default as nextDynamic } from "next/dynamic";
 
 type Components =
+	| "Accordion"
 	| "BlockQuote"
 	| "Code"
 	| "CodePre"

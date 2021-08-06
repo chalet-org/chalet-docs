@@ -6,21 +6,107 @@ title: Getting Started
 
 ---
 
-At the moment, Chalet must be installed manually in non-Windows operating systems, but in the future will be available through Homebrew/package managers. Before working with Chalet, the application should be accessible from PATH. On Windows, this is done either through setting environment variables (or selecting the installer option), while on other operating systems, this is done through your shell.
+At the moment, Chalet must be installed manually in non-Windows operating systems, but in the future will be available through Homebrew/package managers. Before working with Chalet, the application should be accessible from PATH.
 
 ---
+## [Compiler / Prerequisites]
 
-## [More Content]
+Before building, you should have a C/C++ compiler chosen for your platform, and available in PATH.
+
+<!-- accordion:start -->
 
 <!-- tabs:start -->
 |Windows|
-Something for Windows
+Install one of the following:
+* [Visual Studio](https://visualstudio.microsoft.com/) (Recommended)
+* [LLVM](https://llvm.org/)
+* [MinGW via MSYS2](https://www.msys2.org/)
 
 |MacOS|
-Mac stuff!
+Install one of the following:
+* [Xcode](https://developer.apple.com/xcode/) (Recommended)
+* [Command Line Tools for Xcode](https://developer.apple.com/download/all/?q=%22command%20line%20tools%22)
+
+If using Xcode:
+* Ensure Xcode.app is placed in Applications
+* Run the following from Terminal:
+
+```bash
+sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+```
+
+If using Command Line Tools:
+* Run the installer from the dmg image & restart Terminal if necessary
+* Run the following:
+
+```bash
+sudo xcode-select -s /Library/Developer/CommandLineTools
+```
+
+In both, run `which clang` and ensure you see `/usr/bin/clang`
 
 |Linux|
-Something for Linux.
-
-Lots of linux stuff
+It's recommended to start with the compiler that comes with your distribution. Chalet will detect GCC by default, but this can be configured later.
 <!-- tabs:end -->
+
+Additional Tools Recommended:
+
+* [Git](https://git-scm.com/) - Used in Chalet for fetching external dependencies
+* [Ninja](https://ninja-build.org/) - By design, it's quicker than Make
+* [CMake](https://cmake.org/) - Used to integrate external code into Chalet projects
+
+<!-- accordion:end -->
+
+---
+## [Creating a Project]
+
+Once Chalet is installed, either run:
+
+```bash
+chalet init my-project
+cd my-project
+```
+
+or
+
+```bash
+mkdir my-project
+cd my-project
+chalet init
+```
+
+You'll be shown a wizard that will guide you the rest of the way, creating a simple "Hello World" project, a chalet.json, and optionally a git repository.
+
+---
+## [Introduction to chalet.json]
+
+```json
+{
+   "workspace": "my-project",
+   "version": "1.0.0",
+   "abstracts:all": {
+      "language": "C++",
+      "settings:Cxx": {
+         "cppStandard": "c++20",
+         "warnings": "pedantic"
+      }
+   },
+   "targets": {
+      "my-project": {
+         "runProject": true,
+         "kind": "consoleApplication",
+         "location": "src",
+         "settings:Cxx": {
+            "pch": "src/pch.hpp"
+         }
+      }
+   },
+   "distribution": {
+      "my-project": {
+         "projects": [
+            "my-project"
+         ]
+      }
+   }
+}
+```
