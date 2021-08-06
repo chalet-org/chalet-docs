@@ -17,6 +17,11 @@ const trimLineBreaksFromEdges = (text: string) => {
 	return text;
 };
 
+const parseExplicitLineBreaks = (text: string): string => {
+	text = text.replace(/\n\\\n/g, `\n<Spacer />\n`);
+	return text.replace(/\n\\\\\n/g, `\n<Spacer size="lg" />\n`);
+};
+
 const parseImportantNotes = (text: string): string => {
 	return text.replace(/!> (.*)/g, `<p className="tip">$1</p>`);
 };
@@ -60,7 +65,7 @@ const parseAccordions = (text: string): string => {
 	return text.replace(
 		/<!-- accordion:start(.*?) -->((.|\n)*?)<!-- accordion:end -->/g,
 		(match: string, p1: string, p2: string) => {
-			let retString: string = p1.length > 0 ? `<Accordion label=${p1}>` : `<Accordion>`;
+			let retString: string = p1.length > 0 ? `<Accordion label="${p1}">` : `<Accordion>`;
 			retString += p2;
 			retString += `</Accordion>`;
 			return retString;
@@ -269,6 +274,7 @@ const parseCustomMarkdown = async (
 			}
 		}
 
+		text = parseExplicitLineBreaks(text);
 		text = parseImportantNotes(text);
 		text = parsePageHeaders(text);
 		text = parseAnchoredHeaders(text);

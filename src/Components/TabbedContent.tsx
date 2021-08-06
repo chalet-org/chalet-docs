@@ -2,6 +2,7 @@ import platformJs from "platform";
 import React, { useState } from "react";
 import styled from "styled-components";
 
+import { useUiStore } from "Stores";
 import { getCssVariable } from "Theme";
 
 type Props = React.PropsWithChildren<{}>;
@@ -27,6 +28,8 @@ const isTabOperatingSystem = (name: string): boolean => {
 };
 
 const TabbedContent = ({ children }: Props) => {
+	const { notifyAccordions } = useUiStore();
+
 	const [activeTab, setActiveTab] = useState<number>(-1);
 
 	let i: number = -1;
@@ -59,6 +62,7 @@ const TabbedContent = ({ children }: Props) => {
 						onClick: (ev: any) => {
 							ev.preventDefault();
 							setActiveTab(index);
+							notifyAccordions();
 						},
 					},
 				};
@@ -93,7 +97,7 @@ const TabbedContent = ({ children }: Props) => {
 		});
 	}
 
-	return <Styles>{children}</Styles>;
+	return <Styles className="tab-wrapper">{children}</Styles>;
 };
 
 export { TabbedContent };
@@ -103,7 +107,7 @@ const Styles = styled.div`
 	flex-wrap: wrap;
 	position: relative;
 	padding-top: 1rem;
-	padding-bottom: 2rem;
+	padding-bottom: 0.5rem;
 
 	> button {
 		order: -1;

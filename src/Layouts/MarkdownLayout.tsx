@@ -27,6 +27,7 @@ let components: Dictionary<React.ComponentType<any>> = {
 	Accordion: dynamic.component("Accordion"),
 	IndentGroup: dynamic.component("IndentGroup"),
 	PageHeading: dynamic.component("PageHeading"),
+	PageNavigation: dynamic.component("PageNavigation"),
 	TabbedContent: dynamic.component("TabbedContent"),
 	Spacer: dynamic.component("Spacer"),
 };
@@ -94,11 +95,11 @@ const MarkdownLayout = ({ meta, mdx, children, ...navProps }: Props) => {
 
 	useWheelScroll(
 		(ev) => {
-			if (navOpen && focusedId === "") {
+			if (navOpen) {
 				setFocusedLink();
 			}
 		},
-		[navOpen, focusedId]
+		[navOpen]
 	);
 
 	return (

@@ -8,26 +8,75 @@ title: Getting Started
 
 At the moment, Chalet must be installed manually in non-Windows operating systems, but in the future will be available through Homebrew/package managers. Before working with Chalet, the application should be accessible from PATH.
 
----
-## [Compiler / Prerequisites]
+\\
+
+## [Machine Setup]
+
+<!-- accordion:start Adding a C/C++ Compiler -->
 
 Before building, you should have a C/C++ compiler chosen for your platform, and available in PATH.
 
-<!-- accordion:start -->
-
 <!-- tabs:start -->
 |Windows|
-Install one of the following:
+**Install one of the following:**
 * [Visual Studio](https://visualstudio.microsoft.com/) (Recommended)
 * [LLVM](https://llvm.org/)
-* [MinGW via MSYS2](https://www.msys2.org/)
+* [MinGW-w64 via MSYS2](https://www.msys2.org/)
+* A standalone MinGW build (MinGW-w64, TDM-GCC, etc.) 
+
+\
+
+**If using Visual Studio:**
+* In the VS Installer, Install C++ related components, but most importantly, the x64/x86 build tools (and optionally ARM, ARM64).
+* Also install the bundled CMake tools if you wish
+* Chalet uses [vswhere](https://github.com/microsoft/vswhere) to figure out the rest of the Visual Studio environment, so no further steps are necessary
+
+\
+
+**If using LLVM:**
+* Install LLVM and either add to Path directly in Windows Environment Variables or create a .env file in your project to modify Path
+* Use the following command in your project before building:
+
+```bash
+chalet configure --toolchain llvm
+```
+
+> Note: LLVM on Windows uses the Visual Studio ABI `x86_64-pc-windows-msvc` by default (and requires a Visual Studio installation anyway)
+
+\
+
+**If using MinGW-w64 (GCC) via MSYS2:**
+* Install MSYS2 - This defaults to the path `C:\msys64`
+* Update the package database with `pacman -Syu` (Note: some packages may be less stable though)
+* Add MinGW (32 & 64 bit versions respectively) via:
+
+```bash
+pacman -S mingw-w64-x86_64-toolchain mingw-w64-i686-toolchain
+```
+
+* Check for GCC with `gcc --version`
+* Add `C:\msys64\mingw64\bin` to Path directly in Windows Environment Variables (not recommended) or create a .env file in your project to modify Path
+
+> Note: If both 32 and 64 version are installed, Chalet only needs one of the bin folders in path. It will reinterpret the path based on the requested architecture of the build.
+
+> Note: One can also install clang from MSYS2, but support for it in Chalet is still experimental...
+
+\
+
+**If using a standalone MinGW build:**
+* Install/extract it where you please. It is recommended to use sub-folders for 32-bit and 64-bit versions if compiling for both, and to use the convention `mingw32` and `mingw64` for those subfolder names
+* Add `(folder)\mingw64\bin` to Path directly in Windows Environment Variables (not recommended) or create a .env file in your project to modify Path
+
+> Note: If both 32 and 64 version are installed, Chalet only needs one of the bin folders in path. It will reinterpret the path based on the requested architecture of the build.
 
 |MacOS|
-Install one of the following:
+**Install one of the following:**
 * [Xcode](https://developer.apple.com/xcode/) (Recommended)
 * [Command Line Tools for Xcode](https://developer.apple.com/download/all/?q=%22command%20line%20tools%22)
 
-If using Xcode:
+\
+
+**If using Xcode:**
 * Ensure Xcode.app is placed in Applications
 * Run the following from Terminal:
 
@@ -35,7 +84,9 @@ If using Xcode:
 sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
 ```
 
-If using Command Line Tools:
+\
+
+**If using Command Line Tools:**
 * Run the installer from the dmg image & restart Terminal if necessary
 * Run the following:
 
@@ -43,24 +94,27 @@ If using Command Line Tools:
 sudo xcode-select -s /Library/Developer/CommandLineTools
 ```
 
-In both, run `which clang` and ensure you see `/usr/bin/clang`
+In both, running `which clang` should show `/usr/bin/clang` (although it actually resolves to the xcode-select path)
 
 |Linux|
 It's recommended to start with the compiler that comes with your distribution. Chalet will detect GCC by default, but this can be configured later.
 <!-- tabs:end -->
 
-Additional Tools Recommended:
+<!-- accordion:end -->
 
-* [Git](https://git-scm.com/) - Used in Chalet for fetching external dependencies
+<!-- accordion:start Additional Software -->
+
+* [Git](https://git-scm.com/) - Used in Chalet for fetching & managing external dependencies
 * [Ninja](https://ninja-build.org/) - By design, it's quicker than Make
 * [CMake](https://cmake.org/) - Used to integrate external code into Chalet projects
 
 <!-- accordion:end -->
 
----
+\\
+
 ## [Creating a Project]
 
-Once Chalet is installed, either run:
+Once Chalet is installed and a compiler is available, run either:
 
 ```bash
 chalet init my-project
@@ -75,38 +129,15 @@ cd my-project
 chalet init
 ```
 
-You'll be shown a wizard that will guide you the rest of the way, creating a simple "Hello World" project, a chalet.json, and optionally a git repository.
+You'll be shown a wizard that will guide you the rest of the way, creating a simple "Hello World" project, a chalet.json, and optionally a git repository. In the last step, you'll be asked to configure the project.
 
----
-## [Introduction to chalet.json]
-
-```json
-{
-   "workspace": "my-project",
-   "version": "1.0.0",
-   "abstracts:all": {
-      "language": "C++",
-      "settings:Cxx": {
-         "cppStandard": "c++20",
-         "warnings": "pedantic"
-      }
-   },
-   "targets": {
-      "my-project": {
-         "runProject": true,
-         "kind": "consoleApplication",
-         "location": "src",
-         "settings:Cxx": {
-            "pch": "src/pch.hpp"
-         }
-      }
-   },
-   "distribution": {
-      "my-project": {
-         "projects": [
-            "my-project"
-         ]
-      }
-   }
-}
-```
+<PageNavigation 
+    left={{
+        to: "/",
+        label: "Introduction"
+    }}
+    right={{
+        to: "/configure",
+        label: "The Configure Step"
+    }}
+/>

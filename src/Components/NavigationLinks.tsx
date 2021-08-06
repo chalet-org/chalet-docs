@@ -25,9 +25,10 @@ const LinkWithAnchors = ({ href, anchors, children }: LinkWithAnchorProps) => {
 			{(base === href || base2 === href) && (
 				<ul>
 					{anchors.map((anchor, j) => {
+						const dataId = anchor.to.includes("=") ? anchor.to.split("=")[1] : undefined;
 						return (
 							<li key={j}>
-								<Link href={`${href}${anchor.to}`} dataId={anchor.to}>
+								<Link href={`${href}${anchor.to}`} dataId={dataId}>
 									{anchor.text}
 								</Link>
 							</li>

@@ -1,0 +1,46 @@
+---
+title: Understanding chalet.json
+---
+
+# [Understanding chalet.json]
+
+---
+
+```json
+{
+   "workspace": "my-project",
+   "version": "1.0.0",
+   "abstracts:all": {
+      "language": "C++",
+      "settings:Cxx": {
+         "cppStandard": "c++20",
+         "warnings": "pedantic"
+      }
+   },
+   "targets": {
+      "my-project": {
+         "runProject": true,
+         "kind": "consoleApplication",
+         "location": "src",
+         "settings:Cxx": {
+            "pch": "src/pch.hpp"
+         }
+      }
+   },
+   "distribution": {
+      "my-project": {
+         "projects": [
+            "my-project"
+         ]
+      }
+   }
+}
+```
+
+
+<PageNavigation 
+    left={{
+        to: "/configure",
+        label: "The Configure Step"
+    }}
+/>

@@ -14,6 +14,8 @@ class UiState extends BaseState {
 
 	focusedId: string = "examples";
 
+	accordionNotifier: boolean = false;
+
 	@Action
 	initialize = () => {
 		let themeId: Theme;
@@ -64,6 +66,11 @@ class UiState extends BaseState {
 	};
 
 	toggleNavigation = () => this.setNavOpen(!this.navOpen);
+
+	@Action
+	notifyAccordions = () => {
+		this.accordionNotifier = !this.accordionNotifier;
+	};
 }
 
 export { UiState };

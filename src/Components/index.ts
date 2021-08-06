@@ -11,6 +11,7 @@ export * from "./ImportantNote";
 export * from "./IndentGroup";
 export * from "./Page";
 export * from "./PageHeading";
+export * from "./PageNavigation";
 export * from "./Paragraph";
 export * from "./SearchInput";
 export * from "./SideNavigation";

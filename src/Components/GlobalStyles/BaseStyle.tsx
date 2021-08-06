@@ -4,6 +4,10 @@ import { getCssVariable } from "Theme";
 
 import { fontImports, globalFonts } from "./Fonts";
 
+const styleVariables = {
+	baseFontSize: 16,
+};
+
 const cssReset = css`
 	*,
 	::after,
@@ -73,12 +77,12 @@ const cssReset = css`
 	}
 `;
 
-export const BaseStyle = createGlobalStyle`
+const BaseStyle = createGlobalStyle`
     ${cssReset}
 	${fontImports}
 
     html {
-        font-size: 16px;
+        font-size: ${styleVariables.baseFontSize}px;
         background-color: #111111;
 		scroll-behavior: smooth;
     }
@@ -195,3 +199,5 @@ export const BaseStyle = createGlobalStyle`
 		z-index: 50;
 	}
 `;
+
+export { BaseStyle, styleVariables };

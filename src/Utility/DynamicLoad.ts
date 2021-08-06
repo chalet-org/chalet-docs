@@ -9,6 +9,7 @@ type Components =
 	| "IndentGroup"
 	| "Link"
 	| "PageHeading"
+	| "PageNavigation"
 	| "Paragraph"
 	| "Spacer"
 	| "Stub"
