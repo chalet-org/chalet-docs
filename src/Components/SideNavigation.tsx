@@ -144,8 +144,8 @@ const StyledAside = styled.aside<AsideProps>`
 
 	a {
 		display: block;
-		padding-left: 0.5rem;
 		line-height: 2.5;
+		border-left: 0.25rem solid transparent;
 
 		&:hover {
 			text-decoration: underline;
@@ -154,7 +154,7 @@ const StyledAside = styled.aside<AsideProps>`
 
 		&.active {
 			background-color: ${getCssVariable("Background")};
-			border-right: 0.25rem solid ${getCssVariable("Red")};
+			border-left-color: ${getCssVariable("Red")};
 		}
 	}
 
@@ -209,17 +209,19 @@ const StyledAside = styled.aside<AsideProps>`
 const NavGroup = styled.div`
 	padding-bottom: 1rem;
 
-	> ul > li > a,
+	> ul > li > a {
+		padding-left: 1.75rem;
+	}
 	> ul > li > strong {
 		padding-left: 2rem;
 	}
 
 	> ul > li > ul > li > a {
-		padding-left: 3.25rem;
+		padding-left: 2.5rem;
 	}
 
 	> ul > li > ul > li > ul > li > a {
-		padding-left: 4.5rem;
+		padding-left: 3rem;
 	}
 
 	> ul > li > strong {

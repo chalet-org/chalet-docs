@@ -1,6 +1,6 @@
 import debounce from "lodash/debounce";
 import { MDXRemote } from "next-mdx-remote";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 import { Dictionary } from "@andrew-r-king/react-kitchen";
@@ -38,7 +38,7 @@ type AnchorData = {
 };
 
 const MarkdownLayout = ({ meta, mdx, children, ...navProps }: Props) => {
-	const { focusedId, setFocusedId, navOpen } = useUiStore();
+	const { focusedId, setFocusedId, navOpen, heightNotifier } = useUiStore();
 	const pageLayout = useRef<HTMLDivElement>(null);
 
 	useRouteChangeScroll();
@@ -87,7 +87,7 @@ const MarkdownLayout = ({ meta, mdx, children, ...navProps }: Props) => {
 						}
 					}
 				}
-				if (!dataIdSet && scrollPercent < 0.33) {
+				if (!dataIdSet && scrollPercent < 0.5) {
 					setFocusedId("");
 				}
 			}
@@ -101,8 +101,14 @@ const MarkdownLayout = ({ meta, mdx, children, ...navProps }: Props) => {
 				setFocusedLink();
 			}
 		},
-		[navOpen, focusedId]
+		[navOpen, focusedId, heightNotifier]
 	);
+
+	useEffect(() => {
+		if (navOpen) {
+			setFocusedLink();
+		}
+	}, [navOpen, heightNotifier]);
 
 	return (
 		<>

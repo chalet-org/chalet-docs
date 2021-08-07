@@ -22,7 +22,7 @@ Before building, you should have a C/C++ compiler chosen for your platform, and 
 * [Visual Studio](https://visualstudio.microsoft.com/) (Recommended)
 * [LLVM](https://llvm.org/)
 * [MinGW-w64 via MSYS2](https://www.msys2.org/)
-* A standalone MinGW build (MinGW-w64, TDM-GCC, etc.) 
+* A standalone MinGW build (MinGW-w64 from Sourceforge, TDM-GCC, etc.) 
 
 \
 
@@ -118,7 +118,7 @@ It's recommended to start with the compiler that comes with your distribution. C
 <!-- accordion:start Additional Software -->
 
 * [Git](https://git-scm.com/) - Used in Chalet for fetching & managing external dependencies
-* [Ninja](https://ninja-build.org/) - By design, it's quicker than Make
+* [Ninja](https://ninja-build.org/) - Make alternative, that is quicker by design due to how it manages dependencies
 * [CMake](https://cmake.org/) - Used to integrate external code into Chalet projects
 
 <!-- accordion:end -->
@@ -145,6 +145,10 @@ chalet init
 You'll be shown a wizard that will guide you the rest of the way, creating a simple "Hello World" project, a chalet.json, and optionally a git repository. In the last step, you'll be asked to configure the project.
 
 <PageNavigation 
+    left={{
+        to: "/",
+        label: "Introduction"
+    }}
     right={{
         to: "/configure",
         label: "The Configure Step"

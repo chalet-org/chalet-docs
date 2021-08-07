@@ -15,6 +15,7 @@ class UiState extends BaseState {
 	focusedId: string = "examples";
 
 	accordionNotifier: boolean = false;
+	heightNotifier: boolean = false;
 
 	@Action
 	initialize = () => {
@@ -70,6 +71,11 @@ class UiState extends BaseState {
 	@Action
 	notifyAccordions = () => {
 		this.accordionNotifier = !this.accordionNotifier;
+	};
+
+	@Action
+	notifyHeightChange = () => {
+		this.heightNotifier = !this.heightNotifier;
 	};
 }
 

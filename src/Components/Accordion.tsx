@@ -10,7 +10,7 @@ type Props = React.PropsWithChildren<{
 }>;
 
 const Accordion = ({ label, children }: Props) => {
-	const { accordionNotifier } = useUiStore();
+	const { accordionNotifier, notifyHeightChange } = useUiStore();
 
 	const [open, setOpen] = useState<boolean>(false);
 	const [height, setHeight] = useState<number>(0);
@@ -45,6 +45,9 @@ const Accordion = ({ label, children }: Props) => {
 				height={computedRemHeight}
 				marginTop={marginTop}
 				marginBottom={marginBottom}
+				onAnimationEnd={() => {
+					notifyHeightChange();
+				}}
 			>
 				<div className="inner" ref={contentRef}>
 					{children}
@@ -106,10 +109,12 @@ const AccordionContent = styled.div<ContentProps>`
 	display: block;
 	overflow: hidden;
 	max-height: 0rem;
-	transition: max-height 0.25s linear;
+	opacity: 0;
+	transition: max-height 0.25s linear, opacity 0.25s linear;
 
 	&.open {
 		max-height: ${({ height }) => height}rem;
+		opacity: 1;
 	}
 
 	> .inner {
