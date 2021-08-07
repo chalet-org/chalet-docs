@@ -28,7 +28,6 @@ const PageNavigation = ({ left, right }: Props) => {
 						className="nav-left"
 						onClick={() => {
 							router.push(left.to, undefined);
-							setFocusedId("");
 						}}
 						label={left.label ?? "Previous"}
 					/>
@@ -40,7 +39,6 @@ const PageNavigation = ({ left, right }: Props) => {
 						className="nav-right"
 						onClick={() => {
 							router.push(right.to, undefined);
-							setFocusedId("");
 						}}
 						label={right.label ?? "Next"}
 					/>
