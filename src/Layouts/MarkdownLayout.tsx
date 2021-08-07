@@ -1,6 +1,6 @@
 import debounce from "lodash/debounce";
 import { MDXRemote } from "next-mdx-remote";
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import styled from "styled-components";
 
 import { Dictionary } from "@andrew-r-king/react-kitchen";
@@ -38,6 +38,7 @@ type AnchorData = {
 };
 
 const MarkdownLayout = ({ meta, mdx, children, ...navProps }: Props) => {
+	const [focusing, setFocusing] = useState<boolean>(false);
 	const { focusedId, setFocusedId, navOpen } = useUiStore();
 	const pageLayout = useRef<HTMLDivElement>(null);
 
@@ -99,7 +100,7 @@ const MarkdownLayout = ({ meta, mdx, children, ...navProps }: Props) => {
 				setFocusedLink();
 			}
 		},
-		[navOpen]
+		[navOpen, focusedId]
 	);
 
 	return (

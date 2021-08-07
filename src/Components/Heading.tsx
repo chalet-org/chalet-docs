@@ -20,18 +20,7 @@ type Props = {
 const Heading = ({ size, anchor, children }: Props) => {
 	const router = useRouter();
 	const id = !!children && typeof children === "string" ? toKebabCase(children) : "";
-	const { id: routeId, definition } = router.query;
-
-	const { focusedId } = useUiStore();
-
-	const headerElement = useRef(null);
-
-	useEffect(() => {
-		if (!!headerElement && !!headerElement.current && !!routeId && typeof routeId === "string" && id === routeId) {
-			const top = (headerElement.current as any)?.offsetTop ?? 0;
-			window.scrollTo({ behavior: "smooth", top });
-		}
-	}, [routeId, focusedId, headerElement.current, window]);
+	const { definition } = router.query;
 
 	const Tag = Styles[size];
 
@@ -39,7 +28,7 @@ const Heading = ({ size, anchor, children }: Props) => {
 		const basePath = router.asPath.split("?")[0];
 		const href = !!definition ? `${basePath}?definition=${definition}&id=${id}` : `${basePath}?id=${id}`;
 		return (
-			<Tag id={id} ref={headerElement}>
+			<Tag id={id}>
 				<Link href={href} dataId={id}>
 					{children}
 				</Link>
