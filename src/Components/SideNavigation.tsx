@@ -154,7 +154,7 @@ const StyledAside = styled.aside<AsideProps>`
 
 		&.active {
 			background-color: ${getCssVariable("Background")};
-			border-right: 0.25rem solid ${getCssVariable("Accent")};
+			border-right: 0.25rem solid ${getCssVariable("Red")};
 		}
 	}
 

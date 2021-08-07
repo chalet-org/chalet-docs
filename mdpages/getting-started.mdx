@@ -29,7 +29,15 @@ Before building, you should have a C/C++ compiler chosen for your platform, and 
 **If using Visual Studio:**
 * In the VS Installer, Install C++ related components, but most importantly, the x64/x86 build tools (and optionally ARM, ARM64).
 * Also install the bundled CMake tools if you wish
-* Chalet uses [vswhere](https://github.com/microsoft/vswhere) to figure out the rest of the Visual Studio environment, so no further steps are necessary
+* If using a preview version of Visual Studio, use the following command in your project before building:
+
+```bash
+chalet configure --toolchain msvcpre
+```
+
+Otherwise, chalet implicitly uses the `msvc` toolchain preset
+
+> Note: Chalet uses [vswhere](https://github.com/microsoft/vswhere) to get the rest of the Visual Studio environment, so no Path environment variable changes are needed
 
 \
 
@@ -56,6 +64,11 @@ pacman -S mingw-w64-x86_64-toolchain mingw-w64-i686-toolchain
 
 * Check for GCC with `gcc --version`
 * Add `C:\msys64\mingw64\bin` to Path directly in Windows Environment Variables (not recommended) or create a .env file in your project to modify Path
+* Use the following command in your project before building:
+
+```bash
+chalet configure --toolchain gcc
+```
 
 > Note: If both 32 and 64 version are installed, Chalet only needs one of the bin folders in path. It will reinterpret the path based on the requested architecture of the build.
 
@@ -132,10 +145,6 @@ chalet init
 You'll be shown a wizard that will guide you the rest of the way, creating a simple "Hello World" project, a chalet.json, and optionally a git repository. In the last step, you'll be asked to configure the project.
 
 <PageNavigation 
-    left={{
-        to: "/",
-        label: "Introduction"
-    }}
     right={{
         to: "/configure",
         label: "The Configure Step"

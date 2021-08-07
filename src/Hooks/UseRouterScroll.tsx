@@ -3,13 +3,17 @@ import { useEffect, useCallback } from "react";
 
 import { Optional } from "@andrew-r-king/react-kitchen";
 
+import { useUiStore } from "Stores";
 import { getQueryVariable } from "Utility/GetQueryVariable";
 
-export const useRouterScroll = () => {
+const useRouteChangeScroll = () => {
 	const router = useRouter();
+
+	const { setFocusedId } = useUiStore();
 
 	const handler = useCallback(() => {
 		if (window.location.search.length === 0) {
+			setFocusedId("");
 			setTimeout(() => {
 				window.scrollTo(0, 0);
 			}, 25);
@@ -28,8 +32,12 @@ export const useRouterScroll = () => {
 	useEffect(() => {
 		router.events.on("routeChangeComplete", handler);
 
+		handler();
+
 		return () => {
 			router.events.off("routeChangeComplete", handler);
 		};
 	}, []);
 };
+
+export { useRouteChangeScroll };

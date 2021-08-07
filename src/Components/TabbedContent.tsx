@@ -1,5 +1,5 @@
 import platformJs from "platform";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import { useUiStore } from "Stores";
@@ -31,6 +31,10 @@ const TabbedContent = ({ children }: Props) => {
 	const { notifyAccordions } = useUiStore();
 
 	const [activeTab, setActiveTab] = useState<number>(-1);
+
+	useEffect(() => {
+		notifyAccordions();
+	}, []);
 
 	let i: number = -1;
 	let activeTabSet: boolean = false;
@@ -129,8 +133,8 @@ const Styles = styled.div`
 
 		&.active {
 			color: ${getCssVariable("MainText")};
-			background-color: transparent;
-			border-top: 0.25rem solid ${getCssVariable("Accent")};
+			background-color: ${getCssVariable("Background")};
+			border-top: 0.25rem solid ${getCssVariable("Red")};
 			border-bottom-color: ${getCssVariable("Background")};
 			padding-top: 0.125rem;
 		}

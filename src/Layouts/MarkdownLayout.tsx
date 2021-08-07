@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { Dictionary } from "@andrew-r-king/react-kitchen";
 
 import { AnchoredHeadingObject, HeadingObject, Page, SideNavigation } from "Components";
-import { useRouterScroll, useWheelScroll } from "Hooks";
+import { useRouteChangeScroll, useWheelScroll } from "Hooks";
 import { ResultMDXPage } from "Server/ResultTypes";
 import { useUiStore } from "Stores";
 import { dynamic, getWindowHeight } from "Utility";
@@ -38,11 +38,10 @@ type AnchorData = {
 };
 
 const MarkdownLayout = ({ meta, mdx, children, ...navProps }: Props) => {
-	const [focusing, setFocusing] = useState<boolean>(false);
 	const { focusedId, setFocusedId, navOpen } = useUiStore();
 	const pageLayout = useRef<HTMLDivElement>(null);
 
-	useRouterScroll();
+	useRouteChangeScroll();
 
 	const setFocusedLink = useCallback(
 		debounce(() => {
@@ -54,41 +53,43 @@ const MarkdownLayout = ({ meta, mdx, children, ...navProps }: Props) => {
 
 			const links = pageLayout.current.getElementsByTagName("a");
 
-			let setDataId: boolean = false;
-			if (!!links && links.length > 0) {
-				const firstLinkTop = links[0].offsetTop;
+			if (links.length > 1) {
+				let dataIdSet: boolean = false;
+				if (!!links) {
+					const firstLinkTop = links[0].offsetTop;
 
-				let arr: AnchorData[] = [];
-				for (let i = 0; i < links.length; ++i) {
-					// if (!isElementInViewport(links[i + 1])) {
-					// 	continue;
-					// }
-					const dataId = links[i].getAttribute("data-id");
-					if (!!dataId) {
-						arr.push({
-							el: links[i],
-							id: dataId,
-						});
+					let arr: AnchorData[] = [];
+					for (let i = 0; i < links.length; ++i) {
+						// if (!isElementInViewport(links[i + 1])) {
+						// 	continue;
+						// }
+						const dataId = links[i].getAttribute("data-id");
+						if (!!dataId) {
+							arr.push({
+								el: links[i],
+								id: dataId,
+							});
+						}
 					}
-				}
 
-				for (let i = 0; i < arr.length; ++i) {
-					const { id } = arr[i];
-					const { el } = arr[i + 1] ?? {};
+					for (let i = 0; i < arr.length; ++i) {
+						const { id } = arr[i];
+						const { el } = arr[i + 1] ?? {};
 
-					const nextTop = el?.offsetTop ?? pageLayoutHeight;
+						const nextTop = el?.offsetTop ?? pageLayoutHeight;
 
-					if (window.scrollY > firstLinkTop) {
-						if (nextTop - windowHeight * scrollPercent >= window.scrollY) {
-							setDataId = true;
-							setFocusedId(id);
-							return;
+						if (window.scrollY > firstLinkTop) {
+							if (nextTop - windowHeight * scrollPercent >= window.scrollY) {
+								dataIdSet = true;
+								setFocusedId(id);
+								return;
+							}
 						}
 					}
 				}
-			}
-			if (!setDataId && scrollPercent < 0.33) {
-				setFocusedId("");
+				if (!dataIdSet && scrollPercent < 0.33) {
+					setFocusedId("");
+				}
 			}
 		}, 10),
 		[pageLayout.current]

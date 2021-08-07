@@ -1,5 +1,6 @@
-Guides
+
 [Introduction](/)
+Guides
 [Getting Started](/getting-started)
 [The Configure Step](/configure)
 [Understanding chalet.json](/understanding-chalet-json)
