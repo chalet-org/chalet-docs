@@ -248,7 +248,7 @@ const PreStyles = styled.pre<StyleProps>`
 	padding: 1rem 1.25rem;
 	border-radius: 0.5rem;
 	border: 0.125rem solid ${getCssVariable("Border")};
-	white-space: pre;
+	white-space: pre-wrap;
 	line-height: 1.5;
 	overflow: auto;
 
@@ -263,5 +263,6 @@ const PreStyles = styled.pre<StyleProps>`
 		right: 1.25rem;
 		font-family: ${(props) => props.fonts?.paragraph ?? "inherit"};
 		font-size: 0.875rem;
+		z-index: 10;
 	}
 `;

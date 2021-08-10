@@ -128,7 +128,7 @@ In both, running `which clang` should show `/usr/bin/clang` (although it actuall
 
 Every Linux build is going to be a little different, so this is more like a set of guidelines.
 
-You should have at least the following:
+You should have at least the following packages from your package manager:
 ```
 base-devel git cmake ninja gdb
 ```
@@ -190,13 +190,76 @@ chalet init
 
 You'll be shown a wizard that will guide you the rest of the way, creating a simple "Hello World" project, a chalet.json, and optionally a git repository. In the last step, you'll be asked to configure the project.
 
+\\
+
+## [Settings Overview]
+
+During the build, Chalet uses a generated settings file, `.chaletrc`, to control machine-specific paths and settings. The `configure` command is a way to  configure the build and download dependencies without running the build yet. It takes the same cli options as the main set of build commands, but only changes the settings file. This way, you can change settings for each build on the fly without having to configure each time. Typically you would use it to change the toolchain, architecture, paths of ancillary tools, and on mac: apple sdk paths. If a `.chaletrc` file exists in the user/home directory and has its own paths and toolchains defined, they will be copied over into the project's `.chaletrc`.
+
+The toolchain refers to either a preset (`llvm` `applellvm` `gcc` `msvc` `msvcpre`) or a custom name that resolves to a toolchain structure in the project settings. The preset will attempt to detect compiler toolchain executables add add them to settings. 
+
+Architecture will be described in more detail later, but in general, it does not need to be specified if you are compiling for your host architecture
+
+The toolchain is specified with either `--toolchain (name)` or `-t (name)`
+The architecture is specified with either `--arch (name)` or `-a (name)`
+
+Here are some examples:
+
+```bash
+chalet configure -t msvc -a x64 
+chalet configure -t msvcpre -a x64
+# Attempts to find the target architecture and creates the toolchain 'x64-pc-windows-msvc(version)' 
+# where 'version' is the detected MSVC version (or Preview version)
+
+chalet configure -t gcc -a x64 
+# Attempts to find the target architecture (if MinGW) and creates the toolchain 'x64-gcc'
+# since the version of GCC (and the target triple) do not get inferred (yet)
+
+chalet configure -t llvm -a x64
+chalet configure -t applellvm -a x64 
+# creates the toolchain 'llvm' or 'applellvm'
+# since Clang handles the architecture
+```
+
+> Note: In all cases, you can edit the generated toolchain name later
+
+\\
+
+## [The First Build]
+
+Create that first build with:
+```bash
+chalet build Debug
+```
+
+If the output directory is `build`, this will generate a build of the project into the folder `build/(toolchain)_(configuration)`. The subfolder can be customized in the toolchain settings.
+
+By default, Chalet has 5 build configurations: `Release` `Debug` `MinSizeRel` `RelWithDebInfo` and `Profile`. It uses the same build configuration names as CMake, specifically so that it can be passed easily to CMake build targets. `Profile` is a special target that makes a build for profiling and attempts to launch a compatible profiling utility. In the Profile build of CMake build targets, `Debug` is used.
+
+Any Chalet command that takes a build configuration is related to that specific build & configuration, such as:
+
+```bash
+chalet buildrun Debug
+chalet run Debug
+chalet build Debug
+chalet rebuild Debug
+chalet clean Debug
+```
+
+The `buildrun` & `run` commands can also take the target you want to run afterwards (including its arguments). Therefor, if multiple executables are built, and one wants to run a target called "my-tests", a project that is not the default run project, one can use:
+```bash
+chalet buildrun Debug my-tests
+``` 
+
+> Note: Build configurations can be customized by defining a `configurations` structure in `chalet.json` with either a list of new configuration objects, or a string list that limits the default ones (for example, to just `Release` and `Debug`)
+
 <PageNavigation 
     left={{
         to: "/",
         label: "Introduction"
     }}
     right={{
-        to: "/configure",
-        label: "The Configure Step"
+        to: "/understanding-chalet-json",
+        label: "Understanding chalet.json"
     }}
 />

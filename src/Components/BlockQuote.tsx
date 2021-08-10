@@ -35,6 +35,10 @@ const Styles = styled.div`
 			font-size: 1rem;
 			padding-top: 0.25rem;
 			padding-bottom: 0.5rem;
+
+			> code {
+				font-size: 0.75rem;
+			}
 		}
 
 		> .quote {
