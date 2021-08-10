@@ -8,6 +8,7 @@ type Components =
 	| "CodePreFromMarkdown"
 	| "IndentGroup"
 	| "Link"
+	| "OrderedList"
 	| "PageHeading"
 	| "PageNavigation"
 	| "Paragraph"

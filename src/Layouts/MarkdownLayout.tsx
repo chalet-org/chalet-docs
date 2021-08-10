@@ -22,6 +22,7 @@ let components: Dictionary<React.ComponentType<any>> = {
 	p: dynamic.component("Paragraph"),
 	pre: dynamic.component("CodePreFromMarkdown"),
 	ul: dynamic.component("UnorderedList"),
+	ol: dynamic.component("OrderedList"),
 	inlineCode: dynamic.component("Code"),
 	blockquote: dynamic.component("BlockQuote"),
 	Accordion: dynamic.component("Accordion"),

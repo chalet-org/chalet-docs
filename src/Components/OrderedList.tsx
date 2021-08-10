@@ -5,28 +5,30 @@ import { getCssVariable } from "Theme";
 
 type Props = React.PropsWithChildren<{}>;
 
-const UnorderedList = ({ children }: Props) => {
+const OrderedList = ({ children }: Props) => {
 	return <Styles>{children}</Styles>;
 };
 
-export { UnorderedList };
+export { OrderedList };
 
-const Styles = styled.ul`
+const Styles = styled.ol`
 	display: block;
 	padding-left: 0;
 	list-style: none;
+	counter-reset: ordered-list-count;
 
-	> li {
+	li {
 		display: block;
 		position: relative;
 		padding-left: 1.5rem;
+		counter-increment: ordered-list-count;
 
 		&:before {
 			display: block;
 			position: absolute;
-			content: "\u2023";
+			content: counter(ordered-list-count) ". ";
 			color: ${getCssVariable("Header")};
-			font-size: 2rem;
+			line-height: inherit;
 			line-height: 0;
 			left: 0;
 			top: 1rem;

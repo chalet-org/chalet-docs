@@ -9,6 +9,7 @@ export * from "./Icon";
 export * from "./Link";
 export * from "./ImportantNote";
 export * from "./IndentGroup";
+export * from "./OrderedList";
 export * from "./Page";
 export * from "./PageHeading";
 export * from "./PageNavigation";
