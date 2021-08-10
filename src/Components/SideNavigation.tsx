@@ -130,7 +130,8 @@ const StyledAside = styled.aside<AsideProps>`
 
 	> p {
 		font-weight: 600;
-		line-height: 2.5;
+		line-height: 2;
+		padding-bottom: 0.125rem;
 	}
 
 	li {
@@ -138,13 +139,15 @@ const StyledAside = styled.aside<AsideProps>`
 
 		strong {
 			padding: 0;
-			line-height: 2.5;
+			line-height: 2;
+			padding-bottom: 0.125rem;
 		}
 	}
 
 	a {
 		display: block;
-		line-height: 2.5;
+		line-height: 2;
+		padding-bottom: 0.125rem;
 		border-left: 0.25rem solid transparent;
 
 		&:hover {

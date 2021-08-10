@@ -2,9 +2,9 @@ import { Optional } from "@andrew-r-king/react-kitchen";
 
 import { ResultChaletChangelog } from "./ResultTypes";
 
-const getChaletChangelog = async (tag: string = "main"): Promise<ResultChaletChangelog> => {
+const getChaletFile = async (file: string, tag: string = "main"): Promise<ResultChaletChangelog> => {
 	try {
-		const url = `https://raw.githubusercontent.com/chalet-org/chalet-dev/${tag}/CHANGELOG.md`;
+		const url = `https://raw.githubusercontent.com/chalet-org/chalet-dev/${tag}/${file}`;
 		const token: Optional<string> = process.env.GITHUB_TOKEN ?? null;
 		if (token === null) {
 			throw new Error("Github Token not found");
@@ -25,4 +25,4 @@ const getChaletChangelog = async (tag: string = "main"): Promise<ResultChaletCha
 	}
 };
 
-export { getChaletChangelog };
+export { getChaletFile };

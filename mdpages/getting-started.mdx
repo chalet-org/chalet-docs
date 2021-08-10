@@ -8,6 +8,8 @@ title: Getting Started
 
 At the moment, Chalet must be installed manually in non-Windows operating systems, but in the future will be available through Homebrew/package managers. Before working with Chalet, the application should be accessible from PATH.
 
+* [Releases](https://github.com/chalet-org/chalet-dev/releases)
+
 \\
 
 ## [Machine Setup]
@@ -49,6 +51,11 @@ Otherwise, chalet implicitly uses the `msvc` toolchain preset
 chalet configure --toolchain llvm
 ```
 
+* Or to use LLVM by default with Chalet:
+```bash
+chalet set --global settings.toolchain llvm
+```
+
 > Note: LLVM on Windows uses the Visual Studio ABI `x86_64-pc-windows-msvc` by default (and requires a Visual Studio installation anyway)
 
 \
@@ -68,6 +75,11 @@ pacman -S mingw-w64-x86_64-toolchain mingw-w64-i686-toolchain
 
 ```bash
 chalet configure --toolchain gcc
+```
+
+* Or to use GCC by default with Chalet:
+```bash
+chalet set --global settings.toolchain gcc
 ```
 
 > Note: If both 32 and 64 version are installed, Chalet only needs one of the bin folders in path. It will reinterpret the path based on the requested architecture of the build.
@@ -110,7 +122,41 @@ sudo xcode-select -s /Library/Developer/CommandLineTools
 In both, running `which clang` should show `/usr/bin/clang` (although it actually resolves to the xcode-select path)
 
 |Linux|
-It's recommended to start with the compiler that comes with your distribution. Chalet will detect GCC by default, but this can be configured later.
+**Install one of the following**
+* Your distribution's compiler (typically GCC)
+* LLVM
+
+Every Linux build is going to be a little different, so this is more like a set of guidelines.
+
+You should have at least the following:
+```
+base-devel git cmake ninja gdb
+```
+
+**If using GCC:**
+* Chalet will detect GCC by default, so nothing further should be necessary
+
+**If using LLVM:**
+* Use the following command in your project before building:
+```bash
+chalet configure --toolchain llvm
+```
+
+* Or to use LLVM by default with Chalet:
+```bash
+chalet set --global settings.toolchain llvm
+```
+
+<!-- tabs:end -->
+
+<!-- accordion:end -->
+
+<!-- accordion:start Building Chalet from Source -->
+
+<!-- tabs:start -->
+
+!!ChaletReadme!!
+
 <!-- tabs:end -->
 
 <!-- accordion:end -->

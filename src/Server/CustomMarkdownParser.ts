@@ -5,7 +5,7 @@ import { Dictionary, Optional } from "@andrew-r-king/react-kitchen";
 
 import { toKebabCase, toPascalCase } from "Utility/TextCaseConversions";
 
-import { getChaletChangelog } from "./ChaletChangelog";
+import { getChaletFile } from "./ChaletChangelog";
 import { getChaletSchema } from "./ChaletSchema";
 import { jsonNodeToMarkdown } from "./MarkdownPreprocessor";
 import { ResultPageAnchor } from "./ResultTypes";
@@ -150,12 +150,42 @@ const getPageAnchors = async (fileContent: string, slug: string, branch?: string
 	}
 };
 
+let readmeCache: Optional<string> = null;
+
+const parseReadme = async (inText: string): Promise<string> => {
+	try {
+		// if (!readmeCache) {
+		let { changelog: text } = await getChaletFile("README.md");
+		if (!!text) {
+			text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+
+			text = text.replace(/---\n### (.+?)\n/g, "|$1|");
+
+			text = text.replace(/## (.+?)\n/g, "");
+
+			text = text.replace(/\n/g, os.EOL);
+			readmeCache = text;
+		}
+		// }
+
+		return inText.replace(`!!ChaletReadme!!`, (match: string) => {
+			let result: string = "";
+			if (!!readmeCache) {
+				result += readmeCache;
+			}
+			return result;
+		});
+	} catch (err) {
+		throw err;
+	}
+};
+
 let changelogCache: Optional<string> = null;
 
-const parseChangelog = async (text: string): Promise<string> => {
+const parseChangelog = async (inText: string): Promise<string> => {
 	try {
 		if (!changelogCache) {
-			let { changelog: text } = await getChaletChangelog();
+			let { changelog: text } = await getChaletFile("CHANGELOG.md");
 			if (!!text) {
 				text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
 
@@ -178,7 +208,7 @@ const parseChangelog = async (text: string): Promise<string> => {
 			}
 		}
 
-		return text.replace(`!!ChaletChangelog!!`, (match: string) => {
+		return inText.replace(`!!ChaletChangelog!!`, (match: string) => {
 			let result: string = "";
 			if (!!changelogCache) {
 				result += changelogCache;
@@ -263,6 +293,10 @@ const parseCustomMarkdown = async (
 
 		if (slug === "changelog") {
 			text = await parseChangelog(text);
+		}
+
+		if (slug === "getting-started") {
+			text = await parseReadme(text);
 		}
 
 		// Parse the things
