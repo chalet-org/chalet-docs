@@ -5,7 +5,7 @@ import { Dictionary, Optional } from "@andrew-r-king/react-kitchen";
 
 import { toKebabCase, toPascalCase } from "Utility/TextCaseConversions";
 
-import { getChaletFile } from "./ChaletChangelog";
+import { getChaletFile } from "./ChaletFile";
 import { getChaletSchema } from "./ChaletSchema";
 import { jsonNodeToMarkdown } from "./MarkdownPreprocessor";
 import { ResultPageAnchor } from "./ResultTypes";
