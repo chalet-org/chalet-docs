@@ -246,8 +246,6 @@ const PreStyles = styled.pre<StyleProps>`
 	/* max-height: 24rem; */
 	margin: 0.75rem 0;
 	padding: 1rem 1.25rem;
-	border-radius: 0.5rem;
-	border: 0.125rem solid ${getCssVariable("Border")};
 	white-space: pre-wrap;
 	line-height: 1.5;
 	overflow: auto;
@@ -256,7 +254,7 @@ const PreStyles = styled.pre<StyleProps>`
 
 	&:after {
 		content: attr(data-lang);
-		color: ${getCssVariable("Accent")};
+		color: ${getCssVariable("Gray")};
 		display: block;
 		position: absolute;
 		top: 0.875rem;
