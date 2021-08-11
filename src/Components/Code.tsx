@@ -11,7 +11,7 @@ import { getCssVariable } from "Theme";
 
 Prism.languages.bash = {
 	...(Prism.languages.bash as any),
-	chaletOuter: {
+	"chalet-outer": {
 		pattern: /(chalet\b)\s(\w+)/,
 		greedy: true,
 		inside: {
@@ -19,11 +19,19 @@ Prism.languages.bash = {
 				pattern: /^chalet\b/,
 				greedy: true,
 			},
-			chaletcmd: {
+			"chalet-cmd": {
 				pattern: /(\w+)/,
 				greedy: true,
 			},
 		},
+	},
+	"chalet-toolchain-preset": {
+		pattern: /\b(applellvm|llvm|msvcpre|msvc|gcc)\b/,
+		greedy: true,
+	},
+	"chalet-architecture": {
+		pattern: /\b(x86|x64|arm64|arm)\b/,
+		greedy: true,
 	},
 };
 
@@ -235,11 +243,18 @@ const codeCss = css<StyleProps>`
 	}
 
 	.language-bash .token {
-		&.chalet {
+		&.function {
 			color: ${getCssVariable("Accent")};
 		}
-		&.chaletcmd {
+		&.chalet {
+			color: ${getCssVariable("Blue")};
+		}
+		&.chalet-cmd {
 			color: ${getCssVariable("Green")};
+		}
+		&.chalet-toolchain-preset,
+		&.chalet-architecture {
+			color: ${getCssVariable("MainText")};
 		}
 	}
 
