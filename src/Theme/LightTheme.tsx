@@ -11,7 +11,7 @@ export const lightTheme: ThemeType = {
 	accent: "#7f83ff",
 	black: "#eef5f5",
 	white: "#000000",
-	gray: "#5d5d7b",
+	gray: "#9d9daf",
 	red: "#ff4a98",
 	lightRed: "#ff4a98",
 	green: "#1fbb54",

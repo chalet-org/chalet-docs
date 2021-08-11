@@ -9,6 +9,24 @@ import { Dictionary } from "@andrew-r-king/react-kitchen";
 import { globalFonts } from "Components";
 import { getCssVariable } from "Theme";
 
+Prism.languages.bash = {
+	...(Prism.languages.bash as any),
+	chaletOuter: {
+		pattern: /(chalet\b)\s(\w+)/,
+		greedy: true,
+		inside: {
+			chalet: {
+				pattern: /^chalet\b/,
+				greedy: true,
+			},
+			chaletcmd: {
+				pattern: /(\w+)/,
+				greedy: true,
+			},
+		},
+	},
+};
+
 type Props = React.PropsWithChildren<{
 	lang?: string;
 }>;
@@ -213,6 +231,15 @@ const codeCss = css<StyleProps>`
 		}
 		&.variable {
 			color: ${getCssVariable("White")};
+		}
+	}
+
+	.language-bash .token {
+		&.chalet {
+			color: ${getCssVariable("Accent")};
+		}
+		&.chaletcmd {
+			color: ${getCssVariable("Green")};
 		}
 	}
 

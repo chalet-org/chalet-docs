@@ -11,7 +11,7 @@ export const darkTheme: ThemeType = {
 	accent: "#7f83ff",
 	black: "#0a0a0a",
 	white: "#dedede",
-	gray: "#7d7d9b",
+	gray: "#5d5d7b",
 	red: "#ff4a98",
 	lightRed: "#ff4a98",
 	green: "#6ffba4",
