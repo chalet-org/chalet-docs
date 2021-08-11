@@ -243,11 +243,12 @@ const codeCss = css<StyleProps>`
 	}
 
 	.language-bash .token {
-		&.function {
-			color: ${getCssVariable("Accent")};
+		&.function,
+		&.class-name {
+			color: ${getCssVariable("Blue")};
 		}
 		&.chalet {
-			color: ${getCssVariable("Blue")};
+			color: ${getCssVariable("Accent")};
 		}
 		&.chalet-cmd {
 			color: ${getCssVariable("Green")};
