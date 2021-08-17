@@ -21,6 +21,7 @@ const removeIrrelevantMarkdown = (text: string): string => {
 	text = text.replace(/<((.|[\r\n])*?)>/g, " ");
 	text = text.replace(/[>\[\]|*-]/g, " ");
 	text = text.replace(/\r/g, "");
+	text = text.replace(/\`/g, "");
 	text = text.replace(/[\n ]{2,}/g, "\n");
 	text = text.replace(/\n\s*?#{1,}/g, "\n");
 	text = text.replace(/( ){2,}/g, " ");

@@ -154,19 +154,19 @@ let readmeCache: Optional<string> = null;
 
 const parseReadme = async (inText: string): Promise<string> => {
 	try {
-		// if (!readmeCache) {
-		let { changelog: text } = await getChaletFile("README.md");
-		if (!!text) {
-			text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+		if (!readmeCache) {
+			let { changelog: text } = await getChaletFile("README.md");
+			if (!!text) {
+				text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
 
-			text = text.replace(/---\n### (.+?)\n/g, "|$1|");
+				text = text.replace(/---\n### (.+?)\n/g, "|$1|");
 
-			text = text.replace(/## (.+?)\n/g, "");
+				text = text.replace(/## (.+?)\n/g, "");
 
-			text = text.replace(/\n/g, os.EOL);
-			readmeCache = text;
+				text = text.replace(/\n/g, os.EOL);
+				readmeCache = text;
+			}
 		}
-		// }
 
 		return inText.replace(`!!ChaletReadme!!`, (match: string) => {
 			let result: string = "";

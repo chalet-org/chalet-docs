@@ -10,7 +10,15 @@ import { globalFonts } from "Components";
 import { getCssVariable } from "Theme";
 
 Prism.languages.bash = {
+	sudo: {
+		pattern: /\b(sudo)\b/,
+		greedy: true,
+	},
 	...(Prism.languages.bash as any),
+	"terminal-application": {
+		pattern: /\b(pacman|xcode-select)\b/,
+		greedy: true,
+	},
 	"chalet-outer": {
 		pattern: /(chalet\b)\s(\w+)/,
 		greedy: true,
@@ -244,8 +252,12 @@ const codeCss = css<StyleProps>`
 
 	.language-bash .token {
 		&.function,
-		&.class-name {
+		&.class-name,
+		&.terminal-application {
 			color: ${getCssVariable("Blue")};
+		}
+		&.sudo {
+			color: ${getCssVariable("Red")};
 		}
 		&.chalet {
 			color: ${getCssVariable("Accent")};
