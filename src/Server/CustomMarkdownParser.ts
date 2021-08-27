@@ -167,8 +167,6 @@ const parseReadme = async (inText: string): Promise<string> => {
 			}
 		}
 
-		console.log(JSON.stringify(readmeCache));
-
 		return inText.replace(`!!ChaletReadme!!`, (match: string) => {
 			let result: string = "";
 			if (!!readmeCache) {
