@@ -163,10 +163,11 @@ const parseReadme = async (inText: string): Promise<string> => {
 
 				text = text.replace(/## (.+?)\n/g, "");
 
-				text = text.replace(/\n/g, os.EOL);
 				readmeCache = text;
 			}
 		}
+
+		console.log(JSON.stringify(readmeCache));
 
 		return inText.replace(`!!ChaletReadme!!`, (match: string) => {
 			let result: string = "";
@@ -203,7 +204,6 @@ const parseChangelog = async (inText: string): Promise<string> => {
 				});
 				text = text.replace(/## \[(.+?)\] \[(.+?)\]/g, "---\n\n## [$1]\n\n$2");
 
-				text = text.replace(/\n/g, os.EOL);
 				changelogCache = text;
 			}
 		}
