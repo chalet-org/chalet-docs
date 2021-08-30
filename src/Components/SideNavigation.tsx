@@ -114,6 +114,7 @@ const StyledAside = styled.aside<AsideProps>`
 	z-index: 90;
 	overflow-x: hidden;
 	overflow-y: auto;
+	padding-top: 2rem;
 
 	background-color: ${getCssVariable("BackgroundCode")};
 	color: ${getCssVariable("MainText")};

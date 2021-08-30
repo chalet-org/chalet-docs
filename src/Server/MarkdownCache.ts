@@ -11,6 +11,7 @@ import { recursiveDirectorySearch } from "Server/RecursiveDirectorySearch";
 import { getChaletBranches } from "./ChaletBranches";
 import { getChaletTags } from "./ChaletTags";
 import { getSchemaReferencePaths } from "./CustomMarkdownParser";
+import { isDevelopment } from "./IsDevelopment";
 
 const removeIrrelevantMarkdown = (text: string): string => {
 	text = text.replace(/<!--(.+?)-->/g, " ");
@@ -40,7 +41,7 @@ let data: Dictionary<string[]> = {};
 
 const getPagesCache = async (): Promise<PageCache[]> => {
 	try {
-		if (!data["pages"]) {
+		if (!data["pages"] || isDevelopment) {
 			data["pages"] = await recursiveDirectorySearch(mdpages, ["mdx", "md"]);
 		}
 		const internalPage = path.join(path.sep, mdpages, "_");
@@ -69,12 +70,12 @@ const getPagesCache = async (): Promise<PageCache[]> => {
 				};
 			});
 
-		if (!data["tags"]) {
+		if (!data["tags"] || isDevelopment) {
 			data["tags"] = await getChaletTags();
 		}
 		const tagPaths: string[] = flatten(await Promise.all(data["tags"].map((b) => getSchemaReferencePaths(b))));
 
-		if (!data["branches"]) {
+		if (!data["branches"] || isDevelopment) {
 			data["branches"] = await getChaletBranches();
 		}
 		const branchPaths: string[] = flatten(

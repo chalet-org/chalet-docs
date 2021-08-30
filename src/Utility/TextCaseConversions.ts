@@ -11,9 +11,12 @@ export const toPascalCase = (str: string) => {
 };
 
 export const toKebabCase = (str: string) => {
-	return str
+	const ret = str
 		.replace(/([a-z])([A-Z])/g, "$1-$2")
 		.replace(/\s+/g, "-")
-		.replace(/[:?]/g, "")
+		.replace(/[\!]/g, "-")
+		.replace(/[:?\(\)\[\]\|\.\{\}\+\_]/g, "")
 		.toLowerCase();
+	console.log(ret);
+	return ret;
 };

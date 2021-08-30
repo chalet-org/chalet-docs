@@ -34,7 +34,7 @@ Prism.languages.bash = {
 		},
 	},
 	"chalet-toolchain-preset": {
-		pattern: /\b(applellvm|llvm|msvcpre|msvc|gcc)\b/,
+		pattern: /\b(apple-llvm|llvm|msvc-pre|msvc|gcc)\b/,
 		greedy: true,
 	},
 	"chalet-architecture": {

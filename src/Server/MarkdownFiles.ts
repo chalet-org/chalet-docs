@@ -10,6 +10,7 @@ import { Dictionary, Optional } from "@andrew-r-king/react-kitchen";
 import { getChaletBranches } from "./ChaletBranches";
 import { getChaletTags } from "./ChaletTags";
 import { getPageAnchors, parseCustomMarkdown } from "./CustomMarkdownParser";
+import { isDevelopment } from "./IsDevelopment";
 import { ResultMDXPage, ResultMDX, ResultNavigation, SidebarLink } from "./ResultTypes";
 
 const mdpages: string = "mdpages";
@@ -72,35 +73,72 @@ const getFirstExistingPath = (inPath: string, extensions: string[], internal: bo
 	}
 };*/
 
+let linkCache: Dictionary<SidebarLink> = {};
+
+const getLinkFromPageSlug = async (href: string): Promise<SidebarLink> => {
+	try {
+		if (linkCache[href] !== undefined && !isDevelopment) {
+			return linkCache[href];
+		}
+
+		const { filename, isNotFoundPage } = getFirstExistingPath(
+			nodePath.join(mdpages, href),
+			allowedExtensions,
+			false
+		);
+		if (filename.length === 0 || isNotFoundPage) {
+			throw new Error(`File not found: ${filename}`);
+		}
+
+		const fileContent: string = fs.readFileSync(filename, "utf8");
+
+		const { data: meta, content } = matter(fileContent);
+		const result = {
+			label: meta.title ?? "Untitled",
+			href,
+		};
+		linkCache[href] = result;
+		return result;
+	} catch (err) {
+		console.error(err.message);
+		return {
+			label: "Untitled",
+			href,
+		};
+	}
+};
+
 type SidebarResult = SidebarLink | string;
 
-const getSidebarLinks = (): SidebarResult[] => {
-	const sidebarFile: string = nodePath.join(process.cwd(), mdpages, "_sidebar.md");
-	if (!fs.existsSync(sidebarFile)) {
-		throw new Error("Critical: _sidebar.md was not found");
-	}
-	const fileContent: string = fs.readFileSync(sidebarFile, "utf8");
-
-	const split = fileContent.split(os.EOL);
-	let result: (SidebarLink | string)[] = [];
-	for (const line of split) {
-		if (line.startsWith("<!--")) continue;
-
-		if (line.startsWith(":")) {
-			result.push(line.substr(1));
-		} else if (line.startsWith("[")) {
-			let matches = line.match(/^\[(.+?)\]\((.+?)\)$/);
-			if (!!matches && matches.length === 3) {
-				result.push({
-					label: matches[1],
-					href: matches[2],
-				});
-			}
-		} else if (line.length > 0) {
-			result.push(line);
+const getSidebarLinks = async (): Promise<SidebarResult[]> => {
+	try {
+		const sidebarFile: string = nodePath.join(process.cwd(), mdpages, "_sidebar.md");
+		if (!fs.existsSync(sidebarFile)) {
+			throw new Error("Critical: _sidebar.md was not found");
 		}
+		const fileContent: string = fs.readFileSync(sidebarFile, "utf8");
+
+		const split = fileContent.split(os.EOL);
+		let result: (SidebarLink | string)[] = [];
+		for (const line of split) {
+			if (line.startsWith("<!--")) continue;
+
+			if (line.startsWith(":")) {
+				result.push(line.substr(1));
+			} else if (line.startsWith("[")) {
+				let matches = line.match(/^\[\]\((.+?)\)$/);
+				if (!!matches && matches.length === 2) {
+					const link = await getLinkFromPageSlug(matches[1]);
+					result.push(link);
+				}
+			} else if (line.length > 0) {
+				result.push(line);
+			}
+		}
+		return result;
+	} catch (err) {
+		throw err;
 	}
-	return result;
 };
 
 let otherData: Optional<{
@@ -116,7 +154,7 @@ const getNavBar = async (): Promise<Omit<ResultNavigation, "anchors">> => {
 			otherData.branches = await getChaletBranches();
 			otherData.tags = await getChaletTags();
 		}
-		const sidebarLinks = getSidebarLinks();
+		const sidebarLinks = await getSidebarLinks();
 		return {
 			branches: otherData.branches,
 			tags: otherData.tags,
@@ -145,7 +183,7 @@ const getMdxPage = async (
 		const fileContent: string = fs.readFileSync(filename, "utf8");
 
 		const { definition, branch } = query;
-		const { data: meta, content } = matter(await parseCustomMarkdown(fileContent, slug, branch, definition));
+		const { meta, content } = await parseCustomMarkdown(fileContent, slug, branch, definition);
 		const anchors = await getPageAnchors(content, slug, branch);
 
 		const mdx: MDXRemoteSerializeResult<Record<string, unknown>> = await serialize(content, {
@@ -177,4 +215,4 @@ const markdownFiles = {
 	getNotFoundPage,
 };
 
-export { markdownFiles, mdpages };
+export { markdownFiles, mdpages, getLinkFromPageSlug };

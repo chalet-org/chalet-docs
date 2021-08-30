@@ -1,12 +1,16 @@
+import matter from "gray-matter";
 import { JSONSchema7 } from "json-schema";
 import os from "os";
 
 import { Dictionary, Optional } from "@andrew-r-king/react-kitchen";
 
+import { replaceAsync } from "Utility/ReplaceAsync";
 import { toKebabCase, toPascalCase } from "Utility/TextCaseConversions";
 
 import { getChaletFile } from "./ChaletFile";
 import { getChaletSchema } from "./ChaletSchema";
+import { isDevelopment } from "./IsDevelopment";
+import { getLinkFromPageSlug } from "./MarkdownFiles";
 import { jsonNodeToMarkdown } from "./MarkdownPreprocessor";
 import { ResultPageAnchor } from "./ResultTypes";
 
@@ -34,6 +38,31 @@ const parseAnchoredHeaders = (text: string): string => {
 	return text.replace(/(#{1,6}) \[(.+)\](?!\()(.*?)\n/g, (match: string, p1: string, p2: string) => {
 		return `<AnchoredH${p1.length}>${p2.replace(/\{/g, '{"{').replace(/\}/g, '}"}')}</AnchoredH${p1.length}>\n`;
 	});
+};
+
+const parseBottomPageNavigation = async (text: string): Promise<string> => {
+	try {
+		text = await replaceAsync(
+			text,
+			/<!-- nav:(\/?[a-z\/-]*?):(\/?[a-z\/-]*?) -->/g,
+			async (match: string, p1: string, p2: string) => {
+				let nav = "<PageNavigation";
+				if (p1.length > 0) {
+					const link = await getLinkFromPageSlug(p1);
+					nav += ` left={{ to: "${link.href}", label: "${link.label}" }}`;
+				}
+				if (p2.length > 0) {
+					const link = await getLinkFromPageSlug(p2);
+					nav += ` right={{ to: "${link.href}", label: "${link.label}" }}`;
+				}
+				nav += " />";
+				return `\n${nav}\n`;
+			}
+		);
+		return text;
+	} catch (err) {
+		throw err;
+	}
 };
 
 const parseTabs = (text: string): string => {
@@ -77,7 +106,7 @@ let schemaCache: Dictionary<JSONSchema7 | undefined> = {};
 
 const initializeSchema = async (ref: string): Promise<JSONSchema7 | undefined> => {
 	try {
-		if (schemaCache[ref] === undefined) {
+		if (schemaCache[ref] === undefined || isDevelopment) {
 			const { schema } = await getChaletSchema(ref);
 			schemaCache[ref] = schema;
 		}
@@ -154,7 +183,7 @@ let readmeCache: Optional<string> = null;
 
 const parseReadme = async (inText: string): Promise<string> => {
 	try {
-		if (!readmeCache) {
+		if (readmeCache === null) {
 			let { changelog: text } = await getChaletFile("README.md");
 			if (!!text) {
 				text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
@@ -225,10 +254,10 @@ const parseSchemaReference = async (text: string, slug: string, branch: string):
 		return text.replace(`!!ChaletSchemaReference!!`, (match: string) => {
 			let result: string = "";
 			if (!!schema) {
-				result += jsonNodeToMarkdown("$root", `${slug}/${branch}`, schema);
-				result += `\`\`\`json
+				result += jsonNodeToMarkdown("(root)", `${slug}/${branch}`, schema);
+				/*result += `\`\`\`json
 ${JSON.stringify({ ...schema, definitions: undefined }, undefined, 3)}
-\`\`\`\n\n`;
+\`\`\`\n\n`;*/
 			}
 			return result;
 		});
@@ -253,9 +282,9 @@ const parseSchemaDefinition = async (
 
 				result += `#### [${toPascalCase(definition)}]\n\n`;
 				result += jsonNodeToMarkdown(null, `${slug}/${branch}`, definitions?.[definition] ?? null, definitions);
-				result += `\`\`\`json
+				/*result += `\`\`\`json
 ${JSON.stringify(definitions?.[definition] ?? {}, undefined, 3)}
-\`\`\`\n\n`;
+\`\`\`\n\n`;*/
 			}
 			return result;
 		});
@@ -268,7 +297,7 @@ let definitionsCache: Dictionary<string[]> = {};
 
 const getSchemaReferencePaths = async (branch: string): Promise<string[]> => {
 	try {
-		if (!definitionsCache[branch]) {
+		if (!definitionsCache[branch] || isDevelopment) {
 			definitionsCache[branch] = await getSchemaPageDefinitions(branch);
 		}
 		const paths = definitionsCache[branch].map((def) => `${branch}/${def}`);
@@ -280,14 +309,21 @@ const getSchemaReferencePaths = async (branch: string): Promise<string[]> => {
 };
 
 const parseCustomMarkdown = async (
-	text: string,
+	inContent: string,
 	slug: string,
 	branch?: string,
 	definition?: string
-): Promise<string> => {
+): Promise<{
+	meta: Dictionary<any>;
+	content: string;
+}> => {
 	try {
 		// First, ensure consistent line endings to make regex patterns easier
-		text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+		inContent = inContent.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+
+		let { data: meta, content: text } = matter(inContent);
+
+		text = parseReferencedMetaData(text, meta);
 
 		if (slug === "changelog") {
 			text = await parseChangelog(text);
@@ -305,6 +341,7 @@ const parseCustomMarkdown = async (
 				text = await parseSchemaReference(text, slug, branch);
 			}
 		}
+		text = await parseBottomPageNavigation(text);
 
 		text = parseExplicitLineBreaks(text);
 		text = parseImportantNotes(text);
@@ -316,11 +353,25 @@ const parseCustomMarkdown = async (
 		// Set line endings back
 		text = text.replace(/\n/g, os.EOL);
 
-		return text;
+		return {
+			meta,
+			content: text,
+		};
 	} catch (err) {
 		console.error(err);
 		throw err;
 	}
+};
+
+const parseReferencedMetaData = (text: string, meta: Dictionary<any>) => {
+	text = text.replace(/\$\{meta\.(\w+?)\}/g, (match: string, p1: string) => {
+		if (typeof p1 === "string" && p1.length > 0 && meta[p1] !== undefined) {
+			return meta[p1];
+		} else {
+			return match;
+		}
+	});
+	return text;
 };
 
 export { parseCustomMarkdown, getPageAnchors, getSchemaReferencePaths, getSchemaPageAnchors };

@@ -10,20 +10,20 @@ A modern cross-platform project format and build system for C/C++ with a focus o
 
 ## [What does it do?]
 
-Chalet is a command-line application that reads in a JSON project file (ie. chalet.json), finds a usable compiler in PATH if the project isn't already configured, and builds your C/C++ projects. Behind the scenes, Chalet generates either a [Make](//en.wikipedia.org/wiki/Make_(software)) or [Ninja](//ninja-build.org/) build file, does some caching itself, builds the project, and optionally it if it's an executable. Chalet project files are designed to be easy to understand, focusing on GNU-like language, and translating that down to the compiler. Because the projects are JSON, they can be easily integrated with IDEs.
+Chalet is a command-line application that reads in a JSON project file (ie. chalet.json), finds a usable compiler in PATH if the project isn't already configured, and builds your C/C++ projects. Behind the scenes, Chalet generates either a [Ninja](//ninja-build.org/) or [Make](//en.wikipedia.org/wiki/Make_(software)) build file, does some caching itself, builds the project, and optionally runs it if it's executable. Chalet project files are designed to be easy to understand, focusing on GNU-like language and translating that down to the compiler. Because the projects are JSON, they can be easily integrated with IDEs.
 
 In addition to building your projects during the development process, Chalet has numerous other features designed to make working with C/C++ as smooth as possible:
 
 * Bundle your applications & libraries for distribution
 * Fetch & manage external git repositories based on commits, tags or branches
-* Profiling tool integrations - Instruments on macOS, gprof in Linux/MinGW
+* Integration with profiling tools - Instruments on macOS, gprof in Linux/MinGW
 * Support for cross-compiling
 * CI support (tested with Github Actions)
 * Include other Chalet projects as build steps
 * Include [CMake](//cmake.org/) projects as build steps
 * Run scripts as build steps (so far: bash, powershell (Win/Core), Batch (Win), python, ruby, lua, perl)
 * A wizard for generating new projects: `chalet init`
-* CLI Commands for manipulating the settings & build file (ie. from the CI)
+* CLI Commands for manipulating settings (ie. from the CI)
 * MSVC Support on Windows (VS 2019 & 2022 Preview versions currently)
 * Objective-C/C++ support on macOS
 * Universal binary support on macOS (Intel & M1)
@@ -43,9 +43,8 @@ In addition to building your projects during the development process, Chalet has
 * iOS Support, which ultimately means working with the Swift compiler or Xcode in some way. There's partial support already
 * Android support
 * A "native" build strategy to optionally try instead of Make/Ninja
-* Generate other project file types
-* Optional YAML project files possibly?
-* Support for more languages one day
+* Generate other project file types (Xcode & Visual Studio at a minimum)
+* Support for more compiled languages
 
 <!-- accordion:end -->
 
@@ -64,9 +63,4 @@ In addition to building your projects during the development process, Chalet has
 
 It's a beautifully constructed home. It also starts with 'C'.
 
-<PageNavigation 
-    right={{
-        to: "/getting-started",
-        label: "Getting Started"
-    }}
-/>
+<!-- nav::/getting-started -->

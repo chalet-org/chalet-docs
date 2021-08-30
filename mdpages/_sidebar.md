@@ -1,16 +1,16 @@
 
-[Introduction](/)
+[](/)
 Guides
-[Getting Started](/getting-started)
-[Understanding chalet.json](/understanding-chalet-json)
+[](/getting-started)
+[](/understanding-chalet-json)
 
 Other
-[Contact](/contact)
+[](/contact)
 
 <!-- Dev -->
-<!-- [Sandbox](/sandbox) -->
+<!-- [](/sandbox) -->
 
 Schema
-[Changelog](/changelog)
+[](/changelog)
 :branches
 :tags
