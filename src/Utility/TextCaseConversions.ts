@@ -17,6 +17,5 @@ export const toKebabCase = (str: string) => {
 		.replace(/[\!]/g, "-")
 		.replace(/[:?\(\)\[\]\|\.\{\}\+\_]/g, "")
 		.toLowerCase();
-	console.log(ret);
 	return ret;
 };

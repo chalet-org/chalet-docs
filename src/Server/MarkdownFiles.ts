@@ -34,7 +34,6 @@ const getFirstExistingPath = (inPath: string, extensions: string[], internal: bo
 	arr.push(nodePath.join(process.cwd(), mdpages, notFoundPage));
 
 	for (const p of arr) {
-		// console.log(p);
 		if (fs.existsSync(p)) {
 			return {
 				filename: p,
