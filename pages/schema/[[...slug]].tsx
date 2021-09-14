@@ -24,7 +24,7 @@ export const getStaticPaths = async () => {
 			fallback: false,
 			paths,
 		};
-	} catch (err) {
+	} catch (err: any) {
 		console.error(err.message);
 		throw err;
 	}

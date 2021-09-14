@@ -29,7 +29,7 @@ export const recursiveDirectorySearch = async (dir: string, extensions: string[]
 			}
 		}
 		return result;
-	} catch (err) {
+	} catch (err: any) {
 		throw err;
 	}
 };

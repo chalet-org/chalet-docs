@@ -22,7 +22,7 @@ const getChaletSchema = async (tag: string = "main"): Promise<ResultChaletSchema
 		const schema = await response.json();
 
 		return { schema };
-	} catch (err) {
+	} catch (err: any) {
 		throw err;
 	}
 };

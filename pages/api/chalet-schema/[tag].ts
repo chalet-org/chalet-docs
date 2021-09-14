@@ -9,7 +9,7 @@ const handler = async (req: ApiReq, res: ApiRes<ResultChaletSchema | Error>): Pr
 		const schema = await getChaletSchema(tag as string);
 
 		res.status(200).json(schema);
-	} catch (err) {
+	} catch (err: any) {
 		res.status(500).json({
 			...err,
 		});

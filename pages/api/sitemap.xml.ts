@@ -62,7 +62,7 @@ const handler = async (req: ApiReq, res: ApiRes<any>) => {
 		pipeline.pipe(res).on("error", (err) => {
 			throw err;
 		});
-	} catch (err) {
+	} catch (err: any) {
 		console.error(err);
 		res.status(500).json({
 			...err,

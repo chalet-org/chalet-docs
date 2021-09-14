@@ -20,7 +20,7 @@ const getChaletFile = async (file: string, tag: string = "main"): Promise<Result
 		// const schema = await response.json();
 
 		return { changelog };
-	} catch (err) {
+	} catch (err: any) {
 		throw err;
 	}
 };

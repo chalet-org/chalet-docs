@@ -55,7 +55,7 @@ const handler = async (req: ApiReq, res: ApiRes<ResultSearchResults>): Promise<v
 		const results = getSearchResults(search.toLowerCase(), pages);
 		// console.log(results);
 		res.status(200).json(results);
-	} catch (err) {
+	} catch (err: any) {
 		res.status(404).json({
 			...err,
 		});

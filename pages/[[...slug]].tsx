@@ -28,14 +28,14 @@ export const getStaticPaths = async () => {
 			acc.push(result);
 			return acc;
 		}, []);
-		console.log(paths);
+		// console.log(paths);
 
 		return {
 			fallback: false,
 			paths,
 		};
-	} catch (err) {
-		console.error(err.message);
+	} catch (err: any) {
+		console.error(err?.message);
 		throw err;
 	}
 };

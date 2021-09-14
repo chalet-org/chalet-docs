@@ -20,7 +20,7 @@ const getChaletTags = async (): Promise<string[]> => {
 		const tags = reverse(result.map((ref: any) => (ref?.ref ?? "").split("/").pop()));
 
 		return tags;
-	} catch (err) {
+	} catch (err: any) {
 		throw err;
 	}
 };

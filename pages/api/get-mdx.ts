@@ -18,7 +18,7 @@ const handler = async (
 		const result = await markdownFiles.getMdxPage(slug, req.query as Dictionary<string | undefined>);
 
 		res.status(200).json(result);
-	} catch (err) {
+	} catch (err: any) {
 		// console.error(err.message);
 		res.status(404).json({
 			...err,

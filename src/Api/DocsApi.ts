@@ -22,7 +22,7 @@ class DocsApi extends BaseApi {
 			} else {
 				return [];
 			}
-		} catch (err) {
+		} catch (err: any) {
 			throw err;
 		}
 	};

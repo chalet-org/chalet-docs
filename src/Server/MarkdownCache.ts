@@ -98,7 +98,7 @@ const getPagesCache = async (): Promise<PageCache[]> => {
 		});
 
 		return [...pageNormal, ...schemaPages];
-	} catch (err) {
+	} catch (err: any) {
 		throw err;
 	}
 };

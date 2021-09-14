@@ -24,7 +24,7 @@ export function handleInitialProps<U extends object, T extends object = {}>(
 				...data,
 				error: null,
 			};
-		} catch (err) {
+		} catch (err: any) {
 			// console.log(err);
 			const { status } = err.response;
 			return {

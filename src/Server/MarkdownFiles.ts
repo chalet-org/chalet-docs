@@ -68,7 +68,7 @@ const getFirstExistingPath = (inPath: string, extensions: string[], internal: bo
 			target: ["esnext"],
 		});
 		return mdx;
-	} catch (err) {
+	} catch (err: any) {
 		throw err;
 	}
 };*/
@@ -99,7 +99,7 @@ const getLinkFromPageSlug = async (href: string): Promise<SidebarLink> => {
 		};
 		linkCache[href] = result;
 		return result;
-	} catch (err) {
+	} catch (err: any) {
 		console.error(err.message);
 		return {
 			label: "Untitled",
@@ -136,7 +136,7 @@ const getSidebarLinks = async (): Promise<SidebarResult[]> => {
 			}
 		}
 		return result;
-	} catch (err) {
+	} catch (err: any) {
 		throw err;
 	}
 };
@@ -160,7 +160,7 @@ const getNavBar = async (): Promise<Omit<ResultNavigation, "anchors">> => {
 			tags: otherData.tags,
 			sidebarLinks,
 		};
-	} catch (err) {
+	} catch (err: any) {
 		throw err;
 	}
 };
@@ -202,7 +202,7 @@ const getMdxPage = async (
 			},
 			mdx,
 		};
-	} catch (err) {
+	} catch (err: any) {
 		throw err;
 	}
 };

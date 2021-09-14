@@ -26,7 +26,7 @@ class LocalStorage {
 		try {
 			LocalStorage.storage().setItem(key, value);
 			return true;
-		} catch (err) {
+		} catch (err: any) {
 			console.error(err.message);
 			return false;
 		}

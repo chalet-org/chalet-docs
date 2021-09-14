@@ -7,7 +7,7 @@ const handler = async (req: ApiReq, res: ApiRes<ResultChaletBranches | Error>): 
 		const branches = await getChaletBranches();
 
 		res.status(200).json(branches);
-	} catch (err) {
+	} catch (err: any) {
 		res.status(500).json({
 			...err,
 		});

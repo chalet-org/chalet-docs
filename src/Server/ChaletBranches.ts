@@ -21,7 +21,7 @@ const getChaletBranches = async (): Promise<string[]> => {
 
 		return branches;*/
 		return ["main", "development"];
-	} catch (err) {
+	} catch (err: any) {
 		throw err;
 	}
 };

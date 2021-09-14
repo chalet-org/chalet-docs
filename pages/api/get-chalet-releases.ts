@@ -21,7 +21,7 @@ const handler = async (
 			tags,
 			branches,
 		});
-	} catch (err) {
+	} catch (err: any) {
 		res.status(500).json({
 			...err,
 		});

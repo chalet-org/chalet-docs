@@ -60,7 +60,7 @@ const parseBottomPageNavigation = async (text: string): Promise<string> => {
 			}
 		);
 		return text;
-	} catch (err) {
+	} catch (err: any) {
 		throw err;
 	}
 };
@@ -112,7 +112,7 @@ const initializeSchema = async (ref: string): Promise<JSONSchema7 | undefined> =
 		}
 
 		return schemaCache[ref];
-	} catch (err) {
+	} catch (err: any) {
 		throw err;
 	}
 };
@@ -129,7 +129,7 @@ const getSchemaPageDefinitions = async (ref?: string): Promise<string[]> => {
 			}
 		}
 		return ret;
-	} catch (err) {
+	} catch (err: any) {
 		throw err;
 	}
 };
@@ -147,7 +147,7 @@ const getSchemaPageAnchors = async (branch?: string): Promise<ResultPageAnchor[]
 			return a.text > b.text ? 1 : -1;
 		});
 		return anchors;
-	} catch (err) {
+	} catch (err: any) {
 		throw err;
 	}
 };
@@ -174,7 +174,7 @@ const getPageAnchors = async (fileContent: string, slug: string, branch?: string
 			}
 			return anchors;
 		}
-	} catch (err) {
+	} catch (err: any) {
 		throw err;
 	}
 };
@@ -203,7 +203,7 @@ const parseReadme = async (inText: string): Promise<string> => {
 			}
 			return result;
 		});
-	} catch (err) {
+	} catch (err: any) {
 		throw err;
 	}
 };
@@ -242,7 +242,7 @@ const parseChangelog = async (inText: string): Promise<string> => {
 			}
 			return result;
 		});
-	} catch (err) {
+	} catch (err: any) {
 		throw err;
 	}
 };
@@ -261,7 +261,7 @@ ${JSON.stringify({ ...schema, definitions: undefined }, undefined, 3)}
 			}
 			return result;
 		});
-	} catch (err) {
+	} catch (err: any) {
 		throw err;
 	}
 };
@@ -288,7 +288,7 @@ ${JSON.stringify(definitions?.[definition] ?? {}, undefined, 3)}
 			}
 			return result;
 		});
-	} catch (err) {
+	} catch (err: any) {
 		throw err;
 	}
 };
@@ -303,7 +303,7 @@ const getSchemaReferencePaths = async (branch: string): Promise<string[]> => {
 		const paths = definitionsCache[branch].map((def) => `${branch}/${def}`);
 		const result: string[] = [branch, ...paths];
 		return result;
-	} catch (err) {
+	} catch (err: any) {
 		throw err;
 	}
 };
@@ -357,7 +357,7 @@ const parseCustomMarkdown = async (
 			meta,
 			content: text,
 		};
-	} catch (err) {
+	} catch (err: any) {
 		console.error(err);
 		throw err;
 	}
