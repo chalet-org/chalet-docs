@@ -4,7 +4,7 @@ import { ResultChaletSchema, ResultMDXPage, ResultSearchResults, ResultChaletBra
 
 class DocsApi extends BaseApi {
 	constructor() {
-		super(`${process.env.API_BASE ?? "https://www.chalet-work.space/api"}`);
+		super(`${process.env.NEXT_PUBLIC_API_BASE ?? "http://localhost:3000/api"}`);
 	}
 
 	getChaletSchema = (version: string = "main") => this.GET<ResultChaletSchema>(`/chalet-schema/${version}`);
