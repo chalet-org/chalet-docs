@@ -16,9 +16,9 @@ async function* recursiveDirectorySearchIter(dir: string) {
 export const recursiveDirectorySearch = async (dir: string, extensions: string[] = []): Promise<string[]> => {
 	try {
 		let result: string[] = [];
-		for await (const f of recursiveDirectorySearchIter(
-			path.join(process.cwd(), path.sep, dir.replace(/\/\//g, path.sep))
-		)) {
+		const searchPath = path.join(process.cwd(), dir.replace(/\/\//g, path.sep));
+		console.log(searchPath);
+		for await (const f of recursiveDirectorySearchIter(searchPath)) {
 			const relativePath = f.replace(process.cwd(), "").replace(/\\/g, "/");
 			if (extensions.length === 0) {
 				result.push(relativePath);

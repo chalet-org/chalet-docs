@@ -15,7 +15,7 @@ const mdpages = "mdpages";
 
 export const getStaticPaths = async () => {
 	try {
-		const pathsRaw = await recursiveDirectorySearch(`${mdpages}`, ["md", "mdx"]);
+		const pathsRaw = await recursiveDirectorySearch(mdpages, ["md", "mdx"]);
 		const paths = pathsRaw.reduce<string[]>((acc, inPath, i, arr) => {
 			let result: string = inPath.substring(0, inPath.lastIndexOf("."));
 			result = result.slice(mdpages.length + 1);
