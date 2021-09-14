@@ -29,7 +29,7 @@ const Styles = styled.ul`
 			font-size: 2rem;
 			line-height: 0;
 			left: 0;
-			top: 1rem;
+			top: 0.875rem;
 		}
 	}
 `;

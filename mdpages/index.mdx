@@ -10,9 +10,9 @@ A modern cross-platform project format and build system for C/C++ with a focus o
 
 ## [What does it do?]
 
-Chalet is a command-line application that reads in a JSON project file (ie. chalet.json), finds a usable compiler in PATH if the project isn't already configured, and builds your C/C++ projects. Behind the scenes, Chalet generates either a [Ninja](//ninja-build.org/) or [Make](//en.wikipedia.org/wiki/Make_(software)) build file, does some caching itself, builds the project, and optionally runs it if it's executable. Chalet project files are designed to be easy to understand, focusing on GNU-like language and translating that down to the compiler. Because the projects are JSON, they can be easily integrated with IDEs.
+Chalet is a command-line application that reads in a JSON project file (ie. chalet.json), finds a usable compiler, and builds your C/C++ projects. Behind the scenes, Chalet generates either a [Ninja](//ninja-build.org/) or [Make](//en.wikipedia.org/wiki/Make_(software)) build file, does some caching itself, builds the project, and optionally runs it if it's executable. Chalet project files are designed to be easy to understand, focusing on GNU-like language and translating that down to the compiler. Because the projects are JSON, they can be easily integrated with IDEs.
 
-In addition to building your projects during the development process, Chalet has numerous other features designed to make working with C/C++ as smooth as possible:
+In addition to building your projects during the development process, Chalet has numerous features designed to make working with C/C++ as smooth as possible:
 
 * Bundle your applications & libraries for distribution
 * Fetch & manage external git repositories based on commits, tags or branches

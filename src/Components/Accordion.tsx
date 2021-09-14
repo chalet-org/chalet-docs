@@ -62,7 +62,7 @@ export { Accordion };
 const AccordionHandle = styled.div`
 	display: block;
 	position: relative;
-	font-weight: 600;
+	font-weight: 400;
 	font-size: 1.125rem;
 	line-height: 2;
 	cursor: pointer;

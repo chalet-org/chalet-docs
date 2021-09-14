@@ -6,12 +6,19 @@ title: Understanding chalet.json
 
 ---
 
+Before getting into the detailed parts of the chalet.json structure, like compiler settings, it's important to understand the top-most levels and how they interact.
+
 
 
 ```json
 {
    "workspace": "my-project",
    "version": "1.0.0",
+   "externalDependencies": {
+      "nlohmann_json": {
+         "repository": "https://github.com/nlohmann/json.git"
+      }
+   },
    "abstracts:all": {
       "language": "C++",
       "settings:Cxx": {
