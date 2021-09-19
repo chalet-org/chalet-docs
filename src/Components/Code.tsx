@@ -43,6 +43,14 @@ Prism.languages.bash = {
 	},
 };
 
+Prism.languages.json = {
+	...(Prism.languages.json as any),
+	"json-ellipsis": {
+		pattern: /\.\.\./,
+		greedy: true,
+	},
+};
+
 type Props = React.PropsWithChildren<{
 	lang?: string;
 }>;
@@ -268,6 +276,12 @@ const codeCss = css<StyleProps>`
 		&.chalet-toolchain-preset,
 		&.chalet-architecture {
 			color: ${getCssVariable("MainText")};
+		}
+	}
+
+	.language-json .token {
+		&.json-ellipsis {
+			color: ${getCssVariable("Gray")};
 		}
 	}
 

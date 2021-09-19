@@ -10,25 +10,27 @@ The philosophy behind Chalet projects is quite simple: Abstract away only what n
 
 \\
 
-## [Targets at a Glance]
+## [At A Glance]
 
 By far the most important part of a Chalet project is its targets. Targets are defined in sequential order, and describe individual source compilation targets, CMake projects, other Chalet project, or scripts.
 
+* [Source Target](/schema/latest/source-target) - A folder, set of folders, or files with compilation options
+* [Source Target](/schema/latest/chalet-target) - A subfolder that contains a separate chalet.json
+* [CMake Target](/schema/latest/cmake-target) - A subfolder that contains a CMakeLists.txt
+* [Script Target](/schema/latest/cmake-target) - A path to an individual script, of the following types: `.sh` `.bat` `.ps1` `.py` `.rb` `.pl` and `.lua`. Portable shebangs — `#!/usr/bin/env (executable)` — are also supported with any extension.
+
 ```json
 "targets": {
-   "first-target": {
-      "location": "src/first-target"
+   "first": {
+      "location": "src/first"
    },
-   "cmake-target": {
+   "second": {
       "type": "CMake",
-      "location": "vendor/cmake-target"
+      "location": "vendor/second"
    },
-   "chalet-target": {
+   "third": {
       "type": "Chalet",
-      "location": "vendor/chalet-target"
-   },
-   "last-target": {
-      "location": "src/last-target"
+      "location": "vendor/third"
    },
    "post-build": {
       "script": "scripts/post-build.py"
@@ -36,14 +38,174 @@ By far the most important part of a Chalet project is its targets. Targets are d
 }
 ```
 
-With this approach, external dependencies can be pulled in from other sources like git, placed wherever we need them, and built as closely as possible to the rest of the project without necessarily having to write extra scripts. Chalet can orchestrate some of that work for you, in addition to just building some source code. 
+With this approach, external dependencies can be pulled in from other sources like git, placed wherever we need them, and built as closely as possible to the rest of the project without necessarily having to write extra scripts. Chalet can orchestrate some of that work for you, in addition to just building your own source code. 
+
+\\
+
+## [Abstract Targets]
+
+Abstracts are source targets that do not build by themselves, and instead get extended in source targets. For example, if there are two different source targets that both require the same compilation options, one can write them out twice, but that wouldn't be very programmatic. The solution for this is to create an abstract and extend it in each source target. They can be declared in one of two ways.
+
+First, simply with a root `abstracts` object:
+
+```json
+"abstracts": {
+   "all": {
+      ...
+   },
+   "minimal": {
+      ...
+   }
+}
+```
+
+Second, with a colon separating `abstracts` and the name of the abstract target:
+
+```json
+// Possibly more desireable in small projects
+"abstracts:all": {
+   ...
+},
+"abstracts:minimal": {
+   ...
+}
+```
+
+Which one you decide to use doesn't matter, but it's recommended to pick one style over the other rather than mix them.
+
+An example of how abstracts could be used is if stricter warnings are desired on one target, while they need to be more relaxed on another:
+
+```json
+"abstracts": {
+   "strict": {
+      ...
+      "settings:Cxx": {
+         "warnings": "strict"
+      }
+   },
+   "minimal": {
+      ...
+      "settings:Cxx": {
+         "warnings": "minimal"
+      }
+   }
+},
+"targets": {
+   "first-target": {
+      "extends": "strict",
+      ...
+   },
+   "second-target": {
+      "extends": "strict",
+      ...
+   },
+   "third-target": {
+      "extends": "minimal",
+      ...
+   }
+}
+```
+
+Another common situation is where one target needs to be compiled as C, while the rest as C++, or perhaps.
+
+`all` is a special abstract target that gets implicitly extended in all source targets. Therefore, the following are equivalent:
+
+```json
+"abstracts:all": {
+   ...
+},
+"targets": {
+   "my-project": {
+      ...
+   }
+}
+```
+
+```json
+"abstracts:all": {
+   ...
+},
+"targets": {
+   "my-project": {
+      ...
+      "extends": "all"
+   }
+}
+```
+
+\\
+
+Another way of writing the strict/minimal example, utilizing `all` would be:
+
+```json
+"abstracts:all": {
+   "settings:Cxx": {
+      "warnings": "strict"
+   }
+},
+"targets": {
+   "first-target": {
+      ...
+   },
+   "second-target": {
+      ...
+   },
+   "third-target": {
+      ...
+      "settings:Cxx": {
+         "warnings": "minimal"
+      }
+   }
+}
+```
+
+> Note: A single source target can extend a single abstract target, but an abstract target can not extend another abstract target.
 
 \\
 
 ## [Source Targets]
 
-The most verbose of these is the source target. 
+With abstracts out of the way, we can start thinking about how to structure our source targets. As you would expect with any C++ build system, we can add include directories, macro definitions, compiler warnings, define precompiled headers, and a handful of other goodies to ensure our project remains as compiler-independent and cross-platform as possible.
 
+```json
+"targets": {
+   "my-project": {
+      "kind": "consoleApplication",
+      "language": "C++",
+      "location": "src",
+      "runProject": true,
+      "settings:Cxx": {
+         "pch": "src/PCH.hpp",
+         "cppStandard": "c++20",
+         "warnings": "strict",
+         "threads": "auto",
+         "rtti": false,
+         "exceptions": true,
+         "staticLinking": false,
+         "defines": [
+            "LIB_FOO"
+         ],
+         "defines:debug": [
+            "_DEBUG"
+         ],
+         "includeDirs": [
+            "${externalDir}/foo/include",
+            "${externalDir}/bar/include"
+         ],
+         "libDirs": [
+            "${externalDir}/foo/lib"
+         ],
+         "links": [
+            "foo"
+         ]
+      }
+   }
+}
+```
+
+\\
+
+<!-- accordion:start Scrap -->
 
 ```json
 {
@@ -82,6 +244,8 @@ The most verbose of these is the source target.
    }
 }
 ```
+
+<!-- accordion:end -->
 
 
 <!-- nav:/getting-started: -->
