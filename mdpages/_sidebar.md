@@ -2,13 +2,13 @@
 [](/)
 Guides
 [](/getting-started)
-[](/understanding-chalet-json)
+[](/creating-targets)
 
 Other
 [](/contact)
 
-<!-- Dev -->
-<!-- [](/sandbox) -->
+Dev 
+[](/sandbox)
 
 Schema
 [](/changelog)

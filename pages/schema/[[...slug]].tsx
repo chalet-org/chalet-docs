@@ -6,7 +6,7 @@ import { Dictionary } from "@andrew-r-king/react-kitchen";
 
 import { withServerErrorPage } from "HighComponents";
 import { MarkdownLayout, Props } from "Layouts/MarkdownLayout";
-import { getChaletTags } from "Server/ChaletTags";
+import { getChaletTags, getLatestTag } from "Server/ChaletTags";
 import { getSchemaReferencePaths } from "Server/CustomMarkdownParser";
 import { markdownFiles } from "Server/MarkdownFiles";
 
@@ -46,6 +46,18 @@ export const getStaticProps = async (ctx: GetStaticPropsContext) => {
 	const query: Dictionary<string | undefined> = {
 		branch: typeof slugRaw === "string" ? slugRaw : slugRaw[0],
 	};
+
+	if (query.branch?.startsWith("latest")) {
+		const latestTag: string = await getLatestTag();
+		let outDestination = typeof slugRaw === "string" ? [slugRaw] : [...slugRaw];
+		outDestination[0] = latestTag;
+		return {
+			redirect: {
+				destination: `/${slug}/${outDestination.join("/")}`,
+				permanent: true,
+			},
+		};
+	}
 
 	if (typeof slugRaw !== "string") {
 		if (slugRaw.length > 1) {

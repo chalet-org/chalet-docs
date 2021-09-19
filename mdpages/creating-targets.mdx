@@ -1,0 +1,87 @@
+---
+title: Creating Targets
+---
+
+# [${meta.title}]
+
+---
+
+The philosophy behind Chalet projects is quite simple: Abstract away only what needs to be abstracted, and unify as much of the build as possible.
+
+\\
+
+## [Targets at a Glance]
+
+By far the most important part of a Chalet project is its targets. Targets are defined in sequential order, and describe individual source compilation targets, CMake projects, other Chalet project, or scripts.
+
+```json
+"targets": {
+   "first-target": {
+      "location": "src/first-target"
+   },
+   "cmake-target": {
+      "type": "CMake",
+      "location": "vendor/cmake-target"
+   },
+   "chalet-target": {
+      "type": "Chalet",
+      "location": "vendor/chalet-target"
+   },
+   "last-target": {
+      "location": "src/last-target"
+   },
+   "post-build": {
+      "script": "scripts/post-build.py"
+   }
+}
+```
+
+With this approach, external dependencies can be pulled in from other sources like git, placed wherever we need them, and built as closely as possible to the rest of the project without necessarily having to write extra scripts. Chalet can orchestrate some of that work for you, in addition to just building some source code. 
+
+\\
+
+## [Source Targets]
+
+The most verbose of these is the source target. 
+
+
+```json
+{
+   "workspace": "my-project",
+   "version": "1.0.0",
+   "searchPaths.windows": [],
+   "configurations": [],
+   "externalDependencies": {
+      "nlohmann_json": {
+         "repository": "https://github.com/nlohmann/json.git"
+      }
+   },
+   "abstracts:all": {
+      "language": "C++",
+      "settings:Cxx": {
+         "cppStandard": "c++20",
+         "warnings": "pedantic"
+      }
+   },
+   "targets": {
+      "my-project": {
+         "runProject": true,
+         "kind": "consoleApplication",
+         "location": "src",
+         "settings:Cxx": {
+            "pch": "src/pch.hpp"
+         }
+      }
+   },
+   "distribution": {
+      "my-project": {
+         "projects": [
+            "my-project"
+         ]
+      }
+   }
+}
+```
+
+
+<!-- nav:/getting-started: -->

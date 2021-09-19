@@ -295,13 +295,13 @@ ${JSON.stringify(definitions?.[definition] ?? {}, undefined, 3)}
 
 let definitionsCache: Dictionary<string[]> = {};
 
-const getSchemaReferencePaths = async (branch: string): Promise<string[]> => {
+const getSchemaReferencePaths = async (ref: string): Promise<string[]> => {
 	try {
-		if (!definitionsCache[branch] || isDevelopment) {
-			definitionsCache[branch] = await getSchemaPageDefinitions(branch);
+		if (!definitionsCache[ref] || isDevelopment) {
+			definitionsCache[ref] = await getSchemaPageDefinitions(ref);
 		}
-		const paths = definitionsCache[branch].map((def) => `${branch}/${def}`);
-		const result: string[] = [branch, ...paths];
+		const paths = definitionsCache[ref].map((def) => `${ref}/${def}`);
+		const result: string[] = [ref, ...paths];
 		return result;
 	} catch (err: any) {
 		throw err;

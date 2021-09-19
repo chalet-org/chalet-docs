@@ -25,4 +25,21 @@ const getChaletTags = async (): Promise<string[]> => {
 	}
 };
 
-export { getChaletTags };
+let tagCache: Optional<string[]> = null;
+
+const getLatestTag = async (): Promise<string> => {
+	try {
+		if (tagCache === null) {
+			tagCache = await getChaletTags();
+		}
+		if (tagCache.length > 0) {
+			return tagCache[0];
+		} else {
+			return "main";
+		}
+	} catch (err: any) {
+		throw err;
+	}
+};
+
+export { getChaletTags, getLatestTag };
