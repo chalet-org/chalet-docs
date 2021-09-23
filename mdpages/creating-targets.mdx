@@ -108,7 +108,7 @@ An example of how abstracts could be used is if stricter warnings are desired on
 
 Another common situation is where one target needs to be compiled as C, while the rest as C++, or perhaps.
 
-`all` is a special abstract target that gets implicitly extended in all source targets. Therefore, the following are equivalent:
+`all` is a special abstract target that gets implicitly extended in all source targets. Therefore, there's no need to define `"extends": "all"` since it would be equivalent to not defining it.
 
 ```json
 "abstracts:all": {
@@ -117,18 +117,7 @@ Another common situation is where one target needs to be compiled as C, while th
 "targets": {
    "my-project": {
       ...
-   }
-}
-```
-
-```json
-"abstracts:all": {
-   ...
-},
-"targets": {
-   "my-project": {
-      ...
-      "extends": "all"
+      // "extends": "all"
    }
 }
 ```
@@ -159,18 +148,20 @@ Another way of writing the strict/minimal example, utilizing `all` would be:
 }
 ```
 
+`"warnings": "minimal"` would simply override `"warnings": "strict"` in this case.
+
 > Note: A single source target can extend a single abstract target, but an abstract target can not extend another abstract target.
 
 \\
 
 ## [Source Targets]
 
-With abstracts out of the way, we can start thinking about how to structure our source targets. As you would expect with any C++ build system, we can add include directories, macro definitions, compiler warnings, define precompiled headers, and a handful of other goodies to ensure our project remains as compiler-independent and cross-platform as possible.
+With abstracts out of the way, we can start thinking about how to structure our source targets. As you would expect with any C++ build system, we can add include directories, macro definitions, compiler warnings, define precompiled headers, and a handful of other goodies to ensure our project remains as compiler-independent and cross-platform as possible. 
 
 ```json
 "targets": {
    "my-project": {
-      "kind": "consoleApplication",
+      "kind": "executable",
       "language": "C++",
       "location": "src",
       "runProject": true,
@@ -197,11 +188,130 @@ With abstracts out of the way, we can start thinking about how to structure our 
          ],
          "links": [
             "foo"
+         ],
+         "links.windows": [
+            "bar"
          ]
       }
    }
 }
 ```
+
+Some of these properties will be covered here, as well as ways to express them, while others will be explained are detailed in the schema documentation, [here](http://localhost:3000/schema-dev/main/source-target).
+
+\\
+
+## [Property Rules]
+
+Most properties support rules that describe whether to include or exclude them from the build. These are simply suffixes that describe the build configuration or platform:
+
+* `:debug` / `:!debug` if the build configuration uses debug symbols (Debug/RelWithDebInfo/Profile) or doesn't use them.
+* `.(platform)` / `.!(platform)` where platform is or isn't `macos` `linux` & `windows`
+
+Most properties support both, but some support one and not the other where appropriate.
+
+When combining the two, order as: `:debug.(platform)`.
+
+If a property with these rules are defined along with a property without them (for example: `links`, `links:debug.windows` & `links.windows`), `links` will be read first, `links.windows` second, followed by `links:debug.windows`.
+
+\\
+
+## [Adding Source Files]
+
+There are two ways to handle source files: Define the location(s) that will search directories recursively, or define each file explicitly. In both scenarios, the following file extensions are supported:
+* C: `c` 
+* C++: `cpp` `cc` `cxx` `c++` / `CPP` `CC` `CXX` `C++` `C`
+* Windows Resource: `rc` / `RC`
+* Objective-C: `m` / `M`
+* Objective-C++: `mm`
+
+> Note: Lowercase extensions are recommended
+
+\
+
+**By Location**
+
+Locations are a simple way to express where sources are found. The first way is as a string to a folder path:
+
+```json
+"location": "src"
+```
+
+This would describe a root folder called "src" that contains files all source files with supported extensions. 
+
+The `location` property can also be expressed an array:
+
+```json
+"location": [
+   "src/foo",
+   "src/bar"
+]
+```
+
+As one would expect, this would include any folders that are specified.
+
+One can also express `location` as an object, with `include` (string or array) and `exclude` (string or array).
+
+```json
+"location": {
+   "include": [
+      "src",
+      "test"
+   ],
+   "exclude": "src/Main.cpp"
+}
+```
+
+Finally, one can also include/exclude based on platform using the property rules explained earlier:
+
+```json
+"location": {
+   "include": "src",
+   "exclude.!macos": [
+      "src/MacOS"
+   ],
+   "exclude.!windows": [
+      "src/Windows"
+   ],
+   "exclude.!linux": [
+      "src/Linux"
+   ]
+}
+```
+
+\
+
+**By Files**
+
+Defining files is very easy. Instead of using `location`, simply define a `files` array and list each file.
+
+```json
+"files": [
+   "src/main.cpp",
+   "src/foo.cpp",
+   "src/bar.cpp"
+]
+```
+
+Property rules are also supported:
+
+```json
+"files": [
+   "src/main.cpp"
+]
+"files.windows": [
+   "src/Windows/foo.cpp"
+]
+"files.macos": [
+   "src/MacOS/bar.cpp"
+]
+```
+
+\\
+
+## [Excluding Targets]
+
+TODO
 
 \\
 
@@ -227,8 +337,7 @@ With abstracts out of the way, we can start thinking about how to structure our 
    },
    "targets": {
       "my-project": {
-         "runProject": true,
-         "kind": "consoleApplication",
+         "kind": "executable",
          "location": "src",
          "settings:Cxx": {
             "pch": "src/pch.hpp"
