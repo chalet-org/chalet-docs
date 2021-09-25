@@ -1,6 +1,5 @@
 
 [](/)
-Guides
 [](/getting-started)
 [](/creating-targets)
 

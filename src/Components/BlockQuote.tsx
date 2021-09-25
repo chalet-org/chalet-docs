@@ -26,7 +26,7 @@ const Styles = styled.blockquote`
 		padding-bottom: 0.5rem;
 
 		> code {
-			font-size: 0.75rem;
+			font-size: 0.8125rem;
 		}
 	}
 

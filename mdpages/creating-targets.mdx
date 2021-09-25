@@ -199,20 +199,43 @@ With abstracts out of the way, we can start thinking about how to structure our 
 
 Some of these properties will be covered here, as well as ways to express them, while others will be explained are detailed in the schema documentation, [here](http://localhost:3000/schema-dev/main/source-target).
 
+The main required properties for source targets are `language`, `kind`, `settings` and `location` / `files`.
+
+* Languages: `C++` `C` 
+* Kinds: `executable` `sharedLibrary` `staticLibrary`
+
 \\
 
-## [Property Rules]
+## [Property Conditions]
 
-Most properties support rules that describe whether to include or exclude them from the build. These are simply suffixes that describe the build configuration or platform:
+Most properties support conditions that describe whether to include or exclude them from the build. These are simply suffixes that describe the build configuration or platform:
 
-* `:debug` / `:!debug` if the build configuration uses debug symbols (Debug/RelWithDebInfo/Profile) or doesn't use them.
-* `.(platform)` / `.!(platform)` where platform is or isn't `macos` `linux` & `windows`
+* `debug` / `!debug` if the build configuration uses debug symbols (Debug/RelWithDebInfo/Profile) or doesn't use them.
+* `(platform)` / `!(platform)` where platform is or isn't `macos` `linux` & `windows`
 
-Most properties support both, but some support one and not the other where appropriate.
+Most properties support both, but some support one and not the other where appropriate. `debug` can be combined with a single platform, separated by a period, in either order:
 
-When combining the two, order as: `:debug.(platform)`.
+```
+.debug.(platform)
+.(platform).debug
+```
 
-If a property with these rules are defined along with a property without them (for example: `links`, `links:debug.windows` & `links.windows`), `links` will be read first, `links.windows` second, followed by `links:debug.windows`.
+If a property with conditions are defined along with a property without them (for example: `links`, `links.debug.windows` & `links.windows`), the order may need to be considered. In this example, `links` will be read first, `links.windows` second, followed by `links.debug.windows`.
+
+\
+
+**Excluding Targets**
+
+Targets can be excluded with the `condition` property, and works the exact same way as property conditions:
+
+```json
+"first-target": {
+   "condition": "debug.!windows"
+}
+"second-target": {
+   "condition": "linux"
+}
+```
 
 \\
 
@@ -262,7 +285,16 @@ One can also express `location` as an object, with `include` (string or array) a
 }
 ```
 
-Finally, one can also include/exclude based on platform using the property rules explained earlier:
+Glob patterns are supported:
+
+```json
+"location": {
+   "include": "src/**",
+   "exclude": "src/Foo/**/*.cpp"
+}
+```
+
+Finally, one can also include/exclude based on platform using the property conditions explained earlier:
 
 ```json
 "location": {
@@ -279,6 +311,8 @@ Finally, one can also include/exclude based on platform using the property rules
 }
 ```
 
+> Note: `include` will only resolve to folders, while `exclude` can resolve both files and folders.
+
 \
 
 **By Files**
@@ -293,7 +327,16 @@ Defining files is very easy. Instead of using `location`, simply define a `files
 ]
 ```
 
-Property rules are also supported:
+Glob patterns are supported:
+
+```json
+"files": [
+   "src/**/*.cpp",
+   "src/**/*.rc"
+]
+```
+
+Property conditions are also supported:
 
 ```json
 "files": [
@@ -309,52 +352,11 @@ Property rules are also supported:
 
 \\
 
-## [Excluding Targets]
+## [More Stuff]
 
 TODO
 
 \\
-
-<!-- accordion:start Scrap -->
-
-```json
-{
-   "workspace": "my-project",
-   "version": "1.0.0",
-   "searchPaths.windows": [],
-   "configurations": [],
-   "externalDependencies": {
-      "nlohmann_json": {
-         "repository": "https://github.com/nlohmann/json.git"
-      }
-   },
-   "abstracts:all": {
-      "language": "C++",
-      "settings:Cxx": {
-         "cppStandard": "c++20",
-         "warnings": "pedantic"
-      }
-   },
-   "targets": {
-      "my-project": {
-         "kind": "executable",
-         "location": "src",
-         "settings:Cxx": {
-            "pch": "src/pch.hpp"
-         }
-      }
-   },
-   "distribution": {
-      "my-project": {
-         "projects": [
-            "my-project"
-         ]
-      }
-   }
-}
-```
-
-<!-- accordion:end -->
 
 
 <!-- nav:/getting-started: -->
