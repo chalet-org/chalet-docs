@@ -10,14 +10,14 @@ The philosophy behind Chalet projects is quite simple: Abstract away only what n
 
 \\
 
-## [At A Glance]
+## [Target Types]
 
 By far the most important part of a Chalet project is its targets. Targets are defined in sequential order, and describe individual source compilation targets, CMake projects, other Chalet project, or scripts.
 
 * [Source Target](/schema/latest/source-target) - A folder, set of folders, or files with compilation options
 * [Source Target](/schema/latest/chalet-target) - A subfolder that contains a separate chalet.json
 * [CMake Target](/schema/latest/cmake-target) - A subfolder that contains a CMakeLists.txt
-* [Script Target](/schema/latest/cmake-target) - A path to an individual script, of the following types: `.sh` `.bat` `.ps1` `.py` `.rb` `.pl` and `.lua`. Portable shebangs — `#!/usr/bin/env (executable)` — are also supported with any extension.
+* [Script Target](/schema/latest/cmake-target) - A path to an individual script
 
 ```json
 "targets": {
@@ -184,6 +184,40 @@ The main required properties for source targets are `language`, `kind`, `setting
 * Kinds: `executable` `sharedLibrary` `staticLibrary`
 
 > Note: Objective-C++ implies C++, and Objective-C implies C, so files of both types can be combined.
+
+\\
+
+## [Target Descriptions]
+
+All target types can take a `description` property that explicitly changes the header to something else. For example, if the list of targets look something like:
+
+```json
+"targets": {
+   "my-target": {}
+}
+```
+
+The default output would be:
+
+```
+▼  Build: my-target
+```
+
+If the description is changed:
+
+```json
+"targets": {
+   "my-target": {
+      "description": "My super cool project!"
+   }
+}
+```
+
+The output would become:
+
+```
+▼  My super cool project!
+```
 
 \\
 
@@ -617,27 +651,80 @@ Example:
 
 \\
 
-## [Thread Model]
+## [Compile/Linker Options]
+
+As a last resort, `compileOptions` and `linkerOptions` can pass certain options directly to the build at the time of a compilation unit's compile, or at link time. However, this ultimately limits which compilers can be used with your project, because property conditions aren't specific enough yet to target compilers and versions. As Chalet evolves, more options will be leveraged as properties, and the goal will be to reduce the need for this as much as possible, or also provide some kind of lightweight scripting. If you require a more refined build, you can certainly combine CMake with Chalet.
+
+**Linker Scripts**
+
+At the moment, this is just supported with GCC & Clang, but you can supply a linker script to the the linker via the `linkerScript` property.
 
 \\
 
-## [Compile Options]
+## [Script Targets]
 
-\\
+Script targets are quite simple. In addition to the `condition` and `description` properties, they only take a `script` property (that can also be suffixed with a property condition.
 
-## [Linker Options]
+The following file extensions are supported:
+* `.sh` - Bash / Unix shell
+* `.bat` - Windows Batch
+* `.ps1` - Powershell ([Powershell Core](https://github.com/PowerShell/PowerShell) is also supported on non-windows)
+* `.py` - Python
+* `.rb` - Ruby
+* `.pl` - Perl
+* `.lua` - Lua
+
+Portable shebangs — `#!/usr/bin/env (executable)` — are supported with any extension.
+
+The following examples are all valid:
+
+```json
+"my-first-script": {
+   "description": "The very first script",
+   "script.!windows": "scripts/script.sh",
+   "script.windows": "scripts/script.bat",
+}
+"my-second-script": {
+   "condition": "windows",
+   "script.debug": "scripts/script_Debug.bat",
+   "script.!debug": "scripts/script_Release.bat"
+}
+"my-second-script": {
+   "condition": "windows",
+   "script": "scripts/script.ps1"
+}
+"my-third-script": {
+   "script": "scripts/script.py"
+}
+```
 
 \\
 
 ## [CMake Targets]
 
+TODO
+
+`type: CMake`
+`buildFile`
+`condition`
+`defines`
+`description`
+`location`
+`recheck`
+`toolset`
+
 \\
 
 ## [Chalet Targets]
 
-\\
+TODO
 
-## [Script Targets]
+`type: Chalet`
+`buildFile`
+`condition`
+`description`
+`location`
+`recheck`
 
 \\
 

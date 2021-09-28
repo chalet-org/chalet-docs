@@ -3,11 +3,11 @@
 [](/getting-started)
 [](/creating-targets)
 
-Other
-[](/contact)
+<!-- Other -->
+<!-- [](/contact) -->
 
-Dev 
-[](/sandbox)
+<!-- Dev  -->
+<!-- [](/sandbox) -->
 
 Schema
 [](/changelog)
