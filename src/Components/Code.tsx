@@ -258,6 +258,22 @@ const codeCss = css<StyleProps>`
 		}
 	}
 
+	.language-cpp .token {
+		&.directive-hash {
+			color: ${getCssVariable("Gray")};
+			font-weight: 400;
+
+			+ .directive.keyword {
+				color: ${getCssVariable("Gray")};
+				font-weight: 400;
+
+				+ .string {
+					color: ${getCssVariable("Magenta")};
+				}
+			}
+		}
+	}
+
 	.language-bash .token {
 		&.function,
 		&.class-name,

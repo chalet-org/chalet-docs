@@ -50,12 +50,8 @@ First, simply with a root `abstracts` object:
 
 ```json
 "abstracts": {
-   "all": {
-      ...
-   },
-   "minimal": {
-      ...
-   }
+   "all": {},
+   "minimal": {}
 }
 ```
 
@@ -63,12 +59,8 @@ Second, with a colon separating `abstracts` and the name of the abstract target:
 
 ```json
 // Possibly more desireable in small projects
-"abstracts:all": {
-   ...
-},
-"abstracts:minimal": {
-   ...
-}
+"abstracts:all": {},
+"abstracts:minimal": {}
 ```
 
 Which one you decide to use doesn't matter, but it's recommended to pick one style over the other rather than mix them.
@@ -78,13 +70,11 @@ An example of how abstracts could be used is if stricter warnings are desired on
 ```json
 "abstracts": {
    "strict": {
-      ...
       "settings:Cxx": {
          "warnings": "strict"
       }
    },
    "minimal": {
-      ...
       "settings:Cxx": {
          "warnings": "minimal"
       }
@@ -92,16 +82,13 @@ An example of how abstracts could be used is if stricter warnings are desired on
 },
 "targets": {
    "first-target": {
-      "extends": "strict",
-      ...
+      "extends": "strict"
    },
    "second-target": {
-      "extends": "strict",
-      ...
+      "extends": "strict"
    },
    "third-target": {
-      "extends": "minimal",
-      ...
+      "extends": "minimal"
    }
 }
 ```
@@ -111,12 +98,9 @@ Another common situation is where one target needs to be compiled as C, while th
 `all` is a special abstract target that gets implicitly extended in all source targets. Therefore, there's no need to define `"extends": "all"` since it would be equivalent to not defining it.
 
 ```json
-"abstracts:all": {
-   ...
-},
+"abstracts:all": {},
 "targets": {
    "my-project": {
-      ...
       // "extends": "all"
    }
 }
@@ -133,14 +117,9 @@ Another way of writing the strict/minimal example, utilizing `all` would be:
    }
 },
 "targets": {
-   "first-target": {
-      ...
-   },
-   "second-target": {
-      ...
-   },
+   "first-target": {},
+   "second-target": {},
    "third-target": {
-      ...
       "settings:Cxx": {
          "warnings": "minimal"
       }
@@ -201,8 +180,10 @@ Some of these properties will be covered here, as well as ways to express them, 
 
 The main required properties for source targets are `language`, `kind`, `settings` and `location` / `files`.
 
-* Languages: `C++` `C` 
+* Languages: `C++` `C` `Objective-C` `Objective-C++`
 * Kinds: `executable` `sharedLibrary` `staticLibrary`
+
+> Note: Objective-C++ implies C++, and Objective-C implies C, so files of both types can be combined.
 
 \\
 
@@ -352,9 +333,311 @@ Property conditions are also supported:
 
 \\
 
-## [More Stuff]
+## [Compile Settings]
 
-TODO
+Like with abstracts, compile settings can be expressed in two ways:
+
+
+```json
+"my-project": {
+   "settings:Cxx": {}
+}
+```
+
+or:
+
+```json
+"my-project": {
+   "settings": {
+      "Cxx": {}
+   }
+}
+```
+
+> Note: At the moment, `Cxx` is the only sub-type, but as Chalet matures, more may be added.
+
+\\
+
+## [Language Standard]
+
+The C and C++ language standard are represented as `cStandard` and `cppStandard` respectively. If using GCC and clang, the language standard is given directly to the compiler, while if using MSVC, it's reinterpreted to a supported flag.
+
+Examples:
+
+```json
+// /std:c++20 or /std:c++latest in MSVC
+"cppStandard": "c++20"
+"cppStandard": "gnu++2b"
+
+// /std:c++17 in MSVC
+"cppStandard": "c++17" 
+
+// /std:c17 in MSVC
+"cStandard": "gnu17"
+
+// /std:c11 in MSVC
+"cStandard": "c11"
+```
+
+\\
+
+## [Include Directories]
+
+These are directories (preferably relative) to be included during compilation, and tell it where header files are located. This is expressed with the `includeDirs` property, where all [Path Substitutions](/creating-targets?id=path-substitution) and glob patterns are supported.
+
+```json
+"includeDirs": [
+   "${externalDir}/foo/include",
+   "${externalDir}/bar/include"
+]
+```
+
+Typically this means if a library has subdirectories, you have to declare your include directives in code as: 
+
+```cpp
+#include <subdir/foo.hpp>
+#include <subdir/bar/bar.hpp>
+```
+
+Some might prefer the following:
+
+```cpp
+#include <foo.hpp>
+#include <bar.hpp>
+```
+
+Glob patterns are also supported for this reason, so one can include a directory recursively:
+
+```json
+"includeDirs": [
+   "${externalDir}/foo/include/**"
+]
+```
+
+This would ultimately come down to personal preference.
+
+\\
+
+## [Library Search Paths]
+
+These are directories (preferably relative) that are used to search for static or dynamic libraries at link time. If you're looking to link a library called `foo`, you must tell the linker where `foo.lib` or `libfoo.a` exist. This is expressed with the `libDirs` property, where all [Path Substitutions](/creating-targets?id=path-substitution) and glob patterns are supported.
+
+Example:
+
+```json
+"libDirs": [
+   "${externalBuildDir}/foo/lib"
+]
+"libDirs.windows": [
+   "${env:ProgramFiles}/bar/lib"
+]
+"libDirs.!windows": [
+   "~/libraries/bar/lib"
+]
+```
+
+\\
+
+## [Preprocessor Definitions]
+
+These are preprocessor symbols to pass to the compiler **per target**. These are typically used to define something globally that affects how the target gets compiled for its usage.
+
+For example, in a debug build, you're probably going to want to define `DEBUG` or `_DEBUG` (this is not done for you).
+
+```json
+"abstracts:all": {
+   "settings:Cxx": {
+      "defines.debug": [
+         "_DEBUG"
+      ]
+   }
+}
+```
+
+\\
+
+## [Precompiled Headers]
+
+For the unfamiliar, this is a convention used to speed up the build process by compiling common headers up front. A single precompiled header can be defined per source target using the `pch` property. One can include as many headers as they wish to inside of the precompiled header itself.
+
+```json
+"my-target": {
+   "location": "src",
+   "settings:Cxx": {
+      "pch": "src/PCH.hpp"
+   }
+}
+```
+
+This will automatically include that header in every source file of that target. Although there's nothing stopping one from doing so, it's not necessary to include it again at the top of source files via `#include`.  Every compiler handles precompiled headers a little differently, so Chalet abstracts that away for you.
+
+> Note: In `universal` architecture builds on MacOS, a separate precompiled header is created for each architecture.
+
+\\
+
+## [Dynamic Linking]
+
+Linking shared libraries is quite simple in Chalet. Like with the `-l` option in GCC/Clang, you only need to supply the base name of the library. Thus, `libfoo.a` would be linked as `foo`. If you are using MSVC, and the library is `foo.lib`, the link is again just `foo`.
+
+```json
+"links": [
+   "foo"
+],
+"links.debug": [
+   "bar-d"
+],
+"links.!debug": [
+   "bar"
+],
+"links.windows": [
+   "user32"
+]
+```
+
+If linking to another target, the target must build prior to the current target, and one only needs to supply the target name to `links`.
+
+```json
+"first-target": {
+   "kind": "sharedLibrary",
+   "location": "src/foo"
+},
+"second-target": {
+   "settings:Cxx": {
+      "links": [
+         "first-target"
+      ]
+   }
+}
+```
+
+You might run into a situation where a library is only supported on a certain platform, or is only relevant in a Debug build. Expressing that is quite easy:
+
+```json
+"first-target": {
+   "kind": "sharedLibrary",
+   "location": "src/foo",
+   "condition": "windows"
+},
+"second-target": {
+   "settings:Cxx": {
+      "links.windows": [
+         "first-target"
+      ]
+   }
+```
+
+
+\\
+
+## [Static Linking]
+
+Static links work the same way as shared, but use the `staticLinks` property instead. However, static library targets will have an output filename with a "-s" suffix behind the scenes. If linking to a prebuilt static library, or one built with CMake for instance, the suffix will need to be added, if applicable.
+
+```json
+"first-target": {
+   "kind": "staticLibrary",
+   "location": "src/foo"
+},
+"second-target": {
+   "settings:Cxx": {
+      "staticLinks": [
+         "first-target"
+      ]
+   }
+```
+
+The actual file being linked in that example is `libfirst-target-s.a`, but we only care about the target name here.
+
+**Static Linking Compiler Libraries (libstdc++ etc)**
+
+There's an extra property for this: `staticLinking`, but has different behavior on each toolchain. For those familar with GCC, it does not use `-static` (which links everything statically) but instead uses the explicit versions:
+
+```
+-static-libgcc
+-static-libasan
+-static-libtsan
+-static-liblsan
+-static-libubsan
+-static-libstdc++
+```
+
+This is particularly useful with MinGW, as it means not having to distribute as many .dll files, whereas on linux it may be less desireable.
+
+In LLVM, `staticLinking` just passes `-static-libsan` at the moment, and in MSVC, does nothing.
+
+\\
+
+## [Path Substitution]
+
+In properties that take paths to directories or files, path substitution is supported for certain variables that describe locations of the build that could vary between machines. The following is supported:
+
+* `~/`, `${home}` - resolves to the home directory of the machine. On Windows, this is `C:\Users\(Name)`
+* `${env:(Name)}` - resolves an environment variable by name. For example: `${env:MY_LIBRARY_PATH}`
+* `${buildDir}` - resolves to the main build directory for the current configuration & architecture
+* `${externalDir}` - resolves to the root path for external dependencies. See [externalDependencies](/schema-dev/latest?id=external-dependencies)
+* `${externalBuildDir}` - resolves to the build path for an external dependency. For instance, if a CMake project is located at `${externalDir}/foo`, it will build to `${buildDir}/${externalDir}/foo`, so it's easier to write `${externalBuilDir}/foo`
+* `${cwd}` - resolves the current working directory (this shouldn't be needed, but it's here just in case)
+
+Example:
+
+```json
+"searchPaths": [
+   "${externalBuildDir}/foo/arbitrary-path"
+],
+"targets": {
+   "my-target": {
+      "location": "${externalDir}/foo",
+      "settings:Cxx": {
+         "includeDirs": [
+            "${env:MY_BAR_LIB}/include"
+         ],
+         "includeDirs.windows": [
+            "${env:ProgramFiles}/bar/include"
+         ],
+         "includeDirs.!windows": [
+            "~/libs/bar/include"
+         ]
+      }
+   },
+   "other-target": {
+      "settings:Cxx": {
+         "includeDirs": [
+            "${externalDir}/foo/include"
+         ],
+         "libDirs": [
+            "${externalBuildDir}/foo"
+         ],
+         "links": [
+            "foo"
+         ]
+      }
+   }
+}
+```
+
+\\
+
+## [Thread Model]
+
+\\
+
+## [Compile Options]
+
+\\
+
+## [Linker Options]
+
+\\
+
+## [CMake Targets]
+
+\\
+
+## [Chalet Targets]
+
+\\
+
+## [Script Targets]
 
 \\
 
