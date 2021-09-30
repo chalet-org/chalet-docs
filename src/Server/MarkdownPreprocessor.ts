@@ -31,8 +31,12 @@ const jsonNodeToMarkdown = (
 		examples,
 		anyOf,
 		oneOf,
+		allOf,
 		$ref: reference,
 		definitions: schemaDefinitions,
+		if: schemaIf,
+		then: schemaThen,
+		else: schemaElse,
 		additionalProperties,
 		required,
 	} = schema;
@@ -117,17 +121,19 @@ ${JSON.stringify(defaultValue, undefined, 3)}
 	if (!!anyOf) {
 		result +=
 			`\n<IndentGroup label="anyOf">\n\n` +
-			anyOf
-				.map((value, i) => jsonNodeToMarkdown(null, slug, value as JSONSchema7, definitions, true))
-				.join(spacer) +
+			anyOf.map((value, i) => jsonNodeToMarkdown(null, slug, value as JSONSchema7, definitions, true)).join("") +
 			`\n</IndentGroup>\n\n`;
 	}
 	if (!!oneOf) {
 		result +=
 			`\n<IndentGroup label="oneOf">\n\n` +
-			oneOf
-				.map((value, i) => jsonNodeToMarkdown(null, slug, value as JSONSchema7, definitions, true))
-				.join(spacer) +
+			oneOf.map((value, i) => jsonNodeToMarkdown(null, slug, value as JSONSchema7, definitions, true)).join("") +
+			`\n</IndentGroup>\n\n`;
+	}
+	if (!!allOf) {
+		result +=
+			`\n<IndentGroup label="allOf">\n\n` +
+			allOf.map((value, i) => jsonNodeToMarkdown(null, slug, value as JSONSchema7, definitions, true)).join("") +
 			`\n</IndentGroup>\n\n`;
 	}
 	if (!!items) {
@@ -139,6 +145,29 @@ ${JSON.stringify(defaultValue, undefined, 3)}
 		} else if (typeof items === "object") {
 			result += jsonNodeToMarkdown(null, slug, items as JSONSchema7, definitions);
 		}
+		result += `\n</IndentGroup>\n\n`;
+	}
+
+	if (!!schemaIf || !!schemaThen || !!schemaElse) {
+		result += `\n<IndentGroup label="oneOf">\n\n`;
+
+		let nextNode: JSONSchema7 | undefined = schema;
+		while (nextNode !== undefined) {
+			if (!!nextNode.then && typeof nextNode.then === "object") {
+				result += jsonNodeToMarkdown(null, slug, nextNode.then as JSONSchema7, definitions);
+			}
+			if (!!nextNode.else && typeof nextNode.else === "object") {
+				if (!!nextNode.else.$ref) {
+					result += jsonNodeToMarkdown(null, slug, nextNode.else as JSONSchema7, definitions);
+					nextNode = undefined;
+				} else {
+					nextNode = nextNode.else;
+				}
+			} else {
+				nextNode = undefined;
+			}
+		}
+
 		result += `\n</IndentGroup>\n\n`;
 	}
 

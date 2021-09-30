@@ -14,25 +14,27 @@ The philosophy behind Chalet projects is quite simple: Abstract away only what n
 
 By far the most important part of a Chalet project is its targets. Targets are defined in sequential order, and describe individual source compilation targets, CMake projects, other Chalet project, or scripts.
 
-* [Source Target](/schema/latest/source-target) - A folder, set of folders, or files with compilation options
+* [Source Target](/schema/latest/executable-source-target) - A folder, set of folders, or files with compilation options
 * [Source Target](/schema/latest/chalet-target) - A subfolder that contains a separate chalet.json
 * [CMake Target](/schema/latest/cmake-target) - A subfolder that contains a CMakeLists.txt
-* [Script Target](/schema/latest/cmake-target) - A path to an individual script
+* [Script Target](/schema/latest/build-script-target) - A path to an individual script
 
 ```json
 "targets": {
    "first": {
+      "kind": "executable",
       "location": "src/first"
    },
    "second": {
-      "type": "CMake",
+      "kind": "cmakeProject",
       "location": "vendor/second"
    },
    "third": {
-      "type": "Chalet",
+      "kind": "chaletProject",
       "location": "vendor/third"
    },
    "post-build": {
+      "kind": "script",
       "script": "scripts/post-build.py"
    }
 }
@@ -143,7 +145,7 @@ With abstracts out of the way, we can start thinking about how to structure our 
       "kind": "executable",
       "language": "C++",
       "location": "src",
-      "runProject": true,
+      "runTarget": true,
       "settings:Cxx": {
          "pch": "src/PCH.hpp",
          "cppStandard": "c++20",
@@ -176,7 +178,7 @@ With abstracts out of the way, we can start thinking about how to structure our 
 }
 ```
 
-Some of these properties will be covered here, as well as ways to express them, while others will be explained are detailed in the schema documentation, [here](http://localhost:3000/schema-dev/main/source-target).
+Some of these properties will be covered here, as well as ways to express them, while others will be explained are detailed in the schema documentation, [here](http://localhost:3000/schema-dev/main/executable-source-target).
 
 The main required properties for source targets are `language`, `kind`, `settings` and `location` / `files`.
 
@@ -490,6 +492,12 @@ For example, in a debug build, you're probably going to want to define `DEBUG` o
 
 \\
 
+## [Warnings]
+
+TODO
+
+\\
+
 ## [Precompiled Headers]
 
 For the unfamiliar, this is a convention used to speed up the build process by compiling common headers up front. A single precompiled header can be defined per source target using the `pch` property. One can include as many headers as they wish to inside of the precompiled header itself.
@@ -582,9 +590,11 @@ Static links work the same way as shared, but use the `staticLinks` property ins
 
 The actual file being linked in that example is `libfirst-target-s.a`, but we only care about the target name here.
 
-**Static Linking Compiler Libraries (libstdc++ etc)**
+\
 
-There's an extra property for this: `staticLinking`, but has different behavior on each toolchain. For those familar with GCC, it does not use `-static` (which links everything statically) but instead uses the explicit versions:
+<!-- accordion:start Static Linking Compiler Libraries (libstdc++ etc) -->
+
+There's an extra property for this: `staticLinking`, but has different behavior on each toolchain. For those familar with GCC, it does not use `-static` (which links every link following it statically, including compiler libraries) but instead uses the explicit versions:
 
 ```
 -static-libgcc
@@ -598,6 +608,14 @@ There's an extra property for this: `staticLinking`, but has different behavior 
 This is particularly useful with MinGW, as it means not having to distribute as many .dll files, whereas on linux it may be less desireable.
 
 In LLVM, `staticLinking` just passes `-static-libsan` at the moment, and in MSVC, does nothing.
+
+<!-- accordion:end -->
+
+\\
+
+## [Run Projects]
+
+TODO
 
 \\
 
@@ -663,7 +681,7 @@ At the moment, this is just supported with GCC & Clang, but you can supply a lin
 
 ## [Script Targets]
 
-Script targets are quite simple. In addition to the `condition` and `description` properties, they only take a `script` property (that can also be suffixed with a property condition.
+Script targets are quite simple. They are triggered by setting the `kind` property to `script`. In addition to the `condition` and `description` properties, they only take a `script` property (that can also be suffixed with a property condition.
 
 The following file extensions are supported:
 * `.sh` - Bash / Unix shell
@@ -680,20 +698,24 @@ The following examples are all valid:
 
 ```json
 "my-first-script": {
+   "kind": "script",
    "description": "The very first script",
    "script.!windows": "scripts/script.sh",
    "script.windows": "scripts/script.bat",
 }
 "my-second-script": {
+   "kind": "script",
    "condition": "windows",
    "script.debug": "scripts/script_Debug.bat",
    "script.!debug": "scripts/script_Release.bat"
 }
 "my-second-script": {
+   "kind": "script",
    "condition": "windows",
    "script": "scripts/script.ps1"
 }
 "my-third-script": {
+   "kind": "script",
    "script": "scripts/script.py"
 }
 ```

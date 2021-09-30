@@ -114,7 +114,7 @@ const MarkdownLayout = ({ meta, mdx, children, ...navProps }: Props) => {
 	return (
 		<>
 			<SideNavigation {...navProps} />
-			<Page title={meta.title}>
+			<Page title={meta?.title ?? "Untitled"}>
 				<Styles ref={pageLayout}>
 					<MDXRemote {...mdx} components={components} />
 				</Styles>

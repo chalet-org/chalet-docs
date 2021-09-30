@@ -21,7 +21,7 @@ export const getStaticPaths = async () => {
 		const paths = schemaPaths.map((p) => `/schema/${p}`);
 
 		return {
-			fallback: false,
+			fallback: true,
 			paths,
 		};
 	} catch (err: any) {

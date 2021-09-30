@@ -298,7 +298,11 @@ let definitionsCache: Dictionary<string[]> = {};
 const getSchemaReferencePaths = async (ref: string): Promise<string[]> => {
 	try {
 		if (!definitionsCache[ref] || isDevelopment) {
-			definitionsCache[ref] = await getSchemaPageDefinitions(ref);
+			if (ref === "latest") {
+				definitionsCache[ref] = await getSchemaPageDefinitions();
+			} else {
+				definitionsCache[ref] = await getSchemaPageDefinitions(ref);
+			}
 		}
 		const paths = definitionsCache[ref].map((def) => `${ref}/${def}`);
 		const result: string[] = [ref, ...paths];
