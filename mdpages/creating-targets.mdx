@@ -494,7 +494,68 @@ For example, in a debug build, you're probably going to want to define `DEBUG` o
 
 ## [Warnings]
 
-TODO
+Deciding which warnings to use is a central part of working with C++. There are two ways to declare them: As a preset, or as a GNU-style list.
+
+\
+
+**Warning Presets**
+
+Presets are inherently opinionated. Their goal is to provide an abstraction that can be interpreted by all compilers. With GCC & clang, they will populate a list of warnings behinds the scenes, try to limit them based on the compiler version, and pass them along. Both compilers tend to support each other in that if a warning is available on one, but not the other, it tends to just be a no-op. 
+
+```json
+"my-target": {
+   "settings:Cxx": {
+     "warnings": "strict"
+   }
+}
+```
+
+In GCC/Clang, the presets are as follows:
+
+* **none** - No warnings (default). This is the same as not defining `warnings` at all.
+* **minimal** - Equivalent to `-Wall`.
+* **extra** - Equivalent to **minimal** + `-Wextra`.
+* **pedantic** - Equivalent to **extra** + `-Wpedantic`.
+* **error** - Equivalent to **pedantic** + `-Werror`. Warnings will be treated as errors.
+* **strict** - Equivalent to **error** + `-Wunused` `-Wcast-align` `-Wdouble-promotion` `-Wformat=2` `-Wmissing-declarations` `-Wmissing-include-dirs` `-Wnon-virtual-dtor` `-Wredundant-decls` `-Wodr`. Warnings will be treated as errors.
+* **strictPedantic** - Equivalent to **strict** + `-Wunreachable-code` `-Wshadow`. Warnings will be treated as errors.
+* **veryStrict** - Equivalent to **strictPedantic** + `-Wnoexcept` `-Wundef` `-Wconversion` `-Wcast-qual` `-Wfloat-equal` `-Winline` `-Wold-style-cast` `-Wstrict-null-sentinel` `-Woverloaded-virtual` `-Wsign-conversion` `-Wsign-promo`. Warnings will be treated as errors.
+
+In MSVC, presets are interpreted as the warning level:
+
+* **none** - No warnings (default). This is the same as not defining `warnings` at all.
+* **minimal** - Equivalent to `/W1`.
+* **extra** - Equivalent to `/W2`.
+* **pedantic** - Equivalent to `/W3`.
+* **error** - Equivalent to `/W3 /WX`. Warnings will be treated as errors.
+* **strict** & **strictPedantic** - Equivalent to `/W4 /WX`. Warnings will be treated as errors.
+* **veryStrict** - Equivalent to `/Wall /WX`. Warnings will be treated as errors.
+
+> Note: These may change between some Chalet versions (probably not very often), as they have the potential to be pretty contentious. [Debate](//github.com/chalet-org/chalet-dev/discussions) is welcomed.
+
+\
+
+**Explicit GNU-style List**
+
+Warnings can be defined manually, as a list of their GNU names, minus the `-W` prefix. If the compiler is GCC or clang, the list is passed along directly to the compile commands, without any further validation (although this behavior may get tweaked in the future).
+
+```json
+"my-target": {
+   "settings:Cxx": {
+      "warnings": [
+         "all",
+         "error",
+         "unused",
+         "shadow",
+         "unreachable-code",
+         "format=2"
+      ]
+   }
+}
+```
+
+In MSVC, warning flags will be cross-referenced based on how presets are defined above, so if "pedantic" is present in the list, the flag will be `/W3`. If "error" or any of the strict/veryStrict GNU names are present, `/WX` will get added.
+
 
 \\
 
@@ -586,6 +647,7 @@ Static links work the same way as shared, but use the `staticLinks` property ins
          "first-target"
       ]
    }
+}
 ```
 
 The actual file being linked in that example is `libfirst-target-s.a`, but we only care about the target name here.
@@ -613,9 +675,41 @@ In LLVM, `staticLinking` just passes `-static-libsan` at the moment, and in MSVC
 
 \\
 
-## [Run Projects]
+## [Run Targets]
 
-TODO
+If a target is runnable (kind is `executable` or `script`), one only needs to set `runTarget` to `true` in order to choose it as the target that gets run during `chalet buildrun` and `chalet run`. If more than one target has the `runTarget` property, or none have it, then the first runnable target is chosen.
+
+```json
+"first-target": {
+   "kind": "executable",
+   "location": "src"
+},
+"second-target": {
+   "kind": "script",
+   "script": "scripts/do_something.sh",
+   "runTarget": true
+}
+```
+
+An executable target can also take the `runArguments` and `runDependencies` properties. The `runArguments` property is simply an array of arguments to pass to the executable, while `runDependencies` is meant for shared libraries that have to be copied to the build folder at the time of execution. In most cases, it's not needed as long as the shared library is accessible from PATH.
+
+```json
+"first-target": {
+   "kind": "executable",
+   "location": "src",
+   "runTarget": true,
+   "runArguments": [
+      "--foo",
+      "-i",
+      "bar"
+   ],
+   "runDependencies.windows": [
+      "${env:SOME_PATH}/stubborn_lib.dll"
+   ]
+}
+```
+
+> Note: If a run target is specified from the command line, it will take precedence over any targets with the `runTarget` property.
 
 \\
 
@@ -627,7 +721,7 @@ In properties that take paths to directories or files, path substitution is supp
 * `${env:(Name)}` - resolves an environment variable by name. For example: `${env:MY_LIBRARY_PATH}`
 * `${buildDir}` - resolves to the main build directory for the current configuration & architecture
 * `${externalDir}` - resolves to the root path for external dependencies. See [externalDependencies](/schema-dev/latest?id=external-dependencies)
-* `${externalBuildDir}` - resolves to the build path for an external dependency. For instance, if a CMake project is located at `${externalDir}/foo`, it will build to `${buildDir}/${externalDir}/foo`, so it's easier to write `${externalBuilDir}/foo`
+* `${externalBuildDir}` - resolves to the build path for an external dependency. For instance, if a CMake project is located at `${externalDir}/foo`, it will build to `${buildDir}/${externalDir}/foo`, so it's easier to write `${externalBuildDir}/foo`
 * `${cwd}` - resolves the current working directory (this shouldn't be needed, but it's here just in case)
 
 Example:
@@ -739,7 +833,7 @@ TODO
 
 ## [Chalet Targets]
 
-TODO
+Chalet targets are like saying "I have a Chalet project in a separate repository and want it to build during this project's build."  This is a feature that may not get a lot of use in these early days, but could serve as a foundation for package management in the future.
 
 `type: Chalet`
 `buildFile`
