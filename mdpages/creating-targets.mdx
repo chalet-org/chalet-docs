@@ -818,31 +818,60 @@ The following examples are all valid:
 
 ## [CMake Targets]
 
-TODO
+CMake projects can be built as a build step / target of a Chalet project. This is the ideal choice for working with a library needs to be built with CMake before a source target that relies on that library, or if a build is better accomplished with CMake, but one wants to use Chalet to manage the command given to CMake. Chalet will pick an appropriate CMake generator based on its own toolchain, generate the build files with the given defines and toolset specification (if applicable), then build during the same step (using the `cmake --build` method). 
 
-`type: CMake`
-`buildFile`
-`condition`
-`defines`
-`description`
-`location`
-`recheck`
-`toolset`
+At the moment, these are the generators used:
+
+* **Ninja** - If the toolchain's `strategy` is ninja, this will always be the generator.
+* **Visual Studio ## ####** - If using MSVC and not using Ninja, this generator will be based on the version of MSVC detected (up to Visual Studio 17 2022).
+* **MinGW Makefiles** - If on Windows, and the toolchain does not use Ninja or MSVC.
+* **Unix Makefiles** - If not Windows, and the toolchain does not use Ninja.
+
+To build another CMake project, set `kind` to `cmakeProject`, and define the `location` as the directory where the `CMakeLists.txt` of the project exists. If using a custom build file name, you can specify it with `buildFile`. This is passed directly to the `-C` CMake option.
+
+The only other property is `recheck` which if true, will check the project for changes each time a build is run. If not defined, this will default to `true`. Setting this to false by nature would speed up rebuilds because CMake wouldn't need to be invoked after the target has already been built once.
+
+```json
+"my-cmake-target": {
+   "kind": "cmakeProject",
+   "condition": "!windows",
+   "location": "${externalDir}/foo",
+   "recheck": false
+}
+```
+
+If using a toolset specification (`-T` option), simply define it under `toolset`.
+
+Chalet will attempt to add appropriate cache entries with `-D` based on its own settings and toolchain, but if one wants to override these, this can be done by adding `defines` manually, without the `-D` option.
+
+```json
+"my-cmake-target": {
+   "kind": "cmakeProject",
+   "location": "${externalDir}/foo",
+   "defines": [
+      "CMAKE_C_COMPILER=foo",
+      "CMAKE_CXX_COMPILER=foo++"
+   ]
+}
+```
 
 \\
 
 ## [Chalet Targets]
 
-Chalet targets are like saying "I have a Chalet project in a separate repository and want it to build during this project's build."  This is a feature that may not get a lot of use in these early days, but could serve as a foundation for package management in the future.
+Chalet targets are like saying "I have a Chalet project in a separate repository and want it to build during this project's build."  This is a feature that may not get a lot of use in these early days, but could serve as a foundation for package management in the future. One would want to combine this feature with `externalDependencies`, which would pull down a git repository prior to building.
 
-`type: Chalet`
-`buildFile`
-`condition`
-`description`
-`location`
-`recheck`
+To build another Chalet project, set `kind` to `chaletProject`, and define the `location` as the directory where the `chalet.json` of the project exists. If using a custom build file name, you can specify it with `buildFile`. This is a path relative to the location, so by default its value is `chalet.json`.
 
-\\
+The only other property is `recheck` which if true, will check the project for changes each time a build is run. If not defined, this will default to `true`. Setting this to false by nature would speed up rebuilds because chalet wouldn't need to be invoked after the target has already been built once.
 
+```json
+"my-chalet-target": {
+   "kind": "chaletProject",
+   "condition": "!windows",
+   "location": "${externalDir}/bar",
+   "recheck": false
+}
+```
 
-<!-- nav:/getting-started: -->
+<!-- nav:/managing-dependencies:/describing-the-distribution -->

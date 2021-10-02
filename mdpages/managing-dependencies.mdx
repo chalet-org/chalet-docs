@@ -1,0 +1,104 @@
+---
+title: Managing Dependencies
+---
+
+# [${meta.title}]
+
+---
+
+Before diving into build target details, one should consider how to import libraries and external code. In general, it's best to figure out a way to exclude the actual code of those projects from your own project. So if using git, one can use submodules for this, scripts, or an external package manager in combination with adding appropriate paths to `.gitignore`.
+
+Chalet is not a package manager itself, but has a method of streamlining external git dependencies that can then be used in its own build targets. It makes no assumptions when the repositories are cloned, so it's up to the developer to figure out what to do with it afterwards. This may serve as a basis for package management in the future.
+
+\\
+
+## [Git Dependencies]
+
+External git repositories are added to the project with the `externalDependencies` property at the root of chalet.json. With it, one can add a series of repositories, define what branch, tag or commit to clone the repo from, and then Chalet can lightly manage it from there. The `repository` property takes any valid git repository path.
+
+```json
+"externalDependencies": {
+    "foo-repo": {
+        "repository": "https://github.com/foo/foo.git"
+    },
+    "bar-repo": {
+        "repository": "https://my-website.io/bar/bar.git",
+		"commit": "2b74ae96d9649d26be9a3deea0862ac1ad29c19b"
+    }
+}
+```
+
+Chalet also supports repositories with submodules, via the `submodules` property.
+
+```json
+"foo-repo": {
+    "repository": "https://github.com/foo/foo.git",
+    "submodules": true
+}
+```
+
+To define a commit id, use the `commit` property, with must contain between 7 and 40 characters, pointing to a correct commit.
+
+```json
+"bar-repo": {
+    "repository": "https://my-website.io/bar/bar.git",
+    "commit": "2b74ae9"
+}
+```
+
+To define a tag, use the `tag` property with a valid tag:
+
+```json
+"bar-repo": {
+    "repository": "https://my-website.io/bar/bar.git",
+    "tag": "v4.2"
+}
+```
+
+To define a branch, use the `branch` property with a valid branch:
+
+```json
+"bar-repo": {
+    "repository": "https://my-website.io/bar/bar.git",
+    "branch": "v4.2"
+}
+```
+
+The `branch` & `commit` properties can also be combined:
+
+```json
+"bar-repo": {
+    "repository": "https://my-website.io/bar/bar.git",
+    "branch": "experimental",
+    "commit": "2b74ae9"
+}
+```
+
+If a repository only references the branch or doesn't use a branch, commit, or tag, then the repository will be updatable whenever newer commits are pushed to it. However, this update process is only done when one re-runs `chalet configure` since checking & updating the repos from the build commands can take extra time, and may unexpectedly break a build if a repository is unstable.
+
+\\
+
+## [The External Directory]
+
+Chalet uses a folder called `chalet_external` to store anything added with `externalDependencies`. It performs shallow clones of the repositories, does not store their git history, and keeps track of the given branch or ref separately in a central cache. It's expected that the code cloned down is managed elsewhere. The external directory can be changed via the `--external-dir` or `-e` command line option. Some might want to use `external` or `vendor` for instance if that makes more sense. 
+
+The directory can be referenced in chalet.json with the `${externalDir}` path substitution variable explained [in the next section](/creating-targets?id=path-substitution).
+
+The subfolder name of the cloned repository will always been the object node's name. For example, the following:
+
+```json
+"bar-repo": {
+    "repository": "https://my-website.io/bar/bar.git",
+    "tag": "v4.2"
+}
+```
+
+... will be cloned into `${externalDir}/bar-repo` (or `chalet_external/bar-repo`).
+
+\\
+
+## [Using Package Managers]
+
+At the moment, other package managers like [Conan](https://conan.io) and [vcpkg](https://vcpkg.io) can be integrated using [Script Targets](/creating-targets?id=script-targets), or they can invoked via CMake in [CMake Targets](/creating-targets?id=cmake-targets), but there is no official integration for them.
+
+<!-- nav:/getting-started:/creating-targets -->
