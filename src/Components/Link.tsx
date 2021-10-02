@@ -26,7 +26,7 @@ const Link = ({ children, dataId, onClick, ...props }: Props) => {
 			<Styles
 				className={
 					showActive &&
-					((dataId === undefined && asPath === href && focusedId === "") ||
+					((dataId === undefined && asPath === href && (focusedId === "" || asPath.endsWith(focusedId))) ||
 						(!!dataId && focusedId === dataId))
 						? "active"
 						: ""
@@ -34,7 +34,9 @@ const Link = ({ children, dataId, onClick, ...props }: Props) => {
 				target={targetBlank ? "_blank" : undefined}
 				data-id={dataId}
 				onClick={(ev) => {
-					setFocusedId(dataId ?? "");
+					if (!router.asPath.startsWith("/schema")) {
+						setFocusedId(dataId ?? "");
+					}
 					onClick?.(ev);
 				}}
 			>

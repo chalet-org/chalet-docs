@@ -18,7 +18,6 @@ type Props = {
 
 const PageNavigation = ({ left, right }: Props) => {
 	const router = useRouter();
-	const { setFocusedId } = useUiStore();
 	return (
 		<>
 			<PageBreak />

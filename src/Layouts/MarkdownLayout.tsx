@@ -1,5 +1,6 @@
 import debounce from "lodash/debounce";
 import { MDXRemote } from "next-mdx-remote";
+import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
@@ -41,12 +42,18 @@ type AnchorData = {
 const MarkdownLayout = ({ meta, mdx, children, ...navProps }: Props) => {
 	const { focusedId, setFocusedId, navOpen, heightNotifier } = useUiStore();
 	const pageLayout = useRef<HTMLDivElement>(null);
+	const router = useRouter();
 
 	useRouteChangeScroll();
 
 	const setFocusedLink = useCallback(
 		debounce(() => {
 			if (pageLayout.current === null) return;
+			if (router.asPath.startsWith("/schema")) {
+				// disable tracking on schema pages
+				setFocusedId("");
+				return;
+			}
 
 			const windowHeight = getWindowHeight();
 			const pageLayoutHeight = pageLayout.current.getBoundingClientRect().height ?? 0;
@@ -55,15 +62,11 @@ const MarkdownLayout = ({ meta, mdx, children, ...navProps }: Props) => {
 			const links = pageLayout.current.getElementsByTagName("a");
 
 			if (links.length > 1) {
-				let dataIdSet: boolean = false;
 				if (!!links) {
 					const firstLinkTop = links[0].offsetTop;
 
 					let arr: AnchorData[] = [];
 					for (let i = 0; i < links.length; ++i) {
-						// if (!isElementInViewport(links[i + 1])) {
-						// 	continue;
-						// }
 						const dataId = links[i].getAttribute("data-id");
 						if (!!dataId) {
 							arr.push({
@@ -81,17 +84,15 @@ const MarkdownLayout = ({ meta, mdx, children, ...navProps }: Props) => {
 
 						if (window.scrollY > firstLinkTop) {
 							if (nextTop - windowHeight * scrollPercent >= window.scrollY) {
-								dataIdSet = true;
 								setFocusedId(id);
 								return;
 							}
 						}
 					}
 				}
-				if (!dataIdSet && scrollPercent < 0.5) {
-					setFocusedId("");
-				}
 			}
+
+			setFocusedId("");
 		}, 10),
 		[pageLayout.current]
 	);

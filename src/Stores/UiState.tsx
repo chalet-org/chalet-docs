@@ -58,6 +58,7 @@ class UiState extends BaseState {
 	@Action
 	private setFocusedIdInternal = (inValue: string) => {
 		this.focusedId = inValue;
+		console.log(this.focusedId);
 	};
 
 	setFocusedId = (inValue: string) => {

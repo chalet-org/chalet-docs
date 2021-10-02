@@ -221,11 +221,11 @@ const NavGroup = styled.div`
 	}
 
 	> ul > li > ul > li > a {
-		padding-left: 2.5rem;
+		padding-left: 2.75rem;
 	}
 
 	> ul > li > ul > li > ul > li > a {
-		padding-left: 3rem;
+		padding-left: 3.5rem;
 	}
 
 	> ul > li > strong {
