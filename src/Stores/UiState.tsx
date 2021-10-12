@@ -10,7 +10,7 @@ class UiState extends BaseState {
 	theme: ThemeType = darkTheme;
 
 	navOpen: boolean = false;
-	navWidth: string = "20rem";
+	navWidth: string = "18rem";
 
 	focusedId: string = "examples";
 

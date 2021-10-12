@@ -31,13 +31,22 @@ Before building, you should have a C/C++ compiler chosen for your platform, and 
 **If using Visual Studio:**
 * In the VS Installer, Install C++ related components, but most importantly, the x64/x86 build tools (and optionally ARM, ARM64).
 * Also install the bundled CMake tools if you wish
-* If using a preview version of Visual Studio, use the following command in your project before building:
+* Use one of the following commands in your project before building:
 
 ```bash
-chalet configure --toolchain msvc-pre
+# To target a non-specific stable/preview version:
+chalet configure --toolchain vs-stable
+chalet configure --toolchain vs-preview 
+
+# To target specific VS versions:
+chalet configure --toolchain vs-2022
+chalet configure --toolchain vs-2019
+chalet configure --toolchain vs-2017
+
+# legacy: vs-2015 vs-2013 vs-2012 vs-2010
 ```
 
-Otherwise, chalet implicitly uses the `msvc` toolchain preset
+Otherwise, chalet implicitly uses the `vs-stable` toolchain preset. stable/preview can target future VS versions before Chalet officially supports them.
 
 > Note: Chalet uses [vswhere](https://github.com/microsoft/vswhere) to get the rest of the Visual Studio environment, so no Path environment variable changes are needed
 
@@ -119,7 +128,7 @@ sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
 sudo xcode-select -s /Library/Developer/CommandLineTools
 ```
 
-In both, running `which clang` should show `/usr/bin/clang` (although it actually resolves to the xcode-select path)
+In both, running `which clang` should show `/usr/bin/clang`, although it actually resolves to the xcode-select path.
 
 |Linux|
 **Install one of the following**
@@ -169,6 +178,16 @@ chalet set --global settings.toolchain llvm
 
 <!-- accordion:end -->
 
+<!-- accordion:start Tab Completion for Bash -->
+
+Each Chalet release should come with a `chalet-completion.sh` file. To use this on your machine, simply source the file from `~/.bash_profile` and restart your terminal instance. You can also run the source command from your terminal beforehand in order to test the tab completion.
+
+```bash
+source "(CHALET_PATH)/chalet-completion.sh"
+```
+
+<!-- accordion:end -->
+
 \\
 
 ## [Creating a Project]
@@ -202,7 +221,7 @@ During the build, Chalet uses a generated settings file, `.chaletrc`, to control
 
 **Toolchains**
 
-The toolchain refers to either a preset (`llvm` `apple-llvm` `gcc` `msvc` `msvc-pre`) or a custom name that resolves to a toolchain structure in the project settings. The preset will attempt to detect compiler toolchain executables add add them to settings. 
+The toolchain refers to either a preset (`llvm` `apple-llvm` `gcc` `vs-stable` `vs-preview`) or a custom name that resolves to a toolchain structure in the project settings. The preset will attempt to detect compiler toolchain executables add add them to settings. 
 
 Architecture will be described in more detail later, but in general, it does not need to be specified if you are compiling for your host architecture
 
@@ -212,11 +231,11 @@ The architecture is specified with either `--arch (name)` or `-a (name)`
 Here are some examples:
 
 ```bash
-chalet configure -t msvc -a x86 
-chalet configure -t msvc-pre -a x64
+chalet configure -t vs-stable -a x86 
+chalet configure -t vs-preview -a x64
 # Attempts to find the target architecture and creates the toolchain:
-# 'x64-pc-windows-msvc(version)' where 'version' is the detected 
-# MSVC version (or Preview version) - 16, 17, etc.
+# 'x64-pc-windows-msvc(version)' where 'version' is the one detected 
+# VS version (or Preview version) - 16, 17, etc.
 
 chalet configure -t gcc -a x86_64 
 # Attempts to find the target architecture (if MinGW) and creates the toolchain 'x86_64-gcc'
@@ -244,10 +263,11 @@ Release
 Debug
 MinSizeRel
 RelWithDebInfo
+RelStable
 Profile
 ```
 
-It uses the same names as CMake, specifically for familiarity. `Profile` is a special target that makes a build for profiling and attempts to launch a compatible profiler. In the Profile build of CMake build targets, `Debug` is used, while if custom build configurations are defined, a CMake compatible configuration will be deduced from its properties.
+The first four use the same names as CMake, specifically for familiarity. `Profile` is a special target that makes a build for profiling and attempts to launch a compatible profiler. In the Profile build of CMake build targets, `Debug` is used, while if custom build configurations are defined, a CMake compatible configuration will be deduced from its properties. For those familiar with optimization levels, `Release` uses `-O3` with link-time optimizations, while `RelStable` uses `-O2` and no link-time optimizations. `RelStable` is provided for builds where `-O3` and `-lto` do not make sense.
 
 During the configure step the `Release` build configuration will be chosen and configured in settings. If it's a new project, you'll typically want to go right to the `Debug` build, so the option to do that would simply be either `--configuration (name)` or `-c (name)`. If you want to do this in the configure step, the previous examples can be expanded upon with:
 

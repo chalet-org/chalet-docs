@@ -124,5 +124,9 @@ const AccordionContent = styled.div<ContentProps>`
 		margin-bottom: ${({ marginBottom }) => marginBottom}rem;
 		border: 0.0625rem dashed ${getCssVariable("Border")};
 		background-color: ${getCssVariable("BackgroundCode")};
+
+		> pre {
+			border: 0.0625rem solid ${getCssVariable("Background")};
+		}
 	}
 `;
