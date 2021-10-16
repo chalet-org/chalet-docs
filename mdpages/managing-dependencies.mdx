@@ -18,13 +18,13 @@ External git repositories are added to the project with the `externalDependencie
 
 ```json
 "externalDependencies": {
-    "foo-repo": {
-        "repository": "https://github.com/foo/foo.git"
-    },
-    "bar-repo": {
-        "repository": "https://my-website.io/bar/bar.git",
-		"commit": "2b74ae96d9649d26be9a3deea0862ac1ad29c19b"
-    }
+   "foo-repo": {
+      "repository": "https://github.com/foo/foo.git"
+   },
+   "bar-repo": {
+      "repository": "https://my-website.io/bar/bar.git",
+      "commit": "2b74ae96d9649d26be9a3deea0862ac1ad29c19b"
+   }
 }
 ```
 
@@ -32,8 +32,8 @@ Chalet also supports repositories with submodules, via the `submodules` property
 
 ```json
 "foo-repo": {
-    "repository": "https://github.com/foo/foo.git",
-    "submodules": true
+   "repository": "https://github.com/foo/foo.git",
+   "submodules": true
 }
 ```
 
@@ -41,8 +41,8 @@ To define a commit id, use the `commit` property, with must contain between 7 an
 
 ```json
 "bar-repo": {
-    "repository": "https://my-website.io/bar/bar.git",
-    "commit": "2b74ae9"
+   "repository": "https://my-website.io/bar/bar.git",
+   "commit": "2b74ae9"
 }
 ```
 
@@ -50,8 +50,8 @@ To define a tag, use the `tag` property with a valid tag:
 
 ```json
 "bar-repo": {
-    "repository": "https://my-website.io/bar/bar.git",
-    "tag": "v4.2"
+   "repository": "https://my-website.io/bar/bar.git",
+   "tag": "v4.2"
 }
 ```
 
@@ -59,8 +59,8 @@ To define a branch, use the `branch` property with a valid branch:
 
 ```json
 "bar-repo": {
-    "repository": "https://my-website.io/bar/bar.git",
-    "branch": "experimental"
+   "repository": "https://my-website.io/bar/bar.git",
+   "branch": "experimental"
 }
 ```
 
@@ -68,9 +68,9 @@ The `branch` & `commit` properties can also be combined:
 
 ```json
 "bar-repo": {
-    "repository": "https://my-website.io/bar/bar.git",
-    "branch": "experimental",
-    "commit": "2b74ae9"
+   "repository": "https://my-website.io/bar/bar.git",
+   "branch": "experimental",
+   "commit": "2b74ae9"
 }
 ```
 
@@ -88,8 +88,8 @@ The subfolder name of the cloned repository will always been the object node's n
 
 ```json
 "bar-repo": {
-    "repository": "https://my-website.io/bar/bar.git",
-    "tag": "v4.2"
+   "repository": "https://my-website.io/bar/bar.git",
+   "tag": "v4.2"
 }
 ```
 

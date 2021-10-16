@@ -8,6 +8,44 @@ title: Describing the Distribution
 
 The last thing that Chalet can help out with is to organize one's project for distribution. This implies different things on each operating system, but ultimately means copying built binaries, dependent shared libraries, and other files into some kind of folder structure meant for distribution.
 
-TODO
+\\
+
+## [A Basic Bundle]
+
+Like with targets, the `distribution` property takes named objects describing bundles, or individual parts of the final distribution.
+The `kind` property determines the rest of the structure, where it can be either `bundle` or `script`. Scripts work the same way as their target counterparts, but they're run at the time the distribution is made, so that one can do more with their distribution than what Chalet can offer.
+
+The command-line command to create the distribution is:
+
+```bash
+chalet bundle
+```
+
+Consider the following example:
+
+```json
+"distribution": {
+   "MyApp": {
+      "kind": "bundle",
+      "configuration": "Release",
+      "buildTargets": [
+          "shared-lib",
+          "my-executable"
+      ]
+   }
+}
+```
+
+In settings, Chalet has a "distributionDir" property (`-d` or `--distribution-dir` from the command line), that defines the root path for distribution targets, that defaults to `dist`. 
+
+`configuration` tells Chalet which build configuration to use for the bundle. In this case, it's `Release`, but if `configuration` is omitted, then `Release` will be chosen automatically (or if using custom configurations - a Release-like). If the chosen configuration hasn't been built yet, it will be built prior to bundling.
+
+`buildTargets` are an array of build target names to include in the bundle. In the above example, the output files of `shared-lib` `my-executable` are copied to `dist`. 
+
+> Note: the above is also true on MacOS - Application bundles are expressed differently, explained further down.
+
+
+
+
 
 <!-- nav:/creating-targets:/build-commands -->
