@@ -24,7 +24,7 @@ Before building, you should have a C/C++ compiler chosen for your platform, and 
 * [Visual Studio](https://visualstudio.microsoft.com/) (Recommended)
 * [LLVM](https://llvm.org/)
 * [MinGW-w64 via MSYS2](https://www.msys2.org/)
-* A standalone MinGW build (MinGW-w64 from Sourceforge, TDM-GCC, etc.) 
+* A standalone MinGW build (TDM-GCC, MinGW-w64 from Sourceforge, etc.) 
 
 \
 
@@ -62,7 +62,7 @@ chalet configure --toolchain llvm
 
 * Or to use LLVM by default with Chalet:
 ```bash
-chalet set --global settings.toolchain llvm
+chalet set --global options.toolchain llvm
 ```
 
 > Note: LLVM on Windows uses the Visual Studio ABI `x86_64-pc-windows-msvc` by default (and requires a Visual Studio installation anyway)
@@ -80,15 +80,22 @@ pacman -S mingw-w64-x86_64-toolchain mingw-w64-i686-toolchain
 
 * Check for GCC with `gcc --version`
 * Add `C:\msys64\mingw64\bin` to Path directly in Windows Environment Variables (not recommended) or create a .env file in your project to modify Path
-* Use the following command in your project before building:
+* Use one of the following commands in your project before building:
 
 ```bash
+# To use the same architecture as the host machine:
 chalet configure --toolchain gcc
+
+# To explicity use the 64 or 32-bit toolchains:
+chalet configure --toolchain x86_64-w64-mingw32-gcc
+chalet configure --toolchain i686-w64-mingw32-gcc
 ```
 
-* Or to use GCC by default with Chalet:
+* To use GCC by default with Chalet:
 ```bash
-chalet set --global settings.toolchain gcc
+chalet set --global options.toolchain gcc
+chalet set --global options.toolchain x86_64-w64-mingw32-gcc
+chalet set --global options.toolchain i686-w64-mingw32-gcc
 ```
 
 > Note: If both 32 and 64 version are installed, Chalet only needs one of the bin folders in path. It will reinterpret the path based on the requested architecture of the build.
@@ -100,6 +107,10 @@ chalet set --global settings.toolchain gcc
 **If using a standalone MinGW build:**
 * Install/extract it where you please. It is recommended to use sub-folders for 32-bit and 64-bit versions if compiling for both, and to use the convention `mingw32` and `mingw64` for those subfolder names
 * Add `(folder)\mingw64\bin` to Path directly in Windows Environment Variables (not recommended) or create a .env file in your project to modify Path
+* If you know the architecture triple used in the toolchain, you can configure chalet using that + '-gcc', or simply use `gcc`
+```bash
+chalet configure --toolchain gcc
+```
 
 > Note: If both 32 and 64 version are installed, Chalet only needs one of the bin folders in path. It will reinterpret the path based on the requested architecture of the build.
 
@@ -130,9 +141,19 @@ sudo xcode-select -s /Library/Developer/CommandLineTools
 
 In both, running `which clang` should show `/usr/bin/clang`, although it actually resolves to the xcode-select path.
 
+Configure Chalet with:
+```bash
+chalet configure --toolchain apple-llvm
+```
+
+\
+
+> Note: LLVM and GCC can also be used on Mac (both can be grabbed from Homebrew), but they are not recommended for any serious projects.
+
 |Linux|
 **Install one of the following**
 * Your distribution's compiler (typically GCC)
+* Any GCC cross-compiler (ie. arm-linux-gnueabihf)
 * [LLVM](https://llvm.org/)
 
 Every Linux build is going to be a little different, so this is more like a set of guidelines.
@@ -143,7 +164,17 @@ base-devel git cmake ninja gdb
 ```
 
 **If using GCC:**
-* Chalet will detect GCC by default, so nothing further should be necessary
+* Chalet will detect GCC by default, so nothing further should be necessary. Use the 'gcc' toolchain preset to explicitly request it, or the name of toolchain's target triple + '-gcc'
+
+```bash
+# To use the same architecture as the host machine:
+chalet configure --toolchain gcc
+
+# To explicity use a specific toolchain or cross-compiler:
+chalet configure --toolchain x86_64-linux-gnu-gcc
+chalet configure --toolchain i686-linux-gnu-gcc
+chalet configure --toolchain arm-linux-gnueabihf-gcc
+```
 
 **If using LLVM:**
 * Use the following command in your project before building:
@@ -153,7 +184,7 @@ chalet configure --toolchain llvm
 
 * Or to use LLVM by default with Chalet:
 ```bash
-chalet set --global settings.toolchain llvm
+chalet set --global options.toolchain llvm
 ```
 
 <!-- tabs:end -->
@@ -221,7 +252,7 @@ During the build, Chalet uses a generated settings file, `.chaletrc`, to control
 
 **Toolchains**
 
-The toolchain refers to either a preset (`llvm` `apple-llvm` `gcc` `vs-stable` `vs-preview`) or a custom name that resolves to a toolchain structure in the project settings. The preset will attempt to detect compiler toolchain executables add add them to settings. 
+The toolchain refers to either a preset (`llvm` `apple-llvm` `gcc` `vs-stable` `vs-preview`) or a custom name that resolves to a toolchain structure in the project settings file. A preset will attempt to detect compiler toolchain executables add add them to the settings file. 
 
 Architecture will be described in more detail later, but in general, it does not need to be specified if you are compiling for your host architecture
 
@@ -231,23 +262,32 @@ The architecture is specified with either `--arch (name)` or `-a (name)`
 Here are some examples:
 
 ```bash
-chalet configure -t vs-stable -a x86 
-chalet configure -t vs-preview -a x64
 # Attempts to find the target architecture and creates the toolchain:
 # 'x64-pc-windows-msvc(version)' where 'version' is the one detected 
 # VS version (or Preview version) - 16, 17, etc.
+chalet configure -t vs-stable -a x64 
+chalet configure -t vs-preview -a x64
+chalet configure -t vs-2022 -a arm64
+chalet configure -t vs-2019 -a x64
+chalet configure -t vs-2017 -a x86 
 
-chalet configure -t gcc -a x86_64 
-# Attempts to find the target architecture (if MinGW) and creates the toolchain 'x86_64-gcc'
-# since the version of GCC (and the target triple) do not get inferred (yet)
-
+# Creates the toolchain 'llvm' or 'apple-llvm' since Clang handles the architecture
 chalet configure -t llvm -a x86_64
+chalet configure -t apple-llvm -a x86_64 
+chalet configure -t apple-llvm -a arm64 
 chalet configure -t apple-llvm -a universal 
-# creates the toolchain 'llvm' or 'apple-llvm'
-# since Clang handles the architecture
 
+# "auto" explicity sets the output architecture to the host machine's architecture
 chalet configure -t llvm -a auto
-# "auto" explicity sets the output architecture to the build machine's architecture
+
+# Creates a generic GCC toolchain and attempts to find the version with the target architecture
+chalet configure -t gcc -a auto 
+
+# In most cases, just the toolchain with the full triple will suffice
+chalet configure -t x86_64-linux-gnu-gcc 
+chalet configure -t x86_64-x64-mingw32-gcc 
+chalet configure -t x86_64-apple-darwin20-gcc-11 
+
 ```
 
 > Note: In all cases, you can edit the generated toolchain name later

@@ -44,8 +44,123 @@ In settings, Chalet has a "distributionDir" property (`-d` or `--distribution-di
 
 > Note: the above is also true on MacOS - Application bundles are expressed differently, explained further down.
 
+\\
 
+## [The Main Executable]
 
+If a distribution target has a single executable defined in `buildTargets`, that will be considered the "main" executable used in platform-specific files like Info.plist on MacOS and Linux desktop entry files. If more than one executable is defined in the same distribution target, the first executable will be picked. However, to avoid this ambiguity, one can define the main executable target with the `mainExecutable` property.
 
+```json
+"MyApp": {
+   "mainExecutable": "my-executable",
+   "buildTargets": [
+      "my-other-executable",
+      "my-executable"
+   ]
+}
+```
+
+\\
+
+## [Subdirectories]
+
+One can specify a subdirectory to place the bundle with the `subdirectory` property.
+
+```json
+"distribution": {
+   "bin-dir": {
+      "subdirectory": "bin",
+      "buildTargets": [
+         "shared-lib",
+         "my-executable"
+      ]
+   },
+   "lib-dir": {
+      "subdirectory": "lib",
+       "buildTargets": [
+          "static-lib"
+      ]
+   }
+}
+```
+
+This would place the binaries for shared-lib and my-executable in `(distDir)/bin` and the output of static-lib in `(distDir)/lib`.
+
+\\
+
+## [Includes & Excludes]
+
+To include (or exclude) other files and folders, simply define the `include` or `exclude` arrays. These can also be defined with platform conditions. It is recommended to only define paths and files that are within the project directory. The paths in either array can also take glob patterns. These files and folders will be copied either directly into the distribution folder or into `(distDir)/(subdirectory)` if `subdirectory` is defined. If a folder is included, its subdirectories will be preserved.
+
+In MacOS application bundles, these includes will be placed in the `Resources` directory of the bundle structure.
+
+```json
+"MyApp": {
+   "include": [
+      "content"
+   ],
+   "exclude": [
+      "*.psd",
+      "Thumbs.db",
+      ".DS_Store"
+   ]
+}
+```
+
+\\
+
+## [Dependant Shared Libraries]
+
+By default, executables and shared libraries will be read for dependant shared libraries. If any are found in Path at the time of bundling, they will also be included (except for system libraries). This behavior can be controlled with the `includeDependentSharedLibraries` property. 
+
+```json
+"MyApp": {
+   "includeDependentSharedLibraries": false
+}
+```
+
+\\
+
+## [Bundle Descriptions]
+
+Like with build targets, distribution targets or script targets can be described via the `description` property.
+
+```json
+"MyApp": {
+   "description": "Bundling my application..."
+}
+```
+
+This would produce the header output:
+
+```
+▼  Bundling my application...
+```
+
+\\
+
+## [MacOS Properties]
+
+TODO
+
+\\
+
+## [Linux Properties]
+
+TODO
+
+\\
+
+## [Windows Properties]
+
+Since there isn't a standard way of distributing Windows applications, the only windows-specific property is `nsisScript`. This can provide the path to a Nullsoft installer script to run after bundling. This may get improved in the future.
+
+```json
+"MyApp": {
+   "windows": {
+      "nsisScript": "platform/windows/installer/install_script.nsi"
+   }
+}
+```
 
 <!-- nav:/creating-targets:/build-commands -->

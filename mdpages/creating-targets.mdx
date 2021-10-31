@@ -528,8 +528,9 @@ In MSVC, presets are interpreted as the warning level:
 * **extra** - Equivalent to `/W2`.
 * **pedantic** - Equivalent to `/W3`.
 * **error** - Equivalent to `/W3 /WX`. Warnings will be treated as errors.
-* **strict** & **strictPedantic** - Equivalent to `/W4 /WX`. Warnings will be treated as errors.
-* **veryStrict** - Equivalent to `/Wall /WX`. Warnings will be treated as errors.
+* **strict**, **strictPedantic** & **veryStrict**  - Equivalent to `/W4 /WX`. Warnings will be treated as errors.
+
+> Note: If you'd like to use /Wall, it must be added manually.
 
 > Note: These may change between some Chalet versions (probably not very often), as they have the potential to be pretty contentious. [Debate](//github.com/chalet-org/chalet-dev/discussions) is welcomed.
 
