@@ -52,7 +52,7 @@ First, simply with a root `abstracts` object:
 
 ```json
 "abstracts": {
-   "all": {},
+   "*": {},
    "minimal": {}
 }
 ```
@@ -61,7 +61,7 @@ Second, with a colon separating `abstracts` and the name of the abstract target:
 
 ```json
 // Possibly more desireable in small projects
-"abstracts:all": {},
+"abstracts:*": {},
 "abstracts:minimal": {}
 ```
 
@@ -97,23 +97,23 @@ An example of how abstracts could be used is if stricter warnings are desired on
 
 Another common situation is where one target needs to be compiled as C, while the rest as C++, or perhaps.
 
-`all` is a special abstract target that gets implicitly extended in all source targets. Therefore, there's no need to define `"extends": "all"` since it would be equivalent to not defining it.
+`*` is a special abstract target that gets implicitly extended in all source targets. Therefore, there's no need to define `"extends": "*"` since it would be equivalent to not defining it.
 
 ```json
-"abstracts:all": {},
+"abstracts:*": {},
 "targets": {
    "my-project": {
-      // "extends": "all"
+      // "extends": "*"
    }
 }
 ```
 
 \\
 
-Another way of writing the strict/minimal example, utilizing `all` would be:
+Another way of writing the strict/minimal example, utilizing `*` would be:
 
 ```json
-"abstracts:all": {
+"abstracts:*": {
    "settings:Cxx": {
       "warnings": "strict"
    }
@@ -452,6 +452,8 @@ Glob patterns are also supported for this reason, so one can include a directory
 
 This would ultimately come down to personal preference.
 
+See also: [Advanced: Fine Tuning](/creating-targets?id=advanced-fine-tuning)
+
 \\
 
 ## [Library Search Paths]
@@ -472,6 +474,8 @@ Example:
 ]
 ```
 
+See also: [Advanced: Fine Tuning](/creating-targets?id=advanced-fine-tuning)
+
 \\
 
 ## [Preprocessor Definitions]
@@ -481,7 +485,7 @@ These are preprocessor symbols to pass to the compiler **per target**. These are
 For example, in a debug build, you're probably going to want to define `DEBUG` or `_DEBUG` (this is not done for you).
 
 ```json
-"abstracts:all": {
+"abstracts:*": {
    "settings:Cxx": {
       "defines.debug": [
          "_DEBUG"
@@ -489,6 +493,8 @@ For example, in a debug build, you're probably going to want to define `DEBUG` o
    }
 }
 ```
+
+See also: [Advanced: Fine Tuning](/creating-targets?id=advanced-fine-tuning)
 
 \\
 
@@ -557,6 +563,7 @@ Warnings can be defined manually, as a list of their GNU names, minus the `-W` p
 
 In MSVC, warning flags will be cross-referenced based on how presets are defined above, so if "pedantic" is present in the list, the flag will be `/W3`. If "error" or any of the strict/veryStrict GNU names are present, `/WX` will get added.
 
+See also: [Advanced: Fine Tuning](/creating-targets?id=advanced-fine-tuning)
 
 \\
 
@@ -630,6 +637,8 @@ You might run into a situation where a library is only supported on a certain pl
    }
 ```
 
+See also: [Advanced: Fine Tuning](/creating-targets?id=advanced-fine-tuning)
+
 
 \\
 
@@ -652,6 +661,8 @@ Static links work the same way as shared, but use the `staticLinks` property ins
 ```
 
 The actual file being linked in that example is `libfirst-target-s.a`, but we only care about the target name here.
+
+See also: [Advanced: Fine Tuning](/creating-targets?id=advanced-fine-tuning)
 
 \
 
@@ -764,9 +775,47 @@ Example:
 
 \\
 
-## [Compile/Linker Options]
+## [Advanced: Fine Tuning]
 
-As a last resort, `compileOptions` and `linkerOptions` can pass certain options directly to the build at the time of a compilation unit's compile, or at link time. However, this ultimately limits which compilers can be used with your project, because property conditions aren't specific enough yet to target compilers and versions. As Chalet evolves, more options will be leveraged as properties, and the goal will be to reduce the need for this as much as possible, or also provide some kind of lightweight scripting. If you require a more refined build, you can certainly combine CMake with Chalet.
+**Per-toolchain properties**
+
+As a last resort, `compileOptions` and `linkerOptions` can pass certain options directly to the build at the time of a compilation unit's compile, or at link time. As Chalet evolves, more options will be leveraged as properties, and the goal will be to reduce the need for this as much as possible. Both of these properties take a single string of options. 
+
+These properties, in addition to `warnings`, `defines`, `links`, `staticLinks`, `includeDirs` and `libDirs` can also be defined _per compiler toolchain_. This is done by defining them as an object, followed by either the architecture triple or a toolchain name. Like with abstracts, the `*` property is applied to all. If both a matching target triple and a toolchain name are defined, the triple's is read first, followed by the toolchain name's values.
+
+If you require an even more refined build, you can certainly combine CMake with Chalet.
+
+> Note: This feature is still experimental and things may not work as expected
+
+```json
+"compileOptions": {
+   "arm-linux-gnueabihf": "...",
+   "arm64-apple-darwin": "...",
+   "x86_64-pc-windows-msvc": "..."
+}
+```
+
+```json
+"libDirs": {
+   "*": [
+      "${externalDir}/foo/lib",
+      "${externalDir}/bar/lib"
+   ],
+   "arm64-apple-darwin": [
+      "${externalDir}/vendor/macos/lib"
+   ],
+   "arm64-apple-darwin.debug": [
+      "${externalDir}/vendor/macos-debug/lib"
+   ],
+   "x86_64-pc-windows-msvc": [
+      "${externalDir}/vendor/msvc/lib"
+   ]
+}
+```
+
+> Note: `warnings` in this case is for defining specific warnings, not presets. 
+
+\
 
 **Linker Scripts**
 

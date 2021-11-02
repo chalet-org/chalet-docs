@@ -38,12 +38,10 @@ Before building, you should have a C/C++ compiler chosen for your platform, and 
 chalet configure --toolchain vs-stable
 chalet configure --toolchain vs-preview 
 
-# To target specific VS installations:
+# To target specific VS installations (>= 2017 until earlier ones can be tested):
 chalet configure --toolchain vs-2022
 chalet configure --toolchain vs-2019
 chalet configure --toolchain vs-2017
-
-# legacy: vs-2015 vs-2013 vs-2012 vs-2010
 ```
 
 Otherwise, chalet implicitly uses the `vs-stable` toolchain preset. stable/preview can target future VS versions before Chalet officially supports them.
@@ -263,8 +261,7 @@ Here are some examples:
 
 ```bash
 # Attempts to find the target architecture and creates the toolchain:
-# 'x64-pc-windows-msvc(version)' where 'version' is the one detected 
-# VS version (or Preview version) - 16, 17, etc.
+# 'x64-pc-windows-msvc(version)' where 'version' is the detected VS version (or Preview version) - 16, 17, etc.
 chalet configure -t vs-stable -a x64 
 chalet configure -t vs-preview -a x64
 chalet configure -t vs-2022 -a arm64
