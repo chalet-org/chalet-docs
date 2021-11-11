@@ -17,6 +17,10 @@ const getChaletTags = async (): Promise<string[]> => {
 		});
 
 		const result = await response.json();
+		if (!!result.message && !!result.documentation_url) {
+			return [];
+		}
+
 		const tags = reverse(result.map((ref: any) => (ref?.ref ?? "").split("/").pop()));
 
 		return tags;
