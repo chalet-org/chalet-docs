@@ -18,21 +18,22 @@ In addition to building your projects during the development process, Chalet has
 * Fetch & manage external git repositories based on commits, tags or branches
 * Integration with profiling tools - Instruments on macOS, gprof in Linux/MinGW
 * Support for cross-compiling
+* A wizard for generating new projects: `chalet init`
+* MSVC Support on Windows (Tested VS 2022/Preview, 2019 and 2017)
+* Full C++20 modules support with MSVC (requires version 19.28 or higher)
+* Apple clang: Objective-C/C++, universal binary (Intel & M1) support on macOS
+* Intel compiler support on Windows & macOS (new LLVM version on Windows, "Classic" on macOS)
 * CI support (tested with Github Actions)
+* Run scripts as build steps (so far: bash, powershell (Win/Core), Batch (Win), python, ruby, lua, perl)
 * Include other Chalet projects as build steps
 * Include [CMake](//cmake.org/) projects as build steps
-* Run scripts as build steps (so far: bash, powershell (Win/Core), Batch (Win), python, ruby, lua, perl)
-* A wizard for generating new projects: `chalet init`
 * CLI Commands for manipulating settings (ie. from the CI)
-* MSVC Support on Windows (VS 2019 & 2022 Preview versions currently)
-* Objective-C/C++ support on macOS
-* Universal binary support on macOS (Intel & M1)
-* A Visual Studio Code extension
 * Tab completion script for Bash
+* A Visual Studio Code extension
 
 <!-- accordion:start Future -->
 
-* Support for more compilers: Intel, CUDA, Emscripten to name a few
+* Support for more compilers: better Intel support, CUDA, Emscripten to name a few
 * iOS Support, which ultimately means working with the Swift compiler or Xcode in some way. There's partial support already
 * Android support
 * A "native" build strategy to optionally try instead of Make/Ninja

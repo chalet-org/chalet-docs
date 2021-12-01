@@ -51,6 +51,18 @@ Prism.languages.json = {
 	},
 };
 
+Prism.languages.ini = {
+	"chalet-value-substitution": {
+		pattern: /\$\{\b(\w+)\b\}/,
+		greedy: true,
+	},
+	"punctuation-semicolon": {
+		pattern: /;/,
+		greedy: true,
+	},
+	...(Prism.languages.ini as any),
+};
+
 type Props = React.PropsWithChildren<{
 	lang?: string;
 }>;
@@ -298,6 +310,24 @@ const codeCss = css<StyleProps>`
 	.language-json .token {
 		&.json-ellipsis {
 			color: ${getCssVariable("Gray")};
+		}
+	}
+
+	.language-ini .token {
+		&.section-name {
+			color: ${getCssVariable("Gray")};
+		}
+		&.punctuation-semicolon {
+			color: ${getCssVariable("Gray")};
+		}
+		&.key {
+			color: ${getCssVariable("Blue")};
+		}
+		&.value {
+			color: ${getCssVariable("White")};
+		}
+		&.chalet-value-substitution {
+			color: ${getCssVariable("Cyan")};
 		}
 	}
 

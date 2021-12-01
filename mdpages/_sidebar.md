@@ -7,6 +7,7 @@
 [](/build-commands)
 [](/the-settings-file)
 [](/other-commands)
+[](/further-reading)
 
 
 <!-- Other -->

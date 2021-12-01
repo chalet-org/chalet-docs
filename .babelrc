@@ -25,6 +25,7 @@
 					"javascript",
 					"typescript",
 					"yaml",
+					"ini",
 					"c",
 					"cpp"
 				],

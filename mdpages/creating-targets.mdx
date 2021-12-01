@@ -687,6 +687,48 @@ In LLVM, `staticLinking` just passes `-static-libsan` at the moment, and in MSVC
 
 \\
 
+## [C++ Modules]
+
+To enable modules (requires C++20 - currently only works with MSVC), set `cppModules` to true. This will treat **all** source files in that target location as modules. 
+
+```json
+"modules-target": {
+   "settings:Cxx": {
+      "cppModules": true
+   }
+}
+```
+
+If mixing with non-module C++ code, one must create a static library target without `cppModules`, import those headers in your module code, and statically link the non-modules target.
+
+```json
+"non-modules-target": {
+   "kind": "staticLibrary",
+   "location": "src/foo",
+   "settings:Cxx": {
+      "includeDirs": [
+         "include/foo"
+      ]
+   }
+},
+"modules-target": {
+   "location": "src/bar",
+   "settings:Cxx": {
+      "cppModules": true,
+      "includeDirs": [
+         "include/foo"
+      ],
+      "staticLinks": [
+         "non-modules-target"
+      ]
+   }
+}
+```
+
+Modules have a complicated build process compared to other C++ code, so they are built natively through Chalet, instead of using Ninja/Make. Fortunately, this is very fast, and comparable to doing so in msbuild/inside Visual Studio. Other build targets still use Ninja/Make. Because module source code file extensions can technically be anything in the same way as regular C++ code, it makes the most sense to separate out the two types of source code in the build.
+
+\\
+
 ## [Run Targets]
 
 If a target is runnable (kind is `executable` or `script`), one only needs to set `runTarget` to `true` in order to choose it as the target that gets run during `chalet buildrun` and `chalet run`. If more than one target has the `runTarget` property, or none have it, then the first runnable target is chosen.
