@@ -14,10 +14,12 @@ The philosophy behind Chalet projects is quite simple: Abstract away only what n
 
 By far the most important part of a Chalet project is its targets. Targets are defined in sequential order, and describe individual source compilation targets, CMake projects, other Chalet project, or scripts.
 
-* [Source Target](/schema/latest/executable-source-target) - A folder, set of folders, or files with compilation options
-* [Source Target](/schema/latest/chalet-target) - A subfolder that contains a separate chalet.json
-* [CMake Target](/schema/latest/cmake-target) - A subfolder that contains a CMakeLists.txt
-* [Script Target](/schema/latest/build-script-target) - A path to an individual script
+* Source Target - A folder, set of folders, or files with compilation options. Two types can be made:
+   * [Executable Source Target](/schema/latest/target-source-executable) - Describes an executable file to output
+   * [Library Source Target](/schema/latest/target-source-library) - Describes a static or shared library to output
+* [Chalet Target](/schema/latest/target-chalet) - A subfolder that contains a separate chalet.json
+* [CMake Target](/schema/latest/target-cmake) - A subfolder that contains a CMakeLists.txt
+* [Script Target](/schema/latest/target-script) - A path to an individual script to run
 
 ```json
 "targets": {

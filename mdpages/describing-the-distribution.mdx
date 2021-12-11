@@ -6,14 +6,20 @@ title: Describing the Distribution
 
 ---
 
-The last thing that Chalet can help out with is to organize one's project for distribution. This implies different things on each operating system, but ultimately means copying built binaries, dependent shared libraries, and other files into some kind of folder structure meant for distribution.
+Another thing that Chalet can help out with is to organize one's project for distribution. This implies different things on each operating system, but ultimately means copying built binaries, dependent shared libraries, and other files into some kind of folder structure or archive meant for distribution.
 
 \\
 
-## [A Basic Bundle]
+## [Distribution Types]
 
 Like with targets, the `distribution` property takes named objects describing bundles, or individual parts of the final distribution.
-The `kind` property determines the rest of the structure, where it can be either `bundle` or `script`. Scripts work the same way as their target counterparts, but they're run at the time the distribution is made, so that one can do more with their distribution than what Chalet can offer.
+They also take a `kind` property that tells Chalet how to proceed with each distribution. The current types are as follows:
+
+* [Bundle](/schema/latest/dist-bundle) - A group of files/folders, optionally defined by a subdirectory. On MacOS, this can be an app bundle
+* [Archive](/schema/latest/dist-archive) - Describes files/folders to include in a .zip archive
+* [Script](/schema/latest/dist-script) - A path to an individual script to run
+* [MacOS Disk Image](/schema/latest/dist-macos-disk-image) - Describes a MacOS DMG disk image to create
+* [Windows Nullsoft Installer](/schema/latest/dist-windows-nullsoft-installer) - Describes a Nullsoft installer to create for Windows applications
 
 The command-line command to create the distribution is:
 
@@ -21,7 +27,25 @@ The command-line command to create the distribution is:
 chalet bundle
 ```
 
-Consider the following example:
+Like with `build`, this will sequentially go through each distribution target and perform a given task that they describe. If a distribution target requires a certain build, these will be determined prior, and those builds will be run. Also like with build targets, distributions can be described via the `description` property:
+
+```json
+"MyApp": {
+   "description": "Bundling my application..."
+}
+```
+
+This would produce the header output:
+
+```
+▼  Bundling my application...
+```
+
+\\
+
+## [Bundles]
+
+A bundle distribution target describes a group of files and folders, and if you're familiar with MacOS, optionally an application bundle. Consider the following example:
 
 ```json
 "distribution": {
@@ -48,7 +72,7 @@ In settings, Chalet has a "distributionDir" property (`-d` or `--distribution-di
 
 ## [The Main Executable]
 
-If a distribution target has a single executable defined in `buildTargets`, that will be considered the "main" executable used in platform-specific files like Info.plist on MacOS and Linux desktop entry files. If more than one executable is defined in the same distribution target, the first executable will be picked. However, to avoid this ambiguity, one can define the main executable target with the `mainExecutable` property.
+If a distribution target has a single executable defined in `buildTargets`, it will be considered the "main" executable used in platform-specific files like Info.plist on MacOS. If more than one executable is defined in the same distribution target, the first executable will be picked. However, to avoid this ambiguity, one can define the main executable target with the `mainExecutable` property.
 
 ```json
 "MyApp": {
@@ -64,7 +88,7 @@ If a distribution target has a single executable defined in `buildTargets`, that
 
 ## [Subdirectories]
 
-One can specify a subdirectory to contain the distribution in with the `subdirectory` property.
+One can specify a subdirectory to contain the distribution inside of with the `subdirectory` property. For example, if the project produces a library, it can be delegated into a 'lib' folder:
 
 ```json
 "distribution": {
@@ -88,9 +112,21 @@ This would place the binaries for shared-lib and my-executable in `(distDir)/bin
 
 \\
 
+## [Dependant Shared Libraries]
+
+By default, executables and shared libraries will be read for dependant shared libraries. If any are found in Path at the time of bundling, they will also be included (except for system libraries). This behavior can be controlled with the `includeDependentSharedLibraries` property. 
+
+```json
+"MyApp": {
+   "includeDependentSharedLibraries": false
+}
+```
+
+\\
+
 ## [Includes & Excludes]
 
-To include (or exclude) other files and folders, simply define the `include` or `exclude` arrays. These can also be defined with platform conditions. It is recommended to only define paths and files that are within the project directory. The paths in either array can also take glob patterns. These files and folders will be copied either directly into the distribution folder or into `(distDir)/(subdirectory)` if `subdirectory` is defined. If a folder is included, its subdirectories will be preserved.
+To include (or exclude) other files and folders, simply define the `include` or `exclude` arrays. These can also be defined with platform conditions. It is recommended to only define paths and files that are within the project directory. The paths in either array can also take glob patterns. These files and folders will be copied directly into the distribution folder or into `(distDir)/(subdirectory)` if `subdirectory` is defined. If a folder is included, its subdirectories will be preserved.
 
 In MacOS application bundles, these includes will be placed in the `Resources` directory of the bundle structure.
 
@@ -109,76 +145,23 @@ In MacOS application bundles, these includes will be placed in the `Resources` d
 
 \\
 
-## [Dependant Shared Libraries]
+## [Linux Desktop Entries]
 
-By default, executables and shared libraries will be read for dependant shared libraries. If any are found in Path at the time of bundling, they will also be included (except for system libraries). This behavior can be controlled with the `includeDependentSharedLibraries` property. 
-
-```json
-"MyApp": {
-   "includeDependentSharedLibraries": false
-}
-```
-
-\\
-
-## [Bundle Descriptions]
-
-Like with build targets, distribution targets or script targets can be described via the `description` property.
+For Linux, Chalet can create a `.desktop` file for desktop environments that support the XDG Desktop Entry specification. These are basically your app shortcuts on those desktop environments. At the moment, they just point to the distribution directly, so it's obviously not portable. Anything further like moving the distribution elsewhere would require a script. To define a desktop entry, the `linuxDesktopEntry` object must be present, along with the `template` property.
 
 ```json
 "MyApp": {
-   "description": "Bundling my application..."
-}
-```
-
-This would produce the header output:
-
-```
-▼  Bundling my application...
-```
-
-\\
-
-## [Windows]
-
-Windows installers are a whole topic on their own, but at the moment on Windows, options are limited since additional executables are required.
-
-\
-
-**NSIS Installers**
-
-A [NSIS](https://nsis.sourceforge.io/Main_Page) installer can be created, based on a given `nsisScript` that is run after bundling (so any paths in dist will be resolved). This takes in a `.nsi` script and produces the output file defined by it.
-
-```json
-"MyApp": {
-   "windows": {
-      "nsisScript": "platform/windows/installer/install_script.nsi"
+   "kind": "bundle",
+   "linuxDesktopEntry": {
+      "template": "platform/linux/app.desktop",
+      "icon": "platform/linux/app-logo.png"
    }
 }
 ```
 
-\\
+The `icon` property points to a `.png` or `.svg` image of your choosing. For size: 256x256 is a safe bet. This icon gets copied to the distribution target's directory.
 
-## [Linux]
-
-Distributed applications on Linux can also vary wildly, but a couple use cases can be handled.
-
-\
-
-**XDG Desktop Entries**
-
-For Linux, Chalet can create a `.desktop` file for desktop environments that support the XDG Desktop Entry specification. These are basically your app shortcuts on those desktop environments. At the moment, they just point to the distribution directly, so it's obviously not portable. Anything further like moving the distribution elsewhere would require a script. To define a desktop entry, the `desktopEntry` and `icon` properties are required. `desktopEntry` points to the location of an input .desktop file. If one doesn't exist, it will be created. `icon` points to a `.png` or `.svg` image of your choosing. For size: 256x256 is a safe bet. This icon gets copied to the distribution target's directory.
-
-```json
-"MyApp": {
-   "linux": {
-      "icon": "platform/linux/app-logo.png",
-      "desktopEntry": "platform/linux/app.desktop"
-   }
-}
-```
-
-The contents of the desktop entry have a few special variables that get replaced during the bundle step. If the contents are as follows:
+`template` points to the location of an input .desktop file. If one doesn't exist, it will be created. Since it's considered a template, the contents of this file have a few special variables that get replaced during the bundle step. If the contents are as follows:
 
 ```ini
 [Desktop Entry]
@@ -193,44 +176,124 @@ Comment=
 Icon=${icon}
 ```
 
-* `${mainExecutable}`: The main executable, explained [here](/describing-the-distribution?id=the-main-executable)
+* `${name}`: The bundle's name, so in the examples above, this would be "MyApp"
 * `${path}`: The full path to the application bundle's directory (or subdirectory)
-* `${name}`: The bundle's named, so in the examples above, this would be "MyApp"
-* `${icon}`: The path to the icon. This ends up being the copy placed in the distribution target's folder.
+* `${mainExecutable}`: The main executable, explained [here](/describing-the-distribution?id=the-main-executable)
+* `${icon}`: The path to the icon. This ends up being the copy placed in the distribution target's folder
 
 \\
 
-## [MacOS]
+## [MacOS Bundles]
 
 In the MacOS world, bundles have an entirely different meaning, where applications are bundled into specific folder structures that the OS interprets in various ways. Out of these, Chalet currently just supports Application bundles (`.app`), but will hopefully support others in the future.
 
-By defining the `macos` property with a `bundleType`, the distribution target will be treated as that bundle type, managing includes & excludes differently.
+By defining the `macosBundle` property with a `type`, the distribution target will be treated as that bundle type, managing includes & excludes differently.
 
-\
+Application bundles are created with `"type": "app"`. Included files will be treated as Resources, with the exception of `.dylib` files, which will get copied into the bundle's `Frameworks` directory. Dependant frameworks themselves will be detected by the build targets that use them, and copied into the Frameworks directory separately, so that they don't have to be included manually.
 
-**Application Bundles**
-
-Application bundles are created with `"bundleType": "app"`. Included files will be treated as Resources, with the exception of `.dylib` files, which will get copied into the bundle's `Frameworks` directory. Dependant frameworks themselves will be detected by the build targets that use them, and copied into the Frameworks directory separately, so that they don't have to be included manually.
-
-The `icon` property defines an icon for the app. If a `.png` is defined, it will be converted to an `.icns` behind the scenes before being bundled. It can also be defined as an `.icns` to begin with and it will just be copied.
+The `icon` property defines an icon for the app. If a `.png` is defined, it will be converted to an `.icns` behind the scenes before being bundled. It can also be defined as an `.icns` to begin with and will simply be copied.
 
 ```json
 "MyApp": {
-   "macos": {
-      "bundleType": "app",
-      "icon": "platform/macos/app-logo.png",
+   "kind": "bundle",
+   "macosBundle": {
+      "type": "app",
       "infoPropertyList": "platform/macos/Info.plist.json",
-      "dmg": {
-         "background": {
-            "1x": "platform/macos/dmg-background.png",
-            "2x": "platform/macos/dmg-background@2x.png"
-         }
+      "icon": "platform/macos/app-logo.png"
+   }
+}
+```
+
+The `infoPropertyList` defines an Information Property List for the bundle. It can take multiple values, such as a static `.plist` file, a `.json` file containing the data normally in a `.plist`, or this data can be inlined directly into the chalet.json file. If using either json route, one can use special variables that get resolved at the time of bundling (like with linux desktop entries). They are as follows:
+
+* `${name}`: The bundle's name, so in the examples above, this would be "MyApp"
+* `${bundleName}`: The first 15 characters of ${name}, specifically used for [CFBundleName](https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundlename)
+* `${mainExecutable}`: The main executable, explained [here](/describing-the-distribution?id=the-main-executable)
+* `${icon}`: The path to the icon. This ends up being the .icns created/copied in the distribution target's folder
+
+**Code Signing**
+
+On Mac, the `signingIdentity` defined in Chalet's options is used as the identity during code signing. If it's blank, nothing will be signed, and Chalet will issue a warning. If it's filled in with a valid identity or hash, Both `macosBundle` types and plain bundles will be signed.
+
+Notarization is not done at all. You will need to do that through a script.
+
+> Note: This feature is still a work in-progress - Signing is a bit slow, but it works.
+
+\\
+
+## [Scripts]
+
+Scripts work the same way as their target counterparts, but they're run at the time the distribution is made, so that one can do more with their distribution than what Chalet can offer.
+
+```json
+"post-bundle": {
+   "kind": "script",
+   "script": "scripts/my_script.sh"
+}
+```
+
+\\
+
+## [Archives]
+
+Zip archives
+
+```json
+"MyApp-archive": {
+   "kind": "archive",
+   "include": "*"
+}
+```
+
+\\
+
+## [MacOS Disk Images]
+
+DMG images
+
+```json
+"post-bundle": {
+   "kind": "macosDiskImage",
+   "pathbarVisible": false,
+   "textSize": 12,
+   "iconSize": 80,
+   "background": {
+      "1x": "platform/macos/dmg-background.png",
+      "2x": "platform/macos/dmg-background@2x.png"
+   },
+   "size": {
+      "width": 512,
+      "height": 342
+   },
+   "positions": {
+      "MyApp": {
+         "x": 120,
+         "y": 188
+      },
+      "Applications": {
+         "x": 392,
+         "y": 188
       }
    }
 }
 ```
 
-The `infoPropertyList` defines an Information Property List for the bundle. It can take multiple values, such as a `.plist` file, a `.json` file containing the data normally in a `.plist`, or this data can be inlined directly into the chalet.json file. If the 
+\\
 
+## [Windows Nullsoft Installers]
+
+**NSIS Installers**
+
+A [NSIS](https://nsis.sourceforge.io/Main_Page) installer can be created, based on a given `nsisScript` that is run after bundling (so any paths in dist will be resolved). This takes in a `.nsi` script and produces the output file defined by it.
+
+```json
+"MyApp-installer": {
+   "kind": "windowsNullsoftInstaller",
+   "nsisScript": "windowsInstaller/install_script.nsi",
+   "pluginDirs": [
+      "windowsInstaller/plugins"
+   ]
+}
+```
 
 <!-- nav:/creating-targets:/build-commands -->

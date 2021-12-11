@@ -51,7 +51,7 @@ const jsonNodeToMarkdown = (
 				if (value["type"] && value["type"] !== "object" && value["type"] !== undefined) return "";
 
 				let displayName = definitionName.split("-").pop() ?? "";
-				displayName = displayName.charAt(0).toUpperCase() + displayName.substr(1);
+				displayName = displayName.charAt(0).toUpperCase() + displayName.substring(1);
 				return `<!-- ${displayName}:definition=${key} -->\n\n`;
 			})
 			.join("");*/

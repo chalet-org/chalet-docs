@@ -71,7 +71,7 @@ const parseTabs = (text: string): string => {
 		(match: string, p1: string, p2: string) => {
 			p1 = trimLineBreaksFromEdges(p1);
 
-			if (p1.startsWith("|")) p1 = p1.substr(1);
+			if (p1.startsWith("|")) p1 = p1.substring(1);
 
 			const tabArray = p1.replace(/(\n{1,3}\||\|\n{1,3})/g, "|").split("|");
 			if (tabArray.length % 2 == 1) return "";
@@ -221,7 +221,7 @@ const parseChangelog = async (inText: string): Promise<string> => {
 					const commit = p1.split("/").pop();
 					if (!commit) return p1;
 
-					return `([${commit?.substr(0, 7)}](${p1}))`;
+					return `([${commit?.substring(0, 7)}](${p1}))`;
 				});
 				text = text.replace(/\[issue\]\((.+?)\)/g, (result: string, p1: string) => {
 					const issue = p1.split("/").pop();
@@ -280,8 +280,12 @@ const parseSchemaDefinition = async (
 			if (!!schema) {
 				const definitions = schema["definitions"] as Dictionary<JSONSchema7> | undefined;
 
+				if (definitions === undefined || definitions[definition] === undefined) {
+					throw new Error(`Schema not found: ${definition}`);
+				}
+
 				result += `#### [${toPascalCase(definition)}]\n\n`;
-				result += jsonNodeToMarkdown(null, `${slug}/${branch}`, definitions?.[definition] ?? null, definitions);
+				result += jsonNodeToMarkdown(null, `${slug}/${branch}`, definitions[definition], definitions);
 				/*result += `\`\`\`json
 ${JSON.stringify(definitions?.[definition] ?? {}, undefined, 3)}
 \`\`\`\n\n`;*/

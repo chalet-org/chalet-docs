@@ -123,7 +123,7 @@ const getSidebarLinks = async (): Promise<SidebarResult[]> => {
 			if (line.startsWith("<!--")) continue;
 
 			if (line.startsWith(":")) {
-				result.push(line.substr(1));
+				result.push(line.substring(1));
 			} else if (line.startsWith("[")) {
 				let matches = line.match(/^\[\]\((.+?)\)$/);
 				if (!!matches && matches.length === 2) {
@@ -202,7 +202,11 @@ const getMdxPage = async (
 			mdx,
 		};
 	} catch (err: any) {
-		throw err;
+		try {
+			return await getNotFoundPage();
+		} catch (e: any) {
+			throw e;
+		}
 	}
 };
 

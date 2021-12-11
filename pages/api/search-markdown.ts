@@ -22,7 +22,7 @@ const getSearchResults = (search: string, pages: PageCache[], resultLength: numb
 				result.push({
 					url: page.url,
 					title: page.title,
-					text: outputText ? inText.substr(lastPosition, search.length + resultLength).split("\n")[0] : "",
+					text: outputText ? inText.substring(lastPosition, search.length + resultLength).split("\n")[0] : "",
 				});
 				lastPosition += search.length;
 			}
