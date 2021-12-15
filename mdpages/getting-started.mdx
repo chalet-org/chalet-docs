@@ -238,6 +238,12 @@ chalet init
 
 You'll be shown a wizard that will guide you the rest of the way, creating a simple "Hello World" project, a chalet.json, and optionally a git repository. In the last step, you'll be asked to configure the project.
 
+Additionally, you can initialize a Chalet+CMake project with the following command:
+
+```bash
+chalet init --template cmake
+```
+
 \\
 
 ## [Settings Overview]
@@ -250,80 +256,110 @@ During the build, Chalet uses a generated settings file, `.chaletrc`, to control
 
 **Toolchains**
 
-The toolchain refers to either a preset (`llvm` `apple-llvm` `gcc` `vs-stable` `vs-preview`) or a custom name that resolves to a toolchain structure in the project settings file. A preset will attempt to detect compiler toolchain executables add add them to the settings file. 
-
-Architecture will be described in more detail later, but in general, it does not need to be specified if you are compiling for your host architecture
+The toolchain refers to either a preset (`llvm` `apple-llvm` `gcc` `vs-stable` `vs-preview`) or a custom name that resolves to a toolchain structure in the project settings file. A preset will attempt to detect the executables for the requested toolchain (if they're found in Path) and add them to the settings file. 
 
 The toolchain is specified with either `--toolchain (name)` or `-t (name)`
-The architecture is specified with either `--arch (name)` or `-a (name)`
+The architecture is specified with either `--arch (name)` or `-a (name)`.  Architectures will be described in more detail later, but in general, it does not need to be specified if you are compiling for your host architecture. `-a auto` explicity sets the output architecture to the host machine's.
 
-Here are some examples:
+<!-- tabs:start -->
+|MSVC|
 
 ```bash
-# Attempts to find the target architecture and creates the toolchain:
-# 'x64-pc-windows-msvc(version)' where 'version' is the detected VS version (or Preview version) - 16, 17, etc.
 chalet configure -t vs-stable -a x64 
 chalet configure -t vs-preview -a x64
 chalet configure -t vs-2022 -a arm64
 chalet configure -t vs-2019 -a x64
 chalet configure -t vs-2017 -a x86 
+```
 
-# Creates the toolchain 'llvm' or 'apple-llvm' since Clang handles the architecture
+These attempt to find the target architecture and create the toolchain: '(arch)-pc-windows-msvc(version)' where 'version' is the detected VS version (or Preview version) - 16, 17, etc.
+
+```bash
+chalet configure -t vs-stable -a auto
+```
+
+This uses the latest non-preview version of MSVC, attempts to detect it, and uses the machine's host architecture.
+
+|LLVM|
+
+```bash
 chalet configure -t llvm -a x86_64
 chalet configure -t apple-llvm -a x86_64 
 chalet configure -t apple-llvm -a arm64 
 chalet configure -t apple-llvm -a universal 
-
-# "auto" explicity sets the output architecture to the host machine's architecture
-chalet configure -t llvm -a auto
-
-# Creates a generic GCC toolchain and attempts to find the version with the target architecture
-chalet configure -t gcc -a auto 
-
-# In most cases, just the toolchain with the full triple will suffice
-chalet configure -t x86_64-linux-gnu-gcc 
-chalet configure -t x86_64-x64-mingw32-gcc 
-chalet configure -t x86_64-apple-darwin20-gcc-11 
-
 ```
 
-> Note: In all cases, you can edit the generated toolchain name later
+These create the toolchain 'llvm' or 'apple-llvm' since Clang handles the architecture itself. 
+
+```bash
+chalet configure -t llvm -a auto
+```
+
+This detects LLVM from path and uses the machine's host architecture.
+
+|GCC|
+
+GCC works a little differently from the others. In situations where there is no cross compiler installed, the following will suffice:
+
+```bash
+chalet configure -t gcc -a auto
+```
+
+For cross compilers, since there is a 1:1 relationship between the version of GCC and the architecture it was built for: Chalet can detect the correct versions of GCC using the literal filename to the "gcc" you want. For example:
+
+```bash
+chalet configure -t x86_64-linux-gnu-gcc
+chalet configure -t x86_64-x64-mingw32-gcc
+chalet configure -t gcc-11 
+```
+
+|Intel|
+
+Intel support is experimental, but this is the way to get started:
+
+**Intel LLVM w/ a Visual Studio 2019 Environment (Windows):**
+```bash
+chalet configure -t intel-llvm-vs-2019
+```
+
+**Intel Classic (MacOS):**
+
+```bash
+chalet configure -t intel-classic -a auto build
+```
+
+
+<!-- tabs:end -->
+
+> Note: In all cases, you can edit the generated toolchain name, and refine paths to executables later, and save them for use globally.
 
 \
 
-**Build configurations**
+**Build Configurations**
 
-By default, Chalet has 5 build configurations: 
+There are a handful of default build configurations, but by far, the most common are `Release` and `Debug`. If new to C++, `Debug` implies there are no optimizations done, and the build will be used alongside a debugger, while `Release` performs optimizations (within reason) for a released application.
 
-```
-Release
-Debug
-MinSizeRel
-RelWithDebInfo
-RelStable
-Profile
-```
-
-The first four use the same names as CMake, specifically for familiarity. `Profile` is a special target that makes a build for profiling and attempts to launch a compatible profiler. In the Profile build of CMake build targets, `Debug` is used, while if custom build configurations are defined, a CMake compatible configuration will be deduced from its properties. For those familiar with optimization levels, `Release` uses `-O3` with link-time optimizations, while `RelStable` uses `-O2` and no link-time optimizations. `RelStable` is provided for builds where `-O3` and `-lto` do not make sense.
-
-During the configure step the `Release` build configuration will be chosen and configured in settings. If it's a new project, you'll typically want to go right to the `Debug` build, so the option to do that would simply be either `--configuration (name)` or `-c (name)`. If you want to do this in the configure step, the previous examples can be expanded upon with:
+During the configure step the `Release` build configuration will be chosen and configured in settings. If it's a new project, `Debug` will be more desireable. To select the configuration you want to use for the command, simply add `--configuration (name)` or `-c (name)`. For example:
 
 ```bash
 chalet configure -c Debug -t llvm -a auto
 ```
 
-> Note: Build configurations can be customized by defining a `configurations` structure in `chalet.json` with either a list of new configuration objects, or a string list that limits the default ones (for example, to just `Release` and `Debug`)
+> Note: Build configurations can be customized by defining a `configurations` structure in `chalet.json` with either a list of new configuration objects, or `defaultConfigurations`, a string list that limits the default ones (for example, to just `Release` and `Debug`)
 
 \\
 
 ## [The First Build]
 
 Create that first build with:
+
 ```bash
-chalet build
+chalet buildrun
 ```
 
-If the output directory is `build`, this will generate a build of the project into the folder `build/(id)_(configuration)` where `id` is a either the target triple or the toolchain name. The subfolder can also be customized to just the configuration.
+This will build the application, and run it immediately.
+
+If the output directory is `build`, this will generate a build of the project into the folder `build/(id)_(configuration)` where `id` is a either the target triple or the toolchain name. The subfolder can also be customized to just the configuration if that makes for an easier workflow.
 
 The following commands rely on the build configuration in settings:
 
@@ -335,16 +371,21 @@ chalet rebuild
 chalet clean 
 ```
 
-The `buildrun` & `run` commands can also take the target you want to run afterwards (including its arguments). Therefore, if multiple executables are built, and one wants to run a target called "my-tests", a target that is not the default run target, one can use:
+The `buildrun` & `run` commands can also take the target you want to run afterwards (including its arguments). Therefore, if multiple executables are built, and one wants to run a target called "my-tests", one can use any of the following.
+
+No arguments:
 ```bash
 chalet buildrun my-tests
-# No arguments
+```
 
+Remaining arguments after the executable target will be passed to the executable:
+```bash
 chalet buildrun my-tests -w NoTests -s
-# Remaining arguments after the executable target will be passed to the executable
+```
 
+A single string argument will be parsed and passed to the executable as separate arguments:
+```bash
 chalet run my-tests '-w NoTests -s'
-# A single string argument will be parsed and passed to the executable as separate arguments
 ``` 
 
 <!-- nav:/:/managing-dependencies -->

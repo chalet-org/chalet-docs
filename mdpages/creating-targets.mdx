@@ -867,44 +867,20 @@ At the moment, this is just supported with GCC & Clang, but you can supply a lin
 
 \\
 
-## [Script Targets]
+## [Chalet Targets]
 
-Script targets are quite simple. They are triggered by setting the `kind` property to `script`. In addition to the `condition` and `description` properties, they only take a `script` property (that can also be suffixed with a property condition.
+Chalet targets are like saying "I have a Chalet project in a separate repository and want it to build during this project's build."  This is a feature that may not get a lot of use in these early days, but could serve as a foundation for package management in the future. One would want to combine this feature with `externalDependencies`, which would pull down a git repository prior to building.
 
-The following file extensions are supported:
-* `.sh` - Bash / Unix shell
-* `.bat` - Windows Batch
-* `.ps1` - Powershell ([Powershell Core](https://github.com/PowerShell/PowerShell) is also supported on non-windows)
-* `.py` - Python
-* `.rb` - Ruby
-* `.pl` - Perl
-* `.lua` - Lua
+To build another Chalet project, set `kind` to `chaletProject`, and define the `location` as the directory where the `chalet.json` of the project exists. If using a custom build file name, you can specify it with `buildFile`. This is a path relative to the location, so by default its value is `chalet.json`.
 
-Portable shebangs — `#!/usr/bin/env (executable)` — are supported with any extension.
-
-The following examples are all valid:
+The only other property is `recheck` which if true, will check the project for changes each time a build is run. If not defined, this will default to `true`. Setting this to false by nature would speed up rebuilds because chalet wouldn't need to be invoked after the target has already been built once.
 
 ```json
-"my-first-script": {
-   "kind": "script",
-   "description": "The very first script",
-   "script.!windows": "scripts/script.sh",
-   "script.windows": "scripts/script.bat",
-}
-"my-second-script": {
-   "kind": "script",
-   "condition": "windows",
-   "script.debug": "scripts/script_Debug.bat",
-   "script.!debug": "scripts/script_Release.bat"
-}
-"my-second-script": {
-   "kind": "script",
-   "condition": "windows",
-   "script": "scripts/script.ps1"
-}
-"my-third-script": {
-   "kind": "script",
-   "script": "scripts/script.py"
+"my-chalet-target": {
+   "kind": "chaletProject",
+   "condition": "!windows",
+   "location": "${externalDir}/bar",
+   "recheck": false
 }
 ```
 
@@ -951,20 +927,44 @@ Chalet will attempt to add appropriate cache entries with `-D` based on its own 
 
 \\
 
-## [Chalet Targets]
+## [Script Targets]
 
-Chalet targets are like saying "I have a Chalet project in a separate repository and want it to build during this project's build."  This is a feature that may not get a lot of use in these early days, but could serve as a foundation for package management in the future. One would want to combine this feature with `externalDependencies`, which would pull down a git repository prior to building.
+Script targets are quite simple. They are triggered by setting the `kind` property to `script`. In addition to the `condition` and `description` properties, they only take a `script` property (that can also be suffixed with a property condition.
 
-To build another Chalet project, set `kind` to `chaletProject`, and define the `location` as the directory where the `chalet.json` of the project exists. If using a custom build file name, you can specify it with `buildFile`. This is a path relative to the location, so by default its value is `chalet.json`.
+The following file extensions are supported:
+* `.sh` - Bash / Unix shell
+* `.bat` - Windows Batch
+* `.ps1` - Powershell ([Powershell Core](https://github.com/PowerShell/PowerShell) is also supported on non-windows)
+* `.py` - Python
+* `.rb` - Ruby
+* `.pl` - Perl
+* `.lua` - Lua
 
-The only other property is `recheck` which if true, will check the project for changes each time a build is run. If not defined, this will default to `true`. Setting this to false by nature would speed up rebuilds because chalet wouldn't need to be invoked after the target has already been built once.
+Portable shebangs — `#!/usr/bin/env (executable)` — are supported with any extension.
+
+The following examples are all valid:
 
 ```json
-"my-chalet-target": {
-   "kind": "chaletProject",
-   "condition": "!windows",
-   "location": "${externalDir}/bar",
-   "recheck": false
+"my-first-script": {
+   "kind": "script",
+   "description": "The very first script",
+   "script.!windows": "scripts/script.sh",
+   "script.windows": "scripts/script.bat",
+}
+"my-second-script": {
+   "kind": "script",
+   "condition": "windows",
+   "script.debug": "scripts/script_Debug.bat",
+   "script.!debug": "scripts/script_Release.bat"
+}
+"my-second-script": {
+   "kind": "script",
+   "condition": "windows",
+   "script": "scripts/script.ps1"
+}
+"my-third-script": {
+   "kind": "script",
+   "script": "scripts/script.py"
 }
 ```
 

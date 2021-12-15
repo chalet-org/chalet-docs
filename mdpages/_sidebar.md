@@ -4,9 +4,8 @@
 [](/managing-dependencies)
 [](/creating-targets)
 [](/describing-the-distribution)
-[](/build-commands)
+[](/command-line)
 [](/the-settings-file)
-[](/other-commands)
 [](/further-reading)
 
 

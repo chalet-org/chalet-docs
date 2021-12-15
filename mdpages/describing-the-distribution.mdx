@@ -41,6 +41,18 @@ This would produce the header output:
 ▼  Bundling my application...
 ```
 
+\
+
+**Excluding Distribution Targets**
+
+Distribution targets can be excluded with the `condition` property, but only take the platform.
+
+```json
+"some-target": {
+   "condition": "windows"
+}
+```
+
 \\
 
 ## [Bundles]
@@ -223,7 +235,7 @@ Notarization is not done at all. You will need to do that through a script.
 
 ## [Scripts]
 
-Scripts work the same way as their target counterparts, but they're run at the time the distribution is made, so that one can do more with their distribution than what Chalet can offer.
+Scripts work the same way as their target counterparts, so that one can do more with their distribution than what Chalet can offer. Refining the structure of the distribution folder, running additional programs, and generating generating additional files can be easily accomplished this way. To get started, set kind to `script`, followed by path to the script added in the `script` property. For further details, refer back to [here](/creating-targets?id=script-targets).
 
 ```json
 "post-bundle": {
@@ -236,7 +248,19 @@ Scripts work the same way as their target counterparts, but they're run at the t
 
 ## [Archives]
 
-Zip archives
+Chalet can also generate zip archives as a distribution step with kind set to `archive`. The `include` property includes files relative to the distribution directory. If `"*"` is specified instead of an array, all files in the distribution directory up to that archive target will be included.
+
+```json
+"MyApp-archive": {
+   "kind": "archive",
+   "condition": "windows",
+   "include": [
+      "my-installer.exe",
+      "LICENSE.txt"
+      "README.md"
+   ]
+}
+```
 
 ```json
 "MyApp-archive": {
@@ -245,11 +269,16 @@ Zip archives
 }
 ```
 
+> Note: This is equivalent to running `zip` in the command line on Linux/Mac, and Powershell's `Compress-Archive` on Windows.
+
 \\
 
 ## [MacOS Disk Images]
 
-DMG images
+On MacOS, it's very common to distribute an application bundle inside of a DMG. Chalet provides a nice abstraction to do this with. Simply set the kind to `macosDiskImage` and provide some details about the image itself. The DMG always uses the "icon" view
+
+Instead of defining "includes" like with bundles or archives, the `positions` imply two things: the application bundles or files to include in the DMG, and the position to display them at in the DMG image. Use only files that have been copied to the dist folder in a previous distribution target.
+
 
 ```json
 "post-bundle": {
@@ -282,9 +311,7 @@ DMG images
 
 ## [Windows Nullsoft Installers]
 
-**NSIS Installers**
-
-A [NSIS](https://nsis.sourceforge.io/Main_Page) installer can be created, based on a given `nsisScript` that is run after bundling (so any paths in dist will be resolved). This takes in a `.nsi` script and produces the output file defined by it.
+A [NSIS](https://nsis.sourceforge.io/Main_Page) installer can be created, given a distribution target of the kind `windowsNullsoftInstaller`. This takes a given `nsisScript`. This takes in a `.nsi` script and produces the output installer executable that's defined by it. Additional `pluginDirs` can also be defined if the installer script requires additional plugins. As usual, these should be relative paths, but if familiar with NSIS plugins, these paths can contain a `Plugins` folder itself, along with the inner `amd64-unicode`, `x86-ansi`, and `x86-unicode` folders, and Chalet will resolve them.
 
 ```json
 "MyApp-installer": {
@@ -296,4 +323,4 @@ A [NSIS](https://nsis.sourceforge.io/Main_Page) installer can be created, based 
 }
 ```
 
-<!-- nav:/creating-targets:/build-commands -->
+<!-- nav:/creating-targets:/command-line -->
