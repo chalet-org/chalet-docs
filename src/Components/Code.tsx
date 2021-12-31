@@ -271,17 +271,13 @@ const codeCss = css<StyleProps>`
 	}
 
 	.language-cpp .token {
-		&.directive-hash {
-			color: ${getCssVariable("Gray")};
+		&.directive-hash,
+		&.directive.keyword {
+			color: ${getCssVariable("Magenta")};
 			font-weight: 400;
 
-			+ .directive.keyword {
-				color: ${getCssVariable("Gray")};
-				font-weight: 400;
-
-				+ .string {
-					color: ${getCssVariable("Magenta")};
-				}
+			+ .string {
+				color: ${getCssVariable("Magenta")};
 			}
 		}
 	}

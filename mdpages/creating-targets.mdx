@@ -19,13 +19,14 @@ By far the most important part of a Chalet project is its targets. Targets are d
    * [Library Source Target](/schema/latest/target-source-library) - Describes a static or shared library to output
 * [Chalet Target](/schema/latest/target-chalet) - A subfolder that contains a separate chalet.json
 * [CMake Target](/schema/latest/target-cmake) - A subfolder that contains a CMakeLists.txt
-* [Script Target](/schema/latest/target-script) - A path to an individual script to run
+* [Script Target](/schema/latest/target-script) - An individual script to run
+* [Process Target](/schema/latest/target-process) - A single process with arguments to run
 
 ```json
 "targets": {
    "first": {
       "kind": "executable",
-      "location": "src/first"
+      "files": "src/first/**.cpp"
    },
    "second": {
       "kind": "cmakeProject",
@@ -35,22 +36,29 @@ By far the most important part of a Chalet project is its targets. Targets are d
       "kind": "chaletProject",
       "location": "vendor/third"
    },
+   "fourth": {
+      "kind": "process",
+      "path": "myexec",
+      "arguments": [
+         "--foo"
+      ]
+   },
    "post-build": {
       "kind": "script",
-      "script": "scripts/post-build.py"
+      "file": "scripts/post-build.py"
    }
 }
 ```
 
-With this approach, external dependencies can be pulled in from other sources like git, placed wherever we need them, and built as closely as possible to the rest of the project without necessarily having to write extra scripts. Chalet can orchestrate some of that work for you, in addition to just building your own source code. 
+With this approach, external dependencies can be pulled in from other sources like git, placed wherever we need them, and built as closely as possible to the rest of the project without necessarily having to write extra scripts. Chalet can orchestrate that work for you, in addition to simply building your own source code. 
 
 \\
 
 ## [Abstract Targets]
 
-Abstracts are source targets that do not build by themselves, and instead get extended in source targets. For example, if there are two different source targets that both require the same compilation options, one can write them out twice, but that wouldn't be very programmatic. The solution for this is to create an abstract and extend it in each source target. They can be declared in one of two ways.
+Abstracts are source targets that do not build by themselves, and instead get extended by source targets. For example, if there are two different source targets that both require the same compilation options, one can write them out twice, but that wouldn't be very programmatic. The solution for this is to create an abstract and extend it in each source target. They can be declared in one of two ways.
 
-First, simply with a root `abstracts` object:
+Firstly, with a root `abstracts` object:
 
 ```json
 "abstracts": {
@@ -59,7 +67,7 @@ First, simply with a root `abstracts` object:
 }
 ```
 
-Second, with a colon separating `abstracts` and the name of the abstract target:
+Secondly, with a colon separating `abstracts` and the name of the abstract target directly in the property key:
 
 ```json
 // Possibly more desireable in small projects
@@ -67,18 +75,18 @@ Second, with a colon separating `abstracts` and the name of the abstract target:
 "abstracts:minimal": {}
 ```
 
-Which one you decide to use doesn't matter, but it's recommended to pick one style over the other rather than mix them.
+Which one you decide to use doesn't matter, but it's recommended to pick one style over the other rather than mix them. 
 
 An example of how abstracts could be used is if stricter warnings are desired on one target, while they need to be more relaxed on another:
 
 ```json
 "abstracts": {
-   "strict": {
+   "strict-warnings": {
       "settings:Cxx": {
          "warnings": "strict"
       }
    },
-   "minimal": {
+   "min-warnings": {
       "settings:Cxx": {
          "warnings": "minimal"
       }
@@ -86,18 +94,16 @@ An example of how abstracts could be used is if stricter warnings are desired on
 },
 "targets": {
    "first-target": {
-      "extends": "strict"
+      "extends": "strict-warnings"
    },
    "second-target": {
-      "extends": "strict"
+      "extends": "strict-warnings"
    },
    "third-target": {
-      "extends": "minimal"
+      "extends": "min-warnings"
    }
 }
 ```
-
-Another common situation is where one target needs to be compiled as C, while the rest as C++, or perhaps.
 
 `*` is a special abstract target that gets implicitly extended in all source targets. Therefore, there's no need to define `"extends": "*"` since it would be equivalent to not defining it.
 
@@ -133,6 +139,8 @@ Another way of writing the strict/minimal example, utilizing `*` would be:
 
 `"warnings": "minimal"` would simply override `"warnings": "strict"` in this case.
 
+This pattern is useful in situations where one target needs to be compiled as C, while the rest as C++. Another example is that perhaps one target is code you maintain, while another target is code coming from a library written by somebody else.
+
 > Note: A single source target can extend a single abstract target, but an abstract target can not extend another abstract target.
 
 \\
@@ -146,13 +154,11 @@ With abstracts out of the way, we can start thinking about how to structure our 
    "my-project": {
       "kind": "executable",
       "language": "C++",
-      "location": "src",
-      "runTarget": true,
       "settings:Cxx": {
          "pch": "src/PCH.hpp",
          "cppStandard": "c++20",
          "warnings": "strict",
-         "threads": "auto",
+         "threads": true,
          "rtti": false,
          "exceptions": true,
          "staticLinking": false,
@@ -175,19 +181,22 @@ With abstracts out of the way, we can start thinking about how to structure our 
          "links.windows": [
             "bar"
          ]
-      }
+      },
+      "files": "src/**.cpp",
+      "runTarget": true
    }
 }
 ```
 
-Some of these properties will be covered here, as well as ways to express them, while others will be explained are detailed in the schema documentation, [here](http://localhost:3000/schema-dev/main/executable-source-target).
+Some of these properties will be covered here, while others will be explained are detailed in the schema documentation, [here](http://localhost:3000/schema-dev/main/executable-source-target).
 
 The main required properties for source targets are `language`, `kind`, `settings` and `location` / `files`.
 
-* Languages: `C++` `C` `Objective-C` `Objective-C++`
-* Kinds: `executable` `sharedLibrary` `staticLibrary`
+The `language` property is pretty self-explanatory. Accepted values are `C++` and `C`, and on MacOS, `Objective-C` and `Objective-C++`.
 
-> Note: Objective-C++ implies C++, and Objective-C implies C, so files of both types can be combined.
+> Note: Objective-C++ implies C++, and Objective-C implies C, so files of both types can be combined in the same source target.
+
+When the `kind` property is either `executable` `sharedLibrary` or `staticLibrary`, the target is considered a source target.
 
 \\
 
@@ -223,6 +232,8 @@ The output would become:
 ▼  My super cool project!
 ```
 
+> Note: Unicode is supported (given the capabilities of the terminal), so as long as chalet.json itself is Unicode, the description should display correctly.
+
 \\
 
 ## [Property Conditions]
@@ -231,21 +242,31 @@ Most properties support conditions that describe whether to include or exclude t
 
 * `debug` / `!debug` if the build configuration uses debug symbols (Debug/RelWithDebInfo/Profile) or doesn't use them.
 * `(platform)` / `!(platform)` where platform is or isn't `macos` `linux` & `windows`
+* For targeting compilers and architectures, see [Advanced: Fine Tuning](/creating-targets?id=advanced-fine-tuning)
 
-Most properties support both, but some support one and not the other where appropriate. `debug` can be combined with a single platform, separated by a period, in either order:
+Conditions are contextual, so not all properties support all conditions.
 
+If a single property (such as "links") is defined with multiple conditions, each one will be read in the order they're declared.
+
+```json
+"links": [
+   "foo"
+],
+"links.debug": [
+   "bar"
+]
+"links.windows": [
+   "another"
+]
 ```
-.debug.(platform)
-.(platform).debug
-```
 
-If a property with conditions are defined along with a property without them (for example: `links`, `links.debug.windows` & `links.windows`), the order may need to be considered. In this example, `links` will be read first, `links.windows` second, followed by `links.debug.windows`.
+In the above example, if one is building the Debug configuration on windows, `foo` is added first, followed by `bar` and then `another`. If Release: `foo` is still added first followed by `another`.
 
 \
 
 **Excluding Targets**
 
-Targets can be excluded with the `condition` property, and works the exact same way as property conditions:
+Targets can be excluded with the `condition` property, and work the exact same way as property conditions:
 
 ```json
 "first-target": {
@@ -260,83 +281,21 @@ Targets can be excluded with the `condition` property, and works the exact same 
 
 ## [Adding Source Files]
 
-There are two ways to handle source files: Define the location(s) that will search directories recursively, or define each file explicitly. In both scenarios, the following file extensions are supported:
-* C: `c` 
-* C++: `cpp` `cc` `cxx` `c++` / `CPP` `CC` `CXX` `C++` `C`
+Source files can either be added individually or via a glob pattern. In both scenarios, source files will be based on their extensions:
+
+* C++: Any extension other than the ones below, but most common are `cpp` `cc` `cxx` `c++` `C`
+* C: `c` (case-sensitive)
 * Windows Resource: `rc` / `RC`
 * Objective-C: `m` / `M`
 * Objective-C++: `mm`
+
+C++ header files should not be specified at all, so for instance if you're using `.cpp` and `.h` files, only add 
 
 > Note: Lowercase extensions are recommended
 
 \
 
-**By Location**
-
-Locations are a simple way to express where sources are found. The first way is as a string to a folder path:
-
-```json
-"location": "src"
-```
-
-This would describe a root folder called "src" that contains files all source files with supported extensions. 
-
-The `location` property can also be expressed an array:
-
-```json
-"location": [
-   "src/foo",
-   "src/bar"
-]
-```
-
-As one would expect, this would include any folders that are specified.
-
-One can also express `location` as an object, with `include` (string or array) and `exclude` (string or array).
-
-```json
-"location": {
-   "include": [
-      "src",
-      "test"
-   ],
-   "exclude": "src/Main.cpp"
-}
-```
-
-Glob patterns are supported:
-
-```json
-"location": {
-   "include": "src/**",
-   "exclude": "src/Foo/**/*.cpp"
-}
-```
-
-Finally, one can also include/exclude based on platform using the property conditions explained earlier:
-
-```json
-"location": {
-   "include": "src",
-   "exclude.!macos": [
-      "src/MacOS"
-   ],
-   "exclude.!windows": [
-      "src/Windows"
-   ],
-   "exclude.!linux": [
-      "src/Linux"
-   ]
-}
-```
-
-> Note: `include` will only resolve to folders, while `exclude` can resolve both files and folders.
-
-\
-
-**By Files**
-
-Defining files is very easy. Instead of using `location`, simply define a `files` array and list each file.
+To start defining files, simply add a property called `files`. They can be added individually via an array:
 
 ```json
 "files": [
@@ -346,35 +305,69 @@ Defining files is very easy. Instead of using `location`, simply define a `files
 ]
 ```
 
-Glob patterns are supported:
+Or matched via a glob pattern:
 
 ```json
 "files": [
-   "src/**/*.cpp",
-   "src/**/*.rc"
+   "src/**.cpp",
+   "tests/*.cpp"
 ]
 ```
+
+`*` in this case matches files in a single path, while `**` matches files recursively though any subdirectories. Therefor, these can be combined with the following pattern if you wish to exclude files in a directory, but include any of its subdirectories:
+
+```json
+"files": [
+   "src/*/**.cpp"
+]
+```
+
+Using glob patterns, files can also be expressed as a single string:
+
+```json
+"files": "src/**.{cpp,rc}"
+```
+
 
 Property conditions are also supported:
 
 ```json
 "files": [
-   "src/main.cpp"
+   "src/Foo/**.cpp"
 ]
 "files.windows": [
-   "src/Windows/foo.cpp"
+   "src/Windows/**.cpp"
 ]
 "files.macos": [
-   "src/MacOS/bar.cpp"
+   "src/MacOS/**.cpp"
 ]
 ```
+
+The above example would detect any `.cpp` and `.rc` files within the `src` folder. Extensions must be separated by a comma or a `|` character and surrouned by a set of curly brackets.
+
+Files can also be expressed as an object with `include` and `exclude`. Excludes can be expressed as an exact file match, a glob pattern, or a regular string to match against.
+
+```json
+"files": {
+   "include": "src/**.cpp",
+   "exclude.!macos": [
+      "src/MacOS"
+   ],
+   "exclude.!linux": [
+      "Linux"
+   ]
+}
+```
+
+> Note: Because files can be declared differently, no assumptions are made about [include directories](/creating-targets?id=include-directories), so if `src/**.cpp` is the pattern used, `src` should be included 
+
+\
 
 \\
 
 ## [Compile Settings]
 
 Like with abstracts, compile settings can be expressed in two ways:
-
 
 ```json
 "my-project": {
@@ -403,56 +396,74 @@ The C and C++ language standard are represented as `cStandard` and `cppStandard`
 Examples:
 
 ```json
-// /std:c++20 or /std:c++latest in MSVC
+// /std:c++20 in MSVC (19.29 or higher)
 "cppStandard": "c++20"
 "cppStandard": "gnu++2b"
 
-// /std:c++17 in MSVC
+// /std:c++17 in MSVC (19.11 or higher)
 "cppStandard": "c++17" 
 
-// /std:c17 in MSVC
+// /std:c17 in MSVC (19.28 or higher)
 "cStandard": "gnu17"
 
-// /std:c11 in MSVC
+// /std:c11 in MSVC (19.28 or higher)
 "cStandard": "c11"
 ```
+
+MSVC will fall back to `/std:latest` if the standard isn't recognized.
+
+> Note: With this approach, One can try out new C++ versions without needing an update of chalet first
 
 \\
 
 ## [Include Directories]
 
-These are directories (preferably relative) to be included during compilation, and tell it where header files are located. This is expressed with the `includeDirs` property, where all [Path Substitutions](/creating-targets?id=path-substitution) and glob patterns are supported.
+These are directories (preferably relative) to be included during compilation, and tell the compiler where header files are located. This is expressed with the `includeDirs` property, where all [Path Substitutions](/creating-targets?id=path-substitution) and glob patterns apply. The simplest example is the following:
+
+```json
+"includeDirs": [
+   "src"
+]
+```
+
+This means the `src` folder is a root of included paths, so folders are required in `#include` directives.
+
+```cpp
+#include "foo.hpp"         // src/foo.hpp
+#include "bar/bar.hpp"     // src/folder/bar.hpp
+```
 
 ```json
 "includeDirs": [
    "${externalDir}/foo/include",
-   "${externalDir}/bar/include"
 ]
 ```
 
 Typically this means if a library has subdirectories, you have to declare your include directives in code as: 
 
 ```cpp
-#include <subdir/foo.hpp>
-#include <subdir/bar/bar.hpp>
+#include <subdir/foo.hpp>  // ${externalDir}/foo/include/subdir/foo.hpp
 ```
 
-Some might prefer the following:
+Some might want to do the following:
 
 ```cpp
-#include <foo.hpp>
-#include <bar.hpp>
+#include <foo.hpp>         // ${externalDir}/foo/include/subdir/foo.hpp
+#include "bar.hpp"         // src/folder/bar.hpp
 ```
 
 Glob patterns are also supported for this reason, so one can include a directory recursively:
 
 ```json
 "includeDirs": [
-   "${externalDir}/foo/include/**"
+   "${externalDir}/foo/include/**",
+   "src/**"
 ]
 ```
 
-This would ultimately come down to personal preference.
+However, the problem with this approach is that simply adding a folder will add another include path to the build command, forcing a recompile of that target, so it would be more desirable to either place all sources in a single folder, or use the previous subfolder approach. This would ultimately come down to personal preference.
+
+> Note: compiler include paths are automatically added.
 
 See also: [Advanced: Fine Tuning](/creating-targets?id=advanced-fine-tuning)
 
@@ -476,13 +487,15 @@ Example:
 ]
 ```
 
+> Note: compiler lib paths are automatically added.
+
 See also: [Advanced: Fine Tuning](/creating-targets?id=advanced-fine-tuning)
 
 \\
 
 ## [Preprocessor Definitions]
 
-These are preprocessor symbols to pass to the compiler **per target**. These are typically used to define something globally that affects how the target gets compiled for its usage.
+These are preprocessor symbols to pass to the compiler **per target**. These are typically used to define something globally that affects how the target gets compiled for its usage. 
 
 For example, in a debug build, you're probably going to want to define `DEBUG` or `_DEBUG` (this is not done for you).
 
@@ -508,7 +521,7 @@ Deciding which warnings to use is a central part of working with C++. There are 
 
 **Warning Presets**
 
-Presets are inherently opinionated. Their goal is to provide an abstraction that can be interpreted by all compilers. With GCC & clang, they will populate a list of warnings behinds the scenes, try to limit them based on the compiler version, and pass them along. Both compilers tend to support each other in that if a warning is available on one, but not the other, it tends to just be a no-op. 
+Presets are inherently opinionated. Their goal is to provide an abstraction that can be interpreted by all compilers. With GCC & clang, they will populate a list of warnings behinds the scenes, try to limit them based on the compiler version, and pass them along. Both compilers tend to support each other in that if a warning is available on one, but not the other, it tends to just be a no-op. When in doubt: test.
 
 ```json
 "my-target": {
@@ -525,7 +538,7 @@ In GCC/Clang, the presets are as follows:
 * **extra** - Equivalent to **minimal** + `-Wextra`.
 * **pedantic** - Equivalent to **extra** + `-Wpedantic`.
 * **error** - Equivalent to **pedantic** + `-Werror`. Warnings will be treated as errors.
-* **strict** - Equivalent to **error** + `-Wunused` `-Wcast-align` `-Wdouble-promotion` `-Wformat=2` `-Wmissing-declarations` `-Wmissing-include-dirs` `-Wnon-virtual-dtor` `-Wredundant-decls` `-Wodr`. Warnings will be treated as errors.
+* **strict** - Equivalent to **error** + `-Wunused` `-Wcast-align` `-Wdouble-promotion` `-Wformat=2` `-Wmissing-declarations` `-Wmissing-include-dirs` `-Wnon-virtual-dtor` `-Wredundant-decls`. Warnings will be treated as errors.
 * **strictPedantic** - Equivalent to **strict** + `-Wunreachable-code` `-Wshadow`. Warnings will be treated as errors.
 * **veryStrict** - Equivalent to **strictPedantic** + `-Wnoexcept` `-Wundef` `-Wconversion` `-Wcast-qual` `-Wfloat-equal` `-Winline` `-Wold-style-cast` `-Wstrict-null-sentinel` `-Woverloaded-virtual` `-Wsign-conversion` `-Wsign-promo`. Warnings will be treated as errors.
 
@@ -538,7 +551,7 @@ In MSVC, presets are interpreted as the warning level:
 * **error** - Equivalent to `/W3 /WX`. Warnings will be treated as errors.
 * **strict**, **strictPedantic** & **veryStrict**  - Equivalent to `/W4 /WX`. Warnings will be treated as errors.
 
-> Note: If you'd like to use /Wall, it must be added manually.
+> Note: If you'd like to use `/Wall`, it must be added manually.
 
 > Note: These may change between some Chalet versions (probably not very often), as they have the potential to be pretty contentious. [Debate](//github.com/chalet-org/chalet-dev/discussions) is welcomed.
 
@@ -575,14 +588,14 @@ For the unfamiliar, this is a convention used to speed up the build process by c
 
 ```json
 "my-target": {
-   "location": "src",
+   "files": "src/**.cpp",
    "settings:Cxx": {
       "pch": "src/PCH.hpp"
    }
 }
 ```
 
-This will automatically include that header in every source file of that target. Although there's nothing stopping one from doing so, it's not necessary to include it again at the top of source files via `#include`.  Every compiler handles precompiled headers a little differently, so Chalet abstracts that away for you.
+This will automatically include that header in every source file of that target. Although there's nothing stopping one from doing so, it's not necessary to include it again at the top of source files via `#include`. Every compiler handles precompiled headers a little differently under the hood, so Chalet abstracts that away for you.
 
 > Note: In `universal` architecture builds on MacOS, a separate precompiled header is created for each architecture.
 
@@ -590,7 +603,7 @@ This will automatically include that header in every source file of that target.
 
 ## [Dynamic Linking]
 
-Linking shared libraries is quite simple in Chalet. Like with the `-l` option in GCC/Clang, you only need to supply the base name of the library. Thus, `libfoo.a` would be linked as `foo`. If you are using MSVC, and the library is `foo.lib`, the link is again just `foo`.
+Linking shared libraries is quite simple in Chalet. Like with the `-l` option in GCC/Clang, only the base name of the library needs to be supplied. Thus, `libfoo.a` would be linked as `foo`. If you are using MSVC, and the library is `foo.lib`, the link is again just `foo`.
 
 ```json
 "links": [
@@ -612,7 +625,7 @@ If linking to another target, the target must build prior to the current target,
 ```json
 "first-target": {
    "kind": "sharedLibrary",
-   "location": "src/foo"
+   "files": "src/foo/**.cpp",
 },
 "second-target": {
    "settings:Cxx": {
@@ -628,8 +641,8 @@ You might run into a situation where a library is only supported on a certain pl
 ```json
 "first-target": {
    "kind": "sharedLibrary",
-   "location": "src/foo",
-   "condition": "windows"
+   "condition": "windows",
+   "files": "src/foo/**.cpp"
 },
 "second-target": {
    "settings:Cxx": {
@@ -651,7 +664,7 @@ Static links work the same way as shared, but use the `staticLinks` property ins
 ```json
 "first-target": {
    "kind": "staticLibrary",
-   "location": "src/foo"
+   "files": "src/foo/**.cpp"
 },
 "second-target": {
    "settings:Cxx": {
@@ -706,15 +719,14 @@ If mixing with non-module C++ code, one must create a static library target with
 ```json
 "non-modules-target": {
    "kind": "staticLibrary",
-   "location": "src/foo",
    "settings:Cxx": {
       "includeDirs": [
          "include/foo"
       ]
-   }
+   },
+   "files": "src/foo/**.cpp"
 },
 "modules-target": {
-   "location": "src/bar",
    "settings:Cxx": {
       "cppModules": true,
       "includeDirs": [
@@ -723,7 +735,8 @@ If mixing with non-module C++ code, one must create a static library target with
       "staticLinks": [
          "non-modules-target"
       ]
-   }
+   },
+   "files": "src/bar/**.cpp"
 }
 ```
 
@@ -738,21 +751,21 @@ If a target is runnable (kind is `executable` or `script`), one only needs to se
 ```json
 "first-target": {
    "kind": "executable",
-   "location": "src"
+   "files": "src/**.cpp"
 },
 "second-target": {
    "kind": "script",
-   "script": "scripts/do_something.sh",
+   "file": "scripts/do_something.sh",
    "runTarget": true
 }
 ```
 
-An executable target can also take the `runArguments` and `runDependencies` properties. The `runArguments` property is simply an array of arguments to pass to the executable, while `runDependencies` is meant for shared libraries that have to be copied to the build folder at the time of execution. In most cases, it's not needed as long as the shared library is accessible from PATH.
+An executable target can also take the `runArguments` and `runDependencies` properties. The `runArguments` property is simply an array of arguments to pass to the executable, while `runDependencies` is meant for shared libraries that have to be copied to the build folder at the time of execution. In most cases, it's not needed as long as the shared library is accessible from PATH, but if LoadLibrary is called in Windows api for example, it might be necessary to have the file in the same path as the executable.
 
 ```json
 "first-target": {
    "kind": "executable",
-   "location": "src",
+   "files": "src/**.cpp",
    "runTarget": true,
    "runArguments": [
       "--foo",
@@ -788,7 +801,6 @@ Example:
 ],
 "targets": {
    "my-target": {
-      "location": "${externalDir}/foo",
       "settings:Cxx": {
          "includeDirs": [
             "${env:MY_BAR_LIB}/include"
@@ -799,7 +811,8 @@ Example:
          "includeDirs.!windows": [
             "~/libs/bar/include"
          ]
-      }
+      },
+      "files": "${externalDir}/foo/**.cpp",
    },
    "other-target": {
       "settings:Cxx": {
@@ -825,7 +838,7 @@ Example:
 
 As a last resort, `compileOptions` and `linkerOptions` can pass certain options directly to the build at the time of a compilation unit's compile, or at link time. As Chalet evolves, more options will be leveraged as properties, and the goal will be to reduce the need for this as much as possible. Both of these properties take a single string of options. 
 
-These properties, in addition to `warnings`, `defines`, `links`, `staticLinks`, `includeDirs` and `libDirs` can also be defined _per compiler toolchain_. This is done by defining them as an object, followed by either the architecture triple or a toolchain name. Like with abstracts, the `*` property is applied to all. If both a matching target triple and a toolchain name are defined, the triple's is read first, followed by the toolchain name's values.
+These properties, in addition to `warnings`, `defines`, `links`, `staticLinks`, `includeDirs` and `libDirs` can also be defined _per compiler toolchain_. This is done by defining them as an object, followed by either the architecture triple or a toolchain name. Like with abstracts, the `*` property is applied to all. If both a matching target triple and a toolchain name are defined, the triple's is read first, followed by the toolchain name's values. Partial triple names can also be used, but the more specific, the better.
 
 If you require an even more refined build, you can certainly combine CMake with Chalet.
 
@@ -835,9 +848,12 @@ If you require an even more refined build, you can certainly combine CMake with 
 "compileOptions": {
    "arm-linux-gnueabihf": "...",
    "arm64-apple-darwin": "...",
-   "x86_64-pc-windows-msvc": "..."
+   "x86_64-pc-windows-msvc": "...",
+   "w64-mingw32": "..."
 }
 ```
+
+`w64-mingw32` could refer to either `x86_64-w64-mingw32` or `i686-w64-mingw32`.
 
 ```json
 "libDirs": {
@@ -948,24 +964,30 @@ The following examples are all valid:
 "my-first-script": {
    "kind": "script",
    "description": "The very first script",
-   "script.!windows": "scripts/script.sh",
-   "script.windows": "scripts/script.bat",
+   "file.!windows": "scripts/script.sh",
+   "file.windows": "scripts/script.bat",
 }
 "my-second-script": {
    "kind": "script",
    "condition": "windows",
-   "script.debug": "scripts/script_Debug.bat",
-   "script.!debug": "scripts/script_Release.bat"
+   "file.debug": "scripts/script_Debug.bat",
+   "file.!debug": "scripts/script_Release.bat"
 }
 "my-second-script": {
    "kind": "script",
    "condition": "windows",
-   "script": "scripts/script.ps1"
+   "file": "scripts/script.ps1"
 }
 "my-third-script": {
    "kind": "script",
-   "script": "scripts/script.py"
+   "file": "scripts/script.py"
 }
 ```
+
+\\
+
+## [Process Targets]
+
+TODO
 
 <!-- nav:/managing-dependencies:/describing-the-distribution -->
