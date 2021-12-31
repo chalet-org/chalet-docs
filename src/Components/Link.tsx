@@ -16,34 +16,45 @@ const Link = ({ children, dataId, onClick, ...props }: Props) => {
 
 	const { focusedId, setFocusedId } = useUiStore();
 
+	console.log(props.href);
+
 	const showActive = props.showActive ?? true;
 	const targetBlank = typeof props.href === "string" && props.href.startsWith("//");
 	const href = typeof props.href === "string" && props.href.split("?")[0];
 	const asPath = router.asPath.split("?")[0];
 
-	return (
-		<NextLink {...props} passHref scroll={false}>
-			<Styles
-				className={
-					showActive &&
-					((dataId === undefined && asPath === href && (focusedId === "" || asPath.endsWith(focusedId))) ||
-						(!!dataId && focusedId === dataId))
-						? "active"
-						: ""
-				}
-				target={targetBlank ? "_blank" : undefined}
-				data-id={dataId}
-				onClick={(ev) => {
-					if (!router.asPath.startsWith("/schema")) {
-						setFocusedId(dataId ?? "");
-					}
-					onClick?.(ev);
-				}}
-			>
+	if (targetBlank && typeof props.href === "string") {
+		return (
+			<Styles href={props.href} data-id={dataId} target="_blank">
 				{children}
 			</Styles>
-		</NextLink>
-	);
+		);
+	} else {
+		return (
+			<NextLink {...props} passHref scroll={false}>
+				<Styles
+					className={
+						showActive &&
+						((dataId === undefined &&
+							asPath === href &&
+							(focusedId === "" || asPath.endsWith(focusedId))) ||
+							(!!dataId && focusedId === dataId))
+							? "active"
+							: ""
+					}
+					data-id={dataId}
+					onClick={(ev) => {
+						if (!router.asPath.startsWith("/schema")) {
+							setFocusedId(dataId ?? "");
+						}
+						onClick?.(ev);
+					}}
+				>
+					{children}
+				</Styles>
+			</NextLink>
+		);
+	}
 };
 
 export { Link };
