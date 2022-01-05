@@ -10,35 +10,32 @@ A modern cross-platform project format and build system for C/C++ with a focus o
 
 ## [What does it do?]
 
-Chalet is a command-line application that reads in a JSON project file (ie. chalet.json), finds a usable compiler, and builds your C/C++ projects. Behind the scenes, Chalet generates either a [Ninja](//ninja-build.org/) or [Make](//en.wikipedia.org/wiki/Make_(software)) build file, does some caching itself, builds the project, and optionally runs it if it's executable. Chalet project files are designed to be easy to understand, focusing on GNU-like language and translating that down to the compiler. Because the projects are JSON, they can be easily integrated with IDEs.
+Chalet is a command-line application that reads from a JSON project file (ie. chalet.json), and compiles your C/C++ projects. Behind the scenes, Chalet generates either a [Ninja](//ninja-build.org/) or [Make](//en.wikipedia.org/wiki/Make_(software)) build file, does some caching, compiles & runs if it's executable. 
 
-In addition to building your projects during the development process, Chalet has numerous features designed to make working with C/C++ as smooth as possible:
+Chalet project files focus on language that is designed to be easy to understand, and provide lots of control. Because the projects are JSON, they can be easily integrated with IDEs.
 
-* Bundle your applications & libraries for distribution
-* Fetch & manage external git repositories based on commits, tags or branches
-* Integration with profiling tools - Instruments on macOS, gprof in Linux/MinGW
-* Support for cross-compiling
-* A wizard for generating new projects: `chalet init`
-* MSVC Support on Windows (Tested VS 2022/Preview, 2019 and 2017)
+In addition, Chalet has numerous features designed to make working with C/C++ as smooth as possible:
+
+* MSVC Support on Windows (VS 2022/Preview, 2019 & 2017 currently)
 * Full C++20 modules support with MSVC (requires version 19.28 or higher)
-* Apple clang: Objective-C/C++, universal binary (Intel & M1) support on macOS
+* Objective-C/C++, universal binary (Intel & M1) support on macOS
+* Fetch & manage external git repositories based on commits, tags or branches
+* Bundle your applications & libraries for distribution
+* Integration with profiling tools - Visual Studio Profiler, Instruments on macOS, gprof in Linux/MinGW
+* Cross-compiling support with MSVC, LLVM & GCC
 * Intel compiler support on Windows & macOS (new LLVM version on Windows, "Classic" on macOS)
-* CI support (tested with Github Actions)
-* Run scripts as build steps (so far: bash, powershell (Win/Core), Batch (Win), python, ruby, lua, perl)
-* Include other Chalet projects as build steps
-* Include [CMake](//cmake.org/) projects as build steps
-* CLI Commands for manipulating settings (ie. from the CI)
+* A wizard for initializing new projects
+* Include [CMake](//cmake.org/) projects or other Chalet projects as build steps
+* Run scripts & processes as build steps
 * Tab completion script for Bash
 * A Visual Studio Code extension
 
 <!-- accordion:start Future -->
 
+* A "native" build strategy to optionally use instead of Make/Ninja
+* Export to other project file types (Xcode & Visual Studio at a minimum)
 * Support for more compilers: better Intel support, CUDA, Emscripten to name a few
-* iOS Support, which ultimately means working with the Swift compiler or Xcode in some way. There's partial support already
-* Android support
-* A "native" build strategy to optionally try instead of Make/Ninja
-* Generate other project file types (Xcode & Visual Studio at a minimum)
-* Support for more compiled languages
+* iOS & Android support
 
 <!-- accordion:end -->
 
@@ -53,12 +50,12 @@ In addition to building your projects during the development process, Chalet has
 
 \\
 
-> It goes without saying, but as of August 2021, Chalet is a new project in experimental stages and not production-ready. It was built for fun over the course of a year, and if you would like to contribute to its development, please head over to the discussions board with comments, ideas / recommendations and bug reports.
+> It goes without saying, but as of January 2022, Chalet is a new project in experimental stages and not production-ready, and probably will be until the community deems otherwise. It was built for fun over the course of a year, and if you would like to contribute to its development, please head over to the discussion board with comments, ideas / recommendations and bug reports.
 >
 > [Discussions](//github.com/chalet-org/chalet-dev/discussions)
 >
 > [Issues](//github.com/chalet-org/chalet-dev/issues)
 >
-> [Projects / Roadmap](https://github.com/chalet-org/chalet-dev/projects)
+> [Projects / Roadmap](//github.com/chalet-org/chalet-dev/projects)
 
 <!-- nav::/getting-started -->

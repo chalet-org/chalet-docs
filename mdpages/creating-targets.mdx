@@ -988,6 +988,21 @@ The following examples are all valid:
 
 ## [Process Targets]
 
-TODO
+Process targets are a means to call another executable directly using Chalet's subprocess features. Simply set `kind` to `process` to create one.
+
+```json
+"my-process": {
+   "kind": "process",
+   "path": "msbuild",
+   "arguments": [
+      "-nologo",
+      "-property:Configuration=${configuration}",
+      "project.csproj"
+   ]
+}
+```
+
+TODO...
+
 
 <!-- nav:/managing-dependencies:/describing-the-distribution -->

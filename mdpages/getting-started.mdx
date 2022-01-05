@@ -6,7 +6,7 @@ title: Getting Started
 
 ---
 
-At the moment, Chalet must be installed manually in non-Windows operating systems, but in the future will be available through Homebrew/package managers. Before working with Chalet, the application should be accessible from PATH.
+At the moment, Chalet must be installed manually in non-Windows operating systems, but in the future will be available through Homebrew/package managers. Before working with Chalet, it should be [accessible from PATH](//en.wikipedia.org/wiki/PATH_(variable)).
 
 * [Releases](https://github.com/chalet-org/chalet-dev/releases)
 
@@ -16,7 +16,7 @@ At the moment, Chalet must be installed manually in non-Windows operating system
 
 <!-- accordion:start Adding a C/C++ Compiler -->
 
-Before building, you should have a C/C++ compiler chosen for your platform, and make it available from PATH.
+Before building, you should have a C/C++ compiler chosen for your platform.
 
 <!-- tabs:start -->
 |Windows|
@@ -29,39 +29,15 @@ Before building, you should have a C/C++ compiler chosen for your platform, and 
 \
 
 **If using Visual Studio:**
-* In the VS Installer, Install C++ related components, but most importantly, the x64/x86 build tools (and optionally ARM, ARM64).
+* In the VS Installer, Install C++ related components, including the x64/x86 build tools (and optionally ARM, ARM64).
 * Also install the bundled CMake tools if you wish
-* Use one of the following commands in your project before building:
-
-```bash
-# To target the latest stable/preview installation:
-chalet configure --toolchain vs-stable
-chalet configure --toolchain vs-preview 
-
-# To target specific VS installations (>= 2017 until earlier ones can be tested):
-chalet configure --toolchain vs-2022
-chalet configure --toolchain vs-2019
-chalet configure --toolchain vs-2017
-```
-
-Otherwise, chalet implicitly uses the `vs-stable` toolchain preset. stable/preview can target future VS versions before Chalet officially supports them.
 
 > Note: Chalet uses [vswhere](https://github.com/microsoft/vswhere) to get the rest of the Visual Studio environment, so no Path environment variable changes are needed
 
 \
 
 **If using LLVM:**
-* Install LLVM and either add to Path directly in Windows Environment Variables or create a .env file in your project to modify Path
-* Use the following command in your project before building:
-
-```bash
-chalet configure --toolchain llvm
-```
-
-* Or to use LLVM by default with Chalet:
-```bash
-chalet set --global options.toolchain llvm
-```
+* Install LLVM and either add to Path directly in Windows Environment Variables or create a `.env` file in your project to modify Path
 
 > Note: LLVM on Windows uses the Visual Studio ABI `x86_64-pc-windows-msvc` by default (and requires a Visual Studio installation anyway)
 
@@ -77,28 +53,11 @@ pacman -S mingw-w64-x86_64-toolchain mingw-w64-i686-toolchain
 ```
 
 * Check for GCC with `gcc --version`
-* Add `C:\msys64\mingw64\bin` to Path directly in Windows Environment Variables (not recommended) or create a .env file in your project to modify Path
-* Use one of the following commands in your project before building:
+* Add `C:\msys64\mingw64\bin` to Path directly in Windows Environment Variables (not recommended) or create a `.env` file in your project to modify Path
 
-```bash
-# To use the same architecture as the host machine:
-chalet configure --toolchain gcc
+> Note: If both 32 and 64 version are installed, Chalet only needs one of the bin folders in PATH (`C:\msys64\mingw64\bin` for instance). It will reinterpret the path based on the requested architecture of the build in order to find the correct compiler.
 
-# To explicity use the 64 or 32-bit toolchains:
-chalet configure --toolchain x86_64-w64-mingw32-gcc
-chalet configure --toolchain i686-w64-mingw32-gcc
-```
-
-* To use GCC by default with Chalet:
-```bash
-chalet set --global options.toolchain gcc
-chalet set --global options.toolchain x86_64-w64-mingw32-gcc
-chalet set --global options.toolchain i686-w64-mingw32-gcc
-```
-
-> Note: If both 32 and 64 version are installed, Chalet only needs one of the bin folders in path. It will reinterpret the path based on the requested architecture of the build.
-
-> Note: One can also install clang from MSYS2, but support for it in Chalet is still experimental...
+> Note: One can also install clang from MSYS2, but support for it in Chalet is still experimental... `ucrt64` gcc/clang has been tested.
 
 \
 
@@ -106,11 +65,8 @@ chalet set --global options.toolchain i686-w64-mingw32-gcc
 * Install/extract it where you please. It is recommended to use sub-folders for 32-bit and 64-bit versions if compiling for both, and to use the convention `mingw32` and `mingw64` for those subfolder names
 * Add `(folder)\mingw64\bin` to Path directly in Windows Environment Variables (not recommended) or create a .env file in your project to modify Path
 * If you know the architecture triple used in the toolchain, you can configure chalet using that + '-gcc', or simply use `gcc`
-```bash
-chalet configure --toolchain gcc
-```
 
-> Note: If both 32 and 64 version are installed, Chalet only needs one of the bin folders in path. It will reinterpret the path based on the requested architecture of the build.
+> Note: If both 32 and 64 version are installed, split those installations into `mingw32` and `mingw64`. Chalet only needs one of the bin folders in PATH. It will reinterpret the path based on the requested architecture of the build in order to find the correct compiler.
 
 |MacOS|
 **Install one of the following:**
@@ -137,12 +93,7 @@ sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
 sudo xcode-select -s /Library/Developer/CommandLineTools
 ```
 
-In both, running `which clang` should show `/usr/bin/clang`, although it actually resolves to the xcode-select path.
-
-Configure Chalet with:
-```bash
-chalet configure --toolchain apple-llvm
-```
+In both, running `which clang` should show `/usr/bin/clang` (although it actually resolves to the xcode-select path).
 
 \
 
@@ -151,7 +102,7 @@ chalet configure --toolchain apple-llvm
 |Linux|
 **Install one of the following**
 * Your distribution's compiler (typically GCC)
-* Any GCC cross-compiler (ie. arm-linux-gnueabihf)
+* Any GCC cross compiler (ie. arm-linux-gnueabihf)
 * [LLVM](https://llvm.org/)
 
 Every Linux build is going to be a little different, so this is more like a set of guidelines.
@@ -164,26 +115,21 @@ base-devel git cmake ninja gdb
 **If using GCC:**
 * Chalet will detect GCC by default, so nothing further should be necessary. Use the 'gcc' toolchain preset to explicitly request it, or the name of toolchain's target triple + '-gcc'
 
+Examples:
 ```bash
-# To use the same architecture as the host machine:
-chalet configure --toolchain gcc
+x86_64-linux-gnu-gcc
+i686-linux-gnu-gcc
 
-# To explicity use a specific toolchain or cross-compiler:
-chalet configure --toolchain x86_64-linux-gnu-gcc
-chalet configure --toolchain i686-linux-gnu-gcc
-chalet configure --toolchain arm-linux-gnueabihf-gcc
+# Cross compiler for ARM w/ FPU
+arm-linux-gnueabihf-gcc
+
+# Cross compiler for MinGW 64-bit Windows
+x86_64-w64-mingw32-gcc
 ```
 
 **If using LLVM:**
-* Use the following command in your project before building:
-```bash
-chalet configure --toolchain llvm
-```
-
-* Or to use LLVM by default with Chalet:
-```bash
-chalet set --global options.toolchain llvm
-```
+* Install some version of LLVM from your package manager
+* Install any cross compilers you want to use and make note of their target triples like with GCC
 
 <!-- tabs:end -->
 
@@ -265,14 +211,19 @@ The architecture is specified with either `--arch (name)` or `-a (name)`.  Archi
 |MSVC|
 
 ```bash
-chalet configure -t vs-stable -a x64 
-chalet configure -t vs-preview -a x64
+# To target the latest stable/preview installation:
+chalet configure --toolchain vs-stable
+chalet configure --toolchain vs-preview 
+
+# To target specific VS installations (>= 2017 until earlier ones can be tested):
 chalet configure -t vs-2022 -a arm64
 chalet configure -t vs-2019 -a x64
 chalet configure -t vs-2017 -a x86 
 ```
 
 These attempt to find the target architecture and create the toolchain: '(arch)-pc-windows-msvc(version)' where 'version' is the detected VS version (or Preview version) - 16, 17, etc.
+
+Otherwise, chalet implicitly uses the `vs-stable` toolchain preset. stable/preview can target future VS versions before Chalet officially supports them.
 
 ```bash
 chalet configure -t vs-stable -a auto
@@ -282,20 +233,31 @@ This uses the latest non-preview version of MSVC, attempts to detect it, and use
 
 |LLVM|
 
-```bash
-chalet configure -t llvm -a x86_64
-chalet configure -t apple-llvm -a x86_64 
-chalet configure -t apple-llvm -a arm64 
-chalet configure -t apple-llvm -a universal 
-```
-
-These create the toolchain 'llvm' or 'apple-llvm' since Clang handles the architecture itself. 
+Unlike with MSVC and GCC, LLVM generates a single toolchain instead of one for each architecture.
 
 ```bash
 chalet configure -t llvm -a auto
+chalet configure -t apple-llvm -a auto
 ```
 
-This detects LLVM from path and uses the machine's host architecture.
+These detect LLVM (or Apple LLVM) and use the machine's architecture.
+
+```bash
+chalet configure -t llvm -a x86_64
+chalet configure -t llvm -a i866
+chalet configure -t llvm -a arm64
+chalet configure -t llvm -a arm
+chalet configure -t llvm -a arm-linux-gnueabihf
+
+# Mac w/ M1 architecture
+chalet configure -t apple-llvm -a arm64
+
+# Mac w/ Intel architecture
+chalet configure -t apple-llvm -a x86_64
+
+# Mac w/ either architecture (Fat binary w/ x86_64 & arm64)
+chalet configure -t apple-llvm -a universal
+```
 
 |GCC|
 
@@ -310,6 +272,8 @@ For cross compilers, since there is a 1:1 relationship between the version of GC
 ```bash
 chalet configure -t x86_64-linux-gnu-gcc
 chalet configure -t x86_64-x64-mingw32-gcc
+
+# Homebrew GCC on Mac
 chalet configure -t gcc-11 
 ```
 
@@ -319,7 +283,7 @@ Intel support is experimental, but this is the way to get started:
 
 **Intel LLVM w/ a Visual Studio 2019 Environment (Windows):**
 ```bash
-chalet configure -t intel-llvm-vs-2019
+chalet configure -t intel-llvm-vs-2022
 ```
 
 **Intel Classic (MacOS):**
@@ -337,7 +301,7 @@ chalet configure -t intel-classic -a auto build
 
 **Build Configurations**
 
-There are a handful of default build configurations, but by far, the most common are `Release` and `Debug`. If new to C++, `Debug` implies there are no optimizations done, and the build will be used alongside a debugger, while `Release` performs optimizations (within reason) for a released application.
+There are a handful of default build configurations, but by far, the most common are `Release` and `Debug`. If new to C++, `Debug` implies there are no optimizations done, and the build will be used alongside a debugger, while `Release` performs optimizations for a released application.
 
 During the configure step the `Release` build configuration will be chosen and configured in settings. If it's a new project, `Debug` will be more desireable. To select the configuration you want to use for the command, simply add `--configuration (name)` or `-c (name)`. For example:
 
@@ -357,7 +321,7 @@ Create that first build with:
 chalet buildrun
 ```
 
-This will build the application, and run it immediately.
+This will build the application, and run it immediately if it's executable.
 
 If the output directory is `build`, this will generate a build of the project into the folder `build/(id)_(configuration)` where `id` is a either the target triple or the toolchain name. The subfolder can also be customized to just the configuration if that makes for an easier workflow.
 

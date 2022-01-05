@@ -6,9 +6,9 @@ title: Managing Dependencies
 
 ---
 
-Before diving into build target details, one should consider how to import libraries and external code. In general, it's best to figure out a way to exclude the actual code of those projects from your own project. So if using git, one can use submodules for this, scripts, or an external package manager in combination with adding appropriate paths to `.gitignore`.
+Before diving into build target details, one should consider how to import libraries and external code. In general, it's best to figure out a way to separate that code from your project's code. if using git, one can use submodules for this, scripts, or an external package manager in combination with adding appropriate paths to `.gitignore`.
 
-Chalet is not a package manager itself, but has a method of streamlining external git dependencies that can then be used in its own build targets. It makes no assumptions when the repositories are cloned, so it's up to the developer to figure out what to do with it afterwards. This may serve as a basis for package management in the future.
+Chalet has a method of streamlining external git dependencies that can then be used in its own build targets. It makes no assumptions when the repositories are cloned, so it's up to the developer to figure out what to do with it afterwards. This may serve as a basis for package management in the future.
 
 \\
 
@@ -20,6 +20,9 @@ External git repositories are added to the project with the `externalDependencie
 "externalDependencies": {
    "foo-repo": {
       "repository": "https://github.com/foo/foo.git"
+   },
+   "foo2-repo": {
+      "repository": "git@github.com:foo/foo2.git"
    },
    "bar-repo": {
       "repository": "https://my-website.io/bar/bar.git",
@@ -80,11 +83,11 @@ If a repository only references the branch or doesn't use a branch, commit, or t
 
 ## [The External Directory]
 
-Chalet uses a folder called `chalet_external` to store anything added with `externalDependencies`. It performs shallow clones of the repositories, does not store their git history, and keeps track of the given branch or ref separately in a central cache. It's expected that the code cloned down is managed elsewhere. The external directory can be changed via the `--external-dir` or `-e` command line option. Some might want to use `external` or `vendor` for instance if that makes more sense. 
+Chalet uses a folder called `chalet_external` to store anything added with `externalDependencies`. It performs shallow clones of the repositories, does not store their git history, and keeps track of the given branch or ref separately in a central cache. It's expected that the code cloned down is managed elsewhere. The external directory can be changed via the `--external-dir` or `-e` command line option. Some might want to use `external` or `vendor` for instance if that makes more sense to them. 
 
 The directory can be referenced in chalet.json with the `${externalDir}` path substitution variable explained [in the next section](/creating-targets?id=path-substitution).
 
-The subfolder name of the cloned repository will always been the object node's name. For example, the following:
+The subfolder name of the cloned repository will always be the object node's name. For example, the following:
 
 ```json
 "bar-repo": {
@@ -93,12 +96,12 @@ The subfolder name of the cloned repository will always been the object node's n
 }
 ```
 
-... will be cloned into `${externalDir}/bar-repo` (or `chalet_external/bar-repo`).
+... will be cloned into `${externalDir}/bar-repo` (or `chalet_external/bar-repo` by default).
 
 \\
 
 ## [Using Package Managers]
 
-At the moment, other package managers like [Conan](https://conan.io) and [vcpkg](https://vcpkg.io) can be integrated using [Script Targets](/creating-targets?id=script-targets), or they can invoked via CMake in [CMake Targets](/creating-targets?id=cmake-targets), but there is no official integration for them.
+At the moment, other package managers like [Conan](https://conan.io) and [vcpkg](https://vcpkg.io) can be integrated using [Process Targets](/creating-targets?id=process-targets), [Script Targets](/creating-targets?id=script-targets), or they can invoked via CMake in [CMake Targets](/creating-targets?id=cmake-targets), but there is no official integration for them.
 
 <!-- nav:/getting-started:/creating-targets -->

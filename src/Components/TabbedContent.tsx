@@ -10,21 +10,21 @@ type Props = React.PropsWithChildren<{}>;
 const getOperatingSystem = (platform?: typeof platformJs.os) => {
 	if (platform && platform.family) {
 		if (platform.family.startsWith("Windows")) {
-			return "windows";
+			return ["windows", "msvc"];
 		} else if (platform.family.startsWith("OS X") || platform.family.startsWith("iOS")) {
-			return "macos";
+			return ["macos", "llvm"];
 		} else {
-			return "linux";
+			return ["linux", "gcc"];
 		}
 	}
 
-	return "linux";
+	return ["linux", "gcc"];
 };
 
 const isTabOperatingSystem = (name: string): boolean => {
 	const lowerName = name.toLowerCase();
-	const platform = getOperatingSystem(platformJs.os);
-	return lowerName === platform;
+	const [platform, commonCompiler] = getOperatingSystem(platformJs.os);
+	return lowerName === platform || lowerName === commonCompiler;
 };
 
 const TabbedContent = ({ children }: Props) => {
