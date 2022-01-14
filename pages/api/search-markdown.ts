@@ -12,6 +12,7 @@ let pages: PageCache[] = [];
 const getSearchResults = (search: string, pages: PageCache[], resultLength: number = 80): ResultSearchResults => {
 	let result: ResultSearchResults = [];
 
+	let lastPosition: number = 0;
 	const getResultFromText = (inText: string, page: PageCache, outputText: boolean = true) => {
 		const textLowerCase = inText.toLowerCase();
 		while (true) {
@@ -22,14 +23,13 @@ const getSearchResults = (search: string, pages: PageCache[], resultLength: numb
 				result.push({
 					url: page.url,
 					title: page.title,
-					text: outputText ? inText.substring(lastPosition, search.length + resultLength).split("\n")[0] : "",
+					text: outputText ? inText.substring(lastPosition, lastPosition + resultLength).split("\n")[0] : "",
 				});
 				lastPosition += search.length;
 			}
 		}
 	};
 
-	let lastPosition: number = 0;
 	for (const page of pages) {
 		getResultFromText(page.title, page, false);
 		getResultFromText(page.content, page);
