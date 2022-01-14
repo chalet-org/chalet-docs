@@ -1,7 +1,7 @@
 import { ThemeType } from "./ThemeType";
 
 const ThemeIndex: ThemeType = {
-	bodyBackground: "--th-bg-body", // remove?
+	bodyBackground: "--th-bg-body",
 	codeBackground: "--th-bg-code",
 	background: "--th-bg",
 	mainText: "--th-main-text",
@@ -25,6 +25,14 @@ const ThemeIndex: ThemeType = {
 	lightCyan: "--th-light-cyan",
 };
 
-export const getCssVariable = (id: keyof ThemeType) => {
-	return `var(${ThemeIndex[id]})`;
+const values = Object.entries(ThemeIndex);
+
+export const getRootThemeCss = (theme: ThemeType): string => {
+	let result: string = "";
+	values.map(([key, value]) => {
+		result += `${value}: ${theme[key]};`;
+	});
+	return result;
 };
+
+export const getCssVariable = (id: keyof ThemeType) => `var(${ThemeIndex[id]})`;

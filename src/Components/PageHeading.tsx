@@ -3,9 +3,7 @@ import styled from "styled-components";
 
 import { getCssVariable } from "Theme";
 
-type Props = {};
-
-const PageHeading = (props: Props) => {
+const PageHeading = () => {
 	return (
 		<>
 			<Styles>
@@ -21,16 +19,15 @@ export { PageHeading };
 
 const Styles = styled.div`
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	justify-content: center;
+	padding-bottom: 2rem;
 
 	> h1 {
 		line-height: 1;
-		padding: 0;
 		color: ${getCssVariable("white")};
 		font-size: 3.5rem;
 		align-self: center;
-		padding-left: 1rem;
 		text-transform: uppercase;
 		letter-spacing: 0.325em;
 	}
@@ -38,7 +35,8 @@ const Styles = styled.div`
 	> img {
 		display: block;
 		align-self: center;
-		width: 8rem;
+		width: 11rem;
 		height: auto;
+		padding-bottom: 1rem;
 	}
 `;
