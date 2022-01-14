@@ -144,8 +144,8 @@ type StyleProps = {
 
 const codeCss = css<StyleProps>`
 	position: relative;
-	background-color: ${getCssVariable("BackgroundCode")};
-	color: ${getCssVariable("White")};
+	background-color: ${getCssVariable("codeBackground")};
+	color: ${getCssVariable("white")};
 	font-size: 0.875rem;
 	font-weight: 400;
 	word-spacing: normal;
@@ -180,104 +180,104 @@ const codeCss = css<StyleProps>`
 		}
 
 		&.atrule {
-			color: ${getCssVariable("Blue")};
+			color: ${getCssVariable("blue")};
 		}
 		&.attr-name {
-			color: ${getCssVariable("Green")};
+			color: ${getCssVariable("green")};
 		}
 		&.attr-value {
-			color: ${getCssVariable("LightYellow")};
+			color: ${getCssVariable("lightYellow")};
 		}
 		&.boolean {
-			color: ${getCssVariable("Yellow")};
+			color: ${getCssVariable("yellow")};
 			font-weight: ${boldWeight};
 		}
 		&.builtin {
-			color: ${getCssVariable("Cyan")};
+			color: ${getCssVariable("cyan")};
 		}
 		&.cdata {
-			color: ${getCssVariable("Gray")};
+			color: ${getCssVariable("gray")};
 		}
 		&.char {
-			color: ${getCssVariable("Green")};
+			color: ${getCssVariable("green")};
 		}
 		&.class-name {
-			color: ${getCssVariable("Accent")};
+			color: ${getCssVariable("accent")};
 		}
 		&.comment {
-			color: ${getCssVariable("Gray")};
+			color: ${getCssVariable("gray")};
 		}
 		&.constant {
-			color: ${getCssVariable("Red")};
+			color: ${getCssVariable("red")};
 		}
 		&.deleted {
-			color: ${getCssVariable("Red")};
+			color: ${getCssVariable("red")};
 		}
 		&.doctype {
-			color: ${getCssVariable("Gray")};
+			color: ${getCssVariable("gray")};
 		}
 		&.entity {
-			color: ${getCssVariable("White")};
+			color: ${getCssVariable("white")};
 		}
 		&.function {
-			color: ${getCssVariable("Blue")};
+			color: ${getCssVariable("blue")};
 		}
 		&.important {
-			color: ${getCssVariable("Yellow")};
+			color: ${getCssVariable("yellow")};
 		}
 		&.inserted {
-			color: ${getCssVariable("Green")};
+			color: ${getCssVariable("green")};
 		}
 		&.keyword {
-			color: ${getCssVariable("Yellow")};
+			color: ${getCssVariable("yellow")};
 			font-weight: ${boldWeight};
 		}
 		&.number {
-			color: ${getCssVariable("Cyan")};
+			color: ${getCssVariable("cyan")};
 		}
 		&.operator {
-			color: ${getCssVariable("Gray")};
+			color: ${getCssVariable("gray")};
 		}
 		&.prolog {
-			color: ${getCssVariable("Gray")};
+			color: ${getCssVariable("gray")};
 		}
 		&.property {
-			color: ${getCssVariable("Blue")};
+			color: ${getCssVariable("blue")};
 		}
 		&.punctuation {
-			color: ${getCssVariable("Gray")};
+			color: ${getCssVariable("gray")};
 		}
 		&.regex {
-			color: ${getCssVariable("Yellow")};
+			color: ${getCssVariable("yellow")};
 		}
 		&.selector {
-			color: ${getCssVariable("Green")};
+			color: ${getCssVariable("green")};
 		}
 		&.string {
-			color: ${getCssVariable("Green")};
+			color: ${getCssVariable("green")};
 		}
 		&.symbol {
-			color: ${getCssVariable("Red")};
+			color: ${getCssVariable("red")};
 		}
 		&.tag {
-			color: ${getCssVariable("Red")};
+			color: ${getCssVariable("red")};
 		}
 		&.url {
-			color: ${getCssVariable("White")};
+			color: ${getCssVariable("white")};
 		}
 		&.variable {
-			color: ${getCssVariable("White")};
+			color: ${getCssVariable("white")};
 		}
 	}
 
 	.language-cpp .token {
 		&.directive-hash,
 		&.directive.keyword {
-			color: ${getCssVariable("Magenta")};
+			color: ${getCssVariable("magenta")};
 			font-weight: 400;
 
 			+ .string {
-				color: ${getCssVariable("Magenta")};
+				color: ${getCssVariable("magenta")};
 			}
 		}
 	}
@@ -286,52 +286,52 @@ const codeCss = css<StyleProps>`
 		&.function,
 		&.class-name,
 		&.terminal-application {
-			color: ${getCssVariable("Blue")};
+			color: ${getCssVariable("blue")};
 		}
 		&.sudo {
-			color: ${getCssVariable("Red")};
+			color: ${getCssVariable("red")};
 		}
 		&.chalet {
-			color: ${getCssVariable("Accent")};
+			color: ${getCssVariable("accent")};
 		}
 		&.chalet-cmd {
-			color: ${getCssVariable("Green")};
+			color: ${getCssVariable("green")};
 		}
 		&.chalet-toolchain-preset,
 		&.chalet-architecture {
-			color: ${getCssVariable("MainText")};
+			color: ${getCssVariable("mainText")};
 		}
 	}
 
 	.language-json .token {
 		&.json-ellipsis {
-			color: ${getCssVariable("Gray")};
+			color: ${getCssVariable("gray")};
 		}
 	}
 
 	.language-ini .token {
 		&.section-name {
-			color: ${getCssVariable("Gray")};
+			color: ${getCssVariable("gray")};
 		}
 		&.punctuation-semicolon {
-			color: ${getCssVariable("Gray")};
+			color: ${getCssVariable("gray")};
 		}
 		&.key {
-			color: ${getCssVariable("Blue")};
+			color: ${getCssVariable("blue")};
 		}
 		&.value {
-			color: ${getCssVariable("White")};
+			color: ${getCssVariable("white")};
 		}
 		&.chalet-value-substitution {
-			color: ${getCssVariable("Cyan")};
+			color: ${getCssVariable("cyan")};
 		}
 	}
 
 	.language-css .token.string {
-		color: ${getCssVariable("White")};
+		color: ${getCssVariable("white")};
 	}
 	.style .token.string {
-		color: ${getCssVariable("White")};
+		color: ${getCssVariable("white")};
 	}
 `;
 
@@ -349,7 +349,7 @@ const CodeStyles = styled.code<StyleProps>`
 
 	${codeCss}
 
-	color: ${getCssVariable("Cyan")};
+	color: ${getCssVariable("cyan")};
 `;
 
 const PreStyles = styled.pre<StyleProps>`
@@ -365,7 +365,7 @@ const PreStyles = styled.pre<StyleProps>`
 
 	&:after {
 		content: attr(data-lang);
-		color: ${getCssVariable("Gray")};
+		color: ${getCssVariable("gray")};
 		display: block;
 		position: absolute;
 		top: 0.875rem;

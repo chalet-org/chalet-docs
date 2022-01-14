@@ -6,7 +6,7 @@ import { getCssVariable, Theme } from "Theme";
 
 import { Icon } from "./Icon";
 
-const color = getCssVariable("Header");
+const color = getCssVariable("header");
 
 type Props = {};
 
@@ -36,7 +36,7 @@ const Styles = styled.button`
 		> i > svg {
 			> path,
 			> circle {
-				fill: ${getCssVariable("Accent")} !important;
+				fill: ${getCssVariable("accent")} !important;
 			}
 		}
 	}

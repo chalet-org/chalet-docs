@@ -120,22 +120,22 @@ const Styles = styled.div`
 		padding: 0.5rem 1.5rem;
 		padding-top: 0.375rem;
 		background: transparent;
-		color: ${getCssVariable("Header")};
-		background-color: ${getCssVariable("BackgroundCode")};
-		border: 0.0625rem solid ${getCssVariable("Border")};
+		color: ${getCssVariable("header")};
+		background-color: ${getCssVariable("codeBackground")};
+		border: 0.0625rem solid ${getCssVariable("border")};
 		cursor: pointer;
 		z-index: 4;
 		transition: color 0.125s linear;
 
 		&:not(.active):hover {
-			color: ${getCssVariable("MainText")};
+			color: ${getCssVariable("mainText")};
 		}
 
 		&.active {
-			color: ${getCssVariable("MainText")};
-			background-color: ${getCssVariable("Background")};
-			border-top: 0.25rem solid ${getCssVariable("Red")};
-			border-bottom-color: ${getCssVariable("Background")};
+			color: ${getCssVariable("mainText")};
+			background-color: ${getCssVariable("background")};
+			border-top: 0.25rem solid ${getCssVariable("red")};
+			border-bottom-color: ${getCssVariable("background")};
 			padding-top: 0.125rem;
 		}
 
@@ -152,8 +152,8 @@ const Styles = styled.div`
 		height: auto;
 		width: 100%;
 		padding: 1.125rem 1.5rem;
-		border: 0.0625rem solid ${getCssVariable("Border")};
-		background-color: ${getCssVariable("Background")};
+		border: 0.0625rem solid ${getCssVariable("border")};
+		background-color: ${getCssVariable("background")};
 		margin-top: -0.0625rem;
 	}
 

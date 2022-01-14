@@ -27,7 +27,7 @@ const Styles = styled.ol`
 			display: block;
 			position: absolute;
 			content: counter(ordered-list-count) ". ";
-			color: ${getCssVariable("Header")};
+			color: ${getCssVariable("header")};
 			line-height: inherit;
 			line-height: 0;
 			left: 0;

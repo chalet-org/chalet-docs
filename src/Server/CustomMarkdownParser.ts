@@ -30,10 +30,6 @@ const parseImportantNotes = (text: string): string => {
 	return text.replace(/!> (.*)/g, `<p className="tip">$1</p>`);
 };
 
-const parsePageHeaders = (text: string): string => {
-	return text.replace(/!# (.+)/g, `<PageHeading>$1</PageHeading>`);
-};
-
 const parseAnchoredHeaders = (text: string): string => {
 	return text.replace(/(#{1,6}) \[(.+)\](?!\()(.*?)\n/g, (match: string, p1: string, p2: string) => {
 		return `<AnchoredH${p1.length}>${p2.replace(/\{/g, '{"{').replace(/\}/g, '}"}')}</AnchoredH${p1.length}>\n`;
@@ -353,7 +349,6 @@ const parseCustomMarkdown = async (
 
 		text = parseExplicitLineBreaks(text);
 		text = parseImportantNotes(text);
-		text = parsePageHeaders(text);
 		text = parseAnchoredHeaders(text);
 		text = parseAccordions(text);
 		text = parseTabs(text);

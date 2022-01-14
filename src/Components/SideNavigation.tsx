@@ -42,9 +42,12 @@ const SideNavigation = ({ children, ...navigationProps }: Props) => {
 			</SidebarToggle>
 			<StyledAside className={`sidebar ${navOpen ? "open" : ""}`} width={navWidth}>
 				<Logo>
-					<Link href="/" showActive={false}>
-						Chalet
-					</Link>
+					<img src="/images/chalet-logo.svg" alt="chalet-logo" />
+					<h4>
+						<Link href="/" showActive={false}>
+							Chalet
+						</Link>
+					</h4>
 				</Logo>
 				<SearchInput />
 				<NavGroup>
@@ -61,20 +64,37 @@ const SideNavigation = ({ children, ...navigationProps }: Props) => {
 
 export { SideNavigation };
 
-const Logo = styled.h4`
-	text-align: center;
-	text-shadow: 0 0 0 transparent;
-	transition: text-shadow 0.125s linear;
-	text-transform: uppercase;
-	letter-spacing: 0.625rem;
-	word-spacing: 0.25rem;
+const Logo = styled.div`
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 
-	> a {
-		text-decoration: none !important;
+	> h4 {
+		line-height: 1;
+		padding: 0;
+		align-self: center;
+		text-transform: uppercase;
+		letter-spacing: 0.325em;
+		text-align: center;
+		text-shadow: 0 0 0 transparent;
+		transition: text-shadow 0.125s linear;
+
+		> a {
+			text-decoration: none !important;
+		}
+	}
+
+	> img {
+		display: block;
+		align-self: center;
+		width: 3.5rem;
+		height: auto;
 	}
 
 	&:hover {
-		text-shadow: 0 0.125rem 0.5rem ${getCssVariable("Accent")};
+		> h4 {
+			text-shadow: 0 0.125rem 0.5rem ${getCssVariable("accent")};
+		}
 	}
 `;
 
@@ -90,7 +110,7 @@ const SidebarToggle = styled.button`
 	background: none;
 
 	> span {
-		background-color: ${getCssVariable("Accent")};
+		background-color: ${getCssVariable("accent")};
 		display: block;
 		margin-bottom: 0.5rem;
 		width: 2rem;
@@ -116,8 +136,8 @@ const StyledAside = styled.aside<AsideProps>`
 	overflow-y: auto;
 	padding-top: 2rem;
 
-	background-color: ${getCssVariable("BackgroundCode")};
-	color: ${getCssVariable("MainText")};
+	background-color: ${getCssVariable("codeBackground")};
+	color: ${getCssVariable("mainText")};
 
 	ul,
 	> p {
@@ -153,12 +173,12 @@ const StyledAside = styled.aside<AsideProps>`
 
 		&:hover {
 			text-decoration: underline;
-			text-decoration-color: ${getCssVariable("Accent")};
+			text-decoration-color: ${getCssVariable("accent")};
 		}
 
 		&.active {
-			background-color: ${getCssVariable("Background")};
-			border-left-color: ${getCssVariable("Red")};
+			background-color: ${getCssVariable("background")};
+			border-left-color: ${getCssVariable("red")};
 		}
 	}
 
@@ -181,9 +201,9 @@ const StyledAside = styled.aside<AsideProps>`
 		height: 7.5rem;
 		bottom: 0;
 
-		${makeLinearGradient("transparent", getCssVariable("BackgroundCode"), 180)}
-		background: ${getCssVariable("BackgroundCode")};
-		background: linear-gradient(180deg, transparent 0%, ${getCssVariable("BackgroundCode")} 30%);
+		${makeLinearGradient("transparent", getCssVariable("codeBackground"), 180)}
+		background: ${getCssVariable("codeBackground")};
+		background: linear-gradient(180deg, transparent 0%, ${getCssVariable("codeBackground")} 30%);
 
 		> .theme-toggle {
 			display: block;
@@ -200,7 +220,7 @@ const StyledAside = styled.aside<AsideProps>`
 
 	&.open {
 		left: 0;
-		border-right: 0.125rem solid ${getCssVariable("Border")};
+		border-right: 0.125rem solid ${getCssVariable("border")};
 
 		> div.nav-fade {
 			> .theme-toggle {
@@ -229,7 +249,7 @@ const NavGroup = styled.div`
 	}
 
 	> ul > li > strong {
-		color: ${getCssVariable("Header")};
+		color: ${getCssVariable("header")};
 		font-weight: 400;
 	}
 

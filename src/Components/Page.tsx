@@ -65,8 +65,8 @@ const Main = styled.main<NavBarProps>`
 	left: 0;
 	transition: left 0.125s linear;
 
-	background-color: ${getCssVariable("Background")};
-	color: ${getCssVariable("MainText")};
+	background-color: ${getCssVariable("background")};
+	color: ${getCssVariable("mainText")};
 
 	&.nav-open {
 		left: ${(props) => props.navWidth};

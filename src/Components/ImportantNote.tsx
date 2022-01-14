@@ -13,10 +13,10 @@ export { ImportantNote };
 
 const Styles = styled.div`
 	display: block;
-	background-color: ${getCssVariable("BackgroundCode")};
-	border: 0.125rem solid ${getCssVariable("Border")};
+	background-color: ${getCssVariable("codeBackground")};
+	border: 0.125rem solid ${getCssVariable("border")};
 	border-radius: 0.5rem;
-	color: ${getCssVariable("White")};
+	color: ${getCssVariable("white")};
 	margin: 0.75rem 0;
 	padding: 1rem 1.25rem;
 `;

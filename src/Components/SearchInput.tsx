@@ -9,7 +9,7 @@ import { getCssVariable } from "Theme";
 
 type Props = React.PropsWithChildren<{}>;
 
-const searchColor = getCssVariable("Header");
+const searchColor = getCssVariable("header");
 
 const SearchInput = ({ children }: Props) => {
 	const [value, setValue] = useState<string>("");
@@ -94,24 +94,24 @@ const Styles = styled.div`
 	padding: 1rem 0;
 	padding-bottom: 2rem;
 	width: 100%;
-	color: ${getCssVariable("MainText")};
+	color: ${getCssVariable("mainText")};
 
 	> div.search-bar {
 		display: block;
 		position: relative;
 		margin: 0 2rem;
-		border-bottom: 0.125rem solid ${getCssVariable("Border")};
+		border-bottom: 0.125rem solid ${getCssVariable("border")};
 
 		> input {
 			display: block;
 			width: calc(100% - 1.75rem);
 			border: none;
 			background-color: transparent;
-			color: ${getCssVariable("MainText")};
-			caret-color: ${getCssVariable("Accent")};
+			color: ${getCssVariable("mainText")};
+			caret-color: ${getCssVariable("accent")};
 
 			&::placeholder {
-				color: ${getCssVariable("Header")};
+				color: ${getCssVariable("header")};
 			}
 		}
 
@@ -133,16 +133,16 @@ const Styles = styled.div`
 		display: block;
 		padding: 0 2rem;
 		margin-top: -0.125rem;
-		background-color: ${getCssVariable("Background")};
-		border-top: 0.125rem solid ${getCssVariable("Border")};
-		border-bottom: 0.125rem solid ${getCssVariable("Border")};
+		background-color: ${getCssVariable("background")};
+		border-top: 0.125rem solid ${getCssVariable("border")};
+		border-bottom: 0.125rem solid ${getCssVariable("border")};
 
 		> p.search-result-count {
 			display: block;
 			padding: 0;
 			margin: 0;
 			line-height: 2.5;
-			color: ${getCssVariable("Header")};
+			color: ${getCssVariable("header")};
 			font-size: 1rem;
 		}
 
@@ -158,7 +158,7 @@ const Styles = styled.div`
 
 			> span {
 				display: block;
-				color: ${getCssVariable("Accent")};
+				color: ${getCssVariable("accent")};
 			}
 		}
 	}

@@ -139,7 +139,7 @@ const BaseStyle = createGlobalStyle`
 	hr {
 		border: none;
 		outline: 0;
-		background-color: ${getCssVariable("Border")};
+		background-color: ${getCssVariable("border")};
 		margin: 1rem auto;
 		margin-bottom: 2rem;
 		height: 0.0625rem;
@@ -153,7 +153,7 @@ const BaseStyle = createGlobalStyle`
 			top: 0.325rem;
 			height: 0.0625rem;
 			width: 100%;
-			background-color: ${getCssVariable("Border")};
+			background-color: ${getCssVariable("border")};
 		}
 
 		&:after {
@@ -162,8 +162,8 @@ const BaseStyle = createGlobalStyle`
 			position: relative;
 			top: -1.0675rem;
 			padding: 0 0;
-			background: ${getCssVariable("Background")};
-			color: ${getCssVariable("Border")};
+			background: ${getCssVariable("background")};
+			color: ${getCssVariable("border")};
 			font-size: 0.675rem;
 			transform: scaleX(150%);
 		}
@@ -172,11 +172,11 @@ const BaseStyle = createGlobalStyle`
     a {
 		cursor: pointer;
         text-decoration: none;
-		color: ${getCssVariable("Accent")};
+		color: ${getCssVariable("accent")};
 		transition: color 0.125s linear;
 
 		&:hover {
-			color: ${getCssVariable("Cyan")};
+			color: ${getCssVariable("cyan")};
 		}
     }
 

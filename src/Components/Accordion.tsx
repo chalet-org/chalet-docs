@@ -83,13 +83,13 @@ const AccordionHandle = styled.div`
 		letter-spacing: -0.125rem;
 		line-height: 0;
 		top: calc(50% - 0.125rem);
-		color: ${getCssVariable("Cyan")};
+		color: ${getCssVariable("cyan")};
 		transition: transform 0.125s linear;
 	}
 
 	&:hover {
-		border-top-color: ${getCssVariable("Accent")};
-		border-bottom-color: ${getCssVariable("Accent")};
+		border-top-color: ${getCssVariable("accent")};
+		border-bottom-color: ${getCssVariable("accent")};
 	}
 
 	&.open {
@@ -122,11 +122,11 @@ const AccordionContent = styled.div<ContentProps>`
 		margin: 0;
 		margin-top: ${({ marginTop }) => marginTop}rem;
 		margin-bottom: ${({ marginBottom }) => marginBottom}rem;
-		border: 0.0625rem dashed ${getCssVariable("Border")};
-		background-color: ${getCssVariable("BackgroundCode")};
+		border: 0.0625rem dashed ${getCssVariable("border")};
+		background-color: ${getCssVariable("codeBackground")};
 
 		> pre {
-			border: 0.0625rem solid ${getCssVariable("Background")};
+			border: 0.0625rem solid ${getCssVariable("background")};
 		}
 	}
 `;

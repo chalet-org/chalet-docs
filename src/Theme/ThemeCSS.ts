@@ -1,28 +1,30 @@
-enum ThemeCSS {
-	BackgroundBody = "--th-bg-body",
-	BackgroundCode = "--th-bg-code",
-	Background = "--th-bg",
-	MainText = "--th-main-text",
-	Header = "--th-header",
-	Border = "--th-border",
-	Accent = "--th-accent",
-	Black = "--th-black",
-	White = "--th-white",
-	Gray = "--th-gray",
-	Red = "--th-red",
-	LightRed = "--th-light-red",
-	Green = "--th-green",
-	LightGreen = "--th-light-green",
-	Yellow = "--th-yellow",
-	LightYellow = "--th-light-yellow",
-	Blue = "--th-blue",
-	LightBlue = "--th-light-blue",
-	Magenta = "--th-magenta",
-	LightMagenta = "--th-light-magenta",
-	Cyan = "--th-cyan",
-	LightCyan = "--th-light-cyan",
-}
+import { ThemeType } from "./ThemeType";
 
-export const getCssVariable = (id: keyof typeof ThemeCSS) => {
-	return `var(${ThemeCSS[id]})`;
+const ThemeIndex: ThemeType = {
+	bodyBackground: "--th-bg-body", // remove?
+	codeBackground: "--th-bg-code",
+	background: "--th-bg",
+	mainText: "--th-main-text",
+	header: "--th-header",
+	border: "--th-border",
+	accent: "--th-accent",
+	black: "--th-black",
+	white: "--th-white",
+	gray: "--th-gray",
+	red: "--th-red",
+	lightRed: "--th-light-red",
+	green: "--th-green",
+	lightGreen: "--th-light-green",
+	yellow: "--th-yellow",
+	lightYellow: "--th-light-yellow",
+	blue: "--th-blue",
+	lightBlue: "--th-light-blue",
+	magenta: "--th-magenta",
+	lightMagenta: "--th-light-magenta",
+	cyan: "--th-cyan",
+	lightCyan: "--th-light-cyan",
+};
+
+export const getCssVariable = (id: keyof ThemeType) => {
+	return `var(${ThemeIndex[id]})`;
 };

@@ -65,11 +65,11 @@ for (const size of ["h1", "h2", "h3", "h4", "h5", "h6"] as HeadingSize[]) {
 
 		> a {
 			font-weight: 600;
-			color: ${getCssVariable("MainText")};
+			color: ${getCssVariable("mainText")};
 
 			&:hover {
 				text-decoration: underline;
-				text-decoration-color: ${getCssVariable("Accent")};
+				text-decoration-color: ${getCssVariable("accent")};
 			}
 		}
 	`;

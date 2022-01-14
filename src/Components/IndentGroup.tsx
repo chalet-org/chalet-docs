@@ -22,13 +22,13 @@ const Styles = styled.div`
 	display: block;
 	position: relative;
 	padding-left: 1.25rem;
-	border-left: 0.125rem solid ${getCssVariable("Border")};
+	border-left: 0.125rem solid ${getCssVariable("border")};
 `;
 
 const IndentLabel = styled.div`
 	display: block;
 	position: relative;
-	color: ${getCssVariable("Header")};
+	color: ${getCssVariable("header")};
 	/* padding-top: 0.25rem; */
 	padding-top: 0;
 	padding-bottom: 0.5rem;

@@ -25,7 +25,7 @@ const Styles = styled.ul`
 			display: block;
 			position: absolute;
 			content: "\u2023";
-			color: ${getCssVariable("Header")};
+			color: ${getCssVariable("header")};
 			font-size: 2rem;
 			line-height: 0;
 			left: 0;
