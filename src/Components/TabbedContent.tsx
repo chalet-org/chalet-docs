@@ -134,7 +134,7 @@ const Styles = styled.div`
 		&.active {
 			color: ${getCssVariable("mainText")};
 			background-color: ${getCssVariable("background")};
-			border-top: 0.25rem solid ${getCssVariable("red")};
+			border-top: 0.25rem solid ${getCssVariable("tertiaryColor")};
 			border-bottom-color: ${getCssVariable("background")};
 			padding-top: 0.125rem;
 		}

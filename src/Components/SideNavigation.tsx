@@ -93,7 +93,7 @@ const Logo = styled.div`
 
 	&:hover {
 		> h4 {
-			text-shadow: 0 0.125rem 0.5rem ${getCssVariable("accent")};
+			text-shadow: 0 0.125rem 0.5rem ${getCssVariable("primaryColor")};
 		}
 	}
 `;
@@ -110,7 +110,7 @@ const SidebarToggle = styled.button`
 	background: none;
 
 	> span {
-		background-color: ${getCssVariable("accent")};
+		background-color: ${getCssVariable("primaryColor")};
 		display: block;
 		margin-bottom: 0.5rem;
 		width: 2rem;
@@ -173,12 +173,12 @@ const StyledAside = styled.aside<AsideProps>`
 
 		&:hover {
 			text-decoration: underline;
-			text-decoration-color: ${getCssVariable("accent")};
+			text-decoration-color: ${getCssVariable("primaryColor")};
 		}
 
 		&.active {
 			background-color: ${getCssVariable("background")};
-			border-left-color: ${getCssVariable("red")};
+			border-left-color: ${getCssVariable("tertiaryColor")};
 		}
 	}
 

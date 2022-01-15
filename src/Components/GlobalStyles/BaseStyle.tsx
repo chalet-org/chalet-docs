@@ -172,11 +172,11 @@ const BaseStyle = createGlobalStyle`
     a {
 		cursor: pointer;
         text-decoration: none;
-		color: ${getCssVariable("accent")};
+		color: ${getCssVariable("primaryColor")};
 		transition: color 0.125s linear;
 
 		&:hover {
-			color: ${getCssVariable("cyan")};
+			color: ${getCssVariable("secondaryColor")};
 		}
     }
 

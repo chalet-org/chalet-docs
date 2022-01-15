@@ -83,13 +83,13 @@ const AccordionHandle = styled.div`
 		letter-spacing: -0.125rem;
 		line-height: 0;
 		top: calc(50% - 0.125rem);
-		color: ${getCssVariable("cyan")};
+		color: ${getCssVariable("secondaryColor")};
 		transition: transform 0.125s linear;
 	}
 
 	&:hover {
-		border-top-color: ${getCssVariable("accent")};
-		border-bottom-color: ${getCssVariable("accent")};
+		border-top-color: ${getCssVariable("primaryColor")};
+		border-bottom-color: ${getCssVariable("primaryColor")};
 	}
 
 	&.open {

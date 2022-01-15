@@ -108,7 +108,7 @@ const Styles = styled.div`
 			border: none;
 			background-color: transparent;
 			color: ${getCssVariable("mainText")};
-			caret-color: ${getCssVariable("accent")};
+			caret-color: ${getCssVariable("primaryColor")};
 
 			&::placeholder {
 				color: ${getCssVariable("header")};
@@ -158,7 +158,7 @@ const Styles = styled.div`
 
 			> span {
 				display: block;
-				color: ${getCssVariable("accent")};
+				color: ${getCssVariable("primaryColor")};
 			}
 		}
 	}

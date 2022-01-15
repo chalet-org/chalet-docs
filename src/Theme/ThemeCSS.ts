@@ -1,33 +1,36 @@
 import { ThemeType } from "./ThemeType";
 
 const ThemeIndex: ThemeType = {
-	bodyBackground: "--th-bg-body",
-	codeBackground: "--th-bg-code",
-	background: "--th-bg",
-	mainText: "--th-main-text",
-	header: "--th-header",
-	border: "--th-border",
-	accent: "--th-accent",
-	black: "--th-black",
-	white: "--th-white",
-	gray: "--th-gray",
-	red: "--th-red",
-	lightRed: "--th-light-red",
-	green: "--th-green",
-	lightGreen: "--th-light-green",
-	yellow: "--th-yellow",
-	lightYellow: "--th-light-yellow",
-	blue: "--th-blue",
-	lightBlue: "--th-light-blue",
-	magenta: "--th-magenta",
-	lightMagenta: "--th-light-magenta",
-	cyan: "--th-cyan",
-	lightCyan: "--th-light-cyan",
+	bodyBackground: "bg-body",
+	codeBackground: "bg-code",
+	background: "bg",
+	mainText: "main-text",
+	header: "header",
+	border: "border",
+	primaryColor: "primary-color",
+	secondaryColor: "secondary-color",
+	tertiaryColor: "tertiary-color",
+	//
+	codeBlack: "code-black",
+	codeWhite: "code-white",
+	codeGray: "code-gray",
+	codeRed: "code-red",
+	codeLightRed: "code-light-red",
+	codeGreen: "code-green",
+	codeLightGreen: "code-light-green",
+	codeYellow: "code-yellow",
+	codeLightYellow: "code-light-yellow",
+	codeBlue: "code-blue",
+	codeLightBlue: "code-light-blue",
+	codeMagenta: "code-magenta",
+	codeLightMagenta: "code-light-magenta",
+	codeCyan: "code-cyan",
+	codeLightCyan: "code-light-cyan",
 };
 
 const values = Object.entries(ThemeIndex);
 
 export const getRootThemeCss = (theme: ThemeType): string =>
-	values.map(([key, value]) => `${value}: ${theme[key]};`).join("");
+	values.map(([key, value]) => `--th-${value}: ${theme[key]};`).join("");
 
-export const getCssVariable = (id: keyof ThemeType) => `var(${ThemeIndex[id]})`;
+export const getCssVariable = (id: keyof ThemeType) => `var(--th-${ThemeIndex[id]})`;

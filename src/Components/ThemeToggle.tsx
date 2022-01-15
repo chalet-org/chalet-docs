@@ -36,7 +36,7 @@ const Styles = styled.button`
 		> i > svg {
 			> path,
 			> circle {
-				fill: ${getCssVariable("accent")} !important;
+				fill: ${getCssVariable("primaryColor")} !important;
 			}
 		}
 	}

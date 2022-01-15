@@ -17,7 +17,7 @@ const Styles = styled.blockquote`
 	margin: 0.75rem 0;
 	padding: 0.5rem;
 	padding-left: 1.25rem;
-	border-left: 0.25rem solid ${getCssVariable("accent")};
+	border-left: 0.25rem solid ${getCssVariable("primaryColor")};
 	background-color: ${getCssVariable("codeBackground")};
 
 	> p {

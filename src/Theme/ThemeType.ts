@@ -1,25 +1,34 @@
+/*
+	Logo colors:
+	#f49309
+	#b33434
+	#71072d
+*/
+
 export type ThemeType = {
 	bodyBackground: string;
+	codeBackground: string;
 	background: string;
 	mainText: string;
 	header: string;
-	//
-	codeBackground: string;
 	border: string;
-	accent: string;
-	black: string;
-	white: string;
-	gray: string;
-	red: string;
-	lightRed: string;
-	green: string;
-	lightGreen: string;
-	yellow: string;
-	lightYellow: string;
-	blue: string;
-	lightBlue: string;
-	magenta: string;
-	lightMagenta: string;
-	cyan: string;
-	lightCyan: string;
+	primaryColor: string;
+	secondaryColor: string;
+	tertiaryColor: string;
+	//
+	codeBlack: string;
+	codeWhite: string;
+	codeGray: string;
+	codeRed: string;
+	codeLightRed: string;
+	codeGreen: string;
+	codeLightGreen: string;
+	codeYellow: string;
+	codeLightYellow: string;
+	codeBlue: string;
+	codeLightBlue: string;
+	codeMagenta: string;
+	codeLightMagenta: string;
+	codeCyan: string;
+	codeLightCyan: string;
 };
