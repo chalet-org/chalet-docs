@@ -110,11 +110,18 @@ const SidebarToggle = styled.button`
 	background: none;
 
 	> span {
-		background-color: ${getCssVariable("primaryColor")};
+		background-color: ${getCssVariable("header")};
+		transition: background-color 0.125s linear;
 		display: block;
 		margin-bottom: 0.5rem;
 		width: 2rem;
 		height: 0.125rem;
+	}
+
+	&:hover {
+		> span {
+			background-color: ${getCssVariable("primaryColor")};
+		}
 	}
 `;
 

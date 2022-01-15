@@ -189,7 +189,7 @@ const codeCss = css<StyleProps>`
 			color: ${getCssVariable("codeLightYellow")};
 		}
 		&.boolean {
-			color: ${getCssVariable("codeYellow")};
+			color: ${getCssVariable("codeGreen")};
 			font-weight: ${boldWeight};
 		}
 		&.builtin {
@@ -242,7 +242,7 @@ const codeCss = css<StyleProps>`
 			color: ${getCssVariable("codeGray")};
 		}
 		&.property {
-			color: ${getCssVariable("codeCyan")};
+			color: ${getCssVariable("codeYellow")};
 		}
 		&.punctuation {
 			color: ${getCssVariable("codeGray")};
@@ -254,7 +254,7 @@ const codeCss = css<StyleProps>`
 			color: ${getCssVariable("codeGreen")};
 		}
 		&.string {
-			color: ${getCssVariable("codeGreen")};
+			color: ${getCssVariable("codeWhite")};
 		}
 		&.symbol {
 			color: ${getCssVariable("codeRed")};
@@ -273,11 +273,11 @@ const codeCss = css<StyleProps>`
 	.language-cpp .token {
 		&.directive-hash,
 		&.directive.keyword {
-			color: ${getCssVariable("codeMagenta")};
+			color: ${getCssVariable("codeBlue")};
 			font-weight: 400;
 
 			+ .string {
-				color: ${getCssVariable("codeMagenta")};
+				color: ${getCssVariable("codeYellow")};
 			}
 		}
 	}
@@ -290,14 +290,14 @@ const codeCss = css<StyleProps>`
 		}
 		&.sudo {
 			color: ${getCssVariable("codeRed")};
-			font-weight: 600;
 		}
 		&.chalet {
 			color: ${getCssVariable("codeYellow")};
 			font-weight: 600;
 		}
 		&.chalet-cmd {
-			color: ${getCssVariable("codeGreen")};
+			color: ${getCssVariable("codeBlue")};
+			font-weight: 600;
 		}
 		&.chalet-toolchain-preset,
 		&.chalet-architecture {

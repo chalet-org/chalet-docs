@@ -24,7 +24,7 @@ const Main = ({ Component, pageProps }: Props) => {
 
 		const prog = new ProgressBar({
 			size: "0.25rem",
-			color: theme.primaryColor,
+			color: theme.secondaryColor,
 			className: "router-progress-bar",
 			delay: 100,
 		});

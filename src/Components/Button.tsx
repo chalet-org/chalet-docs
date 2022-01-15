@@ -32,7 +32,7 @@ const Styles = styled.button`
 	padding: 1.25rem 1rem;
 	padding-bottom: 1.325rem;
 	line-height: 0;
-	color: ${getCssVariable("primaryColor")};
+	color: ${getCssVariable("mainText")};
 	background-color: transparent;
 	border-radius: 0.25rem;
 	cursor: pointer;
