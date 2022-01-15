@@ -125,7 +125,7 @@ const Styles = styled.div`
 		border: 0.0625rem solid ${getCssVariable("border")};
 		cursor: pointer;
 		z-index: 4;
-		transition: color 0.125s linear;
+		transition: color 0.125s linear, border-top-color 0.125s linear;
 
 		&:not(.active):hover {
 			color: ${getCssVariable("mainText")};
@@ -134,9 +134,13 @@ const Styles = styled.div`
 		&.active {
 			color: ${getCssVariable("mainText")};
 			background-color: ${getCssVariable("background")};
-			border-top: 0.25rem solid ${getCssVariable("tertiaryColor")};
+			border-top: 0.25rem solid ${getCssVariable("primaryColor")};
 			border-bottom-color: ${getCssVariable("background")};
 			padding-top: 0.125rem;
+
+			&:hover {
+				border-top-color: ${getCssVariable("secondaryColor")};
+			}
 		}
 
 		& ~ button {

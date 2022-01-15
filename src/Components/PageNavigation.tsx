@@ -3,6 +3,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { useUiStore } from "Stores";
+import { getCssVariable } from "Theme";
 
 import { Button } from "./Button";
 
@@ -59,11 +60,14 @@ const Styles = styled.div`
 	padding-bottom: 3rem;
 
 	> button {
+		color: ${getCssVariable("secondaryColor")};
+
 		&.nav-left {
 			padding-left: 2.5rem;
 
 			&:before {
 				content: "\u276F";
+				color: ${getCssVariable("primaryColor")};
 				transform: rotate(180deg);
 				left: 1rem;
 			}
@@ -74,7 +78,17 @@ const Styles = styled.div`
 
 			&:after {
 				content: "\u276F";
+				color: ${getCssVariable("primaryColor")};
 				right: 1rem;
+			}
+		}
+
+		&:hover {
+			color: ${getCssVariable("background")};
+
+			&.nav-left:before,
+			&.nav-right:after {
+				color: ${getCssVariable("background")};
 			}
 		}
 	}

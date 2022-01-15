@@ -7,9 +7,9 @@ export const darkTheme: ThemeType = {
 	mainText: "#d9d9d9",
 	header: "#373346",
 	border: "#1d1d24",
-	primaryColor: "#7f83ff",
-	secondaryColor: "#0afafa",
-	tertiaryColor: "#ff4a98",
+	primaryColor: "#f49309",
+	secondaryColor: "#f6bb5e",
+	tertiaryColor: "#71072d",
 	//
 	codeBlack: "#0a0a0a",
 	codeWhite: "#dedede",

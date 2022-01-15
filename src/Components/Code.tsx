@@ -242,7 +242,7 @@ const codeCss = css<StyleProps>`
 			color: ${getCssVariable("codeGray")};
 		}
 		&.property {
-			color: ${getCssVariable("codeBlue")};
+			color: ${getCssVariable("codeCyan")};
 		}
 		&.punctuation {
 			color: ${getCssVariable("codeGray")};
@@ -254,7 +254,7 @@ const codeCss = css<StyleProps>`
 			color: ${getCssVariable("codeGreen")};
 		}
 		&.string {
-			color: ${getCssVariable("codeGreen")};
+			color: ${getCssVariable("codeYellow")};
 		}
 		&.symbol {
 			color: ${getCssVariable("codeRed")};
@@ -290,9 +290,11 @@ const codeCss = css<StyleProps>`
 		}
 		&.sudo {
 			color: ${getCssVariable("codeRed")};
+			font-weight: 600;
 		}
 		&.chalet {
-			color: ${getCssVariable("primaryColor")};
+			color: ${getCssVariable("codeYellow")};
+			font-weight: 600;
 		}
 		&.chalet-cmd {
 			color: ${getCssVariable("codeGreen")};
@@ -349,7 +351,7 @@ const CodeStyles = styled.code<StyleProps>`
 
 	${codeCss}
 
-	color: ${getCssVariable("secondaryColor")};
+	color: ${getCssVariable("primaryColor")};
 `;
 
 const PreStyles = styled.pre<StyleProps>`
