@@ -189,7 +189,7 @@ const codeCss = css<StyleProps>`
 			color: ${getCssVariable("codeLightYellow")};
 		}
 		&.boolean {
-			color: ${getCssVariable("codeGreen")};
+			color: ${getCssVariable("codeYellow")};
 			font-weight: ${boldWeight};
 		}
 		&.builtin {
@@ -242,7 +242,7 @@ const codeCss = css<StyleProps>`
 			color: ${getCssVariable("codeGray")};
 		}
 		&.property {
-			color: ${getCssVariable("codeYellow")};
+			color: ${getCssVariable("codeBlue")};
 		}
 		&.punctuation {
 			color: ${getCssVariable("codeGray")};
@@ -254,7 +254,7 @@ const codeCss = css<StyleProps>`
 			color: ${getCssVariable("codeGreen")};
 		}
 		&.string {
-			color: ${getCssVariable("codeWhite")};
+			color: ${getCssVariable("codeGreen")};
 		}
 		&.symbol {
 			color: ${getCssVariable("codeRed")};

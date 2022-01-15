@@ -42,7 +42,9 @@ const SideNavigation = ({ children, ...navigationProps }: Props) => {
 			</SidebarToggle>
 			<StyledAside className={`sidebar ${navOpen ? "open" : ""}`} width={navWidth}>
 				<Logo>
-					<img src="/images/chalet-logo.svg" alt="chalet-logo" />
+					<Link href="/" showActive={false}>
+						<img src="/images/chalet-logo.svg" alt="chalet-logo" />
+					</Link>
 					<h4>
 						<Link href="/" showActive={false}>
 							Chalet
@@ -84,11 +86,14 @@ const Logo = styled.div`
 		}
 	}
 
-	> img {
+	> a {
 		display: block;
 		align-self: center;
-		width: 3.5rem;
-		height: auto;
+
+		> img {
+			width: 3.5rem;
+			height: auto;
+		}
 	}
 
 	&:hover {

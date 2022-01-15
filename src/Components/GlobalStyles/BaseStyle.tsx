@@ -83,7 +83,7 @@ const BaseStyle = createGlobalStyle`
 
     html {
         font-size: ${styleVariables.baseFontSize}px;
-        background-color: #111111;
+        background-color: ${getCssVariable("background")};
 		scroll-behavior: smooth;
     }
 
@@ -172,11 +172,11 @@ const BaseStyle = createGlobalStyle`
     a {
 		cursor: pointer;
         text-decoration: none;
-		color: ${getCssVariable("primaryColor")};
+		color: ${getCssVariable("secondaryColor")};
 		transition: color 0.125s linear;
 
 		&:hover {
-			color: ${getCssVariable("secondaryColor")};
+			color: ${getCssVariable("primaryColor")};
 		}
     }
 
