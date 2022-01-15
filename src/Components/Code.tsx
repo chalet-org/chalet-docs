@@ -254,7 +254,7 @@ const codeCss = css<StyleProps>`
 			color: ${getCssVariable("codeGreen")};
 		}
 		&.string {
-			color: ${getCssVariable("codeYellow")};
+			color: ${getCssVariable("codeGreen")};
 		}
 		&.symbol {
 			color: ${getCssVariable("codeRed")};
@@ -351,7 +351,7 @@ const CodeStyles = styled.code<StyleProps>`
 
 	${codeCss}
 
-	color: ${getCssVariable("primaryColor")};
+	color: ${getCssVariable("codeBlue")};
 `;
 
 const PreStyles = styled.pre<StyleProps>`

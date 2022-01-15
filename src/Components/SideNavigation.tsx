@@ -179,7 +179,6 @@ const StyledAside = styled.aside<AsideProps>`
 		&.active {
 			background-color: ${getCssVariable("background")};
 			border-left-color: ${getCssVariable("tertiaryColor")};
-			font-weight: 600;
 		}
 	}
 
