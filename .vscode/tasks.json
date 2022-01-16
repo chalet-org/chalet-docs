@@ -6,7 +6,7 @@
 		{
 			"label": "echo",
 			"type": "npm",
-			"script": "dev",
+			"script": "start",
 			"presentation": {
 				"echo": true,
 				"reveal": "always",
