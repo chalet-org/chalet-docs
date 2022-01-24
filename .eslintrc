@@ -1,10 +1,10 @@
 {
-  "extends": [
-    "next",
-    "next/core-web-vitals"
-  ],
-  "rules": {
-    "react-hooks/exhaustive-deps": "off",
-    "@next/next/no-img-element": "off"
-  }
+	"extends": [
+		"next",
+		"next/core-web-vitals"
+	],
+	"rules": {
+		"react-hooks/exhaustive-deps": "off",
+		"@next/next/no-img-element": "off"
+	}
 }
