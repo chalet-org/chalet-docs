@@ -16,7 +16,7 @@ const Link = ({ children, dataId, onClick, ...props }: Props) => {
 
 	const { focusedId, setFocusedId } = useUiStore();
 
-	console.log(props.href);
+	// console.log(props.href);
 
 	const showActive = props.showActive ?? true;
 	const targetBlank = typeof props.href === "string" && props.href.startsWith("//");

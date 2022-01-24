@@ -197,6 +197,7 @@ const BaseStyle = createGlobalStyle`
 
 	.router-progress-bar {
 		z-index: 50;
+		color: ${getCssVariable("secondaryColor")} !important;
 	}
 `;
 
