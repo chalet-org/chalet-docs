@@ -1,6 +1,7 @@
 import { Dictionary } from "@andrew-r-king/react-kitchen";
 
 import { markdownFiles } from "Server/MarkdownFiles";
+import { runCorsMiddleware } from "Server/NextCors";
 import { ResultMDXPage } from "Server/ResultTypes";
 import { ApiReq, ApiRes } from "Utility";
 
@@ -11,6 +12,8 @@ const handler = async (
 	res: ApiRes<ResultMDXPage>
 ): Promise<void> => {
 	try {
+		await runCorsMiddleware(req, res);
+
 		const { slug } = req.query;
 		if (!slug || slug.length === 0) {
 			throw new Error("Invalid query sent in request");

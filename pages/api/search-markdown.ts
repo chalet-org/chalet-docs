@@ -2,6 +2,7 @@ import { Dictionary } from "@andrew-r-king/react-kitchen";
 
 import { isDevelopment } from "Server/IsDevelopment";
 import { getPagesCache, PageCache } from "Server/MarkdownCache";
+import { runCorsMiddleware } from "Server/NextCors";
 import { ResultSearchResults } from "Server/ResultTypes";
 import { ApiReq, ApiRes } from "Utility";
 
@@ -40,6 +41,8 @@ const getSearchResults = (search: string, pages: PageCache[], resultLength: numb
 
 const handler = async (req: ApiReq, res: ApiRes<ResultSearchResults>): Promise<void> => {
 	try {
+		await runCorsMiddleware(req, res);
+
 		let { search } = req.query;
 		if (!search || search.length === 0) {
 			throw new Error("Invalid query sent in request");

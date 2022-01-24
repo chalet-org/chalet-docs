@@ -5,6 +5,7 @@ import { Optional } from "@andrew-r-king/react-kitchen";
 
 import { isDevelopment } from "Server/IsDevelopment";
 import { getPagesCache } from "Server/MarkdownCache";
+import { runCorsMiddleware } from "Server/NextCors";
 import { ApiReq, ApiRes } from "Utility";
 
 const gunzipPromise = (sm: Buffer) =>
@@ -22,6 +23,8 @@ let sitemap: Optional<Buffer> = null;
 
 const handler = async (req: ApiReq, res: ApiRes<any>) => {
 	try {
+		await runCorsMiddleware(req, res);
+
 		res.setHeader("Content-Type", "application/xml");
 
 		// if (!!sitemap && !isDevelopment) {
