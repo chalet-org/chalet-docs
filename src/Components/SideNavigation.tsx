@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 import styled from "styled-components";
 
@@ -43,7 +44,7 @@ const SideNavigation = ({ children, ...navigationProps }: Props) => {
 			<StyledAside className={`sidebar ${navOpen ? "open" : ""}`} width={navWidth}>
 				<Logo>
 					<Link href="/" showActive={false}>
-						<img src="/images/chalet-logo.svg" alt="chalet-logo" />
+						<Image src="/images/chalet-logo.svg" alt="chalet-logo" />
 					</Link>
 					<h4>
 						<Link href="/" showActive={false}>

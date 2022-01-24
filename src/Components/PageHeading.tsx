@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 import styled from "styled-components";
 
@@ -7,7 +8,7 @@ const PageHeading = () => {
 	return (
 		<>
 			<Styles>
-				<img src="/images/chalet-logo.svg" alt="chalet-logo" />
+				<Image src="/images/chalet-logo.svg" alt="chalet-logo" />
 				<h1>Chalet</h1>
 			</Styles>
 			<hr />
