@@ -26,13 +26,12 @@ export function handleInitialProps<U extends object, T extends object = {}>(
 			};
 		} catch (err: any) {
 			// console.log(err);
-			const { status } = err.response;
 			return {
 				...({} as T),
 				...data,
 				error: {
-					message: err.message,
-					status: status ?? 500,
+					message: err?.message ?? "Unknown error",
+					status: err?.response?.status ?? 500,
 				},
 			};
 		}
