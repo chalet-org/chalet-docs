@@ -17,6 +17,8 @@ const mdpages: string = "mdpages";
 const allowedExtensions: string[] = ["mdx", "md"];
 const notFoundPage: string = "_404.mdx";
 
+const cwd = process.cwd();
+
 type FileResult = {
 	filename: string;
 	isNotFoundPage: boolean;
@@ -24,14 +26,14 @@ type FileResult = {
 
 const getFirstExistingPath = (inPath: string, extensions: string[], internal: boolean): FileResult => {
 	let arr: string[] = [];
-	if (internal || !inPath.startsWith(nodePath.join(mdpages, "_"))) {
+	if (internal || !inPath.startsWith("_")) {
 		for (const ext of extensions) {
-			arr.push(nodePath.join(process.cwd(), `${inPath}.${ext}`));
-			arr.push(nodePath.join(process.cwd(), inPath, `index.${ext}`));
-			arr.push(nodePath.join(process.cwd(), inPath, "..", `[id].${ext}`));
+			arr.push(nodePath.join(cwd, mdpages, `${inPath}.${ext}`));
+			arr.push(nodePath.join(cwd, mdpages, inPath, `index.${ext}`));
+			arr.push(nodePath.join(cwd, mdpages, inPath, "..", `[id].${ext}`));
 		}
 	}
-	arr.push(nodePath.join(process.cwd(), mdpages, notFoundPage));
+	arr.push(nodePath.join(cwd, mdpages, notFoundPage));
 
 	for (const p of arr) {
 		if (fs.existsSync(p)) {
@@ -53,7 +55,7 @@ const getFirstExistingPath = (inPath: string, extensions: string[], internal: bo
 
 /*const getPlainMdx = async (slug: string, internal: boolean, onGetContent?: GetContentCallback): Promise<ResultMDX> => {
 	try {
-		const { filename } = getFirstExistingPath(nodePath.join(mdpages, slug), allowedExtensions, internal);
+		const { filename } = getFirstExistingPath(slug, allowedExtensions, internal);
 		if (filename.length === 0) {
 			throw new Error(`File not found: ${filename}`);
 		}
@@ -80,11 +82,7 @@ const getLinkFromPageSlug = async (href: string): Promise<SidebarLink> => {
 			return linkCache[href];
 		}
 
-		const { filename, isNotFoundPage } = getFirstExistingPath(
-			nodePath.join(mdpages, href),
-			allowedExtensions,
-			false
-		);
+		const { filename, isNotFoundPage } = getFirstExistingPath(href, allowedExtensions, false);
 		if (filename.length === 0 || isNotFoundPage) {
 			throw new Error(`File not found: ${filename}`);
 		}
@@ -111,7 +109,7 @@ type SidebarResult = SidebarLink | string;
 
 const getSidebarLinks = async (): Promise<SidebarResult[]> => {
 	try {
-		const sidebarFile: string = nodePath.join(process.cwd(), mdpages, "_sidebar.md");
+		const sidebarFile: string = nodePath.join(cwd, mdpages, "_sidebar.md");
 		if (!fs.existsSync(sidebarFile)) {
 			throw new Error("Critical: _sidebar.md was not found");
 		}
@@ -171,7 +169,7 @@ const getMdxPage = async (
 ): Promise<ResultMDXPage> => {
 	try {
 		const { filename, isNotFoundPage } = getFirstExistingPath(
-			nodePath.join(mdpages, slug === "schema-dev" ? "schema" : slug),
+			slug === "schema-dev" ? "schema" : slug,
 			allowedExtensions,
 			internal
 		);

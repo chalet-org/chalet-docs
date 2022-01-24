@@ -9,9 +9,11 @@ const getChaletSchema = async (tag: string = "main"): Promise<ResultChaletSchema
 
 		const url = `https://raw.githubusercontent.com/chalet-org/chalet-dev/${tag}/schema/chalet.schema.json`;
 		const response = await fetchFromGithub(url);
+		console.log(response);
 		// const blob = await response.blob();
 		// const schema = await blob.text();
 		const schema = await response.json();
+		console.log(schema);
 
 		return { schema };
 	} catch (err: any) {
