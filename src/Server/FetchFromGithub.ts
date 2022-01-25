@@ -6,6 +6,7 @@ const fetchFromGithub = async (url: string) => {
 		throw new Error("Github Token not found");
 	}
 
+	console.log(token);
 	const response = await fetch(url, {
 		headers: {
 			"Access-Control-Allow-Origin": "*",
