@@ -30,7 +30,7 @@ const SchemaSelect = ({ schemaLinks }: Props) => {
 					}
 				}}
 			>
-				<option value="">-- Schema --</option>
+				<option value="">-- Select --</option>
 				{schemaLinks.map((link, i) => {
 					return (
 						<option value={link.label} key={i}>

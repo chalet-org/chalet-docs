@@ -71,7 +71,7 @@ const NavigationLinks = ({ schemaLinks, sidebarLinks, anchors }: Props) => {
 										<SchemaSelect {...{ schemaLinks }} />
 										{(base === href || base2 === href) && (
 											<>
-												<Link href={href}>root</Link>
+												<Link href={href}>(root)</Link>
 												<ul>
 													{anchors.map((anchor, j) => {
 														const dataId = anchor.to.includes("=")
