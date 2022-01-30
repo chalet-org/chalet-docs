@@ -121,7 +121,10 @@ const getSidebarLinks = async (): Promise<SidebarResult[]> => {
 			if (line.startsWith("<!--")) continue;
 
 			if (line.startsWith(":")) {
-				result.push(line.substring(1));
+				const id = line.substring(1);
+				if (id === "ref-select" || id === "break") {
+					result.push(id);
+				}
 			} else if (line.startsWith("[")) {
 				let matches = line.match(/^\[\]\((.+?)\)$/);
 				if (!!matches && matches.length === 2) {
@@ -143,7 +146,7 @@ let otherData: Optional<{
 	tags?: string[];
 }> = null;
 
-const getNavBar = async (): Promise<Omit<ResultNavigation, "anchors">> => {
+const getNavBar = async (content: string, slug: string, branch?: string): Promise<ResultNavigation> => {
 	try {
 		if (!otherData || !otherData.branches || !otherData.tags) {
 			otherData = {};
@@ -151,11 +154,27 @@ const getNavBar = async (): Promise<Omit<ResultNavigation, "anchors">> => {
 			otherData.branches = await getChaletBranches();
 			otherData.tags = await getChaletTags();
 		}
+		const branchLinks = [...otherData.branches].map((value) => {
+			return {
+				label: value,
+				href: `/schema-dev/${value}`,
+			};
+		});
+
+		const tagLinks = [...otherData.tags].map((value) => {
+			return {
+				label: value,
+				href: `/schema/${value}`,
+			};
+		});
 		const sidebarLinks = await getSidebarLinks();
+		const anchors = await getPageAnchors(content, slug, branch);
+
+		const schemaLinks = [...branchLinks, ...tagLinks];
 		return {
-			branches: otherData.branches,
-			tags: otherData.tags,
+			anchors,
 			sidebarLinks,
+			schemaLinks,
 		};
 	} catch (err: any) {
 		throw err;
@@ -181,18 +200,15 @@ const getMdxPage = async (
 
 		const { definition, branch } = query;
 		const { meta, content } = await parseCustomMarkdown(fileContent, slug, branch, definition);
-		const anchors = await getPageAnchors(content, slug, branch);
 
 		const mdx: MDXRemoteSerializeResult<Record<string, unknown>> = await serialize(content, {
 			target: ["esnext"],
 		});
 
-		const navData = await getNavBar();
+		const navData = await getNavBar(content, slug, branch);
 
 		return {
-			...otherData,
 			...navData,
-			anchors,
 			meta: {
 				...meta,
 				title: meta?.title ?? "Untitled",
@@ -211,7 +227,6 @@ const getMdxPage = async (
 const getNotFoundPage = () => getMdxPage("_404", {}, true);
 
 const markdownFiles = {
-	getNavBar,
 	getMdxPage,
 	getNotFoundPage,
 };

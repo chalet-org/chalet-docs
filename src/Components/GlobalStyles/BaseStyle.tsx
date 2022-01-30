@@ -145,6 +145,7 @@ const BaseStyle = createGlobalStyle`
 		height: 0.0625rem;
 		width: 100%;
 		text-align: center;
+		font-size: 1.125rem;
 
 		&:before {
 			content: ' ';

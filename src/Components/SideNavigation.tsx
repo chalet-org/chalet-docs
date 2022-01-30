@@ -14,7 +14,7 @@ type Props = ResultNavigation & {
 	children?: React.ReactNode;
 };
 
-const SideNavigation = ({ children, ...navigationProps }: Props) => {
+const SideNavigation = ({ children, ...navProps }: Props) => {
 	const { toggleNavigation, navOpen, navWidth, initialized } = useUiStore();
 	useKeyPress(
 		(ev) => {
@@ -53,7 +53,7 @@ const SideNavigation = ({ children, ...navigationProps }: Props) => {
 				</Logo>
 				<SearchInput />
 				<NavGroup>
-					<NavigationLinks {...navigationProps} />
+					<NavigationLinks {...navProps} />
 				</NavGroup>
 				<div className="nav-spacer" />
 				<div className="nav-fade">

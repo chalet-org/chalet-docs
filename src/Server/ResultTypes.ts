@@ -29,10 +29,9 @@ export type SidebarLink = {
 };
 
 export type ResultNavigation = {
-	branches: string[];
-	tags: string[];
 	sidebarLinks: (SidebarLink | string)[];
 	anchors: ResultPageAnchor[];
+	schemaLinks: SidebarLink[];
 };
 
 export type ResultMDXPage = ResultNavigation & {

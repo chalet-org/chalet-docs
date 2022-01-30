@@ -1,7 +1,13 @@
-import { BaseState, Action } from "@andrew-r-king/react-kitchen";
+import { BaseState, Action, Optional } from "@andrew-r-king/react-kitchen";
 
+import { SidebarLink } from "Server/ResultTypes";
 import { Theme, ThemeType, darkTheme, lightTheme } from "Theme";
 import { LocalStorage } from "Utility";
+
+const kDefaultNavSelect: SidebarLink = {
+	href: "",
+	label: "",
+};
 
 class UiState extends BaseState {
 	initialized: boolean = false;
@@ -16,6 +22,8 @@ class UiState extends BaseState {
 
 	accordionNotifier: boolean = false;
 	heightNotifier: boolean = false;
+
+	navSelect: SidebarLink = kDefaultNavSelect;
 
 	@Action
 	initialize = () => {
@@ -77,6 +85,15 @@ class UiState extends BaseState {
 	@Action
 	notifyHeightChange = () => {
 		this.heightNotifier = !this.heightNotifier;
+	};
+
+	@Action
+	setNavSelectValue = (value: Optional<SidebarLink>) => {
+		if (!!value) {
+			this.navSelect = value;
+		} else {
+			this.navSelect = kDefaultNavSelect;
+		}
 	};
 }
 
