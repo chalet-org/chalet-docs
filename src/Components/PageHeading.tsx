@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { getCssVariable } from "Theme";
+import { getThemeVariable } from "Theme";
 
 const PageHeading = () => {
 	return (
@@ -25,7 +25,7 @@ const Styles = styled.div`
 
 	> h1 {
 		line-height: 1;
-		color: ${getCssVariable("mainText")};
+		color: ${getThemeVariable("mainText")};
 		font-size: 3.5rem;
 		align-self: center;
 		text-transform: uppercase;

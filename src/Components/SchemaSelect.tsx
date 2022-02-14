@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 import { ResultNavigation } from "Server/ResultTypes";
 import { useUiStore } from "Stores";
-import { getCssVariable } from "Theme";
+import { getThemeVariable } from "Theme";
 
 type Props = Pick<ResultNavigation, "schemaLinks"> & {};
 
@@ -75,12 +75,12 @@ const Styles = styled.div`
 
 		&:hover {
 			text-decoration: underline;
-			text-decoration-color: ${getCssVariable("primaryColor")};
+			text-decoration-color: ${getThemeVariable("primaryColor")};
 		}
 
 		&.active {
-			background-color: ${getCssVariable("background")};
-			border-left-color: ${getCssVariable("tertiaryColor")};
+			background-color: ${getThemeVariable("background")};
+			border-left-color: ${getThemeVariable("tertiaryColor")};
 		}
 
 		&:after {

@@ -5,11 +5,11 @@ import styled from "styled-components";
 import { docsApi } from "Api";
 import { Icon, Link } from "Components";
 import { ResultSearchResults } from "Server/ResultTypes";
-import { getCssVariable } from "Theme";
+import { getThemeVariable } from "Theme";
 
 type Props = React.PropsWithChildren<{}>;
 
-const searchColor = getCssVariable("header");
+const searchColor = getThemeVariable("header");
 
 const SearchInput = ({ children }: Props) => {
 	const [value, setValue] = useState<string>("");
@@ -94,24 +94,24 @@ const Styles = styled.div`
 	padding: 1rem 0;
 	padding-bottom: 2rem;
 	width: 100%;
-	color: ${getCssVariable("mainText")};
+	color: ${getThemeVariable("mainText")};
 
 	> div.search-bar {
 		display: block;
 		position: relative;
 		margin: 0 2rem;
-		border-bottom: 0.125rem solid ${getCssVariable("border")};
+		border-bottom: 0.125rem solid ${getThemeVariable("border")};
 
 		> input {
 			display: block;
 			width: calc(100% - 1.75rem);
 			border: none;
 			background-color: transparent;
-			color: ${getCssVariable("mainText")};
-			caret-color: ${getCssVariable("primaryColor")};
+			color: ${getThemeVariable("mainText")};
+			caret-color: ${getThemeVariable("primaryColor")};
 
 			&::placeholder {
-				color: ${getCssVariable("header")};
+				color: ${getThemeVariable("header")};
 			}
 		}
 
@@ -133,16 +133,16 @@ const Styles = styled.div`
 		display: block;
 		padding: 0 2rem;
 		margin-top: -0.125rem;
-		background-color: ${getCssVariable("background")};
-		border-top: 0.125rem solid ${getCssVariable("border")};
-		border-bottom: 0.125rem solid ${getCssVariable("border")};
+		background-color: ${getThemeVariable("background")};
+		border-top: 0.125rem solid ${getThemeVariable("border")};
+		border-bottom: 0.125rem solid ${getThemeVariable("border")};
 
 		> p.search-result-count {
 			display: block;
 			padding: 0;
 			margin: 0;
 			line-height: 2.5;
-			color: ${getCssVariable("header")};
+			color: ${getThemeVariable("header")};
 			font-size: 1rem;
 		}
 
@@ -158,7 +158,7 @@ const Styles = styled.div`
 
 			> span {
 				display: block;
-				color: ${getCssVariable("primaryColor")};
+				color: ${getThemeVariable("primaryColor")};
 			}
 		}
 	}

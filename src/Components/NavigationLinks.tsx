@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { Link } from "Components";
 import { ResultNavigation, ResultPageAnchor } from "Server/ResultTypes";
 import { useUiStore } from "Stores";
-import { getCssVariable } from "Theme";
+import { getThemeVariable } from "Theme";
 
 import { SchemaSelect } from "./SchemaSelect";
 
@@ -120,7 +120,7 @@ const NavBreak = styled.div`
 		margin-bottom: 1rem;
 
 		&:after {
-			background: ${getCssVariable("codeBackground")};
+			background: ${getThemeVariable("codeBackground")};
 		}
 	}
 `;

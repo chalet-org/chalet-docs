@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { getCssVariable } from "Theme";
+import { getThemeVariable } from "Theme";
 
 type Props = {
 	children?: React.ReactNode;
@@ -17,8 +17,8 @@ const Styles = styled.blockquote`
 	margin: 0.75rem 0;
 	padding: 0.5rem;
 	padding-left: 1.25rem;
-	border-left: 0.25rem solid ${getCssVariable("tertiaryColor")};
-	background-color: ${getCssVariable("codeBackground")};
+	border-left: 0.25rem solid ${getThemeVariable("tertiaryColor")};
+	background-color: ${getThemeVariable("codeBackground")};
 
 	> p {
 		font-size: 1rem;

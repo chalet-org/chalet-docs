@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { styleVariables } from "Components";
 import { useUiStore } from "Stores";
-import { getCssVariable } from "Theme";
+import { getThemeVariable } from "Theme";
 
 type Props = React.PropsWithChildren<{
 	label?: string;
@@ -83,13 +83,13 @@ const AccordionHandle = styled.div`
 		letter-spacing: -0.125rem;
 		line-height: 0;
 		top: calc(50% - 0.125rem);
-		color: ${getCssVariable("secondaryColor")};
+		color: ${getThemeVariable("secondaryColor")};
 		transition: transform 0.125s linear;
 	}
 
 	&:hover {
-		border-top-color: ${getCssVariable("primaryColor")};
-		border-bottom-color: ${getCssVariable("primaryColor")};
+		border-top-color: ${getThemeVariable("primaryColor")};
+		border-bottom-color: ${getThemeVariable("primaryColor")};
 	}
 
 	&.open {
@@ -122,11 +122,11 @@ const AccordionContent = styled.div<ContentProps>`
 		margin: 0;
 		margin-top: ${({ marginTop }) => marginTop}rem;
 		margin-bottom: ${({ marginBottom }) => marginBottom}rem;
-		border: 0.0625rem dashed ${getCssVariable("border")};
-		background-color: ${getCssVariable("codeBackground")};
+		border: 0.0625rem dashed ${getThemeVariable("border")};
+		background-color: ${getThemeVariable("codeBackground")};
 
 		> pre {
-			border: 0.0625rem solid ${getCssVariable("background")};
+			border: 0.0625rem solid ${getThemeVariable("background")};
 		}
 	}
 `;

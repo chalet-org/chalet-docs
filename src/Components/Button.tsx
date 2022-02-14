@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { getCssVariable } from "Theme";
+import { getThemeVariable } from "Theme";
 
 type Props = React.PropsWithChildren<{
 	className?: string;
@@ -32,7 +32,7 @@ const Styles = styled.button`
 	padding: 1.25rem 1rem;
 	padding-bottom: 1.325rem;
 	line-height: 0;
-	color: ${getCssVariable("mainText")};
+	color: ${getThemeVariable("mainText")};
 	background-color: transparent;
 	border-radius: 0.25rem;
 	cursor: pointer;
@@ -54,7 +54,7 @@ const Styles = styled.button`
 	}
 
 	&:hover {
-		color: ${getCssVariable("background")};
-		background-color: ${getCssVariable("secondaryColor")};
+		color: ${getThemeVariable("background")};
+		background-color: ${getThemeVariable("secondaryColor")};
 	}
 `;

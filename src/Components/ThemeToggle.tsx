@@ -2,11 +2,11 @@ import React from "react";
 import styled from "styled-components";
 
 import { useUiStore } from "Stores";
-import { getCssVariable, Theme } from "Theme";
+import { getThemeVariable, Theme } from "Theme";
 
 import { Icon } from "./Icon";
 
-const color = getCssVariable("header");
+const color = getThemeVariable("header");
 
 type Props = {};
 
@@ -36,7 +36,7 @@ const Styles = styled.button`
 		> i > svg {
 			> path,
 			> circle {
-				fill: ${getCssVariable("primaryColor")} !important;
+				fill: ${getThemeVariable("primaryColor")} !important;
 			}
 		}
 	}

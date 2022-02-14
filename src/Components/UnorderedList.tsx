@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { getCssVariable } from "Theme";
+import { getThemeVariable } from "Theme";
 
 type Props = React.PropsWithChildren<{}>;
 
@@ -25,7 +25,7 @@ const Styles = styled.ul`
 			display: block;
 			position: absolute;
 			content: "\u2023";
-			color: ${getCssVariable("header")};
+			color: ${getThemeVariable("header")};
 			font-size: 2rem;
 			line-height: 0;
 			left: 0;

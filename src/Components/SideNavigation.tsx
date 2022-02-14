@@ -5,7 +5,7 @@ import { Link, SearchInput, ThemeToggle } from "Components";
 import { useKeyPress } from "Hooks";
 import { ResultNavigation } from "Server/ResultTypes";
 import { useUiStore } from "Stores";
-import { getCssVariable } from "Theme";
+import { getThemeVariable } from "Theme";
 import { makeLinearGradient } from "Utility";
 
 import { NavigationLinks } from "./NavigationLinks";
@@ -98,7 +98,7 @@ const Logo = styled.div`
 
 	&:hover {
 		> h4 {
-			text-shadow: 0 0.125rem 0.5rem ${getCssVariable("primaryColor")};
+			text-shadow: 0 0.125rem 0.5rem ${getThemeVariable("primaryColor")};
 		}
 	}
 `;
@@ -115,7 +115,7 @@ const SidebarToggle = styled.button`
 	background: none;
 
 	> span {
-		background-color: ${getCssVariable("header")};
+		background-color: ${getThemeVariable("header")};
 		transition: background-color 0.125s linear;
 		display: block;
 		margin-bottom: 0.5rem;
@@ -125,7 +125,7 @@ const SidebarToggle = styled.button`
 
 	&:hover {
 		> span {
-			background-color: ${getCssVariable("primaryColor")};
+			background-color: ${getThemeVariable("primaryColor")};
 		}
 	}
 `;
@@ -148,8 +148,8 @@ const StyledAside = styled.aside<AsideProps>`
 	overflow-y: auto;
 	padding-top: 2rem;
 
-	background-color: ${getCssVariable("codeBackground")};
-	color: ${getCssVariable("mainText")};
+	background-color: ${getThemeVariable("codeBackground")};
+	color: ${getThemeVariable("mainText")};
 
 	ul,
 	> p {
@@ -185,12 +185,12 @@ const StyledAside = styled.aside<AsideProps>`
 
 		&:hover {
 			text-decoration: underline;
-			text-decoration-color: ${getCssVariable("primaryColor")};
+			text-decoration-color: ${getThemeVariable("primaryColor")};
 		}
 
 		&.active {
-			background-color: ${getCssVariable("background")};
-			border-left-color: ${getCssVariable("tertiaryColor")};
+			background-color: ${getThemeVariable("background")};
+			border-left-color: ${getThemeVariable("tertiaryColor")};
 		}
 	}
 
@@ -213,9 +213,9 @@ const StyledAside = styled.aside<AsideProps>`
 		height: 7.5rem;
 		bottom: 0;
 
-		${makeLinearGradient("transparent", getCssVariable("codeBackground"), 180)}
-		background: ${getCssVariable("codeBackground")};
-		background: linear-gradient(180deg, transparent 0%, ${getCssVariable("codeBackground")} 30%);
+		${makeLinearGradient("transparent", getThemeVariable("codeBackground"), 180)}
+		background: ${getThemeVariable("codeBackground")};
+		background: linear-gradient(180deg, transparent 0%, ${getThemeVariable("codeBackground")} 30%);
 
 		> .theme-toggle {
 			display: block;
@@ -232,7 +232,7 @@ const StyledAside = styled.aside<AsideProps>`
 
 	&.open {
 		left: 0;
-		border-right: 0.125rem solid ${getCssVariable("border")};
+		border-right: 0.125rem solid ${getThemeVariable("border")};
 
 		> div.nav-fade {
 			> .theme-toggle {
@@ -261,7 +261,7 @@ const NavGroup = styled.div`
 	}
 
 	> ul > li > strong {
-		color: ${getCssVariable("header")};
+		color: ${getThemeVariable("header")};
 		font-weight: 400;
 	}
 

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { getCssVariable } from "Theme";
+import { getThemeVariable } from "Theme";
 
 type Props = React.PropsWithChildren<{
 	label?: string;
@@ -22,13 +22,13 @@ const Styles = styled.div`
 	display: block;
 	position: relative;
 	padding-left: 1.25rem;
-	border-left: 0.125rem solid ${getCssVariable("border")};
+	border-left: 0.125rem solid ${getThemeVariable("border")};
 `;
 
 const IndentLabel = styled.div`
 	display: block;
 	position: relative;
-	color: ${getCssVariable("header")};
+	color: ${getThemeVariable("header")};
 	/* padding-top: 0.25rem; */
 	padding-top: 0;
 	padding-bottom: 0.5rem;

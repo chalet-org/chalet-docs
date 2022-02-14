@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 
 import { useUiStore } from "Stores";
-import { getCssVariable } from "Theme";
+import { getThemeVariable } from "Theme";
 
 type Props = {
 	children?: React.ReactNode;
@@ -65,8 +65,8 @@ const Main = styled.main<NavBarProps>`
 	left: 0;
 	transition: left 0.125s linear;
 
-	background-color: ${getCssVariable("background")};
-	color: ${getCssVariable("mainText")};
+	background-color: ${getThemeVariable("background")};
+	color: ${getThemeVariable("mainText")};
 
 	&.nav-open {
 		left: ${(props) => props.navWidth};

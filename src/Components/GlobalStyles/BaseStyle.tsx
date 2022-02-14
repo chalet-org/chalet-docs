@@ -1,6 +1,6 @@
 import { createGlobalStyle, css } from "styled-components";
 
-import { getCssVariable } from "Theme";
+import { getThemeVariable } from "Theme";
 
 import { fontImports, globalFonts } from "./Fonts";
 
@@ -83,7 +83,7 @@ const BaseStyle = createGlobalStyle`
 
     html {
         font-size: ${styleVariables.baseFontSize}px;
-        background-color: ${getCssVariable("background")};
+        background-color: ${getThemeVariable("background")};
 		scroll-behavior: smooth;
     }
 
@@ -139,7 +139,7 @@ const BaseStyle = createGlobalStyle`
 	hr {
 		border: none;
 		outline: 0;
-		background-color: ${getCssVariable("border")};
+		background-color: ${getThemeVariable("border")};
 		margin: 1rem auto;
 		margin-bottom: 2rem;
 		height: 0.0625rem;
@@ -154,7 +154,7 @@ const BaseStyle = createGlobalStyle`
 			top: 0.325rem;
 			height: 0.0625rem;
 			width: 100%;
-			background-color: ${getCssVariable("border")};
+			background-color: ${getThemeVariable("border")};
 		}
 
 		&:after {
@@ -163,8 +163,8 @@ const BaseStyle = createGlobalStyle`
 			position: relative;
 			top: -1.0675rem;
 			padding: 0 0;
-			background: ${getCssVariable("background")};
-			color: ${getCssVariable("border")};
+			background: ${getThemeVariable("background")};
+			color: ${getThemeVariable("border")};
 			font-size: 0.675rem;
 			transform: scaleX(150%);
 		}
@@ -173,11 +173,11 @@ const BaseStyle = createGlobalStyle`
     a {
 		cursor: pointer;
         text-decoration: none;
-		color: ${getCssVariable("secondaryColor")};
+		color: ${getThemeVariable("secondaryColor")};
 		transition: color 0.125s linear;
 
 		&:hover {
-			color: ${getCssVariable("primaryColor")};
+			color: ${getThemeVariable("primaryColor")};
 		}
     }
 
@@ -198,7 +198,7 @@ const BaseStyle = createGlobalStyle`
 
 	.router-progress-bar {
 		z-index: 50;
-		color: ${getCssVariable("secondaryColor")} !important;
+		color: ${getThemeVariable("secondaryColor")} !important;
 	}
 `;
 

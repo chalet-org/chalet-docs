@@ -3,7 +3,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { useUiStore } from "Stores";
-import { getCssVariable } from "Theme";
+import { getThemeVariable } from "Theme";
 
 import { Button } from "./Button";
 

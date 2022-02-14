@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import { useUiStore } from "Stores";
-import { getCssVariable } from "Theme";
+import { getThemeVariable } from "Theme";
 
 type Props = React.PropsWithChildren<{}>;
 
@@ -120,26 +120,26 @@ const Styles = styled.div`
 		padding: 0.5rem 1.5rem;
 		padding-top: 0.375rem;
 		background: transparent;
-		color: ${getCssVariable("header")};
-		background-color: ${getCssVariable("codeBackground")};
-		border: 0.0625rem solid ${getCssVariable("border")};
+		color: ${getThemeVariable("header")};
+		background-color: ${getThemeVariable("codeBackground")};
+		border: 0.0625rem solid ${getThemeVariable("border")};
 		cursor: pointer;
 		z-index: 4;
 		transition: color 0.125s linear, border-top-color 0.125s linear;
 
 		&:not(.active):hover {
-			color: ${getCssVariable("mainText")};
+			color: ${getThemeVariable("mainText")};
 		}
 
 		&.active {
-			color: ${getCssVariable("mainText")};
-			background-color: ${getCssVariable("background")};
-			border-top: 0.25rem solid ${getCssVariable("primaryColor")};
-			border-bottom-color: ${getCssVariable("background")};
+			color: ${getThemeVariable("mainText")};
+			background-color: ${getThemeVariable("background")};
+			border-top: 0.25rem solid ${getThemeVariable("primaryColor")};
+			border-bottom-color: ${getThemeVariable("background")};
 			padding-top: 0.125rem;
 
 			&:hover {
-				border-top-color: ${getCssVariable("secondaryColor")};
+				border-top-color: ${getThemeVariable("secondaryColor")};
 			}
 		}
 
@@ -156,8 +156,8 @@ const Styles = styled.div`
 		height: auto;
 		width: 100%;
 		padding: 1.125rem 1.5rem;
-		border: 0.0625rem solid ${getCssVariable("border")};
-		background-color: ${getCssVariable("background")};
+		border: 0.0625rem solid ${getThemeVariable("border")};
+		background-color: ${getThemeVariable("background")};
 		margin-top: -0.0625rem;
 	}
 

@@ -7,7 +7,7 @@ import styled, { css } from "styled-components";
 import { Dictionary } from "@andrew-r-king/react-kitchen";
 
 import { globalFonts } from "Components";
-import { getCssVariable } from "Theme";
+import { getThemeVariable } from "Theme";
 
 Prism.languages.bash = {
 	sudo: {
@@ -144,8 +144,8 @@ type StyleProps = {
 
 const codeCss = css<StyleProps>`
 	position: relative;
-	background-color: ${getCssVariable("codeBackground")};
-	color: ${getCssVariable("codeWhite")};
+	background-color: ${getThemeVariable("codeBackground")};
+	color: ${getThemeVariable("codeWhite")};
 	font-size: 0.875rem;
 	font-weight: 400;
 	word-spacing: normal;
@@ -180,104 +180,104 @@ const codeCss = css<StyleProps>`
 		}
 
 		&.atrule {
-			color: ${getCssVariable("codeBlue")};
+			color: ${getThemeVariable("codeBlue")};
 		}
 		&.attr-name {
-			color: ${getCssVariable("codeGreen")};
+			color: ${getThemeVariable("codeGreen")};
 		}
 		&.attr-value {
-			color: ${getCssVariable("codeLightYellow")};
+			color: ${getThemeVariable("codeLightYellow")};
 		}
 		&.boolean {
-			color: ${getCssVariable("codeYellow")};
+			color: ${getThemeVariable("codeYellow")};
 			font-weight: ${boldWeight};
 		}
 		&.builtin {
-			color: ${getCssVariable("codeCyan")};
+			color: ${getThemeVariable("codeCyan")};
 		}
 		&.cdata {
-			color: ${getCssVariable("codeGray")};
+			color: ${getThemeVariable("codeGray")};
 		}
 		&.char {
-			color: ${getCssVariable("codeGreen")};
+			color: ${getThemeVariable("codeGreen")};
 		}
 		&.class-name {
-			color: ${getCssVariable("primaryColor")};
+			color: ${getThemeVariable("primaryColor")};
 		}
 		&.comment {
-			color: ${getCssVariable("codeGray")};
+			color: ${getThemeVariable("codeGray")};
 		}
 		&.constant {
-			color: ${getCssVariable("codeRed")};
+			color: ${getThemeVariable("codeRed")};
 		}
 		&.deleted {
-			color: ${getCssVariable("codeRed")};
+			color: ${getThemeVariable("codeRed")};
 		}
 		&.doctype {
-			color: ${getCssVariable("codeGray")};
+			color: ${getThemeVariable("codeGray")};
 		}
 		&.entity {
-			color: ${getCssVariable("codeWhite")};
+			color: ${getThemeVariable("codeWhite")};
 		}
 		&.function {
-			color: ${getCssVariable("codeBlue")};
+			color: ${getThemeVariable("codeBlue")};
 		}
 		&.important {
-			color: ${getCssVariable("codeYellow")};
+			color: ${getThemeVariable("codeYellow")};
 		}
 		&.inserted {
-			color: ${getCssVariable("codeGreen")};
+			color: ${getThemeVariable("codeGreen")};
 		}
 		&.keyword {
-			color: ${getCssVariable("codeYellow")};
+			color: ${getThemeVariable("codeYellow")};
 			font-weight: ${boldWeight};
 		}
 		&.number {
-			color: ${getCssVariable("codeCyan")};
+			color: ${getThemeVariable("codeCyan")};
 		}
 		&.operator {
-			color: ${getCssVariable("codeGray")};
+			color: ${getThemeVariable("codeGray")};
 		}
 		&.prolog {
-			color: ${getCssVariable("codeGray")};
+			color: ${getThemeVariable("codeGray")};
 		}
 		&.property {
-			color: ${getCssVariable("codeBlue")};
+			color: ${getThemeVariable("codeBlue")};
 		}
 		&.punctuation {
-			color: ${getCssVariable("codeGray")};
+			color: ${getThemeVariable("codeGray")};
 		}
 		&.regex {
-			color: ${getCssVariable("codeYellow")};
+			color: ${getThemeVariable("codeYellow")};
 		}
 		&.selector {
-			color: ${getCssVariable("codeGreen")};
+			color: ${getThemeVariable("codeGreen")};
 		}
 		&.string {
-			color: ${getCssVariable("codeGreen")};
+			color: ${getThemeVariable("codeGreen")};
 		}
 		&.symbol {
-			color: ${getCssVariable("codeRed")};
+			color: ${getThemeVariable("codeRed")};
 		}
 		&.tag {
-			color: ${getCssVariable("codeRed")};
+			color: ${getThemeVariable("codeRed")};
 		}
 		&.url {
-			color: ${getCssVariable("codeWhite")};
+			color: ${getThemeVariable("codeWhite")};
 		}
 		&.variable {
-			color: ${getCssVariable("codeWhite")};
+			color: ${getThemeVariable("codeWhite")};
 		}
 	}
 
 	.language-cpp .token {
 		&.directive-hash,
 		&.directive.keyword {
-			color: ${getCssVariable("codeBlue")};
+			color: ${getThemeVariable("codeBlue")};
 			font-weight: 400;
 
 			+ .string {
-				color: ${getCssVariable("codeYellow")};
+				color: ${getThemeVariable("codeYellow")};
 			}
 		}
 	}
@@ -286,54 +286,54 @@ const codeCss = css<StyleProps>`
 		&.function,
 		&.class-name,
 		&.terminal-application {
-			color: ${getCssVariable("codeBlue")};
+			color: ${getThemeVariable("codeBlue")};
 		}
 		&.sudo {
-			color: ${getCssVariable("codeRed")};
+			color: ${getThemeVariable("codeRed")};
 		}
 		&.chalet {
-			color: ${getCssVariable("codeYellow")};
+			color: ${getThemeVariable("codeYellow")};
 			font-weight: 600;
 		}
 		&.chalet-cmd {
-			color: ${getCssVariable("codeBlue")};
+			color: ${getThemeVariable("codeBlue")};
 			font-weight: 600;
 		}
 		&.chalet-toolchain-preset,
 		&.chalet-architecture {
-			color: ${getCssVariable("codeWhite")};
+			color: ${getThemeVariable("codeWhite")};
 		}
 	}
 
 	.language-json .token {
 		&.json-ellipsis {
-			color: ${getCssVariable("codeGray")};
+			color: ${getThemeVariable("codeGray")};
 		}
 	}
 
 	.language-ini .token {
 		&.section-name {
-			color: ${getCssVariable("codeGray")};
+			color: ${getThemeVariable("codeGray")};
 		}
 		&.punctuation-semicolon {
-			color: ${getCssVariable("codeGray")};
+			color: ${getThemeVariable("codeGray")};
 		}
 		&.key {
-			color: ${getCssVariable("codeBlue")};
+			color: ${getThemeVariable("codeBlue")};
 		}
 		&.value {
-			color: ${getCssVariable("codeWhite")};
+			color: ${getThemeVariable("codeWhite")};
 		}
 		&.chalet-value-substitution {
-			color: ${getCssVariable("codeCyan")};
+			color: ${getThemeVariable("codeCyan")};
 		}
 	}
 
 	.language-css .token.string {
-		color: ${getCssVariable("codeWhite")};
+		color: ${getThemeVariable("codeWhite")};
 	}
 	.style .token.string {
-		color: ${getCssVariable("codeWhite")};
+		color: ${getThemeVariable("codeWhite")};
 	}
 `;
 
@@ -351,7 +351,7 @@ const CodeStyles = styled.code<StyleProps>`
 
 	${codeCss}
 
-	color: ${getCssVariable("codeBlue")};
+	color: ${getThemeVariable("codeBlue")};
 `;
 
 const PreStyles = styled.pre<StyleProps>`
@@ -367,7 +367,7 @@ const PreStyles = styled.pre<StyleProps>`
 
 	&:after {
 		content: attr(data-lang);
-		color: ${getCssVariable("codeGray")};
+		color: ${getThemeVariable("codeGray")};
 		display: block;
 		position: absolute;
 		top: 0.875rem;

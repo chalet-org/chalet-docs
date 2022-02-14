@@ -33,4 +33,4 @@ const values = Object.entries(ThemeIndex);
 export const getRootThemeCss = (theme: ThemeType): string =>
 	values.map(([key, value]) => `--th-${value}: ${theme[key]};`).join("");
 
-export const getCssVariable = (id: keyof ThemeType) => `var(--th-${ThemeIndex[id]})`;
+export const getThemeVariable = (id: keyof ThemeType) => `var(--th-${ThemeIndex[id]})`;

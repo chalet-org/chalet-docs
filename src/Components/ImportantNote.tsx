@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { getCssVariable } from "Theme";
+import { getThemeVariable } from "Theme";
 
 type Props = React.PropsWithChildren<{}>;
 
@@ -13,10 +13,10 @@ export { ImportantNote };
 
 const Styles = styled.div`
 	display: block;
-	background-color: ${getCssVariable("codeBackground")};
-	border: 0.125rem solid ${getCssVariable("border")};
+	background-color: ${getThemeVariable("codeBackground")};
+	border: 0.125rem solid ${getThemeVariable("border")};
 	border-radius: 0.5rem;
-	color: ${getCssVariable("mainText")};
+	color: ${getThemeVariable("mainText")};
 	margin: 0.75rem 0;
 	padding: 1rem 1.25rem;
 `;

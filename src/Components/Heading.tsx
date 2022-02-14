@@ -6,7 +6,7 @@ import { Dictionary } from "@andrew-r-king/react-kitchen";
 
 import { Link } from "Components";
 import { useUiStore } from "Stores";
-import { getCssVariable } from "Theme";
+import { getThemeVariable } from "Theme";
 import { toKebabCase } from "Utility/TextCaseConversions";
 
 type HeadingSize = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
@@ -65,11 +65,11 @@ for (const size of ["h1", "h2", "h3", "h4", "h5", "h6"] as HeadingSize[]) {
 
 		> a {
 			font-weight: 600;
-			color: ${getCssVariable("mainText")};
+			color: ${getThemeVariable("mainText")};
 
 			&:hover {
 				text-decoration: underline;
-				text-decoration-color: ${getCssVariable("primaryColor")};
+				text-decoration-color: ${getThemeVariable("primaryColor")};
 			}
 		}
 	`;
