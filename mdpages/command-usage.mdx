@@ -335,6 +335,53 @@ chalet unset <key>
 
 Remove the key/value pair given a valid key.
 
+<!-- dl:start -->
+
+``<key>``
+
+<dd>
+
+The config key to change [required]
+
+</dd>
+
+``<value>``
+
+<dd>
+
+The config value to change to
+
+</dd>
+
+``-f``
+``--file``
+
+<dd>
+
+The path to a JSON file to examine, if not the local/global settings.
+
+</dd>
+
+``-l``
+``--local``
+
+<dd>
+
+Use the local settings [.chaletrc]
+
+</dd>
+
+``-g``
+``--global``
+
+<dd>
+
+Use the global settings [~/.chaletconfig]
+
+</dd>
+
+<!-- dl:end -->
+
 \\
 
 ---
@@ -342,7 +389,7 @@ Remove the key/value pair given a valid key.
 ## [Other Commands]
 
 ```bash
-chalet query <type>
+chalet query <type> [<args>...]
 ```
 
 Query Chalet for any project-specific or global information. Intended to be used for code editor integrations. 
@@ -353,6 +400,42 @@ chalet colortest
 
 Display all color themes and terminal capabilities.
 
+<!-- dl:start -->
+
+``<type>``
+
+<dd>
+
+The data type to query. It must be one of hte following:
+
+* schema-settings-json - The entire .chaletrc / .chaletconfig schema in JSON format
+* state-chalet-json - State applicable to the chalet.json for the current project in JSON format
+* state-settings-json - State applicable to the .chaletrc / .chaletconfig for the current project in JSON format
+* user-toolchains - The list of user-specified or cached toolchains for the project
+* toolchain - The current toolchain selected for the project
+* theme-names - The list of terminal theme names available
+* configurations - The current build configuration selected for the project
+* schema-chalet-json - The entire chalet.json schema in JSON format
+* run-target - The current run target for the project
+* list-names - The list of available data types to query for (this list)
+* configuration - The current build configuration for the project
+* architectures - Any architectures used by the current toolchain
+* commands - The full list of chalet commands
+* toolchain-presets - The list of toolchain presets available on the platform
+* architecture - The current build architecture for the project
+* all-toolchains - The list of toolchain presets and user toolchains for the project
+
+</dd>
+
+``<args>...``
+
+<dd>
+
+Data to provide to the query. This is only used by "architecture", where a single argument is the toolchain name.
+
+</dd>
+
+<!-- dl:end -->
 
 
 <!-- 
