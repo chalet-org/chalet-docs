@@ -36,6 +36,21 @@ const parseAnchoredHeaders = (text: string): string => {
 	});
 };
 
+const parseCodeHeaders = (text: string): string => {
+	return text.replace(/\n``(.+)``/g, (match: string, p1: string) => {
+		return `\n<CodeHeader lang="bash">{"${p1}"}</CodeHeader>`;
+	});
+};
+
+const parseDescriptionList = (text: string): string => {
+	return text.replace(/<!-- dl:start -->((.|\n)*?)<!-- dl:end -->/g, (match: string, p1: string) => {
+		let retString: string = `<dl>`;
+		retString += p1;
+		retString += `</dl>`;
+		return retString;
+	});
+};
+
 const parseBottomPageNavigation = async (text: string): Promise<string> => {
 	try {
 		text = await replaceAsync(
@@ -88,7 +103,7 @@ ${tabArray[i + 1]}
 
 const parseAccordions = (text: string): string => {
 	return text.replace(
-		/<!-- accordion:start(.*?) -->((.|\n)*?)<!-- accordion:end -->/g,
+		/<!-- accordion:start\s?(.*?) -->((.|\n)*?)<!-- accordion:end -->/g,
 		(match: string, p1: string, p2: string) => {
 			let retString: string = p1.length > 0 ? `<Accordion label="${p1}">` : `<Accordion>`;
 			retString += p2;
@@ -352,6 +367,8 @@ const parseCustomMarkdown = async (
 		text = parseAnchoredHeaders(text);
 		text = parseAccordions(text);
 		text = parseTabs(text);
+		text = parseCodeHeaders(text);
+		text = parseDescriptionList(text);
 
 		// Set line endings back
 		text = text.replace(/\n/g, os.EOL);

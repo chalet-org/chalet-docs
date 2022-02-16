@@ -32,6 +32,7 @@ let components: Dictionary<React.ComponentType<any>> = {
 	PageNavigation: dynamic.component("PageNavigation"),
 	TabbedContent: dynamic.component("TabbedContent"),
 	Spacer: dynamic.component("Spacer"),
+	CodeHeader: dynamic.component("CodeHeader"),
 };
 
 type AnchorData = {

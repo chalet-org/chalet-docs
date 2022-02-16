@@ -5,6 +5,7 @@ type Components =
 	| "BlockQuote"
 	| "Code"
 	| "CodePre"
+	| "CodeHeader"
 	| "CodePreFromMarkdown"
 	| "IndentGroup"
 	| "Link"

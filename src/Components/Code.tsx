@@ -14,6 +14,10 @@ Prism.languages.bash = {
 		pattern: /\b(sudo)\b/,
 		greedy: true,
 	},
+	"bash-ellipsis": {
+		pattern: /\.\.\./,
+		greedy: true,
+	},
 	...(Prism.languages.bash as any),
 	"terminal-application": {
 		pattern: /\b(pacman|xcode-select)\b/,
@@ -101,6 +105,21 @@ const CodePre = ({ children, lang }: CodeProps) => {
 	);
 };
 
+const CodeHeader = ({ children, lang }: CodeProps) => {
+	return (
+		<HeaderStyles fonts={globalFonts} data-lang={lang}>
+			<code
+				// className={`language-${lang}`}
+				dangerouslySetInnerHTML={{
+					__html: !!Prism.languages[lang]
+						? Prism.highlight(children ?? "", Prism.languages[lang], lang)
+						: children,
+				}}
+			/>
+		</HeaderStyles>
+	);
+};
+
 const CodePreFromMarkdown = ({ children, ...props }: Props) => {
 	return (
 		<>
@@ -134,7 +153,7 @@ const CodePreFromMarkdown = ({ children, ...props }: Props) => {
 	);
 };
 
-export { Code, CodePre, CodePreFromMarkdown };
+export { Code, CodePre, CodeHeader, CodePreFromMarkdown };
 
 const boldWeight: number = 800;
 
@@ -144,10 +163,7 @@ type StyleProps = {
 
 const codeCss = css<StyleProps>`
 	position: relative;
-	background-color: ${getThemeVariable("codeBackground")};
 	color: ${getThemeVariable("codeWhite")};
-	font-size: 0.875rem;
-	font-weight: 400;
 	word-spacing: normal;
 	word-break: normal;
 	word-wrap: normal;
@@ -303,6 +319,9 @@ const codeCss = css<StyleProps>`
 		&.chalet-architecture {
 			color: ${getThemeVariable("codeWhite")};
 		}
+		&.bash-ellipsis {
+			color: ${getThemeVariable("codeGray")};
+		}
 	}
 
 	.language-json .token {
@@ -348,10 +367,33 @@ const CodeStyles = styled.code<StyleProps>`
 	white-space: pre-wrap;
 	line-height: inherit;
 	overflow: hidden;
+	font-size: 0.875rem;
+	font-weight: 400;
+	background-color: ${getThemeVariable("codeBackground")};
 
 	${codeCss}
 
 	color: ${getThemeVariable("codeBlue")};
+`;
+
+const HeaderStyles = styled.dt<StyleProps>`
+	display: block;
+	/* max-height: 24rem; */
+	font-size: inherit;
+	line-height: inherit;
+
+	> code {
+		line-height: 1.5;
+		overflow: auto;
+		font-size: 1rem;
+		font-weight: 800;
+		background-color: ${getThemeVariable("codeBackground")};
+		padding: 0.25rem 0.375rem;
+
+		${codeCss}
+
+		color: ${getThemeVariable("codeGreen")};
+	}
 `;
 
 const PreStyles = styled.pre<StyleProps>`
@@ -362,6 +404,9 @@ const PreStyles = styled.pre<StyleProps>`
 	white-space: pre-wrap;
 	line-height: 1.5;
 	overflow: auto;
+	font-size: 0.875rem;
+	font-weight: 400;
+	background-color: ${getThemeVariable("codeBackground")};
 
 	${codeCss}
 

@@ -206,18 +206,24 @@ const getMdxPage = async (
 		});
 
 		const navData = await getNavBar(content, slug, branch);
+		const title = meta?.title ?? "Untitled";
 
 		return {
 			...navData,
 			meta: {
 				...meta,
-				title: meta?.title ?? "Untitled",
+				title,
 			},
 			mdx,
 		};
 	} catch (err: any) {
 		try {
-			return await getNotFoundPage();
+			console.error(err);
+			if ((err.message ?? "").startsWith("File not found")) {
+				return await getNotFoundPage();
+			} else {
+				return await getInternalServerErrorPage();
+			}
 		} catch (e: any) {
 			throw e;
 		}
@@ -226,8 +232,11 @@ const getMdxPage = async (
 
 const getNotFoundPage = () => getMdxPage("_404", {}, true);
 
+const getInternalServerErrorPage = () => getMdxPage("_500", {}, true);
+
 const markdownFiles = {
 	getMdxPage,
+	getInternalServerErrorPage,
 	getNotFoundPage,
 };
 

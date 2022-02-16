@@ -192,6 +192,10 @@ const BaseStyle = createGlobalStyle`
 		padding-left: 1rem;
 	}
 
+	dd {
+		padding-left: 1.25rem;
+	}
+
 	button {
 		border: none;
 	}
