@@ -24,7 +24,7 @@ const Styles = styled.ul`
 		&:before {
 			display: block;
 			position: absolute;
-			content: "\u2023";
+			content: "\u25AB";
 			color: ${getThemeVariable("header")};
 			font-size: 2rem;
 			line-height: 0;

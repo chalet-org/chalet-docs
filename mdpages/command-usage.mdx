@@ -41,7 +41,7 @@ prints version information and exits
 
 <!-- dl:end -->
 
-\\
+\
 
 ---
 
@@ -63,7 +63,9 @@ Initialize a project in either the current directory or a subdirectory.
 
 <dd>
 
-The path of the project to initialize [default: "."]
+The path of the project to initialize.
+
+default: `.`
 
 </dd>
 
@@ -78,7 +80,7 @@ The project template to use during initialization (ex: cmake)
 
 <!-- dl:end -->
 
-\\
+\
 
 ---
 
@@ -153,7 +155,9 @@ The arguments to pass to the run target.
 
 <dd>
 
-An input build file to use [default: "chalet.json"]
+An input build file to use.
+
+default: `chalet.json`
 
 </dd>
 
@@ -162,7 +166,9 @@ An input build file to use [default: "chalet.json"]
 
 <dd>
 
-The path to a settings file to use [default: ".chaletrc"]
+The path to a settings file to use.
+
+default: `.chaletrc`
 
 </dd>
 
@@ -180,7 +186,9 @@ The root directory to run the build from
 
 <dd>
 
-The directory to install external dependencies into [default: "chalet_external"]
+The directory to install external dependencies into.
+
+default: `chalet_external`
 
 </dd>
 
@@ -189,7 +197,9 @@ The directory to install external dependencies into [default: "chalet_external"]
 
 <dd>
 
-The output directory of the build [default: "build"]
+The output directory of the build.
+
+default: `build`
 
 </dd>
 
@@ -198,7 +208,9 @@ The output directory of the build [default: "build"]
 
 <dd>
 
-The root directory for all distribution bundles [default: "dist"]
+The root directory for all distribution bundles.
+
+default: `dist`
 
 </dd>
 
@@ -207,7 +219,9 @@ The root directory for all distribution bundles [default: "dist"]
 
 <dd>
 
-The build configuration to use [default: "Release"]
+The build configuration to use.
+
+default: `Release`
 
 </dd>
 
@@ -216,7 +230,29 @@ The build configuration to use [default: "Release"]
 
 <dd>
 
-A toolchain preset to use (ex: apple-llvm, llvm, gcc, intel-classic) [default: "apple-llvm"]
+A toolchain preset to use, or a user-made toolchain.
+
+default: 
+* MacOS: `apple-llvm`
+* Windows: `vs-stable`
+* Linux: `gcc`
+
+Presets:
+* `llvm`
+* `gcc`
+
+Windows Presets:
+* `vs-stable`
+* `vs-latest`
+* `vs-2022`
+* `vs-2019`
+* `vs-2017`
+* `intel-llvm-vs-2019`
+* `intel-llvm-vs-2017`
+
+MacOS Presets:
+* `apple-llvm`
+* `intel-classic`
 
 </dd>
 
@@ -225,7 +261,9 @@ A toolchain preset to use (ex: apple-llvm, llvm, gcc, intel-classic) [default: "
 
 <dd>
 
-Target architecture [default: "auto"]
+Target architecture.
+
+default: `auto`
 
 </dd>
 
@@ -234,7 +272,9 @@ Target architecture [default: "auto"]
 
 <dd>
 
-A file to load environment variables from [default: ".env"]
+A file to load environment variables from.
+
+default: `.env`
 
 </dd>
 
@@ -243,7 +283,9 @@ A file to load environment variables from [default: ".env"]
 
 <dd>
 
-The number of jobs to run during compilation [default: 16]
+The number of jobs to run during compilation.
+
+default: `16`
 
 </dd>
 
@@ -251,7 +293,7 @@ The number of jobs to run during compilation [default: 16]
 
 <dd>
 
-Show the commands run during the build
+Show the commands run during the build.
 
 </dd>
 
@@ -259,7 +301,7 @@ Show the commands run during the build
 
 <dd>
 
-Create an .asm dump of each object file during the build
+Create an .asm dump of each object file during the build.
 
 </dd>
 
@@ -267,7 +309,7 @@ Create an .asm dump of each object file during the build
 
 <dd>
 
-Show all build times (total build time, build targets, other steps)
+Show all build times (total build time, build targets, other steps).
 
 </dd>
 
@@ -275,7 +317,7 @@ Show all build times (total build time, build targets, other steps)
 
 <dd>
 
-If running profile targets, launch the preferred profiler afterwards
+If running profile targets, launch the preferred profiler afterwards.
 
 </dd>
 
@@ -283,7 +325,7 @@ If running profile targets, launch the preferred profiler afterwards
 
 <dd>
 
-If there's a build error, continue as much of the build as possible
+If there's a build error, continue as much of the build as possible.
 
 </dd>
 
@@ -291,7 +333,7 @@ If there's a build error, continue as much of the build as possible
 
 <dd>
 
-Generate a compile_commands.json file for Clang tooling use
+Generate a compile_commands.json file for Clang tooling use.
 
 </dd>
 
@@ -299,13 +341,13 @@ Generate a compile_commands.json file for Clang tooling use
 
 <dd>
 
-Show only build output
+Show only build output.
 
 </dd>
 
 <!-- dl:end -->
 
-\\
+\
 
 ---
 
@@ -367,7 +409,7 @@ The path to a JSON file to examine, if not the local/global settings.
 
 <dd>
 
-Use the local settings [.chaletrc]
+Use the local settings (.chaletrc)
 
 </dd>
 
@@ -376,23 +418,17 @@ Use the local settings [.chaletrc]
 
 <dd>
 
-Use the global settings [~/.chaletconfig]
+Use the global settings (~/.chaletconfig)
 
 </dd>
 
 <!-- dl:end -->
 
-\\
+\
 
 ---
 
 ## [Other Commands]
-
-```bash
-chalet query <type> [<args>...]
-```
-
-Query Chalet for any project-specific or global information. Intended to be used for code editor integrations. 
 
 ```bash
 chalet colortest
@@ -400,30 +436,37 @@ chalet colortest
 
 Display all color themes and terminal capabilities.
 
+```bash
+chalet query <type> [<args>...]
+```
+
+Query Chalet for any project-specific or global information. Intended to be used for code editor integrations. 
+
 <!-- dl:start -->
 
 ``<type>``
 
 <dd>
 
-The data type to query. It must be one of hte following:
+The data type to query. It must be one of the following:
 
-* schema-settings-json - The entire .chaletrc / .chaletconfig schema in JSON format
-* state-chalet-json - State applicable to the chalet.json for the current project in JSON format
-* state-settings-json - State applicable to the .chaletrc / .chaletconfig for the current project in JSON format
-* user-toolchains - The list of user-specified or cached toolchains for the project
-* toolchain - The current toolchain selected for the project
-* theme-names - The list of terminal theme names available
-* configurations - The current build configuration selected for the project
-* schema-chalet-json - The entire chalet.json schema in JSON format
-* run-target - The current run target for the project
-* list-names - The list of available data types to query for (this list)
-* configuration - The current build configuration for the project
-* architectures - Any architectures used by the current toolchain
-* commands - The full list of chalet commands
-* toolchain-presets - The list of toolchain presets available on the platform
-* architecture - The current build architecture for the project
-* all-toolchains - The list of toolchain presets and user toolchains for the project
+Types:
+* `schema-settings-json` - The entire `.chaletrc` / `.chaletconfig` schema in JSON format
+* `state-chalet-json` - State applicable to the chalet.json for the current project in JSON format
+* `state-settings-json` - State applicable to the `.chaletrc` / `.chaletconfig` for the current project in JSON format
+* `user-toolchains` - The list of user-specified or cached toolchains for the project
+* `toolchain` - The current toolchain selected for the project
+* `theme-names` - The list of terminal theme names available
+* `configurations` - The current build configuration selected for the project
+* `schema-chalet-json` - The entire chalet.json schema in JSON format
+* `run-target` - The current run target for the project
+* `list-names` - The list of available data types to query for (this list)
+* `configuration` - The current build configuration for the project
+* `architectures` - Any architectures used by the current toolchain
+* `commands` - The full list of chalet commands
+* `toolchain-presets` - The list of toolchain presets available on the platform
+* `architecture` - The current build architecture for the project
+* `all-toolchains` - The list of toolchain presets and user toolchains for the project
 
 </dd>
 
@@ -431,7 +474,7 @@ The data type to query. It must be one of hte following:
 
 <dd>
 
-Data to provide to the query. This is only used by "architecture", where a single argument is the toolchain name.
+Data to provide to the query. This is only used by `architecture`, where a single argument is the toolchain name.
 
 </dd>
 

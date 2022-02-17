@@ -388,11 +388,12 @@ const HeaderStyles = styled.dt<StyleProps>`
 		font-size: 1rem;
 		font-weight: 800;
 		background-color: ${getThemeVariable("codeBackground")};
-		padding: 0.25rem 0.375rem;
+		padding: 0.125rem 0.75rem;
+		padding-top: 0.2rem;
 
 		${codeCss}
 
-		color: ${getThemeVariable("codeGreen")};
+		color: ${getThemeVariable("codeCyan")};
 	}
 `;
 

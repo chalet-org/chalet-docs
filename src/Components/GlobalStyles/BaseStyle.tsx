@@ -194,6 +194,7 @@ const BaseStyle = createGlobalStyle`
 
 	dd {
 		padding-left: 1.25rem;
+		padding-bottom: 1rem;
 	}
 
 	button {
