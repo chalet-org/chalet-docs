@@ -47,6 +47,7 @@ export { SchemaSelect };
 
 const Styles = styled.div`
 	display: flex;
+	position: relative;
 	flex-direction: row;
 	width: 100%;
 	padding: 0 1.5rem;
@@ -70,8 +71,7 @@ const Styles = styled.div`
 		font-family: inherit;
 		font-size: inherit;
 		padding-bottom: 0.125rem;
-
-		border-left: 0.25rem solid transparent;
+		z-index: 2;
 
 		&:hover {
 			text-decoration: underline;
@@ -80,24 +80,32 @@ const Styles = styled.div`
 
 		&.active {
 			background-color: ${getThemeVariable("background")};
-			border-left-color: ${getThemeVariable("tertiaryColor")};
-		}
-
-		&:after {
-			content: "<>";
-			display: block;
-			position: absolute;
-			right: 0;
-			top: 50%;
-			width: 0.8em;
-			height: 0.5em;
-			clip-path: polygon(100% 0%, 0 0%, 50% 100%);
-			color: red;
-			z-index: 99;
 		}
 
 		> option {
 			font-size: 1rem;
+			color: #222;
+		}
+	}
+
+	&:after {
+		content: "\u25BE";
+		display: block;
+		position: absolute;
+		font-size: 1.25rem;
+		line-height: 0;
+		right: 2rem;
+		top: 50%;
+		transform: translateY(-12.5%);
+		width: 0.8em;
+		height: 0.5em;
+		color: ${getThemeVariable("tertiaryColor")};
+		z-index: 1;
+	}
+
+	&:hover {
+		&:after {
+			color: ${getThemeVariable("primaryColor")};
 		}
 	}
 `;
