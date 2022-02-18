@@ -11,7 +11,7 @@ import { getSchemaReferencePaths } from "Server/CustomMarkdownParser";
 import { markdownFiles } from "Server/MarkdownFiles";
 
 const MarkdownPage = withServerErrorPage((props: Props) => {
-	return <MarkdownLayout {...props} />;
+	return <MarkdownLayout {...props} isSchema />;
 });
 
 export const getStaticPaths = async () => {
@@ -21,6 +21,7 @@ export const getStaticPaths = async () => {
 		const paths = schemaPaths.map((p) => `/schema/${p}`);
 
 		return {
+			// fallback: "blocking",
 			fallback: true,
 			paths,
 		};

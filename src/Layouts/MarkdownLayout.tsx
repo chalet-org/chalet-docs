@@ -6,7 +6,7 @@ import styled from "styled-components";
 
 import { Dictionary } from "@andrew-r-king/react-kitchen";
 
-import { AnchoredHeadingObject, HeadingObject, Page, SideNavigation } from "Components";
+import { AnchoredHeadingObject, HeadingObject, Page, SchemaNavigation, SideNavigation } from "Components";
 import { useRouteChangeScroll, useWheelScroll } from "Hooks";
 import { ResultMDXPage } from "Server/ResultTypes";
 import { useUiStore } from "Stores";
@@ -14,6 +14,7 @@ import { dynamic, getWindowHeight } from "Utility";
 
 export type Props = ResultMDXPage & {
 	children?: React.ReactNode;
+	isSchema?: boolean;
 };
 
 let components: Dictionary<React.ComponentType<any>> = {
@@ -35,12 +36,17 @@ let components: Dictionary<React.ComponentType<any>> = {
 	CodeHeader: dynamic.component("CodeHeader"),
 };
 
+let schemaComponents: Dictionary<React.ComponentType<any>> = {
+	...components,
+	ul: dynamic.component("UnorderedListSchema"),
+};
+
 type AnchorData = {
 	el: HTMLAnchorElement;
 	id: string;
 };
 
-const MarkdownLayout = ({ meta, mdx, children, ...navProps }: Props) => {
+const MarkdownLayout = ({ meta, mdx, children, isSchema, ...navProps }: Props) => {
 	const { focusedId, setFocusedId, navOpen, heightNotifier } = useUiStore();
 	const pageLayout = useRef<HTMLDivElement>(null);
 	const router = useRouter();
@@ -118,7 +124,8 @@ const MarkdownLayout = ({ meta, mdx, children, ...navProps }: Props) => {
 			<SideNavigation {...navProps} />
 			<Page title={meta?.title ?? "Untitled"}>
 				<Styles ref={pageLayout}>
-					<MDXRemote {...mdx} components={components} />
+					{!!isSchema && <SchemaNavigation schemaLinks={navProps.schemaLinks} anchors={navProps.anchors} />}
+					<MDXRemote {...mdx} components={!!isSchema ? schemaComponents : components} />
 				</Styles>
 			</Page>
 		</>

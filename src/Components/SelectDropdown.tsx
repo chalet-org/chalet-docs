@@ -1,39 +1,42 @@
-import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { ResultNavigation } from "Server/ResultTypes";
-import { useUiStore } from "Stores";
+import { HyperLink } from "Server/ResultTypes";
 import { getThemeVariable } from "Theme";
 
-type Props = Pick<ResultNavigation, "schemaLinks"> & {};
+type Props = {
+	name: string;
+	label?: string;
+	defaultValue?: string;
+	onChange?: (value: HyperLink) => Promise<void> | void | Promise<boolean> | boolean;
+	options: HyperLink[];
+};
 
-const SchemaSelect = ({ schemaLinks }: Props) => {
-	const router = useRouter();
-	const { navSelect, setNavSelectValue } = useUiStore();
-
+const SelectDropdown = ({ name, label, options, onChange, defaultValue }: Props) => {
+	const [value, setValue] = useState<string>(defaultValue ?? options?.[0].href ?? "");
+	useEffect(() => {
+		if (!!defaultValue) setValue(defaultValue);
+	}, [defaultValue]);
 	return (
 		<Styles className="schema-select">
+			{!!label && <label htmlFor={name}>{label}: </label>}
 			<select
-				id="ref-select"
-				name="gitRef"
-				value={navSelect.label}
+				name={name}
+				value={value}
 				onChange={async (ev) => {
-					for (const link of schemaLinks) {
-						if (link.label === ev.target.value) {
-							setNavSelectValue(link);
-							await router.push(link.href);
+					ev.preventDefault();
+					for (const link of options) {
+						if (link.href === ev.target.value) {
+							setValue(link.href);
+							await onChange?.(link);
 							break;
 						}
-
-						setNavSelectValue(null);
 					}
 				}}
 			>
-				<option value="">-- Select --</option>
-				{schemaLinks.map((link, i) => {
+				{options.map((link, i) => {
 					return (
-						<option value={link.label} key={i}>
+						<option value={link.href} key={i}>
 							{link.label}
 						</option>
 					);
@@ -43,19 +46,20 @@ const SchemaSelect = ({ schemaLinks }: Props) => {
 	);
 };
 
-export { SchemaSelect };
+export { SelectDropdown };
 
 const Styles = styled.div`
 	display: flex;
 	position: relative;
 	flex-direction: row;
 	width: 100%;
-	padding: 0 1.5rem;
 	line-height: 2;
 
 	> label {
 		display: block;
 		width: 100%;
+		flex: 1;
+		color: ${getThemeVariable("codeGray")};
 	}
 
 	> select {
@@ -63,6 +67,7 @@ const Styles = styled.div`
 		position: relative;
 		appearance: none;
 		width: 100%;
+		flex: 2;
 		font-size: 1rem;
 		cursor: pointer;
 		background-color: transparent;

@@ -23,15 +23,15 @@ export type ResultChaletChangelog = {
 
 export type ResultMDX = MDXRemoteSerializeResult<Record<string, unknown>>;
 
-export type SidebarLink = {
+export type HyperLink = {
 	href: string;
 	label: string;
 };
 
 export type ResultNavigation = {
-	sidebarLinks: (SidebarLink | string)[];
+	sidebarLinks: (HyperLink | string)[];
 	anchors: ResultPageAnchor[];
-	schemaLinks: SidebarLink[];
+	schemaLinks: HyperLink[];
 };
 
 export type ResultMDXPage = ResultNavigation & {

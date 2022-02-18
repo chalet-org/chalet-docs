@@ -11,7 +11,7 @@ import { getChaletBranches } from "./ChaletBranches";
 import { getChaletTags } from "./ChaletTags";
 import { getPageAnchors, parseCustomMarkdown } from "./CustomMarkdownParser";
 import { isDevelopment } from "./IsDevelopment";
-import { ResultMDXPage, ResultMDX, ResultNavigation, SidebarLink } from "./ResultTypes";
+import { ResultMDXPage, ResultMDX, ResultNavigation, HyperLink } from "./ResultTypes";
 
 const mdpages: string = "mdpages";
 const allowedExtensions: string[] = ["mdx", "md"];
@@ -74,9 +74,9 @@ const getFirstExistingPath = (inPath: string, extensions: string[], internal: bo
 	}
 };*/
 
-let linkCache: Dictionary<SidebarLink> = {};
+let linkCache: Dictionary<HyperLink> = {};
 
-const getLinkFromPageSlug = async (href: string): Promise<SidebarLink> => {
+const getLinkFromPageSlug = async (href: string): Promise<HyperLink> => {
 	try {
 		if (linkCache[href] !== undefined && !isDevelopment) {
 			return linkCache[href];
@@ -105,7 +105,7 @@ const getLinkFromPageSlug = async (href: string): Promise<SidebarLink> => {
 	}
 };
 
-type SidebarResult = SidebarLink | string;
+type SidebarResult = HyperLink | string;
 
 const getSidebarLinks = async (): Promise<SidebarResult[]> => {
 	try {
@@ -116,20 +116,29 @@ const getSidebarLinks = async (): Promise<SidebarResult[]> => {
 		const fileContent: string = fs.readFileSync(sidebarFile, "utf8");
 
 		const split = fileContent.split(os.EOL);
-		let result: (SidebarLink | string)[] = [];
+		let result: (HyperLink | string)[] = [];
 		for (const line of split) {
 			if (line.startsWith("<!--")) continue;
 
 			if (line.startsWith(":")) {
 				const id = line.substring(1);
-				if (id === "ref-select" || id === "break") {
+				if (id === "break") {
 					result.push(id);
 				}
 			} else if (line.startsWith("[")) {
-				let matches = line.match(/^\[\]\((.+?)\)$/);
-				if (!!matches && matches.length === 2) {
-					const link = await getLinkFromPageSlug(matches[1]);
-					result.push(link);
+				let matches = line.match(/^\[(.*)\]\((.+?)\)$/);
+				if (!!matches) {
+					if (matches.length === 3) {
+						if (matches[1].length === 0) {
+							const link = await getLinkFromPageSlug(matches[2]);
+							result.push(link);
+						} else {
+							result.push({
+								href: matches[2],
+								label: matches[1],
+							});
+						}
+					}
 				}
 			} else if (line.length > 0) {
 				result.push(line);

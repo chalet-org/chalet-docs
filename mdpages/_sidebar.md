@@ -17,5 +17,4 @@
 
 :break
 [](/changelog)
-Schema Reference
-:ref-select
+[Schema Reference](/schema/latest)

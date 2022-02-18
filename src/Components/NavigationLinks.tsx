@@ -5,10 +5,7 @@ import styled from "styled-components";
 
 import { Link } from "Components";
 import { ResultNavigation, ResultPageAnchor } from "Server/ResultTypes";
-import { useUiStore } from "Stores";
 import { getThemeVariable } from "Theme";
-
-import { SchemaSelect } from "./SchemaSelect";
 
 // Note: don't style this component here
 // all links in the SideNavigation need to respect its styling
@@ -45,11 +42,9 @@ const LinkWithAnchors = ({ href, anchors, children }: LinkWithAnchorProps) => {
 	);
 };
 
-type Props = Omit<ResultNavigation, "mdxNav">;
+type Props = Omit<ResultNavigation, "mdxNav" | "schemaLinks">;
 
-const NavigationLinks = ({ schemaLinks, sidebarLinks, anchors }: Props) => {
-	const { navSelect } = useUiStore();
-	const router = useRouter();
+const NavigationLinks = ({ sidebarLinks, anchors }: Props) => {
 	return (
 		<ul>
 			{sidebarLinks.map((link, i) => {
@@ -59,40 +54,6 @@ const NavigationLinks = ({ schemaLinks, sidebarLinks, anchors }: Props) => {
 							<NavBreak key={i}>
 								<hr />
 							</NavBreak>
-						);
-					} else if (link === "ref-select") {
-						const href = navSelect.href.toString();
-						const base = router.asPath.split("?")[0];
-						const base2 = base.split("/").slice(0, -1).join("/");
-						return (
-							<React.Fragment key={i}>
-								{navSelect.href !== "" ? (
-									<li>
-										<SchemaSelect {...{ schemaLinks }} />
-										{(base === href || base2 === href) && (
-											<>
-												<Link href={href}>(root)</Link>
-												<ul>
-													{anchors.map((anchor, j) => {
-														const dataId = anchor.to.includes("=")
-															? anchor.to.split("=")[1]
-															: undefined;
-														return (
-															<li key={j}>
-																<Link href={`${href}${anchor.to}`} dataId={dataId}>
-																	{anchor.text}
-																</Link>
-															</li>
-														);
-													})}
-												</ul>
-											</>
-										)}
-									</li>
-								) : (
-									<SchemaSelect {...{ schemaLinks }} />
-								)}
-							</React.Fragment>
 						);
 					} else {
 						return (

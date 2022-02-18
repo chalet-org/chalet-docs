@@ -379,13 +379,12 @@ const CodeStyles = styled.code<StyleProps>`
 const HeaderStyles = styled.dt<StyleProps>`
 	display: block;
 	/* max-height: 24rem; */
-	font-size: inherit;
+	font-size: 0.875rem;
 	line-height: inherit;
 
 	> code {
 		line-height: 1.5;
 		overflow: auto;
-		font-size: 1rem;
 		font-weight: 800;
 		background-color: ${getThemeVariable("codeBackground")};
 		padding: 0.125rem 0.75rem;

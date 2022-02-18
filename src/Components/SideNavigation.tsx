@@ -212,6 +212,7 @@ const StyledAside = styled.aside<AsideProps>`
 		width: calc(${(props) => props.width} - 0.125rem);
 		height: 7.5rem;
 		bottom: 0;
+		z-index: 100;
 
 		${makeLinearGradient("transparent", getThemeVariable("codeBackground"), 180)}
 		background: ${getThemeVariable("codeBackground")};

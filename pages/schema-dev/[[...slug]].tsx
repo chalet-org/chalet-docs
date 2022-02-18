@@ -6,7 +6,7 @@ import { MarkdownLayout, Props } from "Layouts/MarkdownLayout";
 import { handleInitialProps } from "Utility";
 
 const MarkdownPage = withServerErrorPage((props: Props) => {
-	return <MarkdownLayout {...props} />;
+	return <MarkdownLayout {...props} isSchema />;
 });
 
 MarkdownPage.getInitialProps = handleInitialProps(async (ctx) => {

@@ -16,7 +16,8 @@ type Components =
 	| "Spacer"
 	| "Stub"
 	| "TabbedContent"
-	| "UnorderedList";
+	| "UnorderedList"
+	| "UnorderedListSchema";
 
 export const dynamic = {
 	component: (component: Components) => nextDynamic(async () => (await import("Components"))[component] as any),
