@@ -41,7 +41,7 @@ const jsonNodeToMarkdown = (
 		required,
 	} = schema;
 
-	const cleanName = !!name ? name.replace(/^\^(.+?)\$$/g, "$1") : null;
+	// const cleanName = !!name ? name.replace(/^\^(.+?)\$$/g, "$1") : null;
 
 	if (!!schemaDefinitions) {
 		definitions = schemaDefinitions;
@@ -57,8 +57,8 @@ const jsonNodeToMarkdown = (
 			.join("");*/
 	}
 
-	if (!!cleanName) {
-		result += `##### [${cleanName}]\n\n`;
+	if (!!name) {
+		result += `##### [${name}]\n\n`;
 	}
 
 	let isNotDefinition: boolean = false;
@@ -79,6 +79,7 @@ const jsonNodeToMarkdown = (
 			const displayName = toPascalCase(definitionName);
 			result += `* type: [${displayName}](/${slug}/${definitionName})\n`;
 		}
+		return result;
 	}
 
 	if (!!type) {
@@ -95,16 +96,16 @@ ${JSON.stringify(defaultValue, undefined, 3)}
 		}
 	}
 	if (!!pattern) {
-		result += `* pattern: \`${pattern.replace(/^\^(.+?)\$$/g, "$1")}\`\n`;
+		result += `* pattern: \`\`${pattern.replace(/\\b/g, "\\\\b")}\`\`\n`;
 	}
 	if (!!uniqueItems) {
-		result += `* uniqueItems: \`${uniqueItems ? "true" : "false"}\`\n`;
+		result += `* unique items: \`${uniqueItems ? "true" : "false"}\`\n`;
 	}
 	if (!!minItems) {
-		result += `* minItems: \`${minItems}\`\n`;
+		result += `* min items: \`${minItems}\`\n`;
 	}
 	if (!!maxItems) {
-		result += `* maxItems: \`${maxItems}\`\n`;
+		result += `* max items: \`${maxItems}\`\n`;
 	}
 	if (!!enumValue) {
 		result += `* enum: \`${enumValue.join("` `")}\`\n`;
@@ -120,19 +121,19 @@ ${JSON.stringify(defaultValue, undefined, 3)}
 	}
 	if (!!anyOf) {
 		result +=
-			`\n<IndentGroup label="anyOf">\n\n` +
+			`\n<IndentGroup label="any of">\n\n` +
 			anyOf.map((value, i) => jsonNodeToMarkdown(null, slug, value as JSONSchema7, definitions, true)).join("") +
 			`\n</IndentGroup>\n\n`;
 	}
 	if (!!oneOf) {
 		result +=
-			`\n<IndentGroup label="oneOf">\n\n` +
+			`\n<IndentGroup label="one of">\n\n` +
 			oneOf.map((value, i) => jsonNodeToMarkdown(null, slug, value as JSONSchema7, definitions, true)).join("") +
 			`\n</IndentGroup>\n\n`;
 	}
 	if (!!allOf) {
 		result +=
-			`\n<IndentGroup label="allOf">\n\n` +
+			`\n<IndentGroup label="all of">\n\n` +
 			allOf.map((value, i) => jsonNodeToMarkdown(null, slug, value as JSONSchema7, definitions, true)).join("") +
 			`\n</IndentGroup>\n\n`;
 	}
@@ -149,7 +150,7 @@ ${JSON.stringify(defaultValue, undefined, 3)}
 	}
 
 	if (!!schemaIf || !!schemaThen || !!schemaElse) {
-		result += `\n<IndentGroup label="oneOf">\n\n`;
+		result += `\n<IndentGroup label="one of">\n\n`;
 
 		let nextNode: JSONSchema7 | undefined = schema;
 		while (nextNode !== undefined) {
@@ -191,9 +192,14 @@ ${JSON.stringify(defaultValue, undefined, 3)}
 	}
 	if (!!patternProperties) {
 		result +=
-			`\n<IndentGroup label="patternProperties">\n\n` +
+			`\n<IndentGroup label="pattern properties">\n\n` +
 			Object.entries(patternProperties)
-				.map(([key, value], i) => jsonNodeToMarkdown(key, slug, value as JSONSchema7, definitions, indented))
+				.map(([key, value], i) => {
+					// let res: string = `##### [pattern${i + 1}]\n\n\`${key}\`\n\n`;
+					let res: string = `\`\`${key.replace(/\\b/g, "\\\\b")}\`\`\n\n`;
+					res += jsonNodeToMarkdown(null, slug, value as JSONSchema7, definitions, indented);
+					return res;
+				})
 				.join(spacer) +
 			`\n</IndentGroup>\n\n`;
 	}

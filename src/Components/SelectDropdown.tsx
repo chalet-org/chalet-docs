@@ -58,6 +58,7 @@ const Styles = styled.div`
 	> label {
 		display: block;
 		width: 100%;
+		padding-right: 0.5rem;
 		flex: 1;
 		color: ${getThemeVariable("codeGray")};
 	}
@@ -67,7 +68,7 @@ const Styles = styled.div`
 		position: relative;
 		appearance: none;
 		width: 100%;
-		flex: 2;
+		flex: 3;
 		font-size: 1rem;
 		cursor: pointer;
 		background-color: transparent;
@@ -75,8 +76,12 @@ const Styles = styled.div`
 		border: none;
 		font-family: inherit;
 		font-size: inherit;
+		padding: 0 0.75rem;
 		padding-bottom: 0.125rem;
 		z-index: 2;
+		/* border: 1px solid ${getThemeVariable("background")}; */
+		border-radius: 0.5rem;
+		background-color: ${getThemeVariable("background")};
 
 		&:hover {
 			text-decoration: underline;
@@ -90,6 +95,7 @@ const Styles = styled.div`
 		> option {
 			font-size: 1rem;
 			color: #222;
+			background-color: #fff;
 		}
 	}
 
@@ -99,13 +105,14 @@ const Styles = styled.div`
 		position: absolute;
 		font-size: 1.25rem;
 		line-height: 0;
-		right: 2rem;
+		right: 0.75rem;
 		top: 50%;
 		transform: translateY(-12.5%);
 		width: 0.8em;
 		height: 0.5em;
-		color: ${getThemeVariable("tertiaryColor")};
-		z-index: 1;
+		color: ${getThemeVariable("mainText")};
+		z-index: 3;
+		pointer-events: none;
 	}
 
 	&:hover {

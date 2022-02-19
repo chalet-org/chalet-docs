@@ -16,5 +16,5 @@
 <!-- [](/sandbox) -->
 
 :break
-[](/changelog)
 [Schema Reference](/schema/latest)
+[](/changelog)

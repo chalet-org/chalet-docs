@@ -13,21 +13,18 @@ const Accordion = ({ label, children }: Props) => {
 	const { accordionNotifier, notifyHeightChange } = useUiStore();
 
 	const [open, setOpen] = useState<boolean>(false);
-	const [height, setHeight] = useState<number>(0);
 	const contentRef = useRef<HTMLDivElement>(null);
 
-	useEffect(() => {
-		if (contentRef.current && contentRef.current.clientHeight !== height) {
-			setHeight(contentRef.current.clientHeight);
-		}
-	}, [accordionNotifier, height, contentRef]);
+	// We can just use this noop to trigger re-renders
+	useEffect(() => {}, [accordionNotifier, contentRef.current]);
 
 	const className = open ? "open" : "";
 
 	const { baseFontSize } = styleVariables;
 	const marginTop = 0;
 	const marginBottom = 1.0;
-	const computedRemHeight = (height + baseFontSize * (marginTop + marginBottom)) / baseFontSize;
+	const computedRemHeight =
+		((contentRef.current?.clientHeight ?? 0) + baseFontSize * (marginTop + marginBottom)) / baseFontSize;
 
 	return (
 		<>

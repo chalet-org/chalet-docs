@@ -265,10 +265,10 @@ const parseSchemaReference = async (text: string, slug: string, branch: string):
 		return text.replace(`!!ChaletSchemaReference!!`, (match: string) => {
 			let result: string = "";
 			if (!!schema) {
-				result += jsonNodeToMarkdown("(root)", `${slug}/${branch}`, schema);
-				/*result += `\`\`\`json
+				result += `<!-- accordion:start Raw JSON -->\n\n\`\`\`json
 ${JSON.stringify({ ...schema, definitions: undefined }, undefined, 3)}
-\`\`\`\n\n`;*/
+\`\`\`\n\n<!-- accordion:end -->\n\n\\\\\n\n`;
+				result += jsonNodeToMarkdown("(root)", `${slug}/${branch}`, schema);
 			}
 			return result;
 		});
@@ -295,11 +295,13 @@ const parseSchemaDefinition = async (
 					throw new Error(`Schema not found: ${definition}`);
 				}
 
-				result += `#### [${toPascalCase(definition)}]\n\n`;
-				result += jsonNodeToMarkdown(null, `${slug}/${branch}`, definitions[definition], definitions);
-				/*result += `\`\`\`json
+				const markdown = jsonNodeToMarkdown(null, `${slug}/${branch}`, definitions[definition], definitions);
+
+				result += `<!-- accordion:start Raw JSON -->\n\n\`\`\`json
 ${JSON.stringify(definitions?.[definition] ?? {}, undefined, 3)}
-\`\`\`\n\n`;*/
+\`\`\`\n\n<!-- accordion:end -->\n\n\\\\\n\n`;
+				result += `#### [${toPascalCase(definition)}]\n\n`;
+				result += markdown;
 			}
 			return result;
 		});

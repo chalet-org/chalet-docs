@@ -15,6 +15,7 @@ const SchemaNavigation = ({ schemaLinks, anchors }: Props) => {
 	const split = useMemo(() => router.asPath.split("/"), [router.asPath]);
 	const schema: string | undefined = split?.[1];
 	const branch: string | undefined = split?.[2];
+	const path = router.asPath.split("?")[0];
 	const memoAnchors: HyperLink[] = useMemo(
 		() =>
 			[
@@ -45,7 +46,7 @@ const SchemaNavigation = ({ schemaLinks, anchors }: Props) => {
 				<div className="spacer" />
 				<SelectDropdown
 					name="page-select"
-					defaultValue={router.asPath}
+					defaultValue={path}
 					options={memoAnchors}
 					onChange={(value) => router.push(value.href)}
 				/>
@@ -61,12 +62,13 @@ const Styles = styled.div`
 	flex-direction: row;
 	align-items: center;
 	background-color: ${getThemeVariable("codeBackground")};
-	width: calc(100% + 2.5rem);
-	border-radius: 0.5rem;
-	padding: 0.5rem 1.25rem;
-	margin: 0 -1.25rem;
-	margin-bottom: 4rem;
+	width: 100%;
+	/* width: calc(100% + 2.5rem); */
+	padding: 1rem 1.25rem;
+	/* margin: 0 -1.25rem; */
+	margin-bottom: 1.75rem;
 	border: 0.0625rem solid ${getThemeVariable("border")};
+	/* border-radius: 0.5rem; */
 
 	> .schema-select {
 	}

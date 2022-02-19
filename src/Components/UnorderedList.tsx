@@ -37,7 +37,7 @@ const Styles = styled.ul`
 			&:before {
 				display: block;
 				position: absolute;
-				content: "\u25AB";
+				content: "\u2023";
 				color: ${getThemeVariable("header")};
 				font-size: 2rem;
 				line-height: 0;
