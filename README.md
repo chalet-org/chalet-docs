@@ -16,4 +16,4 @@ yarn install
 yarn dev
 ```
 
-5. Test GITHUB_TOKEN by going to `localhost:3000/api/get-mdx?slug=schema-dev&branch=latest&schemaType=chalet-json`
+5. Test GITHUB_TOKEN by going to `localhost:3000/api/get-schema?ref=latest&type=settings-json`

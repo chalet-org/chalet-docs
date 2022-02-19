@@ -1,6 +1,6 @@
 import fs from "fs";
 import matter from "gray-matter";
-import { flatten } from "lodash";
+import flatten from "lodash/flatten";
 import path from "path";
 
 import { Dictionary } from "@andrew-r-king/react-kitchen";

@@ -1,8 +1,8 @@
-import { flatten } from "lodash";
-import { GetStaticPathsResult, GetStaticPropsContext } from "next";
+import flatten from "lodash/flatten";
+import { GetStaticPropsContext } from "next";
 import React from "react";
 
-import { Dictionary, Optional } from "@andrew-r-king/react-kitchen";
+import { Dictionary } from "@andrew-r-king/react-kitchen";
 
 import { withServerErrorPage } from "HighComponents";
 import { MarkdownLayout, Props } from "Layouts/MarkdownLayout";

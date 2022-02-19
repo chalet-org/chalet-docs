@@ -6,6 +6,7 @@ import { HyperLink, ResultNavigation, SchemaType } from "Server/ResultTypes";
 import { getThemeVariable } from "Theme";
 
 import { AnchoredHeadingObject } from "./Heading";
+import { Link } from "./Link";
 import { SelectDropdown } from "./SelectDropdown";
 
 const schemaPicks: HyperLink[] = [
@@ -26,7 +27,7 @@ const SchemaNavigation = ({ schemaLinks, anchors }: Props) => {
 	const path = router.asPath.split("?")[0];
 	const split = path.split("/");
 	const schema: string | undefined = split?.[1];
-	const branch: string | undefined = split?.[2];
+	const ref: string | undefined = split?.[2];
 	const jsonFile: string | undefined = split?.[3];
 	const memoAnchors: HyperLink[] = useMemo(
 		() =>
@@ -37,7 +38,7 @@ const SchemaNavigation = ({ schemaLinks, anchors }: Props) => {
 				},
 				...anchors,
 			].map(({ to, text }) => ({
-				href: `/${schema}/${branch}/${jsonFile}${to}`,
+				href: `/${schema}/${ref}/${jsonFile}${to}`,
 				label: text,
 			})),
 		[router.asPath]
@@ -45,12 +46,12 @@ const SchemaNavigation = ({ schemaLinks, anchors }: Props) => {
 	const memoSchema: HyperLink[] = useMemo(
 		() =>
 			schemaPicks.map(({ href, label }) => ({
-				href: `/${schema}/${branch}/${href}`,
+				href: `/${schema}/${ref}/${href}`,
 				label,
 			})),
 		[router.asPath]
 	);
-	const rootUrl: string = `/${schema}/${branch}/${jsonFile}`;
+	const rootUrl: string = `/${schema}/${ref}/${jsonFile}`;
 	const Header = AnchoredHeadingObject["AnchoredH1"];
 	return (
 		<>
@@ -79,6 +80,9 @@ const SchemaNavigation = ({ schemaLinks, anchors }: Props) => {
 					options={memoAnchors}
 					onChange={(value) => router.push(value.href)}
 				/>
+				<Link href={`/api/get-schema?ref=${ref}&type=${jsonFile}`} noReferrer newWindow>
+					JSON
+				</Link>
 			</Styles>
 		</>
 	);
@@ -112,6 +116,10 @@ const Styles = styled.div`
 		&:nth-of-type(3) {
 			flex: 3;
 		}
+	}
+
+	> a {
+		margin-left: 0.25rem;
 	}
 
 	> .spacer,

@@ -6,12 +6,14 @@ import styled from "styled-components";
 import { useUiStore } from "Stores";
 
 type Props = React.PropsWithChildren<NextLinkProps> & {
+	noReferrer?: boolean;
+	newWindow?: boolean;
 	showActive?: boolean;
 	dataId?: string;
 	onClick?: React.MouseEventHandler;
 };
 
-const Link = ({ children, dataId, onClick, ...props }: Props) => {
+const Link = ({ children, dataId, onClick, noReferrer, newWindow, ...props }: Props) => {
 	const router = useRouter();
 
 	const { focusedId, setFocusedId } = useUiStore();
@@ -49,6 +51,8 @@ const Link = ({ children, dataId, onClick, ...props }: Props) => {
 						}
 						onClick?.(ev);
 					}}
+					rel={noReferrer ? "noreferrer noopener" : undefined}
+					target={newWindow ? "_blank" : undefined}
 				>
 					{children}
 				</Styles>
