@@ -59,7 +59,7 @@ const SchemaNavigation = ({ schemaLinks, anchors }: Props) => {
 			<hr />
 			<Styles>
 				<SelectDropdown
-					name="branch-select"
+					name="ref-select"
 					label="Version"
 					defaultValue={rootUrl}
 					options={schemaLinks}
@@ -80,9 +80,7 @@ const SchemaNavigation = ({ schemaLinks, anchors }: Props) => {
 					options={memoAnchors}
 					onChange={(value) => router.push(value.href)}
 				/>
-				<Link href={`/api/get-schema?ref=${ref}&type=${jsonFile}`} noReferrer newWindow>
-					JSON
-				</Link>
+				<Link href={`/api/schema/${ref}/${jsonFile}`}>JSON</Link>
 			</Styles>
 		</>
 	);
@@ -95,6 +93,7 @@ const Styles = styled.div`
 	flex-direction: row;
 	align-items: center;
 	background-color: ${getThemeVariable("codeBackground")};
+	font-size: 1rem;
 	width: 100%;
 	/* width: calc(100% + 2.5rem); */
 	padding: 1rem 1.25rem;
@@ -104,7 +103,7 @@ const Styles = styled.div`
 	/* border-radius: 0.5rem; */
 
 	> .schema-select {
-		margin: 0 0.25rem;
+		margin: 0 0.5rem;
 		flex: 1;
 
 		&:nth-of-type(1) {
@@ -119,7 +118,7 @@ const Styles = styled.div`
 	}
 
 	> a {
-		margin-left: 0.25rem;
+		margin: 0 0.5rem;
 	}
 
 	> .spacer,

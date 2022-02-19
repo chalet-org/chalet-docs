@@ -159,7 +159,7 @@ const getNavBar = async (
 	content: string,
 	slug: string,
 	schemaType?: SchemaType,
-	branch?: string
+	ref?: string
 ): Promise<ResultNavigation> => {
 	try {
 		if (!otherData || !otherData.branches || !otherData.tags) {
@@ -170,7 +170,7 @@ const getNavBar = async (
 		}
 
 		const sidebarLinks = await getSidebarLinks();
-		const anchors = await getPageAnchors(content, slug, branch, schemaType);
+		const anchors = await getPageAnchors(content, slug, ref, schemaType);
 
 		let schemaLinks: HyperLink[] = [];
 		if (!!schemaType) {
@@ -216,8 +216,9 @@ const getMdxPage = async (
 
 		const fileContent: string = fs.readFileSync(filename, "utf8");
 
-		const { definition, branch } = query;
-		const schemaType = query.schemaType as SchemaType | undefined;
+		const { definition, ref } = query;
+		console.log(slug, query);
+		const schemaType = query.type as SchemaType | undefined;
 		if (
 			!!schemaType &&
 			schemaType !== SchemaType.ChaletJson &&
@@ -227,13 +228,13 @@ const getMdxPage = async (
 			throw new Error(`Invalid schema type requested: ${schemaType}`);
 		}
 
-		const { meta, content } = await parseCustomMarkdown(fileContent, slug, branch, schemaType, definition);
+		const { meta, content } = await parseCustomMarkdown(fileContent, slug, ref, schemaType, definition);
 
 		const mdx: MDXRemoteSerializeResult<Record<string, unknown>> = await serialize(content, {
 			target: ["esnext"],
 		});
 
-		const navData = await getNavBar(content, slug, schemaType, branch);
+		const navData = await getNavBar(content, slug, schemaType, ref);
 		const title = meta?.title ?? "Untitled";
 
 		return {

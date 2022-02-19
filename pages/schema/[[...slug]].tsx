@@ -57,12 +57,12 @@ export const getStaticProps = async (ctx: GetStaticPropsContext) => {
 
 	const slug: string = "schema";
 	const query: Dictionary<string | undefined> = {
-		branch: typeof slugRaw === "string" ? slugRaw : slugRaw[0],
+		ref: typeof slugRaw === "string" ? slugRaw : slugRaw[0],
 	};
 
 	if (typeof slugRaw !== "string") {
 		if (slugRaw[1] === SchemaType.SettingsJson || slugRaw[1] === SchemaType.ChaletJson) {
-			query["schemaType"] = slugRaw[1];
+			query["type"] = slugRaw[1];
 		}
 
 		if (slugRaw.length > 2) {
@@ -71,7 +71,7 @@ export const getStaticProps = async (ctx: GetStaticPropsContext) => {
 	}
 
 	let outDestination = typeof slugRaw === "string" ? [slugRaw] : [...slugRaw];
-	if (query.branch!.startsWith("latest")) {
+	if (query.ref!.startsWith("latest")) {
 		const latestTag: string = await getLatestTag();
 		outDestination[0] = latestTag;
 		return {

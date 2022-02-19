@@ -30,7 +30,6 @@ const handler = async (req: ApiReq, res: ApiRes<ResultChaletSchema | Error>): Pr
 
 		if (refs === null) {
 			refs = flatten(await Promise.all([getChaletBranches(), getChaletTags()]));
-			console.log(refs);
 		}
 
 		if (ref === "latest") {

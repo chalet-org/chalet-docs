@@ -6,14 +6,12 @@ import styled from "styled-components";
 import { useUiStore } from "Stores";
 
 type Props = React.PropsWithChildren<NextLinkProps> & {
-	noReferrer?: boolean;
-	newWindow?: boolean;
 	showActive?: boolean;
 	dataId?: string;
 	onClick?: React.MouseEventHandler;
 };
 
-const Link = ({ children, dataId, onClick, noReferrer, newWindow, ...props }: Props) => {
+const Link = ({ children, dataId, onClick, ...props }: Props) => {
 	const router = useRouter();
 
 	const { focusedId, setFocusedId } = useUiStore();
@@ -21,13 +19,14 @@ const Link = ({ children, dataId, onClick, noReferrer, newWindow, ...props }: Pr
 	// console.log(props.href);
 
 	const showActive = props.showActive ?? true;
-	const targetBlank = typeof props.href === "string" && props.href.startsWith("//");
+	const targetBlank =
+		typeof props.href === "string" && (props.href.startsWith("//") || props.href.startsWith("/api"));
 	const href = typeof props.href === "string" && props.href.split("?")[0];
 	const asPath = router.asPath.split("?")[0];
 
 	if (targetBlank && typeof props.href === "string") {
 		return (
-			<Styles href={props.href} data-id={dataId} target="_blank">
+			<Styles href={props.href} data-id={dataId} rel="noreferrer noopener" target="_blank">
 				{children}
 			</Styles>
 		);
@@ -51,8 +50,6 @@ const Link = ({ children, dataId, onClick, noReferrer, newWindow, ...props }: Pr
 						}
 						onClick?.(ev);
 					}}
-					rel={noReferrer ? "noreferrer noopener" : undefined}
-					target={newWindow ? "_blank" : undefined}
 				>
 					{children}
 				</Styles>

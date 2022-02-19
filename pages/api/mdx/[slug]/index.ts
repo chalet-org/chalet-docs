@@ -1,9 +1,11 @@
-import { Dictionary } from "@andrew-r-king/react-kitchen";
+import { Dictionary, Optional } from "@andrew-r-king/react-kitchen";
 
 import { markdownFiles } from "Server/MarkdownFiles";
 import { runCorsMiddleware } from "Server/NextCors";
 import { ResultMDXPage } from "Server/ResultTypes";
 import { ApiReq, ApiRes } from "Utility";
+
+const validToken: Optional<string> = process.env.NEXT_PUBLIC_API_TOKEN ?? null;
 
 const handler = async (
 	req: ApiReq<{
@@ -14,15 +16,26 @@ const handler = async (
 	try {
 		await runCorsMiddleware(req, res);
 
+		if (validToken === null) {
+			throw new Error("Missing: NEXT_PUBLIC_API_TOKEN");
+		}
+
+		const authToken: Optional<string> = req.headers?.authorization?.split("Bearer ")?.[1] ?? null;
+
 		const { slug } = req.query;
 		if (!slug || slug.length === 0) {
 			throw new Error("Invalid query sent in request");
 		}
+
+		if (authToken !== validToken) {
+			throw new Error("Invalid request");
+		}
+
 		const result = await markdownFiles.getMdxPage(slug, req.query as Dictionary<string | undefined>);
 
 		res.status(200).json(result);
 	} catch (err: any) {
-		// console.error(err.message);
+		console.error(err.message);
 		res.status(404).json({
 			...err,
 		});

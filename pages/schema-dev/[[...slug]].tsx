@@ -23,7 +23,7 @@ MarkdownPage.getInitialProps = handleInitialProps(async (ctx) => {
 		throw new Error(`Invalid slug rquested: ${ctx.query.slug}`);
 	}
 
-	const branch: string = typeof slug === "string" ? slug : slug[0];
+	const ref: string = typeof slug === "string" ? slug : slug[0];
 
 	let definition: string = "";
 	const schemaType = slug[1] as SchemaType;
@@ -34,7 +34,7 @@ MarkdownPage.getInitialProps = handleInitialProps(async (ctx) => {
 		}
 	}
 
-	const page = await docsApi.getSchemaDevMdxPage(definition, branch, schemaType);
+	const page = await docsApi.getSchemaDevMdxPage(definition, ref, schemaType);
 	return {
 		...page,
 	};

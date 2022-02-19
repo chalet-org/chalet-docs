@@ -1,4 +1,10 @@
 
+[Download](https://github.com/chalet-org/chalet/releases)
+[Schema Reference](/schema/latest/chalet-json)
+[](/changelog)
+
+:break
+Documentation
 [](/)
 [](/getting-started)
 [](/managing-dependencies)
@@ -14,7 +20,3 @@
 
 <!-- Dev  -->
 <!-- [](/sandbox) -->
-
-:break
-[Schema Reference](/schema/latest/chalet-json)
-[](/changelog)

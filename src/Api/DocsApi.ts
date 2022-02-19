@@ -1,22 +1,18 @@
 import { BaseApi } from "@andrew-r-king/react-kitchen";
 
-import {
-	ResultChaletSchema,
-	ResultMDXPage,
-	ResultSearchResults,
-	ResultChaletBranches,
-	SchemaType,
-} from "Server/ResultTypes";
+import { ResultMDXPage, ResultSearchResults, SchemaType } from "Server/ResultTypes";
 
 class DocsApi extends BaseApi {
 	constructor() {
-		super(`${process.env.NEXT_PUBLIC_API_BASE ?? "http://localhost:3000/api"}`);
+		super(`${process.env.NEXT_PUBLIC_API_BASE ?? "http://localhost:3000/api"}`, {
+			headers: {
+				Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_TOKEN ?? ""}`,
+			},
+		});
 	}
 
-	getSchemaDevMdxPage = (definition: string, branch: string = "", schemaType: SchemaType = SchemaType.ChaletJson) =>
-		this.GET<ResultMDXPage>(
-			`/get-mdx?slug=schema-dev&definition=${definition}&branch=${branch}&schemaType=${schemaType}`
-		);
+	getSchemaDevMdxPage = (definition: string, ref: string = "", type: SchemaType = SchemaType.ChaletJson) =>
+		this.GET<ResultMDXPage>(`/mdx/schema-dev?ref=${ref}&type=${type}&definition=${definition}`);
 
 	searchMarkdown = async (search: string): Promise<ResultSearchResults> => {
 		try {
