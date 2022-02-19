@@ -255,9 +255,6 @@ const parseSchemaReference = async (type: SchemaType, text: string, slug: string
 		return text.replace(`!!ChaletSchemaReference!!`, (match: string) => {
 			let result: string = "";
 			if (!!schema) {
-				/*result += `<!-- accordion:start Raw JSON -->\n\n\`\`\`json
-${JSON.stringify({ ...schema, definitions: undefined }, undefined, 3)}
-\`\`\`\n\n<!-- accordion:end -->\n\n\\\\\n\n`;*/
 				result += jsonNodeToMarkdown("(root)", `${slug}/${ref}/${type}`, schema);
 			}
 			return result;
@@ -289,9 +286,6 @@ const parseSchemaDefinition = async (
 
 				const markdown = jsonNodeToMarkdown(null, `${slug}/${ref}`, definitions[definition], definitions);
 
-				/*result += `<!-- accordion:start Raw JSON -->\n\n\`\`\`json
-${JSON.stringify(definitions?.[definition] ?? {}, undefined, 3)}
-\`\`\`\n\n<!-- accordion:end -->\n\n\\\\\n\n`;*/
 				result += `#### [${toPascalCase(definition)}]\n\n`;
 				result += markdown;
 			}

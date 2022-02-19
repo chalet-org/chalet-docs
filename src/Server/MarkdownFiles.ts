@@ -217,7 +217,6 @@ const getMdxPage = async (
 		const fileContent: string = fs.readFileSync(filename, "utf8");
 
 		const { definition, ref } = query;
-		console.log(slug, query);
 		const schemaType = query.type as SchemaType | undefined;
 		if (
 			!!schemaType &&
