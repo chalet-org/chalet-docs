@@ -2,11 +2,22 @@ import { useRouter } from "next/router";
 import React, { useMemo } from "react";
 import styled from "styled-components";
 
-import { HyperLink, ResultNavigation } from "Server/ResultTypes";
+import { HyperLink, ResultNavigation, SchemaType } from "Server/ResultTypes";
 import { getThemeVariable } from "Theme";
 
 import { AnchoredHeadingObject } from "./Heading";
 import { SelectDropdown } from "./SelectDropdown";
+
+const schemaPicks: HyperLink[] = [
+	{
+		href: SchemaType.ChaletJson,
+		label: "chalet.json",
+	},
+	{
+		href: SchemaType.SettingsJson,
+		label: ".chaletrc",
+	},
+];
 
 type Props = Pick<ResultNavigation, "schemaLinks" | "anchors">;
 
@@ -26,11 +37,20 @@ const SchemaNavigation = ({ schemaLinks, anchors }: Props) => {
 				},
 				...anchors,
 			].map(({ to, text }) => ({
-				href: `/${schema}/${branch}/${jsonFile}/${to}`,
+				href: `/${schema}/${branch}/${jsonFile}${to}`,
 				label: text,
 			})),
 		[router.asPath]
 	);
+	const memoSchema: HyperLink[] = useMemo(
+		() =>
+			schemaPicks.map(({ href, label }) => ({
+				href: `/${schema}/${branch}/${href}`,
+				label,
+			})),
+		[router.asPath]
+	);
+	const rootUrl: string = `/${schema}/${branch}/${jsonFile}`;
 	const Header = AnchoredHeadingObject["AnchoredH1"];
 	return (
 		<>
@@ -38,13 +58,21 @@ const SchemaNavigation = ({ schemaLinks, anchors }: Props) => {
 			<hr />
 			<Styles>
 				<SelectDropdown
-					name="schema-select"
+					name="branch-select"
 					label="Version"
-					defaultValue={`/${schema}/${branch}/${jsonFile}`}
+					defaultValue={rootUrl}
 					options={schemaLinks}
 					onChange={(value) => router.push(value.href)}
 				/>
-				<div className="spacer" />
+				{/* <div className="spacer" /> */}
+				<SelectDropdown
+					name="schema-select"
+					defaultValue={rootUrl}
+					options={memoSchema}
+					onChange={async (value) => {
+						await router.push(value.href);
+					}}
+				/>
 				<SelectDropdown
 					name="page-select"
 					defaultValue={path}
@@ -72,6 +100,18 @@ const Styles = styled.div`
 	/* border-radius: 0.5rem; */
 
 	> .schema-select {
+		margin: 0 0.25rem;
+		flex: 1;
+
+		&:nth-of-type(1) {
+			flex: 2;
+		}
+		&:nth-of-type(2) {
+			flex: 2;
+		}
+		&:nth-of-type(3) {
+			flex: 3;
+		}
 	}
 
 	> .spacer,

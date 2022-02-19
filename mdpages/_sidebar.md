@@ -16,6 +16,5 @@
 <!-- [](/sandbox) -->
 
 :break
-[Reference: chalet.json](/schema/latest/chalet-json)
-[Refernece: .chaletrc](/schema/latest/settings-json)
+[Schema Reference](/schema/latest/chalet-json)
 [](/changelog)
