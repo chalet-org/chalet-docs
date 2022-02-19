@@ -5,7 +5,7 @@ import { ResultChaletChangelog } from "./ResultTypes";
 
 const getChaletFile = async (file: string, tag: string = "main"): Promise<ResultChaletChangelog> => {
 	try {
-		const url = `https://raw.githubusercontent.com/chalet-org/chalet-dev/${tag}/${file}`;
+		const url = `https://raw.githubusercontent.com/chalet-org/chalet/${tag}/${file}`;
 		const response = await fetchFromGithub(url);
 		const blob = await response.blob();
 		const changelog = await blob.text();

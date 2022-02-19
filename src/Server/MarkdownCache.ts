@@ -12,6 +12,7 @@ import { getChaletBranches } from "./ChaletBranches";
 import { getChaletTags } from "./ChaletTags";
 import { getSchemaReferencePaths } from "./CustomMarkdownParser";
 import { isDevelopment } from "./IsDevelopment";
+import { SchemaType } from "./ResultTypes";
 
 const removeIrrelevantMarkdown = (text: string): string => {
 	text = text.replace(/<!--(.+?)-->/g, " ");
@@ -73,13 +74,21 @@ const getPagesCache = async (): Promise<PageCache[]> => {
 		if (!data["tags"] || isDevelopment) {
 			data["tags"] = await getChaletTags();
 		}
-		const tagPaths: string[] = flatten(await Promise.all(data["tags"].map((b) => getSchemaReferencePaths(b))));
+		const tagPaths: string[] = flatten(
+			await Promise.all([
+				...data["tags"].map((b) => getSchemaReferencePaths(SchemaType.ChaletJson, b)),
+				...data["tags"].map((b) => getSchemaReferencePaths(SchemaType.SettingsJson, b)),
+			])
+		);
 
 		if (!data["branches"] || isDevelopment) {
 			data["branches"] = await getChaletBranches();
 		}
 		const branchPaths: string[] = flatten(
-			await Promise.all(data["branches"].map((b) => getSchemaReferencePaths(b)))
+			await Promise.all([
+				...data["branches"].map((b) => getSchemaReferencePaths(SchemaType.ChaletJson, b)),
+				...data["branches"].map((b) => getSchemaReferencePaths(SchemaType.SettingsJson, b)),
+			])
 		);
 
 		const schemaPageContentRaw = fs.readFileSync(path.join(process.cwd(), schemaPage, "index.mdx"), "utf8");

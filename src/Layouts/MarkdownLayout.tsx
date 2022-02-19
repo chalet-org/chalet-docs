@@ -121,11 +121,13 @@ const MarkdownLayout = ({ meta, mdx, children, isSchema, ...navProps }: Props) =
 
 	return (
 		<>
-			<SideNavigation {...navProps} />
+			{!!navProps.sidebarLinks && <SideNavigation {...navProps} />}
 			<Page title={meta?.title ?? "Untitled"}>
 				<Styles ref={pageLayout}>
-					{!!isSchema && <SchemaNavigation schemaLinks={navProps.schemaLinks} anchors={navProps.anchors} />}
-					<MDXRemote {...mdx} components={!!isSchema ? schemaComponents : components} />
+					{!!isSchema && !!navProps.schemaLinks && (
+						<SchemaNavigation schemaLinks={navProps.schemaLinks} anchors={navProps.anchors} />
+					)}
+					{!!mdx && <MDXRemote {...mdx} components={!!isSchema ? schemaComponents : components} />}
 				</Styles>
 			</Page>
 		</>

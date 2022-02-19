@@ -65,13 +65,11 @@ const jsonNodeToMarkdown = (
 
 	if (!!reference) {
 		let definitionName = reference.replace(/^#\/definitions\/(.+)$/g, "$1");
+		const def = !!definitions && definitions[definitionName];
 		isNotDefinition =
 			!!definitions &&
-			!!definitions[definitionName] &&
-			(!definitions[definitionName]["type"] ||
-				(!!definitions[definitionName]["type"] &&
-					definitions[definitionName]["type"] !== "object" &&
-					definitions[definitionName]["type"] !== undefined));
+			!!def &&
+			(!def["type"] || (!!def["type"] && def["type"] !== "object" && def["type"] !== undefined));
 
 		if (isNotDefinition) {
 			result += jsonNodeToMarkdown(null, slug, definitions![definitionName] as JSONSchema7, definitions);

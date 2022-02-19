@@ -1,13 +1,15 @@
 import { Optional } from "@andrew-r-king/react-kitchen";
 
 import { fetchFromGithub } from "./FetchFromGithub";
-import { ResultChaletSchema } from "./ResultTypes";
+import { ResultChaletSchema, SchemaType } from "./ResultTypes";
 
-const getChaletSchema = async (tag: string = "main"): Promise<ResultChaletSchema> => {
+const getChaletSchema = async (type: SchemaType, tag: string = "main"): Promise<ResultChaletSchema> => {
 	try {
 		// TODO: validate if tag is "main" or "v*.*.*"
 
-		const url = `https://raw.githubusercontent.com/chalet-org/chalet-dev/${tag}/schema/chalet.schema.json`;
+		const file = type == SchemaType.ChaletJson ? "chalet" : "chalet-settings";
+
+		const url = `https://raw.githubusercontent.com/chalet-org/chalet/${tag}/schema/${file}.schema.json`;
 		const response = await fetchFromGithub(url);
 		// const blob = await response.blob();
 		// const schema = await blob.text();

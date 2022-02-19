@@ -72,7 +72,7 @@ const Styles = styled.div`
 		font-size: 1rem;
 		cursor: pointer;
 		background-color: transparent;
-		color: inherit;
+		color: ${getThemeVariable("mainText")};
 		border: none;
 		font-family: inherit;
 		font-size: inherit;
@@ -80,16 +80,14 @@ const Styles = styled.div`
 		padding-bottom: 0.125rem;
 		z-index: 2;
 		/* border: 1px solid ${getThemeVariable("background")}; */
-		border-radius: 0.5rem;
+		border-radius: 0.25rem;
 		background-color: ${getThemeVariable("background")};
 
-		&:hover {
-			text-decoration: underline;
-			text-decoration-color: ${getThemeVariable("primaryColor")};
-		}
+		transition: background-color 0.125s linear, color 0.125s linear;
 
-		&.active {
-			background-color: ${getThemeVariable("background")};
+		&:hover {
+			color: ${getThemeVariable("background")};
+			background-color: ${getThemeVariable("secondaryColor")};
 		}
 
 		> option {
@@ -113,11 +111,12 @@ const Styles = styled.div`
 		color: ${getThemeVariable("mainText")};
 		z-index: 3;
 		pointer-events: none;
+		transition: color 0.125s linear;
 	}
 
 	&:hover {
 		&:after {
-			color: ${getThemeVariable("primaryColor")};
+			color: ${getThemeVariable("background")};
 		}
 	}
 `;

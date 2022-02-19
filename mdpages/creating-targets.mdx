@@ -15,12 +15,12 @@ The philosophy behind Chalet projects is quite simple: Abstract away only what n
 By far the most important part of a Chalet project is its targets. Targets are defined in sequential order, and describe individual source compilation targets, CMake projects, other Chalet project, or scripts.
 
 * Source Target - A folder, set of folders, or files with compilation options. Two types can be made:
-   * [Executable Source Target](/schema/latest/target-source-executable) - Describes an executable file to output
-   * [Library Source Target](/schema/latest/target-source-library) - Describes a static or shared library to output
-* [Chalet Target](/schema/latest/target-chalet) - A subfolder that contains a separate chalet.json
-* [CMake Target](/schema/latest/target-cmake) - A subfolder that contains a CMakeLists.txt
-* [Script Target](/schema/latest/target-script) - An individual script to run
-* [Process Target](/schema/latest/target-process) - A single process with arguments to run
+   * [Executable Source Target](/schema/latest/chalet-json/target-source-executable) - Describes an executable file to output
+   * [Library Source Target](/schema/latest/chalet-json/target-source-library) - Describes a static or shared library to output
+* [Chalet Target](/schema/latest/chalet-json/target-chalet) - A subfolder that contains a separate chalet.json
+* [CMake Target](/schema/latest/chalet-json/target-cmake) - A subfolder that contains a CMakeLists.txt
+* [Script Target](/schema/latest/chalet-json/target-script) - An individual script to run
+* [Process Target](/schema/latest/chalet-json/target-process) - A single process with arguments to run
 
 ```json
 "targets": {
@@ -188,7 +188,7 @@ With abstracts out of the way, we can start thinking about how to structure our 
 }
 ```
 
-Some of these properties will be covered here, while others will be explained are detailed in the schema documentation, [here](http://localhost:3000/schema-dev/main/executable-source-target).
+Some of these properties will be covered here, while others will be explained are detailed in the schema documentation, [here](http://localhost:3000/schema-dev/latest/chalet-json/executable-source-target).
 
 The main required properties for source targets are `language`, `kind`, `settings` and `location` / `files`.
 
@@ -553,7 +553,7 @@ In MSVC, presets are interpreted as the warning level:
 
 > Note: If you'd like to use `/Wall`, it must be added manually.
 
-> Note: These may change between some Chalet versions (probably not very often), as they have the potential to be pretty contentious. [Debate](//github.com/chalet-org/chalet-dev/discussions) is welcomed.
+> Note: These may change between some Chalet versions (probably not very often), as they have the potential to be pretty contentious. [Debate](//github.com/chalet-org/chalet/discussions) is welcomed.
 
 \
 
@@ -789,7 +789,7 @@ In properties that take paths to directories or files, path substitution is supp
 * `~/`, `${home}` - resolves to the home directory of the machine. On Windows, this is `C:\Users\(Name)`
 * `${env:(Name)}` - resolves an environment variable by name. For example: `${env:MY_LIBRARY_PATH}`
 * `${buildDir}` - resolves to the main build directory for the current configuration & architecture
-* `${externalDir}` - resolves to the root path for external dependencies. See [externalDependencies](/schema-dev/latest?id=external-dependencies)
+* `${externalDir}` - resolves to the root path for external dependencies. See [externalDependencies](/schema-dev/latest/chalet-json?id=external-dependencies)
 * `${externalBuildDir}` - resolves to the build path for an external dependency. For instance, if a CMake project is located at `${externalDir}/foo`, it will build to `${buildDir}/${externalDir}/foo`, so it's easier to write `${externalBuildDir}/foo`
 * `${cwd}` - resolves the current working directory (this shouldn't be needed, but it's here just in case)
 

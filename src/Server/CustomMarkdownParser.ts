@@ -12,7 +12,7 @@ import { getChaletSchema } from "./ChaletSchema";
 import { isDevelopment } from "./IsDevelopment";
 import { getLinkFromPageSlug } from "./MarkdownFiles";
 import { jsonNodeToMarkdown } from "./MarkdownPreprocessor";
-import { ResultPageAnchor } from "./ResultTypes";
+import { ResultPageAnchor, SchemaType } from "./ResultTypes";
 
 const trimLineBreaksFromEdges = (text: string) => {
 	while (text.endsWith("\n") || text.endsWith("\r")) {
@@ -113,24 +113,26 @@ const parseAccordions = (text: string): string => {
 	);
 };
 
-let schemaCache: Dictionary<JSONSchema7 | undefined> = {};
+let schemaCache: Dictionary<Dictionary<JSONSchema7 | undefined>> = {};
 
-const initializeSchema = async (ref: string): Promise<JSONSchema7 | undefined> => {
+const getSchemaFromCache = async (type: SchemaType, ref: string): Promise<JSONSchema7 | undefined> => {
 	try {
-		if (schemaCache[ref] === undefined || isDevelopment) {
-			const { schema } = await getChaletSchema(ref);
-			schemaCache[ref] = schema;
+		if (schemaCache[type] === undefined) schemaCache[type] = {};
+
+		if (schemaCache[type][ref] === undefined || isDevelopment) {
+			const { schema } = await getChaletSchema(type, ref);
+			schemaCache[type][ref] = schema;
 		}
 
-		return schemaCache[ref];
+		return schemaCache[type][ref];
 	} catch (err: any) {
 		throw err;
 	}
 };
 
-const getSchemaPageDefinitions = async (ref?: string): Promise<string[]> => {
+const getSchemaPageDefinitions = async (type: SchemaType, ref?: string): Promise<string[]> => {
 	try {
-		const schema = await initializeSchema(ref ?? "main");
+		const schema = await getSchemaFromCache(type, ref ?? "main");
 		const definitions = (schema?.["definitions"] as Dictionary<JSONSchema7> | undefined) ?? {};
 
 		let ret: string[] = [];
@@ -145,9 +147,9 @@ const getSchemaPageDefinitions = async (ref?: string): Promise<string[]> => {
 	}
 };
 
-const getSchemaPageAnchors = async (branch?: string): Promise<ResultPageAnchor[]> => {
+const getSchemaPageAnchors = async (type: SchemaType, branch?: string): Promise<ResultPageAnchor[]> => {
 	try {
-		const keys = await getSchemaPageDefinitions(branch);
+		const keys = await getSchemaPageDefinitions(type, branch);
 		let anchors: ResultPageAnchor[] = keys.map((key) => {
 			return {
 				text: toPascalCase(key),
@@ -163,10 +165,15 @@ const getSchemaPageAnchors = async (branch?: string): Promise<ResultPageAnchor[]
 	}
 };
 
-const getPageAnchors = async (fileContent: string, slug: string, branch?: string): Promise<ResultPageAnchor[]> => {
+const getPageAnchors = async (
+	fileContent: string,
+	slug: string,
+	branch?: string,
+	type?: SchemaType
+): Promise<ResultPageAnchor[]> => {
 	try {
-		if (slug === "schema" || slug === "schema-dev") {
-			return await getSchemaPageAnchors(branch);
+		if (!!type && (slug === "schema" || slug === "schema-dev")) {
+			return await getSchemaPageAnchors(type, branch);
 		} else {
 			let anchors: ResultPageAnchor[] = [];
 
@@ -258,9 +265,9 @@ const parseChangelog = async (inText: string): Promise<string> => {
 	}
 };
 
-const parseSchemaReference = async (text: string, slug: string, branch: string): Promise<string> => {
+const parseSchemaReference = async (type: SchemaType, text: string, slug: string, branch: string): Promise<string> => {
 	try {
-		const schema = await initializeSchema(branch);
+		const schema = await getSchemaFromCache(type, branch);
 
 		return text.replace(`!!ChaletSchemaReference!!`, (match: string) => {
 			let result: string = "";
@@ -268,7 +275,7 @@ const parseSchemaReference = async (text: string, slug: string, branch: string):
 				result += `<!-- accordion:start Raw JSON -->\n\n\`\`\`json
 ${JSON.stringify({ ...schema, definitions: undefined }, undefined, 3)}
 \`\`\`\n\n<!-- accordion:end -->\n\n\\\\\n\n`;
-				result += jsonNodeToMarkdown("(root)", `${slug}/${branch}`, schema);
+				result += jsonNodeToMarkdown("(root)", `${slug}/${branch}/${type}`, schema);
 			}
 			return result;
 		});
@@ -278,13 +285,14 @@ ${JSON.stringify({ ...schema, definitions: undefined }, undefined, 3)}
 };
 
 const parseSchemaDefinition = async (
+	type: SchemaType,
 	text: string,
 	slug: string,
 	branch: string,
 	definition: string
 ): Promise<string> => {
 	try {
-		const schema = await initializeSchema(branch);
+		const schema = await getSchemaFromCache(type, branch);
 
 		return text.replace(`!!ChaletSchemaReference!!`, (match: string) => {
 			let result: string = "";
@@ -292,7 +300,8 @@ const parseSchemaDefinition = async (
 				const definitions = schema["definitions"] as Dictionary<JSONSchema7> | undefined;
 
 				if (definitions === undefined || definitions[definition] === undefined) {
-					throw new Error(`Schema not found: ${definition}`);
+					console.error(`Schema definition not found: ${definition}`);
+					return "";
 				}
 
 				const markdown = jsonNodeToMarkdown(null, `${slug}/${branch}`, definitions[definition], definitions);
@@ -306,23 +315,26 @@ ${JSON.stringify(definitions?.[definition] ?? {}, undefined, 3)}
 			return result;
 		});
 	} catch (err: any) {
-		throw err;
+		console.error(err);
+		return "";
 	}
 };
 
-let definitionsCache: Dictionary<string[]> = {};
+let definitionsCache: Dictionary<Dictionary<string[]>> = {};
 
-const getSchemaReferencePaths = async (ref: string): Promise<string[]> => {
+const getSchemaReferencePaths = async (type: SchemaType, ref: string): Promise<string[]> => {
 	try {
-		if (!definitionsCache[ref] || isDevelopment) {
+		if (definitionsCache[type] === undefined) definitionsCache[type] = {};
+
+		if (!definitionsCache[type][ref] || isDevelopment) {
 			if (ref === "latest") {
-				definitionsCache[ref] = await getSchemaPageDefinitions();
+				definitionsCache[type][ref] = await getSchemaPageDefinitions(type);
 			} else {
-				definitionsCache[ref] = await getSchemaPageDefinitions(ref);
+				definitionsCache[type][ref] = await getSchemaPageDefinitions(type, ref);
 			}
 		}
-		const paths = definitionsCache[ref].map((def) => `${ref}/${def}`);
-		const result: string[] = [ref, ...paths];
+		const paths = definitionsCache[type][ref].map((def) => `${ref}/${type}/${def}`);
+		const result: string[] = [`${ref}/${type}`, ...paths];
 		return result;
 	} catch (err: any) {
 		throw err;
@@ -333,6 +345,7 @@ const parseCustomMarkdown = async (
 	inContent: string,
 	slug: string,
 	branch?: string,
+	schemaType?: SchemaType,
 	definition?: string
 ): Promise<{
 	meta: Dictionary<any>;
@@ -355,11 +368,11 @@ const parseCustomMarkdown = async (
 		}
 
 		// Parse the things
-		if (!!branch) {
+		if (!!branch && !!schemaType) {
 			if (!!definition) {
-				text = await parseSchemaDefinition(text, slug, branch, definition);
+				text = await parseSchemaDefinition(schemaType, text, slug, branch, definition);
 			} else {
-				text = await parseSchemaReference(text, slug, branch);
+				text = await parseSchemaReference(schemaType, text, slug, branch);
 			}
 		}
 		text = await parseBottomPageNavigation(text);

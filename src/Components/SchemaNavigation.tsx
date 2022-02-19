@@ -12,10 +12,11 @@ type Props = Pick<ResultNavigation, "schemaLinks" | "anchors">;
 
 const SchemaNavigation = ({ schemaLinks, anchors }: Props) => {
 	const router = useRouter();
-	const split = useMemo(() => router.asPath.split("/"), [router.asPath]);
+	const path = router.asPath.split("?")[0];
+	const split = path.split("/");
 	const schema: string | undefined = split?.[1];
 	const branch: string | undefined = split?.[2];
-	const path = router.asPath.split("?")[0];
+	const jsonFile: string | undefined = split?.[3];
 	const memoAnchors: HyperLink[] = useMemo(
 		() =>
 			[
@@ -25,7 +26,7 @@ const SchemaNavigation = ({ schemaLinks, anchors }: Props) => {
 				},
 				...anchors,
 			].map(({ to, text }) => ({
-				href: `/${schema}/${branch}${to}`,
+				href: `/${schema}/${branch}/${jsonFile}/${to}`,
 				label: text,
 			})),
 		[router.asPath]
@@ -39,7 +40,7 @@ const SchemaNavigation = ({ schemaLinks, anchors }: Props) => {
 				<SelectDropdown
 					name="schema-select"
 					label="Version"
-					defaultValue={`/${schema}/${branch}`}
+					defaultValue={`/${schema}/${branch}/${jsonFile}`}
 					options={schemaLinks}
 					onChange={(value) => router.push(value.href)}
 				/>

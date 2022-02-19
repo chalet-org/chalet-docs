@@ -11,7 +11,7 @@ import { getChaletBranches } from "./ChaletBranches";
 import { getChaletTags } from "./ChaletTags";
 import { getPageAnchors, parseCustomMarkdown } from "./CustomMarkdownParser";
 import { isDevelopment } from "./IsDevelopment";
-import { ResultMDXPage, ResultMDX, ResultNavigation, HyperLink } from "./ResultTypes";
+import { ResultMDXPage, ResultMDX, ResultNavigation, HyperLink, SchemaType } from "./ResultTypes";
 
 const mdpages: string = "mdpages";
 const allowedExtensions: string[] = ["mdx", "md"];
@@ -155,7 +155,12 @@ let otherData: Optional<{
 	tags?: string[];
 }> = null;
 
-const getNavBar = async (content: string, slug: string, branch?: string): Promise<ResultNavigation> => {
+const getNavBar = async (
+	content: string,
+	slug: string,
+	schemaType?: SchemaType,
+	branch?: string
+): Promise<ResultNavigation> => {
 	try {
 		if (!otherData || !otherData.branches || !otherData.tags) {
 			otherData = {};
@@ -163,23 +168,27 @@ const getNavBar = async (content: string, slug: string, branch?: string): Promis
 			otherData.branches = await getChaletBranches();
 			otherData.tags = await getChaletTags();
 		}
-		const branchLinks = [...otherData.branches].map((value) => {
-			return {
-				label: value,
-				href: `/schema-dev/${value}`,
-			};
-		});
 
-		const tagLinks = [...otherData.tags].map((value) => {
-			return {
-				label: value,
-				href: `/schema/${value}`,
-			};
-		});
 		const sidebarLinks = await getSidebarLinks();
-		const anchors = await getPageAnchors(content, slug, branch);
+		const anchors = await getPageAnchors(content, slug, branch, schemaType);
 
-		const schemaLinks = [...branchLinks, ...tagLinks];
+		let schemaLinks: HyperLink[] = [];
+		if (!!schemaType) {
+			const branchLinks = [...otherData.branches].map((value) => {
+				return {
+					label: value,
+					href: `/schema-dev/${value}/${schemaType}`,
+				};
+			});
+
+			const tagLinks = [...otherData.tags].map((value) => {
+				return {
+					label: value,
+					href: `/schema/${value}/${schemaType}`,
+				};
+			});
+			schemaLinks = [...branchLinks, ...tagLinks];
+		}
 		return {
 			anchors,
 			sidebarLinks,
@@ -208,13 +217,23 @@ const getMdxPage = async (
 		const fileContent: string = fs.readFileSync(filename, "utf8");
 
 		const { definition, branch } = query;
-		const { meta, content } = await parseCustomMarkdown(fileContent, slug, branch, definition);
+		const schemaType = query.schemaType as SchemaType | undefined;
+		if (
+			!!schemaType &&
+			schemaType !== SchemaType.ChaletJson &&
+			schemaType !== SchemaType.SettingsJson &&
+			!slug.startsWith("-")
+		) {
+			throw new Error(`Invalid schema type requested: ${schemaType}`);
+		}
+
+		const { meta, content } = await parseCustomMarkdown(fileContent, slug, branch, schemaType, definition);
 
 		const mdx: MDXRemoteSerializeResult<Record<string, unknown>> = await serialize(content, {
 			target: ["esnext"],
 		});
 
-		const navData = await getNavBar(content, slug, branch);
+		const navData = await getNavBar(content, slug, schemaType, branch);
 		const title = meta?.title ?? "Untitled";
 
 		return {

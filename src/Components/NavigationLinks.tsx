@@ -10,10 +10,11 @@ import { getThemeVariable } from "Theme";
 // Note: don't style this component here
 // all links in the SideNavigation need to respect its styling
 
-type LinkWithAnchorProps = React.PropsWithChildren<{
-	href: NextLinkProps["href"];
-	anchors: ResultPageAnchor[];
-}>;
+type LinkWithAnchorProps = React.PropsWithChildren<
+	Pick<ResultNavigation, "anchors"> & {
+		href: NextLinkProps["href"];
+	}
+>;
 
 const LinkWithAnchors = ({ href, anchors, children }: LinkWithAnchorProps) => {
 	href = href.toString();

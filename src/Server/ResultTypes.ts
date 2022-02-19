@@ -1,6 +1,11 @@
 import { JSONSchema7 } from "json-schema";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 
+export enum SchemaType {
+	ChaletJson = "chalet-json",
+	SettingsJson = "settings-json",
+}
+
 export type ResultGreeting = {
 	name: string;
 };

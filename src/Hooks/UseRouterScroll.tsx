@@ -9,14 +9,12 @@ import { getQueryVariable } from "Utility/GetQueryVariable";
 const useRouteChangeScroll = () => {
 	const router = useRouter();
 
-	const { setFocusedId } = useUiStore();
+	const { setFocusedId, heightNotifier, accordionNotifier } = useUiStore();
 
-	const handler = useCallback(() => {
+	const handler = () => {
 		if (window.location.search.length === 0) {
 			setFocusedId("");
-			setTimeout(() => {
-				window.scrollTo(0, 0);
-			}, 25);
+			setTimeout(() => window.scrollTo(0, 0), 25);
 		} else {
 			const id = getQueryVariable("id");
 			if (id.length > 0) {
@@ -27,7 +25,7 @@ const useRouteChangeScroll = () => {
 				}
 			}
 		}
-	}, []);
+	};
 
 	useEffect(() => {
 		router.events.on("routeChangeComplete", handler);
