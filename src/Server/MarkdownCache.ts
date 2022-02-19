@@ -13,6 +13,7 @@ import { getChaletTags } from "./ChaletTags";
 import { getSchemaReferencePaths } from "./CustomMarkdownParser";
 import { isDevelopment } from "./IsDevelopment";
 import { SchemaType } from "./ResultTypes";
+import { serverCache } from "./ServerCache";
 
 const removeIrrelevantMarkdown = (text: string): string => {
 	text = text.replace(/<!--(.+?)-->/g, " ");
@@ -38,16 +39,12 @@ export type PageCache = {
 	content: string;
 };
 
-let data: Dictionary<string[]> = {};
-
-const getPagesCache = async (): Promise<PageCache[]> => {
-	try {
-		if (!data["pages"] || isDevelopment) {
-			data["pages"] = await recursiveDirectorySearch(mdpages, ["mdx", "md"]);
-		}
+const getPagesCache = (): Promise<PageCache[]> => {
+	return serverCache.get(`pages`, async () => {
+		const pages = await recursiveDirectorySearch(mdpages, ["mdx", "md"]);
 		const internalPage = path.join(path.sep, mdpages, "_");
 		const schemaPage = path.join(path.sep, mdpages, "schema");
-		const pageNormal = data["pages"]
+		const pageNormal = pages
 			.filter((file) => !file.startsWith(internalPage) || file.startsWith(schemaPage))
 			.map((file) => {
 				const id = file
@@ -71,23 +68,19 @@ const getPagesCache = async (): Promise<PageCache[]> => {
 				};
 			});
 
-		if (!data["tags"] || isDevelopment) {
-			data["tags"] = await getChaletTags();
-		}
+		const tags = await getChaletTags();
 		const tagPaths: string[] = flatten(
 			await Promise.all([
-				...data["tags"].map((b) => getSchemaReferencePaths(SchemaType.ChaletJson, b)),
-				...data["tags"].map((b) => getSchemaReferencePaths(SchemaType.SettingsJson, b)),
+				...tags.map((b) => getSchemaReferencePaths(SchemaType.ChaletJson, b)),
+				...tags.map((b) => getSchemaReferencePaths(SchemaType.SettingsJson, b)),
 			])
 		);
 
-		if (!data["branches"] || isDevelopment) {
-			data["branches"] = await getChaletBranches();
-		}
+		const branches = await getChaletBranches();
 		const branchPaths: string[] = flatten(
 			await Promise.all([
-				...data["branches"].map((b) => getSchemaReferencePaths(SchemaType.ChaletJson, b)),
-				...data["branches"].map((b) => getSchemaReferencePaths(SchemaType.SettingsJson, b)),
+				...branches.map((b) => getSchemaReferencePaths(SchemaType.ChaletJson, b)),
+				...branches.map((b) => getSchemaReferencePaths(SchemaType.SettingsJson, b)),
 			])
 		);
 
@@ -107,9 +100,7 @@ const getPagesCache = async (): Promise<PageCache[]> => {
 		});
 
 		return [...pageNormal, ...schemaPages];
-	} catch (err: any) {
-		throw err;
-	}
+	});
 };
 
 export { getPagesCache };

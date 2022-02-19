@@ -13,6 +13,7 @@ import { isDevelopment } from "./IsDevelopment";
 import { getLinkFromPageSlug } from "./MarkdownFiles";
 import { jsonNodeToMarkdown } from "./MarkdownPreprocessor";
 import { ResultPageAnchor, SchemaType } from "./ResultTypes";
+import { serverCache } from "./ServerCache";
 
 const trimLineBreaksFromEdges = (text: string) => {
 	while (text.endsWith("\n") || text.endsWith("\r")) {
@@ -180,11 +181,9 @@ const getPageAnchors = async (
 	}
 };
 
-let readmeCache: Optional<string> = null;
-
 const parseReadme = async (inText: string): Promise<string> => {
 	try {
-		if (readmeCache === null) {
+		const readme = await serverCache.get(`chalet-readme`, async () => {
 			let { changelog: text } = await getChaletFile("README.md");
 			if (!!text) {
 				text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
@@ -192,28 +191,19 @@ const parseReadme = async (inText: string): Promise<string> => {
 				text = text.replace(/---\n### (.+?)\n/g, "|$1|");
 
 				text = text.replace(/## (.+?)\n/g, "");
-
-				readmeCache = text;
 			}
-		}
-
-		return inText.replace(`!!ChaletReadme!!`, (match: string) => {
-			let result: string = "";
-			if (!!readmeCache) {
-				result += readmeCache;
-			}
-			return result;
+			return text ?? "";
 		});
+
+		return inText.replace(`!!ChaletReadme!!`, (match: string) => readme);
 	} catch (err: any) {
 		throw err;
 	}
 };
 
-let changelogCache: Optional<string> = null;
-
 const parseChangelog = async (inText: string): Promise<string> => {
 	try {
-		if (!changelogCache) {
+		const changelog = await serverCache.get(`chalet-changelog`, async () => {
 			let { changelog: text } = await getChaletFile("CHANGELOG.md");
 			if (!!text) {
 				text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
@@ -231,18 +221,11 @@ const parseChangelog = async (inText: string): Promise<string> => {
 					return `([#${issue}](${p1}))`;
 				});
 				text = text.replace(/## \[(.+?)\] \[(.+?)\]/g, "---\n\n## [$1]\n\n$2");
-
-				changelogCache = text;
 			}
-		}
-
-		return inText.replace(`!!ChaletChangelog!!`, (match: string) => {
-			let result: string = "";
-			if (!!changelogCache) {
-				result += changelogCache;
-			}
-			return result;
+			return text ?? "";
 		});
+
+		return inText.replace(`!!ChaletChangelog!!`, (match: string) => changelog);
 	} catch (err: any) {
 		throw err;
 	}
@@ -297,25 +280,18 @@ const parseSchemaDefinition = async (
 	}
 };
 
-let definitionsCache: Dictionary<Dictionary<string[]>> = {};
-
-const getSchemaReferencePaths = async (type: SchemaType, ref: string): Promise<string[]> => {
-	try {
-		if (definitionsCache[type] === undefined) definitionsCache[type] = {};
-
-		if (!definitionsCache[type][ref] || isDevelopment) {
-			if (ref === "latest") {
-				definitionsCache[type][ref] = await getSchemaPageDefinitions(type);
-			} else {
-				definitionsCache[type][ref] = await getSchemaPageDefinitions(type, ref);
-			}
+const getSchemaReferencePaths = (type: SchemaType, ref: string): Promise<string[]> => {
+	return serverCache.get(`schema-definition/${type}/${ref}`, async () => {
+		let defs: string[];
+		if (ref === "latest") {
+			defs = await getSchemaPageDefinitions(type);
+		} else {
+			defs = await getSchemaPageDefinitions(type, ref);
 		}
-		const paths = definitionsCache[type][ref].map((def) => `${ref}/${type}/${def}`);
+		const paths = defs.map((def) => `${ref}/${type}/${def}`);
 		const result: string[] = [`${ref}/${type}`, ...paths];
 		return result;
-	} catch (err: any) {
-		throw err;
-	}
+	});
 };
 
 const parseCustomMarkdown = async (

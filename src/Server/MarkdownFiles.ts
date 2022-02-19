@@ -10,8 +10,8 @@ import { Dictionary, Optional } from "@andrew-r-king/react-kitchen";
 import { getChaletBranches } from "./ChaletBranches";
 import { getChaletTags } from "./ChaletTags";
 import { getPageAnchors, parseCustomMarkdown } from "./CustomMarkdownParser";
-import { isDevelopment } from "./IsDevelopment";
-import { ResultMDXPage, ResultMDX, ResultNavigation, HyperLink, SchemaType } from "./ResultTypes";
+import { ResultMDXPage, ResultNavigation, HyperLink, SchemaType } from "./ResultTypes";
+import { serverCache } from "./ServerCache";
 
 const mdpages: string = "mdpages";
 const allowedExtensions: string[] = ["mdx", "md"];
@@ -74,14 +74,8 @@ const getFirstExistingPath = (inPath: string, extensions: string[], internal: bo
 	}
 };*/
 
-let linkCache: Dictionary<HyperLink> = {};
-
-const getLinkFromPageSlug = async (href: string): Promise<HyperLink> => {
-	try {
-		if (linkCache[href] !== undefined && !isDevelopment) {
-			return linkCache[href];
-		}
-
+const getLinkFromPageSlug = (href: string): Promise<HyperLink> => {
+	return serverCache.get(`link${href.length > 1 ? href : "/index"}`, async () => {
 		const { filename, isNotFoundPage } = getFirstExistingPath(href, allowedExtensions, false);
 		if (filename.length === 0 || isNotFoundPage) {
 			throw new Error(`File not found: ${filename}`);
@@ -90,19 +84,11 @@ const getLinkFromPageSlug = async (href: string): Promise<HyperLink> => {
 		const fileContent: string = fs.readFileSync(filename, "utf8");
 
 		const { data: meta, content } = matter(fileContent);
-		const result = {
+		return {
 			label: meta.title ?? "Untitled",
 			href,
 		};
-		linkCache[href] = result;
-		return result;
-	} catch (err: any) {
-		console.error(err.message);
-		return {
-			label: "Untitled",
-			href,
-		};
-	}
+	});
 };
 
 type SidebarResult = HyperLink | string;

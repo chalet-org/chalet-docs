@@ -1,14 +1,9 @@
-import { Dictionary } from "@andrew-r-king/react-kitchen";
-
-import { isDevelopment } from "Server/IsDevelopment";
 import { getPagesCache, PageCache } from "Server/MarkdownCache";
 import { runCorsMiddleware } from "Server/NextCors";
 import { ResultSearchResults } from "Server/ResultTypes";
 import { ApiReq, ApiRes } from "Utility";
 
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-
-let pages: PageCache[] = [];
 
 const getSearchResults = (search: string, pages: PageCache[], resultLength: number = 80): ResultSearchResults => {
 	let result: ResultSearchResults = [];
@@ -52,9 +47,7 @@ const handler = async (req: ApiReq, res: ApiRes<ResultSearchResults>): Promise<v
 		}
 		search = search.replace(/\n\r/g, "");
 
-		if (pages.length === 0 || isDevelopment) {
-			pages = await getPagesCache();
-		}
+		const pages = await getPagesCache();
 		const results = getSearchResults(search.toLowerCase(), pages);
 		// console.log(results);
 		res.status(200).json(results);
