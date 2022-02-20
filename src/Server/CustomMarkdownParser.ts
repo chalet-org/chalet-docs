@@ -245,7 +245,7 @@ const parseSchemaDefinition = async (
 				throw new Error(`Schema definition not found: ${definition}`);
 			}
 
-			const markdown = jsonNodeToMarkdown(null, `${slug}/${ref}`, definitions[definition], definitions);
+			const markdown = jsonNodeToMarkdown(null, `${slug}/${ref}/${type}`, definitions[definition], definitions);
 
 			result += `#### [${toPascalCase(definition)}]\n\n`;
 			result += markdown;

@@ -9,7 +9,7 @@ import { getQueryVariable } from "Utility/GetQueryVariable";
 const useRouteChangeScroll = () => {
 	const router = useRouter();
 
-	const { setFocusedId, heightNotifier, accordionNotifier } = useUiStore();
+	const { setFocusedId } = useUiStore();
 
 	const handler = () => {
 		if (window.location.search.length === 0) {

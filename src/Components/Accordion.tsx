@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
-import { styleVariables } from "Components";
 import { useUiStore } from "Stores";
 import { getThemeVariable } from "Theme";
 
@@ -14,17 +13,14 @@ const Accordion = ({ label, children }: Props) => {
 
 	const [open, setOpen] = useState<boolean>(false);
 	const contentRef = useRef<HTMLDivElement>(null);
+	const [computedHeight, setComputedHeight] = useState<number>(0);
 
 	// We can just use this noop to trigger re-renders
-	useEffect(() => {}, [accordionNotifier, contentRef.current]);
+	useEffect(() => {
+		setComputedHeight(contentRef.current?.clientHeight ?? 0);
+	}, [accordionNotifier, contentRef.current]);
 
 	const className = open ? "open" : "";
-
-	const { baseFontSize } = styleVariables;
-	const marginTop = 0;
-	const marginBottom = 1.0;
-	const computedRemHeight =
-		((contentRef.current?.clientHeight ?? 0) + baseFontSize * (marginTop + marginBottom)) / baseFontSize;
 
 	return (
 		<>
@@ -37,15 +33,7 @@ const Accordion = ({ label, children }: Props) => {
 			>
 				{!!label ? label : open ? "Collapse" : "Expand"}
 			</AccordionHandle>
-			<AccordionContent
-				className={className}
-				height={computedRemHeight}
-				marginTop={marginTop}
-				marginBottom={marginBottom}
-				onAnimationEnd={() => {
-					notifyHeightChange();
-				}}
-			>
+			<AccordionContent className={className} height={computedHeight} onAnimationEnd={notifyHeightChange}>
 				<div className="inner" ref={contentRef}>
 					{children}
 				</div>
@@ -98,8 +86,6 @@ const AccordionHandle = styled.div`
 
 type ContentProps = {
 	height: number;
-	marginTop: number;
-	marginBottom: number;
 };
 
 const AccordionContent = styled.div<ContentProps>`
@@ -110,15 +96,15 @@ const AccordionContent = styled.div<ContentProps>`
 	transition: max-height 0.25s linear, opacity 0.25s linear;
 
 	&.open {
-		max-height: ${({ height }) => height}rem;
+		max-height: calc(${({ height }) => height}px + 1rem);
 		opacity: 1;
 	}
 
 	> .inner {
 		padding: 0.5rem 1rem;
 		margin: 0;
-		margin-top: ${({ marginTop }) => marginTop}rem;
-		margin-bottom: ${({ marginBottom }) => marginBottom}rem;
+		margin-top: 0;
+		margin-bottom: 1rem;
 		border: 0.0625rem dashed ${getThemeVariable("border")};
 		background-color: ${getThemeVariable("codeBackground")};
 

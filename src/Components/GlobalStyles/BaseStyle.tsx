@@ -3,10 +3,7 @@ import { createGlobalStyle, css } from "styled-components";
 import { getThemeVariable } from "Theme";
 
 import { fontImports, globalFonts } from "./Fonts";
-
-const styleVariables = {
-	baseFontSize: 16,
-};
+import { hasMinWidth } from "./Responsiveness";
 
 const cssReset = css`
 	*,
@@ -82,7 +79,7 @@ const BaseStyle = createGlobalStyle`
 	${fontImports}
 
     html {
-        font-size: ${styleVariables.baseFontSize}px;
+        font-size: 14px;
         background-color: ${getThemeVariable("background")};
 		scroll-behavior: smooth;
     }
@@ -205,6 +202,18 @@ const BaseStyle = createGlobalStyle`
 		z-index: 50;
 		color: ${getThemeVariable("secondaryColor")} !important;
 	}
+
+	@media ${hasMinWidth(0)} {
+		html {
+        	font-size: 16px;
+		}
+	}
+	@media ${hasMinWidth(1)} {
+		/**/
+	}
+	@media ${hasMinWidth(2)} {
+		/**/
+	}
 `;
 
-export { BaseStyle, styleVariables };
+export { BaseStyle };

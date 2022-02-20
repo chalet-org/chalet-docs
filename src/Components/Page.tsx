@@ -1,10 +1,12 @@
 import Head from "next/head";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 // import Image from "next/image";
 import styled from "styled-components";
 
 import { useUiStore } from "Stores";
 import { getThemeVariable } from "Theme";
+
+import { hasMinWidth } from "./GlobalStyles";
 
 type Props = {
 	children?: React.ReactNode;
@@ -13,6 +15,8 @@ type Props = {
 
 const Page = ({ title, children }: Props) => {
 	const { theme, initialize, initialized, navWidth, navOpen } = useUiStore();
+
+	const [animating, setAnimating] = useState<boolean>(false);
 
 	useEffect(() => {
 		if (!initialized) {
@@ -24,6 +28,10 @@ const Page = ({ title, children }: Props) => {
 		document.body.style.backgroundColor = theme.bodyBackground;
 	}, [theme]);
 
+	useEffect(() => {
+		setAnimating(true);
+	}, [navOpen]);
+
 	return (
 		<>
 			<Head>
@@ -33,7 +41,11 @@ const Page = ({ title, children }: Props) => {
 					content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
 				/>
 			</Head>
-			<Main {...{ navWidth }} className={navOpen ? "nav-open" : ""}>
+			<Main
+				{...{ navWidth }}
+				className={`${navOpen ? "nav-open" : ""} ${animating ? "animating" : ""}`}
+				onAnimationEnd={() => setAnimating(false)}
+			>
 				<Container>{!initialized ? "" : children}</Container>
 			</Main>
 			{/*<footer>
@@ -70,6 +82,31 @@ const Main = styled.main<NavBarProps>`
 
 	&.nav-open {
 		left: ${(props) => props.navWidth};
+		overflow: hidden;
+
+		> div {
+			width: 100vw;
+		}
+	}
+
+	&.animating {
+		> div {
+			width: 100vw;
+		}
+	}
+
+	@media ${hasMinWidth(0)} {
+		/**/
+	}
+	@media ${hasMinWidth(1)} {
+		/**/
+	}
+	@media ${hasMinWidth(2)} {
+		&.nav-open {
+			> div {
+				width: auto;
+			}
+		}
 	}
 `;
 

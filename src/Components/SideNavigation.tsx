@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import { Link, SearchInput, ThemeToggle } from "Components";
+import { hasMinWidth, Link, SearchInput, ThemeToggle } from "Components";
 import { useKeyPress } from "Hooks";
 import { ResultNavigation } from "Server/ResultTypes";
 import { useUiStore } from "Stores";
@@ -112,7 +112,8 @@ const SidebarToggle = styled.button`
 	padding: 1rem;
 	margin: 1rem;
 	cursor: pointer;
-	background: none;
+	background: ${getThemeVariable("codeBackground")};
+	border-radius: 0.25rem;
 
 	> span {
 		background-color: ${getThemeVariable("header")};
@@ -121,12 +122,25 @@ const SidebarToggle = styled.button`
 		margin-bottom: 0.5rem;
 		width: 2rem;
 		height: 0.125rem;
+
+		&:last-of-type {
+			margin-bottom: 0;
+		}
 	}
 
 	&:hover {
 		> span {
 			background-color: ${getThemeVariable("primaryColor")};
 		}
+	}
+
+	@media ${hasMinWidth(0)} {
+		/**/
+	}
+	@media ${hasMinWidth(1)} {
+		background: none;
+	}
+	@media ${hasMinWidth(2)} {
 	}
 `;
 
