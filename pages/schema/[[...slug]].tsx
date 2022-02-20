@@ -12,7 +12,7 @@ import { markdownFiles } from "Server/MarkdownFiles";
 import { SchemaType } from "Server/ResultTypes";
 
 const MarkdownPage = withServerErrorPage((props: Props) => {
-	return <MarkdownLayout {...props} isSchema />;
+	return <MarkdownLayout {...props} />;
 });
 
 export const getStaticPaths = async () => {
@@ -38,56 +38,68 @@ export const getStaticPaths = async () => {
 };
 
 export const getStaticProps = async (ctx: GetStaticPropsContext) => {
-	if (
-		!ctx ||
-		!ctx.params ||
-		!ctx.params.slug ||
-		(typeof ctx.params.slug !== "string" && ctx.params.slug.length === 0)
-	) {
-		throw new Error("Params not found");
-	}
-
-	const { slug: slugRaw } = ctx.params;
-	if (
-		ctx.params.slug.length < 2 ||
-		(typeof slugRaw !== "string" && slugRaw[1] !== SchemaType.SettingsJson && slugRaw[1] !== SchemaType.ChaletJson)
-	) {
-		throw new Error(`Invalid slug rquested: ${ctx.params.slug}`);
-	}
-
-	const slug: string = "schema";
-	const query: Dictionary<string | undefined> = {
-		ref: typeof slugRaw === "string" ? slugRaw : slugRaw[0],
-	};
-
-	if (typeof slugRaw !== "string") {
-		if (slugRaw[1] === SchemaType.SettingsJson || slugRaw[1] === SchemaType.ChaletJson) {
-			query["type"] = slugRaw[1];
+	try {
+		if (
+			!ctx ||
+			!ctx.params ||
+			!ctx.params.slug ||
+			(typeof ctx.params.slug !== "string" && ctx.params.slug.length === 0)
+		) {
+			throw new Error("Params not found");
 		}
 
-		if (slugRaw.length > 2) {
-			query["definition"] = slugRaw[2];
+		const { slug: slugRaw } = ctx.params;
+		if (
+			ctx.params.slug.length < 2 ||
+			(typeof slugRaw !== "string" &&
+				slugRaw[1] !== SchemaType.SettingsJson &&
+				slugRaw[1] !== SchemaType.ChaletJson)
+		) {
+			throw new Error(`Invalid slug rquested: ${ctx.params.slug}`);
 		}
-	}
 
-	let outDestination = typeof slugRaw === "string" ? [slugRaw] : [...slugRaw];
-	if (query.ref!.startsWith("latest")) {
-		const latestTag: string = await getLatestTag();
-		outDestination[0] = latestTag;
+		const slug: string = "schema";
+		const query: Dictionary<string | undefined> = {
+			ref: typeof slugRaw === "string" ? slugRaw : slugRaw[0],
+		};
+
+		if (typeof slugRaw !== "string") {
+			if (slugRaw[1] === SchemaType.SettingsJson || slugRaw[1] === SchemaType.ChaletJson) {
+				query["type"] = slugRaw[1];
+			}
+
+			if (slugRaw.length > 2) {
+				query["definition"] = slugRaw[2];
+			}
+		}
+
+		let outDestination = typeof slugRaw === "string" ? [slugRaw] : [...slugRaw];
+		if (query.ref!.startsWith("latest")) {
+			const latestTag: string = await getLatestTag();
+			outDestination[0] = latestTag;
+			return {
+				redirect: {
+					destination: `/${slug}/${outDestination.join("/")}`,
+					permanent: true,
+				},
+			};
+		}
+
+		const page = await markdownFiles.getMdxPage(slug, query);
 		return {
-			redirect: {
-				destination: `/${slug}/${outDestination.join("/")}`,
-				permanent: true,
+			props: {
+				...page,
+				isSchema: true,
+			},
+		};
+	} catch (err) {
+		const page = await markdownFiles.getNotFoundPage();
+		return {
+			props: {
+				...page,
 			},
 		};
 	}
-
-	const page = await markdownFiles.getMdxPage(slug, query);
-	return {
-		props: {
-			...page,
-		},
-	};
 };
 
 export default MarkdownPage;

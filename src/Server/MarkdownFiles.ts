@@ -230,15 +230,11 @@ const getMdxPage = async (
 			mdx,
 		};
 	} catch (err: any) {
-		try {
-			console.error(err);
-			if ((err.message ?? "").startsWith("File not found")) {
-				return await getNotFoundPage();
-			} else {
-				return await getInternalServerErrorPage();
-			}
-		} catch (e: any) {
-			throw e;
+		console.error(err);
+		if ((err.message ?? "").startsWith("File not found")) {
+			return await getNotFoundPage();
+		} else {
+			return await getInternalServerErrorPage();
 		}
 	}
 };
