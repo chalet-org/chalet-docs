@@ -19,7 +19,7 @@ class ServerCache {
 	constructor() {
 		this.development = false;
 
-		const hours = 24;
+		const hours = 4;
 		this.cacheSeconds = 60 * 60 * hours;
 	}
 

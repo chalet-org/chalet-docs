@@ -6,7 +6,7 @@ import styled from "styled-components";
 
 import { Dictionary } from "@andrew-r-king/react-kitchen";
 
-import { AnchoredHeadingObject, HeadingObject, Page, SchemaNavigation, SideNavigation } from "Components";
+import { AnchoredHeadingObject, HeadingObject, Page, GitNavigation, SideNavigation } from "Components";
 import { useRouteChangeScroll, useWheelScroll } from "Hooks";
 import { ResultMDXPage } from "Server/ResultTypes";
 import { useUiStore } from "Stores";
@@ -125,7 +125,7 @@ const MarkdownLayout = ({ meta, mdx, children, isSchema, ...navProps }: Props) =
 			<Page title={meta?.title ?? "Untitled"}>
 				<Styles ref={pageLayout}>
 					{!!isSchema && !!navProps.schemaLinks && (
-						<SchemaNavigation schemaLinks={navProps.schemaLinks} anchors={navProps.anchors} />
+						<GitNavigation schemaLinks={navProps.schemaLinks} anchors={navProps.anchors} />
 					)}
 					{!!mdx && <MDXRemote {...mdx} components={!!isSchema ? schemaComponents : components} />}
 				</Styles>

@@ -1,13 +1,13 @@
 import { AppProps } from "next/app";
 import Router from "next/router";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import { Optional } from "@andrew-r-king/react-kitchen";
 import ProgressBar from "@badrap/bar-of-progress";
 
 import { BaseStyle } from "Components";
 import { ThemeProvider } from "Components/ThemeProvider";
-import { Providers, useUiStore } from "Stores";
+import { Providers } from "Stores";
 
 let progress: Optional<ProgressBar> = null;
 if (progress === null) {

@@ -14,7 +14,7 @@ export * from "./Page";
 export * from "./PageHeading";
 export * from "./PageNavigation";
 export * from "./Paragraph";
-export * from "./SchemaNavigation";
+export * from "./GitNavigation";
 export * from "./SearchInput";
 export * from "./SideNavigation";
 export * from "./Spacer";

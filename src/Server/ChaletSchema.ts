@@ -4,7 +4,7 @@ import { fetchFromGithub } from "./FetchFromGithub";
 import { ResultChaletSchema, SchemaType } from "./ResultTypes";
 import { serverCache } from "./ServerCache";
 
-const getChaletSchema = async (type: SchemaType, ref: string = "main"): Promise<ResultChaletSchema> => {
+const getChaletSchema = (type: SchemaType, ref: string = "main"): Promise<ResultChaletSchema> => {
 	return serverCache.get(`chalet-schema-file/${type}/${ref}`, async () => {
 		// TODO: validate if tag is "main" or "v*.*.*"
 

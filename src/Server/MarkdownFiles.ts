@@ -74,15 +74,14 @@ const getFirstExistingPath = (inPath: string, extensions: string[], internal: bo
 	}
 };*/
 
-const getLinkFromPageSlug = (href: string): Promise<HyperLink> => {
-	return serverCache.get(`link${href.length > 1 ? href : "/index"}`, async () => {
+const getLinkTitleFromPageSlug = (href: string): Promise<HyperLink> => {
+	return serverCache.get(`link-title${href.length > 1 ? href : "/index"}`, async () => {
 		const { filename, isNotFoundPage } = getFirstExistingPath(href, allowedExtensions, false);
 		if (filename.length === 0 || isNotFoundPage) {
 			throw new Error(`File not found: ${filename}`);
 		}
 
 		const fileContent: string = fs.readFileSync(filename, "utf8");
-
 		const { data: meta, content } = matter(fileContent);
 		return {
 			label: meta.title ?? "Untitled",
@@ -116,7 +115,7 @@ const getSidebarLinks = async (): Promise<SidebarResult[]> => {
 				if (!!matches) {
 					if (matches.length === 3) {
 						if (matches[1].length === 0) {
-							const link = await getLinkFromPageSlug(matches[2]);
+							const link = await getLinkTitleFromPageSlug(matches[2]);
 							result.push(link);
 						} else {
 							result.push({
@@ -254,4 +253,4 @@ const markdownFiles = {
 	getNotFoundPage,
 };
 
-export { markdownFiles, mdpages, getLinkFromPageSlug };
+export { markdownFiles, mdpages, getLinkTitleFromPageSlug };

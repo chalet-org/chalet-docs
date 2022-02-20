@@ -2,15 +2,15 @@ import matter from "gray-matter";
 import { JSONSchema7 } from "json-schema";
 import os from "os";
 
-import { Dictionary, Optional } from "@andrew-r-king/react-kitchen";
+import { Dictionary } from "@andrew-r-king/react-kitchen";
 
 import { replaceAsync } from "Utility/ReplaceAsync";
 import { toKebabCase, toPascalCase } from "Utility/TextCaseConversions";
 
 import { getChaletFile } from "./ChaletFile";
+import { getChaletReleases } from "./ChaletRelease";
 import { getChaletSchema } from "./ChaletSchema";
-import { isDevelopment } from "./IsDevelopment";
-import { getLinkFromPageSlug } from "./MarkdownFiles";
+import { getLinkTitleFromPageSlug } from "./MarkdownFiles";
 import { jsonNodeToMarkdown } from "./MarkdownPreprocessor";
 import { ResultPageAnchor, SchemaType } from "./ResultTypes";
 import { serverCache } from "./ServerCache";
@@ -60,11 +60,11 @@ const parseBottomPageNavigation = async (text: string): Promise<string> => {
 			async (match: string, p1: string, p2: string) => {
 				let nav = "<PageNavigation";
 				if (p1.length > 0) {
-					const link = await getLinkFromPageSlug(p1);
+					const link = await getLinkTitleFromPageSlug(p1);
 					nav += ` left={{ to: "${link.href}", label: "${link.label}" }}`;
 				}
 				if (p2.length > 0) {
-					const link = await getLinkFromPageSlug(p2);
+					const link = await getLinkTitleFromPageSlug(p2);
 					nav += ` right={{ to: "${link.href}", label: "${link.label}" }}`;
 				}
 				nav += " />";
@@ -156,7 +156,9 @@ const getPageAnchors = async (
 	type?: SchemaType
 ): Promise<ResultPageAnchor[]> => {
 	try {
-		if (!!type && (slug === "schema" || slug === "schema-dev")) {
+		if (slug === "changelog") {
+			return [];
+		} else if (!!type && (slug === "schema" || slug === "schema-dev")) {
 			return await getSchemaPageAnchors(type, ref);
 		} else {
 			let anchors: ResultPageAnchor[] = [];
@@ -204,7 +206,12 @@ const parseReadme = async (inText: string): Promise<string> => {
 const parseChangelog = async (inText: string): Promise<string> => {
 	try {
 		const changelog = await serverCache.get(`chalet-changelog`, async () => {
-			let { changelog: text } = await getChaletFile("CHANGELOG.md");
+			let text: string = "";
+			const releases = await getChaletReleases();
+			releases.forEach((release) => {
+				text += `---\n\n## [${release.tag_name}]\n\n${release.published_at.toDateString()}\n\n`;
+				text += release.body.replace(/##/g, "####");
+			});
 			if (!!text) {
 				text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
 
@@ -314,9 +321,7 @@ const parseCustomMarkdown = async (
 
 		if (slug === "changelog") {
 			text = await parseChangelog(text);
-		}
-
-		if (slug === "getting-started") {
+		} else if (slug === "getting-started") {
 			text = await parseReadme(text);
 		}
 

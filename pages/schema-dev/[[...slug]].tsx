@@ -11,13 +11,13 @@ const MarkdownPage = withServerErrorPage((props: Props) => {
 });
 
 MarkdownPage.getInitialProps = handleInitialProps(async (ctx) => {
-	if (!ctx.query.slug || (typeof ctx.query.slug !== "string" && ctx.query.slug.length === 0)) {
+	const { slug } = ctx.query;
+	if (!slug || (typeof slug !== "string" && slug.length === 0)) {
 		throw new Error("Params not found");
 	}
 
-	const { slug } = ctx.query;
 	if (
-		ctx.query.slug.length < 2 ||
+		slug.length < 2 ||
 		(typeof slug !== "string" && slug[1] !== SchemaType.SettingsJson && slug[1] !== SchemaType.ChaletJson)
 	) {
 		throw new Error(`Invalid slug rquested: ${ctx.query.slug}`);

@@ -28,7 +28,6 @@ export const getStaticPaths = async () => {
 			acc.push(result);
 			return acc;
 		}, []);
-		// console.log(paths);
 
 		return {
 			fallback: false,
@@ -49,11 +48,7 @@ export const getStaticProps = async (
 		throw new Error("Params not found");
 	}
 
-	// console.log(ctx.params);
-
-	// const { slug: slugRaw } = ctx.params;
 	const { slug: slugRaw } = ctx.params;
-
 	const slug: string = path.join(typeof slugRaw === "string" ? slugRaw : slugRaw?.join(path.sep) ?? "");
 
 	const page = await markdownFiles.getMdxPage(slug, {});
