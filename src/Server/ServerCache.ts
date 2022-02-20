@@ -37,7 +37,12 @@ class ServerCache {
 				data = await onCache();
 				const endTime = performance.now();
 				const time = endTime - startTime;
-				console.log("\x1b[1;31m>>> set:\x1b[0m", key, currentTime, `\x1b[1;32m[${time} ms]\x1b[0m`);
+				console.log(
+					"\x1b[0;90m>>> \x1b[1;31mset:\x1b[0m",
+					key,
+					`\x1b[0;36m${currentTime}`,
+					`\x1b[0;90m ... \x1b[1;32m${time} ms\x1b[0m`
+				);
 				memoryCache[key] = {
 					data,
 					cacheLength,
@@ -50,7 +55,13 @@ class ServerCache {
 		} else {
 			const endTime = performance.now();
 			const time = endTime - startTime;
-			console.log("\x1b[0;34m<<< get:\x1b[0m", key, currentTime, cachedTime, `\x1b[1;32m[${time} ms]\x1b[0m`);
+			console.log(
+				"\x1b[0;90m<<< \x1b[0;34mget:\x1b[0m",
+				key,
+				`\x1b[0;36m${currentTime}`,
+				`\x1b[0;36m${cachedTime}`,
+				`\x1b[0;90m ... \x1b[1;32m${time} ms\x1b[0m`
+			);
 			data = response.data;
 		}
 
