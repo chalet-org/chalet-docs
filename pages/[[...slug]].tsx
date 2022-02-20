@@ -23,6 +23,8 @@ export const getStaticPaths = async () => {
 				result = result.slice(0, -6);
 
 				if (result.length === 0) result = "/";
+			} else if (result.endsWith("/changelog")) {
+				return acc;
 			}
 
 			acc.push(result);
