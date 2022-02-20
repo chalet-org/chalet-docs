@@ -13,7 +13,7 @@ let latestTag: Optional<string> = null;
 let refs: Optional<string[]> = null;
 
 const handler = middleware.use(
-	["cors", "auth"],
+	["auth"],
 	async (req: ApiReq, res: ApiRes<ResultChaletSchema | Error>): Promise<void> => {
 		try {
 			let { ref } = req.query;
