@@ -8,7 +8,7 @@ import { replaceAsync } from "Utility/ReplaceAsync";
 import { toKebabCase, toPascalCase } from "Utility/TextCaseConversions";
 
 import { getChaletFile } from "./ChaletFile";
-import { getChaletReleases } from "./ChaletRelease";
+import { getChaletReleases } from "./ChaletReleases";
 import { getChaletSchema } from "./ChaletSchema";
 import { getLinkTitleFromPageSlug } from "./MarkdownFiles";
 import { jsonNodeToMarkdown } from "./MarkdownPreprocessor";
@@ -209,7 +209,9 @@ const parseChangelog = async (inText: string): Promise<string> => {
 			let text: string = "";
 			const releases = await getChaletReleases();
 			releases.forEach((release) => {
-				text += `---\n\n## [${release.tag_name}]\n\n${release.published_at.toDateString()}\n\n`;
+				const date = release.published_at.toDateString();
+				const prereleaseText = release.prerelease ? `\`Pre-Release\`` : "";
+				text += `---\n\n${date}\n\n## [${release.tag_name}]\n\n${prereleaseText}\n\n`;
 				text += release.body.replace(/##/g, "####");
 			});
 			if (!!text) {

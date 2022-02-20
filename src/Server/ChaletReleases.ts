@@ -32,11 +32,13 @@ const getChaletReleases = (): Promise<ResultReleases> => {
 		const url = `https://api.github.com/repos/chalet-org/chalet/releases`;
 		const response = await fetchFromGithub(url);
 		const releases: any[] = await response.json();
-		return releases.map((release) => ({
-			...release,
-			created_at: new Date(release.created_at),
-			published_at: new Date(release.published_at),
-		}));
+		return releases
+			.filter((release) => !release.draft)
+			.map((release) => ({
+				...release,
+				created_at: new Date(release.created_at),
+				published_at: new Date(release.published_at),
+			}));
 	});
 };
 

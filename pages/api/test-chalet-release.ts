@@ -1,6 +1,6 @@
 import { Dictionary, Optional } from "@andrew-r-king/react-kitchen";
 
-import { getChaletReleases } from "Server/ChaletRelease";
+import { getChaletReleases } from "Server/ChaletReleases";
 import { markdownFiles } from "Server/MarkdownFiles";
 import { runCorsMiddleware } from "Server/NextCors";
 import { ResultMDXPage } from "Server/ResultTypes";

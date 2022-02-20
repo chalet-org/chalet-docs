@@ -20,18 +20,15 @@ const schemaPicks: HyperLink[] = [
 	},
 ];
 
-type Props = Pick<ResultNavigation, "schemaLinks" | "anchors"> & {
-	type?: "schema" | "changelog";
-};
+type Props = Pick<ResultNavigation, "schemaLinks" | "anchors">;
 
-const GitNavigation = ({ schemaLinks, anchors, type }: Props) => {
+const GitNavigation = ({ schemaLinks, anchors }: Props) => {
 	const router = useRouter();
 	const path = router.asPath.split("?")[0];
 	const split = path.split("/");
 	const kind: string = split?.[1] ?? "";
 	const ref: string = split?.[2] ?? "";
 	const jsonFile: string = split?.[3] ?? "";
-	const isSchema = type === "schema";
 
 	const memoAnchors: HyperLink[] = useMemo(
 		() =>
@@ -58,6 +55,7 @@ const GitNavigation = ({ schemaLinks, anchors, type }: Props) => {
 	);
 
 	const rootUrl: string = `/${kind}/${ref}/${jsonFile}`;
+	const isTag: boolean = ref !== "main" && ref != "development";
 	const Header = AnchoredHeadingObject["AnchoredH1"];
 
 	return (
@@ -90,7 +88,7 @@ const GitNavigation = ({ schemaLinks, anchors, type }: Props) => {
 					/>
 				</div>
 				<div className="group">
-					<Link href={`/changelog`}>Changelog</Link>
+					<Link href={isTag ? `/changelog?id=${ref.replace(/\./g, "")}` : `/changelog`}>Changelog</Link>
 					<p>|</p>
 					<Link href={`/api/schema/${ref}/${jsonFile}`}>View as JSON</Link>
 				</div>
@@ -145,6 +143,7 @@ const Styles = styled.div`
 			margin: 0 0.5rem;
 			transform: translateY(-50%);
 			color: ${getThemeVariable("border")};
+			pointer-events: none;
 		}
 
 		> .label {
