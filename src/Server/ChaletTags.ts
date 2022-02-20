@@ -19,12 +19,8 @@ const getChaletTags = (): Promise<string[]> => {
 };
 
 const getLatestTag = async (): Promise<string> => {
-	try {
-		const tags = await getChaletTags();
-		return tags.length > 0 ? tags[0] : "main";
-	} catch (err: any) {
-		throw err;
-	}
+	const tags = await getChaletTags();
+	return tags.length > 0 ? tags[0] : "main";
 };
 
 export { getChaletTags, getLatestTag };

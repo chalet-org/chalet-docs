@@ -12,7 +12,6 @@
 	"alias": {
 		"Api": "./src/Api",
 		"Components": "./src/Components",
-		"HighComponents": "./src/HighComponents",
 		"Hooks": "./src/Hooks",
 		"Layouts": "./src/Layouts",
 		"Server": "./src/Server",

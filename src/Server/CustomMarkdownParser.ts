@@ -52,29 +52,24 @@ const parseDescriptionList = (text: string): string => {
 	});
 };
 
-const parseBottomPageNavigation = async (text: string): Promise<string> => {
-	try {
-		text = await replaceAsync(
-			text,
-			/<!-- nav:(\/?[a-z\/-]*?):(\/?[a-z\/-]*?) -->/g,
-			async (match: string, p1: string, p2: string) => {
-				let nav = "<PageNavigation";
-				if (p1.length > 0) {
-					const link = await getLinkTitleFromPageSlug(p1);
-					nav += ` left={{ to: "${link.href}", label: "${link.label}" }}`;
-				}
-				if (p2.length > 0) {
-					const link = await getLinkTitleFromPageSlug(p2);
-					nav += ` right={{ to: "${link.href}", label: "${link.label}" }}`;
-				}
-				nav += " />";
-				return `\n${nav}\n`;
+const parseBottomPageNavigation = (text: string): Promise<string> => {
+	return replaceAsync(
+		text,
+		/<!-- nav:(\/?[a-z\/-]*?):(\/?[a-z\/-]*?) -->/g,
+		async (match: string, p1: string, p2: string) => {
+			let nav = "<PageNavigation";
+			if (p1.length > 0) {
+				const link = await getLinkTitleFromPageSlug(p1);
+				nav += ` left={{ to: "${link.href}", label: "${link.label}" }}`;
 			}
-		);
-		return text;
-	} catch (err: any) {
-		throw err;
-	}
+			if (p2.length > 0) {
+				const link = await getLinkTitleFromPageSlug(p2);
+				nav += ` right={{ to: "${link.href}", label: "${link.label}" }}`;
+			}
+			nav += " />";
+			return `\n${nav}\n`;
+		}
+	);
 };
 
 const parseTabs = (text: string): string => {
@@ -115,38 +110,30 @@ const parseAccordions = (text: string): string => {
 };
 
 const getSchemaPageDefinitions = async (type: SchemaType, ref?: string): Promise<string[]> => {
-	try {
-		const { schema } = await getChaletSchema(type, ref);
-		const definitions = (schema?.["definitions"] as Dictionary<JSONSchema7> | undefined) ?? {};
+	const { schema } = await getChaletSchema(type, ref);
+	const definitions = (schema?.["definitions"] as Dictionary<JSONSchema7> | undefined) ?? {};
 
-		let ret: string[] = [];
-		for (const [key, value] of Object.entries(definitions)) {
-			if (!!value && !!value["type"] && (value["type"] === "object" || value["type"] === undefined)) {
-				ret.push(key);
-			}
+	let ret: string[] = [];
+	for (const [key, value] of Object.entries(definitions)) {
+		if (!!value && !!value["type"] && (value["type"] === "object" || value["type"] === undefined)) {
+			ret.push(key);
 		}
-		return ret;
-	} catch (err: any) {
-		throw err;
 	}
+	return ret;
 };
 
 const getSchemaPageAnchors = async (type: SchemaType, ref?: string): Promise<ResultPageAnchor[]> => {
-	try {
-		const keys = await getSchemaPageDefinitions(type, ref);
-		let anchors: ResultPageAnchor[] = keys.map((key) => {
-			return {
-				text: toPascalCase(key),
-				to: `/${key}`,
-			};
-		});
-		anchors.sort((a, b) => {
-			return a.text > b.text ? 1 : -1;
-		});
-		return anchors;
-	} catch (err: any) {
-		throw err;
-	}
+	const keys = await getSchemaPageDefinitions(type, ref);
+	let anchors: ResultPageAnchor[] = keys.map((key) => {
+		return {
+			text: toPascalCase(key),
+			to: `/${key}`,
+		};
+	});
+	anchors.sort((a, b) => {
+		return a.text > b.text ? 1 : -1;
+	});
+	return anchors;
 };
 
 const getPageAnchors = async (
@@ -155,105 +142,89 @@ const getPageAnchors = async (
 	ref?: string,
 	type?: SchemaType
 ): Promise<ResultPageAnchor[]> => {
-	try {
-		if (slug === "changelog") {
-			return [];
-		} else if (!!type && (slug === "schema" || slug === "schema-dev")) {
-			return await getSchemaPageAnchors(type, ref);
-		} else {
-			let anchors: ResultPageAnchor[] = [];
+	if (slug === "changelog") {
+		return [];
+	} else if (!!type && (slug === "schema" || slug === "schema-dev")) {
+		return await getSchemaPageAnchors(type, ref);
+	} else {
+		let anchors: ResultPageAnchor[] = [];
 
-			const split = fileContent.split(os.EOL);
-			for (const line of split) {
-				let matches = line.match(/^<AnchoredH(\d)>(.+?)<\/AnchoredH\d>$/);
-				if (!!matches && matches.length === 3) {
-					// ignore H1 as it's already in the sidebar
-					if (matches[1] === "1") continue;
+		const split = fileContent.split(os.EOL);
+		for (const line of split) {
+			let matches = line.match(/^<AnchoredH(\d)>(.+?)<\/AnchoredH\d>$/);
+			if (!!matches && matches.length === 3) {
+				// ignore H1 as it's already in the sidebar
+				if (matches[1] === "1") continue;
 
-					anchors.push({
-						text: matches[2],
-						to: `?id=${toKebabCase(matches[2])}`,
-					});
-				}
+				anchors.push({
+					text: matches[2],
+					to: `?id=${toKebabCase(matches[2])}`,
+				});
 			}
-			return anchors;
 		}
-	} catch (err: any) {
-		throw err;
+		return anchors;
 	}
 };
 
 const parseReadme = async (inText: string): Promise<string> => {
-	try {
-		const readme = await serverCache.get(`chalet-readme`, async () => {
-			let { changelog: text } = await getChaletFile("README.md");
-			if (!!text) {
-				text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+	const readme = await serverCache.get(`chalet-readme`, async () => {
+		let { changelog: text } = await getChaletFile("README.md");
+		if (!!text) {
+			text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
 
-				text = text.replace(/---\n### (.+?)\n/g, "|$1|");
+			text = text.replace(/---\n### (.+?)\n/g, "|$1|");
 
-				text = text.replace(/## (.+?)\n/g, "");
-			}
-			return text ?? "";
-		});
+			text = text.replace(/## (.+?)\n/g, "");
+		}
+		return text ?? "";
+	});
 
-		return inText.replace(`!!ChaletReadme!!`, (match: string) => readme);
-	} catch (err: any) {
-		throw err;
-	}
+	return inText.replace(`!!ChaletReadme!!`, (match: string) => readme);
 };
 
 const parseChangelog = async (inText: string): Promise<string> => {
-	try {
-		const changelog = await serverCache.get(`chalet-changelog`, async () => {
-			let text: string = "";
-			const releases = await getChaletReleases();
-			releases.forEach((release) => {
-				const date = release.published_at.toDateString();
-				const prereleaseText = release.prerelease ? `\`Pre-Release\`` : "";
-				text += `---\n\n${date}\n\n## [${release.tag_name}]\n\n${prereleaseText}\n\n`;
-				text += release.body.replace(/##/g, "####");
-			});
-			if (!!text) {
-				text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
-
-				text = text.replace(/\[commit\]\((.+?)\)/g, (result: string, p1: string) => {
-					const commit = p1.split("/").pop();
-					if (!commit) return p1;
-
-					return `([${commit?.substring(0, 7)}](${p1}))`;
-				});
-				text = text.replace(/\[issue\]\((.+?)\)/g, (result: string, p1: string) => {
-					const issue = p1.split("/").pop();
-					if (!issue) return p1;
-
-					return `([#${issue}](${p1}))`;
-				});
-				text = text.replace(/## \[(.+?)\] \[(.+?)\]/g, "---\n\n## [$1]\n\n$2");
-			}
-			return text ?? "";
+	const changelog = await serverCache.get(`chalet-changelog`, async () => {
+		let text: string = "";
+		const releases = await getChaletReleases();
+		releases.forEach((release) => {
+			const date = release.published_at.toDateString();
+			const prereleaseText = release.prerelease ? `\`Pre-Release\`` : "";
+			text += `---\n\n${date}\n\n## [${release.tag_name}]\n\n${prereleaseText}\n\n`;
+			text += release.body.replace(/##/g, "####");
 		});
+		if (!!text) {
+			text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
 
-		return inText.replace(`!!ChaletChangelog!!`, (match: string) => changelog);
-	} catch (err: any) {
-		throw err;
-	}
+			text = text.replace(/\[commit\]\((.+?)\)/g, (result: string, p1: string) => {
+				const commit = p1.split("/").pop();
+				if (!commit) return p1;
+
+				return `([${commit?.substring(0, 7)}](${p1}))`;
+			});
+			text = text.replace(/\[issue\]\((.+?)\)/g, (result: string, p1: string) => {
+				const issue = p1.split("/").pop();
+				if (!issue) return p1;
+
+				return `([#${issue}](${p1}))`;
+			});
+			text = text.replace(/## \[(.+?)\] \[(.+?)\]/g, "---\n\n## [$1]\n\n$2");
+		}
+		return text ?? "";
+	});
+
+	return inText.replace(`!!ChaletChangelog!!`, (match: string) => changelog);
 };
 
 const parseSchemaReference = async (type: SchemaType, text: string, slug: string, ref: string): Promise<string> => {
-	try {
-		const { schema } = await getChaletSchema(type, ref);
+	const { schema } = await getChaletSchema(type, ref);
 
-		return text.replace(`!!ChaletSchemaReference!!`, (match: string) => {
-			let result: string = "";
-			if (!!schema) {
-				result += jsonNodeToMarkdown("(root)", `${slug}/${ref}/${type}`, schema);
-			}
-			return result;
-		});
-	} catch (err: any) {
-		throw err;
-	}
+	return text.replace(`!!ChaletSchemaReference!!`, (match: string) => {
+		let result: string = "";
+		if (!!schema) {
+			result += jsonNodeToMarkdown("(root)", `${slug}/${ref}/${type}`, schema);
+		}
+		return result;
+	});
 };
 
 const parseSchemaDefinition = async (
@@ -263,30 +234,24 @@ const parseSchemaDefinition = async (
 	ref: string,
 	definition: string
 ): Promise<string> => {
-	try {
-		const { schema } = await getChaletSchema(type, ref);
+	const { schema } = await getChaletSchema(type, ref);
 
-		return text.replace(`!!ChaletSchemaReference!!`, (match: string) => {
-			let result: string = "";
-			if (!!schema) {
-				const definitions = schema["definitions"] as Dictionary<JSONSchema7> | undefined;
+	return text.replace(`!!ChaletSchemaReference!!`, (match: string) => {
+		let result: string = "";
+		if (!!schema) {
+			const definitions = schema["definitions"] as Dictionary<JSONSchema7> | undefined;
 
-				if (definitions === undefined || definitions[definition] === undefined) {
-					console.error(`Schema definition not found: ${definition}`);
-					return "";
-				}
-
-				const markdown = jsonNodeToMarkdown(null, `${slug}/${ref}`, definitions[definition], definitions);
-
-				result += `#### [${toPascalCase(definition)}]\n\n`;
-				result += markdown;
+			if (definitions === undefined || definitions[definition] === undefined) {
+				throw new Error(`Schema definition not found: ${definition}`);
 			}
-			return result;
-		});
-	} catch (err: any) {
-		console.error(err);
-		return "";
-	}
+
+			const markdown = jsonNodeToMarkdown(null, `${slug}/${ref}`, definitions[definition], definitions);
+
+			result += `#### [${toPascalCase(definition)}]\n\n`;
+			result += markdown;
+		}
+		return result;
+	});
 };
 
 const getSchemaReferencePaths = (type: SchemaType, ref: string): Promise<string[]> => {
@@ -313,49 +278,44 @@ const parseCustomMarkdown = async (
 	meta: Dictionary<any>;
 	content: string;
 }> => {
-	try {
-		// First, ensure consistent line endings to make regex patterns easier
-		inContent = inContent.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+	// First, ensure consistent line endings to make regex patterns easier
+	inContent = inContent.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
 
-		let { data: meta, content: text } = matter(inContent);
+	let { data: meta, content: text } = matter(inContent);
 
-		text = parseReferencedMetaData(text, meta);
+	text = parseReferencedMetaData(text, meta);
 
-		if (slug === "changelog") {
-			text = await parseChangelog(text);
-		} else if (slug === "getting-started") {
-			text = await parseReadme(text);
-		}
-
-		// Parse the things
-		if (!!ref && !!schemaType) {
-			if (!!definition) {
-				text = await parseSchemaDefinition(schemaType, text, slug, ref, definition);
-			} else {
-				text = await parseSchemaReference(schemaType, text, slug, ref);
-			}
-		}
-		text = await parseBottomPageNavigation(text);
-
-		text = parseExplicitLineBreaks(text);
-		text = parseImportantNotes(text);
-		text = parseAnchoredHeaders(text);
-		text = parseAccordions(text);
-		text = parseTabs(text);
-		text = parseCodeHeaders(text);
-		text = parseDescriptionList(text);
-
-		// Set line endings back
-		text = text.replace(/\n/g, os.EOL);
-
-		return {
-			meta,
-			content: text,
-		};
-	} catch (err: any) {
-		console.error(err);
-		throw err;
+	if (slug === "changelog") {
+		text = await parseChangelog(text);
+	} else if (slug === "getting-started") {
+		text = await parseReadme(text);
 	}
+
+	// Parse the things
+	if (!!ref && !!schemaType) {
+		if (!!definition) {
+			text = await parseSchemaDefinition(schemaType, text, slug, ref, definition);
+		} else {
+			text = await parseSchemaReference(schemaType, text, slug, ref);
+		}
+	}
+	text = await parseBottomPageNavigation(text);
+
+	text = parseExplicitLineBreaks(text);
+	text = parseImportantNotes(text);
+	text = parseAnchoredHeaders(text);
+	text = parseAccordions(text);
+	text = parseTabs(text);
+	text = parseCodeHeaders(text);
+	text = parseDescriptionList(text);
+
+	// Set line endings back
+	text = text.replace(/\n/g, os.EOL);
+
+	return {
+		meta,
+		content: text,
+	};
 };
 
 const parseReferencedMetaData = (text: string, meta: Dictionary<any>) => {

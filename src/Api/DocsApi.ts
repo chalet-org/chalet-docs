@@ -11,23 +11,14 @@ class DocsApi extends BaseApi {
 		});
 	}
 
-	getSchemaDevMdxPage = (definition: string, ref: string = "", type: SchemaType = SchemaType.ChaletJson) =>
-		this.GET<ResultMDXPage>(`/mdx/schema-dev?ref=${ref}&type=${type}&definition=${definition}`);
-
-	getChangelogMdxPage = () => this.GET<ResultMDXPage>(`/mdx/changelog`);
-
 	searchMarkdown = async (search: string): Promise<ResultSearchResults> => {
-		try {
-			if (search.length >= 3) {
-				const results = await this.GET<ResultSearchResults>(
-					`/search-markdown?search=${encodeURIComponent(search)}`
-				);
-				return results;
-			} else {
-				return [];
-			}
-		} catch (err: any) {
-			throw err;
+		if (search.length >= 3) {
+			const results = await this.GET<ResultSearchResults>(
+				`/search-markdown?search=${encodeURIComponent(search)}`
+			);
+			return results;
+		} else {
+			return [];
 		}
 	};
 }

@@ -1,18 +1,20 @@
+import { GetServerSidePropsContext } from "next";
 import React from "react";
 
-import { docsApi } from "Api";
-import { withServerErrorPage } from "HighComponents";
 import { MarkdownLayout, Props } from "Layouts/MarkdownLayout";
-import { handleInitialProps } from "Utility";
+import { markdownFiles } from "Server/MarkdownFiles";
+import { withServerErrorHandler } from "Utility";
 
-const MarkdownPage = withServerErrorPage((props: Props) => {
+const MarkdownPage = (props: Props) => {
 	return <MarkdownLayout {...props} />;
-});
+};
 
-MarkdownPage.getInitialProps = handleInitialProps(async (ctx) => {
-	const page = await docsApi.getChangelogMdxPage();
+export const getServerSideProps = withServerErrorHandler(async (ctx: GetServerSidePropsContext) => {
+	const page = await markdownFiles.getMdxPage("changelog", {});
 	return {
-		...page,
+		props: {
+			...page,
+		},
 	};
 });
 

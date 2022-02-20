@@ -1,16 +1,16 @@
+import { GetServerSidePropsContext } from "next";
 import React from "react";
 
-import { docsApi } from "Api";
-import { withServerErrorPage } from "HighComponents";
 import { MarkdownLayout, Props } from "Layouts/MarkdownLayout";
+import { markdownFiles } from "Server/MarkdownFiles";
 import { SchemaType } from "Server/ResultTypes";
-import { handleInitialProps } from "Utility";
+import { withServerErrorHandler } from "Utility";
 
-const MarkdownPage = withServerErrorPage((props: Props) => {
-	return <MarkdownLayout {...props} isSchema />;
-});
+const MarkdownPage = (props: Props) => {
+	return <MarkdownLayout {...props} />;
+};
 
-MarkdownPage.getInitialProps = handleInitialProps(async (ctx) => {
+export const getServerSideProps = withServerErrorHandler(async (ctx: GetServerSidePropsContext) => {
 	const { slug } = ctx.query;
 	if (!slug || (typeof slug !== "string" && slug.length === 0)) {
 		throw new Error("Params not found");
@@ -26,7 +26,7 @@ MarkdownPage.getInitialProps = handleInitialProps(async (ctx) => {
 	const ref: string = typeof slug === "string" ? slug : slug[0];
 
 	let definition: string = "";
-	const schemaType = slug[1] as SchemaType;
+	const type = slug[1] as SchemaType;
 
 	if (typeof slug !== "string") {
 		if (slug.length > 2) {
@@ -34,9 +34,16 @@ MarkdownPage.getInitialProps = handleInitialProps(async (ctx) => {
 		}
 	}
 
-	const page = await docsApi.getSchemaDevMdxPage(definition, ref, schemaType);
+	const page = await markdownFiles.getMdxPage("schema", {
+		ref,
+		definition,
+		type,
+	});
 	return {
-		...page,
+		props: {
+			...page,
+			isSchema: true,
+		},
 	};
 });
 
