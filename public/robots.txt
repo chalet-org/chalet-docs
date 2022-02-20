@@ -1,4 +1,4 @@
-Sitemap: https://domain.com/api/sitemap.xml
+Sitemap: https://www.chalet-work.space/api/sitemap.xml
 
 User-Agent: *
 Allow: /*

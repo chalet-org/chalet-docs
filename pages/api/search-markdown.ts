@@ -1,4 +1,4 @@
-import { getPagesCache, PageCache } from "Server/MarkdownCache";
+import { getPagesCache, PageCache } from "Server/MarkdownPagesCache";
 import { middleware } from "Server/Middleware";
 import { ResultSearchResults } from "Server/ResultTypes";
 import { ApiReq, ApiRes } from "Utility";

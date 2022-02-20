@@ -1,67 +1,37 @@
-import { SitemapStream, streamToPromise } from "sitemap";
-import { createGzip, gunzip, Gzip } from "zlib";
-
-import { Optional } from "@andrew-r-king/react-kitchen";
-
-import { getPagesCache } from "Server/MarkdownCache";
+import { getPagesCache } from "Server/MarkdownPagesCache";
 import { middleware } from "Server/Middleware";
+import { serverCache } from "Server/ServerCache";
 import { ApiReq, ApiRes } from "Utility";
-
-const gunzipPromise = (sm: Buffer) =>
-	new Promise((resolve, reject) => {
-		gunzip(sm, (err, result) => {
-			if (err) {
-				reject(err);
-			} else {
-				resolve(result);
-			}
-		});
-	});
-
-let sitemap: Optional<Buffer> = null;
 
 const handler = middleware.use([], async (req: ApiReq, res: ApiRes<any>) => {
 	try {
-		res.setHeader("Content-Type", "application/xml");
-
-		// if (!!sitemap && !isDevelopment) {
-		if (!!sitemap) {
-			const result = await gunzipPromise(sitemap);
-			res.send(result);
-
-			// TODO: Test this in prod, might just need to send the buffer w/ gzip header
-			// res.send(sitemap);
-			return;
-		}
-
-		res.setHeader("Content-Encoding", "gzip");
-
-		const smStream: SitemapStream = new SitemapStream({
-			hostname: `https://${req.headers.host}`,
-		});
-		const pipeline: Gzip = smStream.pipe(createGzip());
-
-		const pages = await getPagesCache();
-		pages.forEach(({ url }) => {
-			smStream.write({
-				url,
+		const sitemap = await serverCache.get("sitemap.xml", async () => {
+			const pages = await getPagesCache();
+			const lastmod = new Date().toISOString();
+			const pageData = pages.map(({ url }) => ({
+				url: `https://${req.headers.host}${url}`,
+				lastmod,
 				changefreq: "weekly",
-				priority: 0.7,
-			});
+				priority: 1.0,
+			}));
+
+			const data: string = pageData
+				.map((data) => {
+					let result = "<url>";
+					result += `<loc>${data.url}</loc>`;
+					result += `<lastmod>${data.lastmod}</lastmod>`;
+					result += `<changefreq>${data.changefreq}</changefreq>`;
+					result += `<priority>${data.priority}</priority>`;
+					result += "</url>";
+					return result;
+				})
+				.join("");
+
+			return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${data}</urlset>`;
 		});
-
-		// smStream.write({ url: "/page-1/", changefreq: "daily", priority: 0.3 });
-		// smStream.write({ url: "/page-2/", changefreq: "monthly", priority: 0.7 });
-		// smStream.write({ url: "/page-3/" }); // changefreq: 'weekly',  priority: 0.5
-		// smStream.write({ url: "/page-4/", img: "http://urlTest.com" });
-
-		streamToPromise(pipeline).then((sm: Buffer) => (sitemap = sm));
-
-		smStream.end();
-
-		pipeline.pipe(res).on("error", (err) => {
-			throw err;
-		});
+		res.setHeader("Content-Type", "application/xml");
+		res.send(sitemap);
+		res.end();
 	} catch (err: any) {
 		console.error(err);
 		res.status(500).json({
