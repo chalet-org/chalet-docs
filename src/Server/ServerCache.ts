@@ -2,7 +2,27 @@ import { performance } from "perf_hooks";
 
 import { Dictionary } from "@andrew-r-king/react-kitchen";
 
-import { isDevelopment } from "./IsDevelopment";
+// import { isDevelopment } from "./IsDevelopment";
+
+type AnsiColorsForeground = 30 | 31 | 32 | 33 | 34 | 35 | 36 | 37;
+type AnsiColrosForegroundBright = 90 | 91 | 92 | 93 | 94 | 95 | 96 | 97;
+type AnsiColors = AnsiColorsForeground | AnsiColrosForegroundBright;
+type AnsiStyle = 1 | 0;
+
+const ansi = (color: AnsiColors, style: AnsiStyle = 1): string => {
+	return `\x1b[${style};${color}m`;
+};
+const ansiReset = (): string => {
+	return `\x1b[0m`;
+};
+
+const gray = ansi(90, 0);
+const yellow = ansi(33);
+const red = ansi(31);
+const blue = ansi(34, 0);
+const reset = ansiReset();
+const cyan = ansi(36, 0);
+const green = ansi(32);
 
 type CacheEntry<T> = {
 	data: T;
@@ -10,40 +30,50 @@ type CacheEntry<T> = {
 	cachedAt: number;
 };
 
-let memoryCache: Dictionary<CacheEntry<any>> = {};
+const lineWidth = 122;
 
 class ServerCache {
-	private development: boolean = isDevelopment;
-	private cacheSeconds: number = 15;
+	private development: boolean;
+	private cacheSeconds: number;
+	private cache: Dictionary<CacheEntry<any>> = {};
 
 	constructor() {
+		// this.development = isDevelopment;
 		this.development = false;
 
 		const hours = 4;
 		this.cacheSeconds = 60 * 60 * hours;
+		// this.cacheSeconds = 15;
 	}
+
+	private print = (action: string, key: string, cached: string, time: number) => {
+		const outTime: string = ` ${green}${time.toFixed(3)} ms${reset}`;
+		let text = `${action}${gray}:${reset} ${key}${gray} `;
+		while (text.length < lineWidth - outTime.length) {
+			text += ".";
+		}
+		text += `${outTime} ${cyan}${cached}`;
+		console.log(text);
+	};
 
 	get = async <T>(key: string, onCache: () => Promise<T>, cacheLength?: number): Promise<T> => {
 		const startTime = performance.now();
-		const response = memoryCache[key] ?? null;
+		const response = this.cache[key] ?? null;
 		cacheLength = cacheLength ?? this.cacheSeconds;
 
-		const currentTime = new Date().getTime() / 1000;
-		const cachedTime = (response?.cachedAt ?? 0) + (response?.cacheLength ?? 0);
+		const currentTime: number = parseInt((new Date().getTime() / 1000).toFixed(), 10);
+		const expiresAt = (response?.cachedAt ?? 0) + (response?.cacheLength ?? 0);
 
 		let data: T;
-		if (this.development || !response || currentTime > response.cachedAt + response.cacheLength) {
+		const needsUpdate: boolean = !!response && currentTime > response.cachedAt + response.cacheLength;
+		if (this.development || !response || needsUpdate) {
 			try {
 				data = await onCache();
 				const endTime = performance.now();
 				const time = endTime - startTime;
-				console.log(
-					"\x1b[0;90m>>> \x1b[1;31mset:\x1b[0m",
-					key,
-					`\x1b[0;36m${currentTime}`,
-					`\x1b[0;90m ... \x1b[1;32m${time} ms\x1b[0m`
-				);
-				memoryCache[key] = {
+				const action = `${gray}>>> ` + (needsUpdate ? `${yellow}upd` : `${red}set`);
+				this.print(action, key, `${currentTime} ${gray}----------`, time);
+				this.cache[key] = {
 					data,
 					cacheLength,
 					cachedAt: currentTime,
@@ -55,13 +85,8 @@ class ServerCache {
 		} else {
 			const endTime = performance.now();
 			const time = endTime - startTime;
-			console.log(
-				"\x1b[0;90m<<< \x1b[0;34mget:\x1b[0m",
-				key,
-				`\x1b[0;36m${currentTime}`,
-				`\x1b[0;36m${cachedTime}`,
-				`\x1b[0;90m ... \x1b[1;32m${time} ms\x1b[0m`
-			);
+			const action = `${gray}<<< ${blue}get`;
+			this.print(action, key, `${currentTime} ${expiresAt}`, time);
 			data = response.data;
 		}
 
