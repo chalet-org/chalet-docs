@@ -20,10 +20,8 @@ const gunzipPromise = (sm: Buffer) =>
 
 let sitemap: Optional<Buffer> = null;
 
-const handler = async (req: ApiReq, res: ApiRes<any>) => {
+const handler = middleware.use(["cors"], async (req: ApiReq, res: ApiRes<any>) => {
 	try {
-		await middleware.use(["cors"], req, res);
-
 		res.setHeader("Content-Type", "application/xml");
 
 		// if (!!sitemap && !isDevelopment) {
@@ -70,6 +68,6 @@ const handler = async (req: ApiReq, res: ApiRes<any>) => {
 			...err,
 		});
 	}
-};
+});
 
 export default handler;

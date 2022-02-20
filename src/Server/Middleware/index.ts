@@ -9,13 +9,19 @@ const middlewareImpl = {
 };
 
 const middleware = {
-	use: async (args: (keyof typeof middlewareImpl)[], req: ApiReq, res: ApiRes<any>) => {
-		for (const key of args) {
-			await middlewareImpl[key](req, res); // called in order
-		}
+	use: (args: (keyof typeof middlewareImpl)[], handler: (req: ApiReq, res: ApiRes<any>) => Promise<any>) => {
+		return async (req: ApiReq, res: ApiRes<any>) => {
+			for (const key of args) {
+				if (!req.statusCode) await middlewareImpl[key](req, res); // called in order
+			}
+			if (!req.statusCode) await handler(req, res);
+		};
 	},
-	useAsync: (args: (keyof typeof middlewareImpl)[], req: ApiReq, res: ApiRes<any>) => {
-		return Promise.all(args.map((key) => middlewareImpl[key](req, res)));
+	useAsync: (args: (keyof typeof middlewareImpl)[], handler: (req: ApiReq, res: ApiRes<any>) => Promise<any>) => {
+		return async (req: ApiReq, res: ApiRes<any>) => {
+			await Promise.all(args.map((key) => middlewareImpl[key](req, res)));
+			if (!req.statusCode) await handler(req, res);
+		};
 	},
 };
 

@@ -32,28 +32,29 @@ const getSearchResults = (search: string, pages: PageCache[], resultLength: numb
 	return result;
 };
 
-const handler = async (req: ApiReq, res: ApiRes<ResultSearchResults>): Promise<void> => {
-	try {
-		await middleware.use(["cors", "auth"], req, res);
+const handler = middleware.use(
+	["cors", "auth"],
+	async (req: ApiReq, res: ApiRes<ResultSearchResults>): Promise<void> => {
+		try {
+			let { search } = req.query;
+			if (!search || search.length === 0) {
+				throw new Error("Invalid query sent in request");
+			}
+			if (Array.isArray(search)) {
+				search = search.join("");
+			}
+			search = search.replace(/\n\r/g, "");
 
-		let { search } = req.query;
-		if (!search || search.length === 0) {
-			throw new Error("Invalid query sent in request");
+			const pages = await getPagesCache();
+			const results = getSearchResults(search.toLowerCase(), pages);
+			// console.log(results);
+			res.status(200).json(results);
+		} catch (err: any) {
+			res.status(404).json({
+				...err,
+			});
 		}
-		if (Array.isArray(search)) {
-			search = search.join("");
-		}
-		search = search.replace(/\n\r/g, "");
-
-		const pages = await getPagesCache();
-		const results = getSearchResults(search.toLowerCase(), pages);
-		// console.log(results);
-		res.status(200).json(results);
-	} catch (err: any) {
-		res.status(404).json({
-			...err,
-		});
 	}
-};
+);
 
 export default handler;
