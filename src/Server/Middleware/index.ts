@@ -9,7 +9,12 @@ const middlewareImpl = {
 };
 
 const middleware = {
-	use: (args: (keyof typeof middlewareImpl)[], req: ApiReq, res: ApiRes<any>) => {
+	use: async (args: (keyof typeof middlewareImpl)[], req: ApiReq, res: ApiRes<any>) => {
+		for (const key of args) {
+			await middlewareImpl[key](req, res); // called in order
+		}
+	},
+	useAsync: (args: (keyof typeof middlewareImpl)[], req: ApiReq, res: ApiRes<any>) => {
 		return Promise.all(args.map((key) => middlewareImpl[key](req, res)));
 	},
 };
