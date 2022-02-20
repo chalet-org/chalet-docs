@@ -5,33 +5,36 @@ import { ApiReq, ApiRes } from "Utility";
 
 const handler = middleware.use([], async (req: ApiReq, res: ApiRes<any>) => {
 	try {
-		const sitemap = await serverCache.get("sitemap.xml", async () => {
-			const pages = await getPagesCache();
-			const lastmod = new Date().toISOString();
-			const pageData = pages.map(({ url }) => ({
-				url: `https://${req.headers.host}${url}`,
-				lastmod,
-				changefreq: "weekly",
-				priority: 1.0,
-			}));
+		const cacheLength = 60 * 60 * 24; // 1 day
+		const sitemap = await serverCache.get(
+			"sitemap.xml",
+			async () => {
+				const pages = await getPagesCache();
+				const pageData = pages.map(({ url }) => url);
 
-			const data: string = pageData
-				.map((data) => {
-					let result = "<url>";
-					result += `<loc>${data.url}</loc>`;
-					result += `<lastmod>${data.lastmod}</lastmod>`;
-					result += `<changefreq>${data.changefreq}</changefreq>`;
-					result += `<priority>${data.priority}</priority>`;
-					result += "</url>";
-					return result;
-				})
-				.join("");
+				const host: string = `https://${req.headers.host}`;
+				const lastmod: string = new Date().toISOString();
+				const changefreq: string = "weekly";
+				const priority: string = (1.0).toFixed(1);
 
-			return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${data}</urlset>`;
-		});
+				const data: string = pageData
+					.map((url) => {
+						let result = "<url>";
+						result += `<loc>${host}${url}</loc>`;
+						result += `<lastmod>${lastmod}</lastmod>`;
+						result += `<changefreq>${changefreq}</changefreq>`;
+						result += `<priority>${priority}</priority>`;
+						result += "</url>";
+						return result;
+					})
+					.join("");
+
+				return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${data}</urlset>`;
+			},
+			cacheLength
+		);
 		res.setHeader("Content-Type", "application/xml");
-		res.send(sitemap);
-		res.end();
+		res.status(200).send(sitemap);
 	} catch (err: any) {
 		console.error(err);
 		res.status(500).json({

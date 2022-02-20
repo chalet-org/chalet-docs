@@ -15,16 +15,22 @@ const defaultMiddleware: (keyof typeof middlewareImpl)[] = ["cors"];
 const middleware = {
 	use: (args: AllowedMiddleware[], handler: (req: ApiReq, res: ApiRes<any>) => Promise<any>) => {
 		return async (req: ApiReq, res: ApiRes<any>) => {
+			const statusCode = res.statusCode;
+			res.statusCode = 0;
 			for (const key of [...defaultMiddleware, ...args]) {
-				if (!req.statusCode) await middlewareImpl[key](req, res); // called in order
+				if (!res.statusCode) await middlewareImpl[key](req, res); // called in order
 			}
-			if (!req.statusCode) await handler(req, res);
+			if (!res.statusCode) await handler(req, res);
+			if (!res.statusCode) res.statusCode = statusCode;
 		};
 	},
 	useAsync: (args: AllowedMiddleware[], handler: (req: ApiReq, res: ApiRes<any>) => Promise<any>) => {
 		return async (req: ApiReq, res: ApiRes<any>) => {
+			const statusCode = res.statusCode;
+			res.statusCode = 0;
 			await Promise.all([...defaultMiddleware, ...args].map((key) => middlewareImpl[key](req, res)));
-			if (!req.statusCode) await handler(req, res);
+			if (!res.statusCode) await handler(req, res);
+			if (!res.statusCode) res.statusCode = statusCode;
 		};
 	},
 };
