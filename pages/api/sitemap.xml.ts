@@ -4,7 +4,7 @@ import { createGzip, gunzip, Gzip } from "zlib";
 import { Optional } from "@andrew-r-king/react-kitchen";
 
 import { getPagesCache } from "Server/MarkdownCache";
-import { runCorsMiddleware } from "Server/NextCors";
+import { middleware } from "Server/Middleware";
 import { ApiReq, ApiRes } from "Utility";
 
 const gunzipPromise = (sm: Buffer) =>
@@ -22,7 +22,7 @@ let sitemap: Optional<Buffer> = null;
 
 const handler = async (req: ApiReq, res: ApiRes<any>) => {
 	try {
-		await runCorsMiddleware(req, res);
+		await middleware.use(["cors"], req, res);
 
 		res.setHeader("Content-Type", "application/xml");
 

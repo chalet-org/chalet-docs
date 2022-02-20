@@ -5,7 +5,7 @@ import { Optional } from "@andrew-r-king/react-kitchen";
 import { getChaletBranches } from "Server/ChaletBranches";
 import { getChaletSchema } from "Server/ChaletSchema";
 import { getChaletTags, getLatestTag } from "Server/ChaletTags";
-import { runCorsMiddleware } from "Server/NextCors";
+import { middleware } from "Server/Middleware";
 import { ResultChaletSchema, SchemaType } from "Server/ResultTypes";
 import { ApiReq, ApiRes } from "Utility";
 
@@ -14,7 +14,7 @@ let refs: Optional<string[]> = null;
 
 const handler = async (req: ApiReq, res: ApiRes<ResultChaletSchema | Error>): Promise<void> => {
 	try {
-		await runCorsMiddleware(req, res);
+		await middleware.use(["cors", "auth"], req, res);
 
 		let { ref } = req.query;
 		const { type } = req.query;

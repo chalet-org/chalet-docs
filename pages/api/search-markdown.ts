@@ -1,13 +1,7 @@
-import { Optional } from "@andrew-r-king/react-kitchen";
-
 import { getPagesCache, PageCache } from "Server/MarkdownCache";
-import { runCorsMiddleware } from "Server/NextCors";
+import { middleware } from "Server/Middleware";
 import { ResultSearchResults } from "Server/ResultTypes";
 import { ApiReq, ApiRes } from "Utility";
-
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-
-const validToken: Optional<string> = process.env.NEXT_PUBLIC_API_TOKEN ?? null;
 
 const getSearchResults = (search: string, pages: PageCache[], resultLength: number = 80): ResultSearchResults => {
 	let result: ResultSearchResults = [];
@@ -40,16 +34,7 @@ const getSearchResults = (search: string, pages: PageCache[], resultLength: numb
 
 const handler = async (req: ApiReq, res: ApiRes<ResultSearchResults>): Promise<void> => {
 	try {
-		await runCorsMiddleware(req, res);
-
-		if (validToken === null) {
-			throw new Error("Missing: NEXT_PUBLIC_API_TOKEN");
-		}
-
-		const authToken: Optional<string> = req.headers?.authorization?.split("Bearer ")?.[1] ?? null;
-		if (authToken !== validToken) {
-			throw new Error("Unauthorized");
-		}
+		await middleware.use(["cors", "auth"], req, res);
 
 		let { search } = req.query;
 		if (!search || search.length === 0) {
