@@ -31,27 +31,13 @@ const Styles = styled.button`
 	font-weight: 400;
 	padding: 1.25rem 1rem;
 	padding-bottom: 1.325rem;
-	line-height: 0;
+	line-height: 1;
 	color: ${getThemeVariable("mainText")};
 	background-color: transparent;
 	border-radius: 0.25rem;
 	cursor: pointer;
 
 	transition: background-color 0.125s linear, color 0.125s linear;
-
-	&:before,
-	&:after {
-		display: block;
-		position: absolute;
-	}
-
-	&:before {
-		top: calc(50% + 0.0675rem);
-	}
-
-	&:after {
-		top: 50%;
-	}
 
 	&:hover {
 		color: ${getThemeVariable("background")};

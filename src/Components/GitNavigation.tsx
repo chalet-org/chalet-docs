@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { HyperLink, ResultNavigation, SchemaType } from "Server/ResultTypes";
 import { getThemeVariable } from "Theme";
 
+import { hasMinWidth } from "./GlobalStyles";
 import { AnchoredHeadingObject } from "./Heading";
 import { Link } from "./Link";
 import { SelectDropdown } from "./SelectDropdown";
@@ -63,7 +64,7 @@ const GitNavigation = ({ schemaLinks, anchors }: Props) => {
 			<Header>Schema Reference</Header>
 			<hr />
 			<Styles>
-				<div className="group">
+				<div className="group dropdowns">
 					<SelectDropdown
 						name="ref-select"
 						label="Version"
@@ -126,7 +127,7 @@ const Styles = styled.div`
 		align-items: center;
 
 		> .schema-select {
-			margin: 0 0.5rem;
+			margin: 0.25rem 0;
 			flex: 1;
 
 			&:nth-of-type(1) {
@@ -160,5 +161,23 @@ const Styles = styled.div`
 			display: block;
 			width: 100%;
 		}
+
+		&.dropdowns {
+			flex-direction: column;
+		}
+	}
+
+	@media ${hasMinWidth(0)} {
+		> .group.dropdowns {
+			flex-direction: row;
+
+			> .schema-select {
+				margin: 0 0.5rem;
+			}
+		}
+	}
+	@media ${hasMinWidth(1)} {
+	}
+	@media ${hasMinWidth(2)} {
 	}
 `;

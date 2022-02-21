@@ -6,6 +6,7 @@ import { useUiStore } from "Stores";
 import { getThemeVariable } from "Theme";
 
 import { Button } from "./Button";
+import { hasMinWidth } from "./GlobalStyles";
 
 type ButtonRoute = {
 	to: string;
@@ -24,28 +25,30 @@ const PageNavigation = ({ left, right }: Props) => {
 			<PageBreak />
 			<Styles>
 				{!!left ? (
-					<Button
-						className="nav-left"
-						onClick={() => {
-							router.push(left.to, undefined, {
-								scroll: false,
-							});
-						}}
-						label={left.label ?? "Previous"}
-					/>
+					<div className="nav-left">
+						<Button
+							onClick={() => {
+								router.push(left.to, undefined, {
+									scroll: false,
+								});
+							}}
+							label={left.label ?? "Previous"}
+						/>
+					</div>
 				) : (
 					<div />
 				)}
 				{!!right ? (
-					<Button
-						className="nav-right"
-						onClick={() => {
-							router.push(right.to, undefined, {
-								scroll: false,
-							});
-						}}
-						label={right.label ?? "Next"}
-					/>
+					<div className="nav-right">
+						<Button
+							onClick={() => {
+								router.push(right.to, undefined, {
+									scroll: false,
+								});
+							}}
+							label={right.label ?? "Next"}
+						/>
+					</div>
 				) : (
 					<div />
 				)}
@@ -58,30 +61,68 @@ export { PageNavigation };
 
 const Styles = styled.div`
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	justify-content: space-between;
 	padding-top: 0.5rem;
 	padding-bottom: 3rem;
 
-	> button {
+	> div {
+		text-align: right;
+
 		&.nav-left {
+			display: flex;
+			justify-content: left;
+		}
+		&.nav-right {
+			display: flex;
+			justify-content: right;
+		}
+
+		> button {
+			min-width: 50%;
+			line-height: 0;
+			margin: 0.25rem 0;
+		}
+
+		&.nav-left > button {
 			padding-left: 2.5rem;
+			text-align: left;
 
 			&:before {
+				display: block;
+				position: absolute;
 				content: "\u276F";
+				top: calc(50% + 0.0675rem);
 				transform: rotate(180deg);
 				left: 1rem;
 			}
 		}
 
-		&.nav-right {
+		&.nav-right > button {
 			padding-right: 2.5rem;
+			text-align: right;
 
 			&:after {
+				display: block;
+				position: absolute;
 				content: "\u276F";
+				top: 50%;
 				right: 1rem;
 			}
 		}
+	}
+
+	@media ${hasMinWidth(0)} {
+		flex-direction: row;
+
+		> div > button {
+			margin: 0;
+		}
+	}
+	@media ${hasMinWidth(1)} {
+		/**/
+	}
+	@media ${hasMinWidth(2)} {
 	}
 `;
 
