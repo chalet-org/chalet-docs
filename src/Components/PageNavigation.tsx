@@ -27,7 +27,9 @@ const PageNavigation = ({ left, right }: Props) => {
 					<Button
 						className="nav-left"
 						onClick={() => {
-							router.push(left.to, undefined);
+							router.push(left.to, undefined, {
+								scroll: false,
+							});
 						}}
 						label={left.label ?? "Previous"}
 					/>
@@ -38,7 +40,9 @@ const PageNavigation = ({ left, right }: Props) => {
 					<Button
 						className="nav-right"
 						onClick={() => {
-							router.push(right.to, undefined);
+							router.push(right.to, undefined, {
+								scroll: false,
+							});
 						}}
 						label={right.label ?? "Next"}
 					/>

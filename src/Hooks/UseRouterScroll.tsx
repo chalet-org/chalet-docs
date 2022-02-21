@@ -11,7 +11,7 @@ const useRouteChangeScroll = () => {
 
 	const { setFocusedId } = useUiStore();
 
-	const handler = () => {
+	const handler = useCallback(() => {
 		if (window.location.search.length === 0) {
 			setFocusedId("");
 			setTimeout(() => window.scrollTo(0, 0), 25);
@@ -25,7 +25,7 @@ const useRouteChangeScroll = () => {
 				}
 			}
 		}
-	};
+	}, [router.asPath]);
 
 	useEffect(() => {
 		router.events.on("routeChangeComplete", handler);
@@ -35,7 +35,7 @@ const useRouteChangeScroll = () => {
 		return () => {
 			router.events.off("routeChangeComplete", handler);
 		};
-	}, []);
+	}, [handler]);
 };
 
 export { useRouteChangeScroll };

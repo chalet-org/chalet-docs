@@ -69,22 +69,32 @@ const GitNavigation = ({ schemaLinks, anchors }: Props) => {
 						label="Version"
 						defaultValue={rootUrl}
 						options={schemaLinks}
-						onChange={(value) => router.push(value.href)}
+						onChange={(value) =>
+							router.push(value.href, undefined, {
+								scroll: false,
+							})
+						}
 					/>
 					{/* <div className="spacer" /> */}
 					<SelectDropdown
 						name="schema-select"
 						defaultValue={rootUrl}
 						options={memoSchema}
-						onChange={async (value) => {
-							await router.push(value.href);
+						onChange={(value) => {
+							router.push(value.href, undefined, {
+								scroll: false,
+							});
 						}}
 					/>
 					<SelectDropdown
 						name="page-select"
 						defaultValue={path}
 						options={memoAnchors}
-						onChange={(value) => router.push(value.href)}
+						onChange={(value) =>
+							router.push(value.href, undefined, {
+								scroll: false,
+							})
+						}
 					/>
 				</div>
 				<div className="group">
