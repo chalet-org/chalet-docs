@@ -13,7 +13,12 @@ type Props = {};
 const ThemeToggle = (props: Props) => {
 	const { setTheme, themeId } = useUiStore();
 	return (
-		<Styles className="theme-toggle" onClick={() => setTheme(themeId === Theme.Light ? Theme.Dark : Theme.Light)}>
+		<Styles
+			className="theme-toggle"
+			onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
+			onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
+			onClick={() => setTheme(themeId === Theme.Light ? Theme.Dark : Theme.Light)}
+		>
 			<Icon id={themeId === Theme.Light ? "night" : "day"} size="2rem" color={color} />
 		</Styles>
 	);
@@ -32,7 +37,8 @@ const Styles = styled.button`
 		}
 	}
 
-	&:hover {
+	&:hover,
+	&.touch-hover {
 		> i > svg {
 			> path,
 			> circle {

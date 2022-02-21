@@ -13,6 +13,8 @@ const Button = ({ children, className, label, onClick }: Props) => {
 	return (
 		<Styles
 			className={className}
+			onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
+			onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
 			onClick={(ev) => {
 				ev.preventDefault();
 				onClick?.();
@@ -39,7 +41,8 @@ const Styles = styled.button`
 
 	transition: background-color 0.125s linear, color 0.125s linear;
 
-	&:hover {
+	&:hover,
+	&.touch-hover {
 		color: ${getThemeVariable("background")};
 		background-color: ${getThemeVariable("secondaryColor")};
 	}

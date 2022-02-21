@@ -173,7 +173,8 @@ const BaseStyle = createGlobalStyle`
 		color: ${getThemeVariable("secondaryColor")};
 		transition: color 0.125s linear;
 
-		&:hover {
+		&:hover,
+		&.touch-hover {
 			color: ${getThemeVariable("primaryColor")};
 		}
     }

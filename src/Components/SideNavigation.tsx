@@ -31,6 +31,8 @@ const SideNavigation = ({ children, ...navProps }: Props) => {
 	return (
 		<>
 			<SidebarToggle
+				onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
+				onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
 				onClick={(ev) => {
 					ev.preventDefault();
 					toggleNavigation();
@@ -128,7 +130,8 @@ const SidebarToggle = styled.button`
 		}
 	}
 
-	&:hover {
+	&:hover,
+	&.touch-hover {
 		> span {
 			background-color: ${getThemeVariable("primaryColor")};
 		}
