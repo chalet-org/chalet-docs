@@ -8,9 +8,10 @@ import nodePath from "path";
 import { Dictionary, Optional } from "@andrew-r-king/react-kitchen";
 
 import { getChaletBranches } from "./ChaletBranches";
+import { getChaletReleases } from "./ChaletReleases";
 import { getChaletTags } from "./ChaletTags";
 import { getPageAnchors, parseCustomMarkdown } from "./CustomMarkdownParser";
-import { ResultMDXPage, ResultNavigation, HyperLink, SchemaType } from "./ResultTypes";
+import { ResultMDXPage, ResultNavigation, HyperLink, SchemaType, ResultDataPage } from "./ResultTypes";
 import { serverCache } from "./ServerCache";
 
 const mdpages: string = "mdpages";
@@ -113,8 +114,8 @@ let otherData: Optional<{
 }> = null;
 
 const getNavBar = async (
-	content: string,
 	slug: string,
+	content: string = "",
 	schemaType?: SchemaType,
 	ref?: string
 ): Promise<ResultNavigation> => {
@@ -157,6 +158,18 @@ const getMdxPage = async (
 	query: Dictionary<string | undefined>,
 	internal: boolean = false
 ): Promise<ResultMDXPage> => {
+	const { definition, ref } = query;
+
+	const schemaType = query.type as SchemaType | undefined;
+	if (
+		!!schemaType &&
+		schemaType !== SchemaType.ChaletJson &&
+		schemaType !== SchemaType.SettingsJson &&
+		!slug.startsWith("-")
+	) {
+		throw new Error(`Invalid schema type requested: ${schemaType}`);
+	}
+
 	const { filename, isNotFoundPage } = getFirstExistingPath(
 		slug === "schema-dev" ? "schema" : slug,
 		allowedExtensions,
@@ -168,24 +181,13 @@ const getMdxPage = async (
 
 	const fileContent: string = fs.readFileSync(filename, "utf8");
 
-	const { definition, ref } = query;
-	const schemaType = query.type as SchemaType | undefined;
-	if (
-		!!schemaType &&
-		schemaType !== SchemaType.ChaletJson &&
-		schemaType !== SchemaType.SettingsJson &&
-		!slug.startsWith("-")
-	) {
-		throw new Error(`Invalid schema type requested: ${schemaType}`);
-	}
-
 	const { meta, content } = await parseCustomMarkdown(fileContent, slug, ref, schemaType, definition);
 
 	const mdx: MDXRemoteSerializeResult<Record<string, unknown>> = await serialize(content, {
 		target: ["esnext"],
 	});
 
-	const navData = await getNavBar(content, slug, schemaType, ref);
+	const navData = await getNavBar(slug, content, schemaType, ref);
 	const title = meta?.title ?? "Untitled";
 
 	return {
@@ -202,10 +204,25 @@ const getNotFoundPage = () => getMdxPage("_404", {}, true);
 
 const getInternalServerErrorPage = () => getMdxPage("_500", {}, true);
 
+const getPageWithData = async (slug: string, query: Dictionary<boolean>): Promise<ResultDataPage> => {
+	const { getReleases } = query;
+
+	const navData = await getNavBar(slug);
+	const data: ResultDataPage = {
+		...navData,
+	};
+
+	if (!!getReleases) {
+		data.releases = await getChaletReleases();
+	}
+
+	return data;
+};
+
 const markdownFiles = {
 	getMdxPage,
 	getInternalServerErrorPage,
 	getNotFoundPage,
 };
 
-export { markdownFiles, mdpages, getLinkTitleFromPageSlug };
+export { markdownFiles, mdpages, getLinkTitleFromPageSlug, getPageWithData };

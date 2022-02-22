@@ -1,6 +1,8 @@
 import { JSONSchema7 } from "json-schema";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 
+import { ResultGithubReleases } from "./ChaletReleases";
+
 export enum SchemaType {
 	ChaletJson = "chalet-json",
 	SettingsJson = "settings-json",
@@ -39,6 +41,10 @@ export type ResultNavigation = {
 	schemaLinks: HyperLink[];
 };
 
+export type ResultChangelog = {
+	releases?: ResultGithubReleases;
+};
+
 export type ResultMDXPage = ResultNavigation & {
 	meta: {
 		title: string;
@@ -46,6 +52,8 @@ export type ResultMDXPage = ResultNavigation & {
 	};
 	mdx: ResultMDX;
 };
+
+export type ResultDataPage = ResultNavigation & ResultChangelog;
 
 export type ResultSearchResults = {
 	url: string;

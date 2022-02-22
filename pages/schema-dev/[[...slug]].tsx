@@ -1,13 +1,19 @@
 import { GetServerSidePropsContext } from "next";
 import React from "react";
 
+import { GitNavigation } from "Components";
 import { MarkdownLayout, Props } from "Layouts/MarkdownLayout";
 import { markdownFiles } from "Server/MarkdownFiles";
 import { SchemaType } from "Server/ResultTypes";
 import { withServerErrorHandler } from "Utility";
 
 const MarkdownPage = (props: Props) => {
-	return <MarkdownLayout {...props} />;
+	const { schemaLinks, anchors } = props;
+	return (
+		<MarkdownLayout {...props}>
+			{!!schemaLinks && <GitNavigation schemaLinks={schemaLinks} anchors={anchors} />}
+		</MarkdownLayout>
+	);
 };
 
 export const getServerSideProps = withServerErrorHandler(async (ctx: GetServerSidePropsContext) => {

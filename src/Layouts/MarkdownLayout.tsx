@@ -1,45 +1,21 @@
 import debounce from "lodash/debounce";
 import { MDXRemote } from "next-mdx-remote";
 import { useRouter } from "next/router";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import styled from "styled-components";
 
-import { Dictionary } from "@andrew-r-king/react-kitchen";
-
-import { AnchoredHeadingObject, HeadingObject, Page, GitNavigation, SideNavigation } from "Components";
+import { Page, SideNavigation } from "Components";
+import { mdxComponents, schemaComponents } from "Components/MarkdownComponents";
 import { useRouteChangeScroll, useWheelScroll } from "Hooks";
 import { ResultMDXPage } from "Server/ResultTypes";
 import { useUiStore } from "Stores";
-import { dynamic, getWindowHeight } from "Utility";
+import { getWindowHeight } from "Utility";
 
-export type Props = ResultMDXPage & {
-	children?: React.ReactNode;
-	isSchema?: boolean;
-};
-
-let components: Dictionary<React.ComponentType<any>> = {
-	...AnchoredHeadingObject,
-	...HeadingObject,
-	a: dynamic.component("Link"),
-	p: dynamic.component("Paragraph"),
-	pre: dynamic.component("CodePreFromMarkdown"),
-	ul: dynamic.component("UnorderedList"),
-	ol: dynamic.component("OrderedList"),
-	inlineCode: dynamic.component("Code"),
-	blockquote: dynamic.component("BlockQuote"),
-	Accordion: dynamic.component("Accordion"),
-	IndentGroup: dynamic.component("IndentGroup"),
-	PageHeading: dynamic.component("PageHeading"),
-	PageNavigation: dynamic.component("PageNavigation"),
-	TabbedContent: dynamic.component("TabbedContent"),
-	Spacer: dynamic.component("Spacer"),
-	CodeHeader: dynamic.component("CodeHeader"),
-};
-
-let schemaComponents: Dictionary<React.ComponentType<any>> = {
-	...components,
-	ul: dynamic.component("UnorderedListSchema"),
-};
+export type Props = React.PropsWithChildren<
+	ResultMDXPage & {
+		isSchema?: boolean;
+	}
+>;
 
 type AnchorData = {
 	el: HTMLAnchorElement;
@@ -124,10 +100,8 @@ const MarkdownLayout = ({ meta, mdx, children, isSchema, ...navProps }: Props) =
 			{!!navProps.sidebarLinks && <SideNavigation {...navProps} />}
 			<Page title={meta?.title ?? "Untitled"}>
 				<Styles ref={pageLayout}>
-					{!!isSchema && !!navProps.schemaLinks && (
-						<GitNavigation schemaLinks={navProps.schemaLinks} anchors={navProps.anchors} />
-					)}
-					{!!mdx && <MDXRemote {...mdx} components={!!isSchema ? schemaComponents : components} />}
+					{children}
+					{!!mdx && <MDXRemote {...mdx} components={!!isSchema ? schemaComponents : mdxComponents} />}
 				</Styles>
 			</Page>
 		</>

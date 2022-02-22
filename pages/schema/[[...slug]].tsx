@@ -4,6 +4,7 @@ import React from "react";
 
 import { Dictionary } from "@andrew-r-king/react-kitchen";
 
+import { GitNavigation } from "Components";
 import { MarkdownLayout, Props } from "Layouts/MarkdownLayout";
 import { getChaletTags, getLatestTag } from "Server/ChaletTags";
 import { getSchemaReferencePaths } from "Server/CustomMarkdownParser";
@@ -12,7 +13,12 @@ import { SchemaType } from "Server/ResultTypes";
 import { withServerErrorHandler } from "Utility";
 
 const MarkdownPage = (props: Props) => {
-	return <MarkdownLayout {...props} />;
+	const { schemaLinks, anchors } = props;
+	return (
+		<MarkdownLayout {...props}>
+			{!!schemaLinks && <GitNavigation schemaLinks={schemaLinks} anchors={anchors} />}
+		</MarkdownLayout>
+	);
 };
 
 export const getStaticPaths = async () => {

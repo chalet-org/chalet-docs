@@ -182,39 +182,6 @@ const parseReadme = async (inText: string): Promise<string> => {
 	return inText.replace(`!!ChaletReadme!!`, (match: string) => readme);
 };
 
-const parseChangelog = async (inText: string): Promise<string> => {
-	const changelog = await serverCache.get(`chalet-changelog`, async () => {
-		let text: string = "";
-		const releases = await getChaletReleases();
-		releases.forEach((release) => {
-			const date = release.published_at.toDateString();
-			const prereleaseText = release.prerelease ? `\`Pre-Release\`` : "";
-			text += `---\n\n${date}\n\n## [${release.tag_name}]\n\n${prereleaseText}\n\n`;
-			text += release.body.replace(/##/g, "####");
-		});
-		if (!!text) {
-			text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
-
-			text = text.replace(/\[commit\]\((.+?)\)/g, (result: string, p1: string) => {
-				const commit = p1.split("/").pop();
-				if (!commit) return p1;
-
-				return `([${commit?.substring(0, 7)}](${p1}))`;
-			});
-			text = text.replace(/\[issue\]\((.+?)\)/g, (result: string, p1: string) => {
-				const issue = p1.split("/").pop();
-				if (!issue) return p1;
-
-				return `([#${issue}](${p1}))`;
-			});
-			text = text.replace(/## \[(.+?)\] \[(.+?)\]/g, "---\n\n## [$1]\n\n$2");
-		}
-		return text ?? "";
-	});
-
-	return inText.replace(`!!ChaletChangelog!!`, (match: string) => changelog);
-};
-
 const parseSchemaReference = async (type: SchemaType, text: string, slug: string, ref: string): Promise<string> => {
 	const { schema } = await getChaletSchema(type, ref);
 
@@ -285,9 +252,7 @@ const parseCustomMarkdown = async (
 
 	text = parseReferencedMetaData(text, meta);
 
-	if (slug === "changelog") {
-		text = await parseChangelog(text);
-	} else if (slug === "getting-started") {
+	if (slug === "getting-started") {
 		text = await parseReadme(text);
 	}
 
