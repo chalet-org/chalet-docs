@@ -43,7 +43,6 @@ const TabbedContent = ({ children }: Props) => {
 			return child;
 		}
 
-		console.log(child);
 		if ((child.props?.mdxType ?? child.type) === "button" || child.type === "button") {
 			++i;
 			const index = i;

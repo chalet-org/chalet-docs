@@ -17,7 +17,7 @@ type Props = {
 };
 
 const ReleaseBlock = ({ release, topMost }: Props) => {
-	console.log(release);
+	// console.log(release);
 	const { body, prerelease, published_at, tag_name, assets, tarball_url, zipball_url } = release;
 	const date = useMemo(() => dateFormat(new Date(published_at), "LLL d, yyyy"), [published_at]);
 	return (

@@ -38,7 +38,6 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 		const response = await fetchFromGithub(url);
 		const releases: any[] = await response.json();
 		const allowedReleases = releases.filter((release) => !release.draft);
-		console.log(allowedReleases);
 
 		const withTransformedBody = await Promise.all(
 			allowedReleases.map(
