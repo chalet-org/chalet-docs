@@ -13,15 +13,15 @@ const MarkdownPage = ({ releases, ...props }: Props) => {
 	const Header = AnchoredHeadingObject["AnchoredH1"];
 	return (
 		<DataPageLayout {...props}>
-			<Header>Changelog</Header>
+			<Header>Download</Header>
 			<hr />
-			{!!releases && releases.map((release, i) => <ReleaseBlock key={i} {...{ release, topMost: i === 0 }} />)}
+			{!!releases && releases.map((release, i) => <ReleaseBlock key={i} {...{ release, topMost: false }} />)}
 		</DataPageLayout>
 	);
 };
 
 export const getServerSideProps = withServerErrorHandler(async (ctx: GetServerSidePropsContext) => {
-	const page = await getPageWithData("changelog", { getReleases: true });
+	const page = await getPageWithData("download", { getReleases: true });
 	return {
 		props: {
 			...page,

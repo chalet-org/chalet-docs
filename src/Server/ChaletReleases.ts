@@ -25,6 +25,8 @@ export type GithubRelease = {
 	prerelease: boolean;
 	created_at: string;
 	published_at: string;
+	tarball_url: string;
+	zipball_url: string;
 	assets: GithubAsset[];
 };
 
@@ -36,6 +38,7 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 		const response = await fetchFromGithub(url);
 		const releases: any[] = await response.json();
 		const allowedReleases = releases.filter((release) => !release.draft);
+		console.log(allowedReleases);
 
 		const withTransformedBody = await Promise.all(
 			allowedReleases.map(
@@ -50,6 +53,8 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 					prerelease,
 					created_at,
 					published_at,
+					tarball_url,
+					zipball_url,
 					assets,
 				}) => {
 					let text = body;
@@ -78,12 +83,14 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 						id,
 						tag_name,
 						name,
+						body: mdx,
 						draft,
 						prerelease,
 						created_at,
 						published_at,
+						tarball_url,
+						zipball_url,
 						assets,
-						body: mdx,
 					};
 				}
 			)

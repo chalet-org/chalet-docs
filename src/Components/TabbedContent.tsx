@@ -43,34 +43,33 @@ const TabbedContent = ({ children }: Props) => {
 			return child;
 		}
 
-		if (child.props?.mdxType) {
-			if (child.props?.mdxType === "button") {
-				++i;
-				const index = i;
-				let tab = activeTab;
-				if (tab === -1 && child.props.children && typeof child.props.children === "string") {
-					if (isTabOperatingSystem(child.props.children)) {
-						tab = index;
-					}
+		console.log(child);
+		if ((child.props?.mdxType ?? child.type) === "button" || child.type === "button") {
+			++i;
+			const index = i;
+			let tab = activeTab;
+			if (tab === -1 && child.props.children && typeof child.props.children === "string") {
+				if (isTabOperatingSystem(child.props.children)) {
+					tab = index;
 				}
-
-				if (i === tab) {
-					activeTabSet = true;
-				}
-
-				return {
-					...child,
-					props: {
-						...child.props,
-						className: i === tab ? "active" : undefined,
-						onClick: (ev: any) => {
-							ev.preventDefault();
-							setActiveTab(index);
-							notifyAccordions();
-						},
-					},
-				};
 			}
+
+			if (i === tab) {
+				activeTabSet = true;
+			}
+
+			return {
+				...child,
+				props: {
+					...child.props,
+					className: i === tab ? "active" : undefined,
+					onClick: (ev: any) => {
+						ev.preventDefault();
+						setActiveTab(index);
+						notifyAccordions();
+					},
+				},
+			};
 		}
 		return child;
 	});
@@ -86,17 +85,15 @@ const TabbedContent = ({ children }: Props) => {
 			)
 				return child;
 
-			if (child.props?.mdxType) {
-				if (child.props?.mdxType === "button") {
-					activeTabSet = true;
-					return {
-						...child,
-						props: {
-							...child.props,
-							className: "active",
-						},
-					};
-				}
+			if ((child.props?.mdxType ?? child.type) === "button" || child.type === "button") {
+				activeTabSet = true;
+				return {
+					...child,
+					props: {
+						...child.props,
+						className: "active",
+					},
+				};
 			}
 		});
 	}

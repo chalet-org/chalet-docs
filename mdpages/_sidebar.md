@@ -1,7 +1,6 @@
 
-[Download](https://github.com/chalet-org/chalet/releases)
+[](/download)
 [Schema Reference](/schema/latest/chalet-json)
-[](/changelog)
 
 :break
 Documentation
