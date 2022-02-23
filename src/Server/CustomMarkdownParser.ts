@@ -142,7 +142,7 @@ const getPageAnchors = async (
 	ref?: string,
 	type?: SchemaType
 ): Promise<ResultPageAnchor[]> => {
-	if (slug === "changelog") {
+	if (slug === "download") {
 		return [];
 	} else if (!!type && (slug === "schema" || slug === "schema-dev")) {
 		return await getSchemaPageAnchors(type, ref);

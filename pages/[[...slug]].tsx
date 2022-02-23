@@ -23,7 +23,7 @@ export const getStaticPaths = async () => {
 				result = result.slice(0, -6);
 
 				if (result.length === 0) result = "/";
-			} else if (result.endsWith("/changelog")) {
+			} else if (result.endsWith("/download")) {
 				return acc;
 			}
 
