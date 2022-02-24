@@ -74,7 +74,7 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 						text = text.replace(/## (.+)/g, "##### $1");
 					}
 					const mdx: MDXRemoteSerializeResult<Record<string, unknown>> = await serialize(text, {
-						target: ["esnext"],
+						parseFrontmatter: false,
 					});
 					return {
 						url,

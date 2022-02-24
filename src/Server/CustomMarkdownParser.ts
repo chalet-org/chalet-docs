@@ -11,7 +11,7 @@ import { getChaletFile } from "./ChaletFile";
 import { getChaletReleases } from "./ChaletReleases";
 import { getChaletSchema } from "./ChaletSchema";
 import { getLinkTitleFromPageSlug } from "./MarkdownFiles";
-import { jsonNodeToMarkdown } from "./MarkdownPreprocessor";
+import { processJsonSchemaToMarkdown } from "./MarkdownPreprocessor";
 import { ResultPageAnchor, SchemaType } from "./ResultTypes";
 import { serverCache } from "./ServerCache";
 
@@ -83,13 +83,13 @@ const parseTabs = (text: string): string => {
 			const tabArray = p1.replace(/(\n{1,3}\||\|\n{1,3})/g, "|").split("|");
 			if (tabArray.length % 2 == 1) return "";
 
-			let retString: string = `<TabbedContent>`;
+			let retString: string = `<TabbedContent>\n`;
 			for (let i = 0; i < tabArray.length; i += 2) {
-				retString += `<button>${tabArray[i]}</button><div className="tab-content">
+				retString += `<button>${tabArray[i]}</button>\n<div className="tab-content">
 
 ${tabArray[i + 1]}
 
-</div>`;
+</div>\n`;
 			}
 			retString += `</TabbedContent>`;
 			return retString;
@@ -188,10 +188,14 @@ const parseSchemaReference = async (type: SchemaType, text: string, slug: string
 	return text.replace(`!!ChaletSchemaReference!!`, (match: string) => {
 		let result: string = "";
 		if (!!schema) {
-			result += jsonNodeToMarkdown("(root)", `${slug}/${ref}/${type}`, schema);
+			result += processJsonSchemaToMarkdown("(root)", `${slug}/${ref}/${type}`, schema);
 		}
 		return result;
 	});
+};
+
+const parseMdxSyntax = (text: string) => {
+	return text.replace(/\$\{(\w+)\}/g, "\\$\\{$1\\}");
 };
 
 const parseSchemaDefinition = async (
@@ -212,7 +216,12 @@ const parseSchemaDefinition = async (
 				throw new Error(`Schema definition not found: ${definition}`);
 			}
 
-			const markdown = jsonNodeToMarkdown(null, `${slug}/${ref}/${type}`, definitions[definition], definitions);
+			const markdown = processJsonSchemaToMarkdown(
+				null,
+				`${slug}/${ref}/${type}`,
+				definitions[definition],
+				definitions
+			);
 
 			result += `#### [${toPascalCase(definition)}]\n\n`;
 			result += markdown;
@@ -263,7 +272,9 @@ const parseCustomMarkdown = async (
 		} else {
 			text = await parseSchemaReference(schemaType, text, slug, ref);
 		}
+		text = text.replace(/\$\{(\w+)\}/g, "\\$\\{$1\\}");
 	}
+	console.log(text);
 	text = await parseBottomPageNavigation(text);
 
 	text = parseExplicitLineBreaks(text);
@@ -273,6 +284,7 @@ const parseCustomMarkdown = async (
 	text = parseTabs(text);
 	text = parseCodeHeaders(text);
 	text = parseDescriptionList(text);
+	text = parseMdxSyntax(text);
 
 	// Set line endings back
 	text = text.replace(/\n/g, os.EOL);

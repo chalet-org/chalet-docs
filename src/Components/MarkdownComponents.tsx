@@ -13,6 +13,7 @@ const mdxComponents: Dictionary<React.ComponentType<any>> = {
 	ul: dynamic.component("UnorderedList"),
 	ol: dynamic.component("OrderedList"),
 	inlineCode: dynamic.component("Code"),
+	code: dynamic.component("Code"),
 	blockquote: dynamic.component("BlockQuote"),
 	Accordion: dynamic.component("Accordion"),
 	IndentGroup: dynamic.component("IndentGroup"),

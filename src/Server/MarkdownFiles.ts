@@ -184,7 +184,7 @@ const getMdxPage = async (
 	const { meta, content } = await parseCustomMarkdown(fileContent, slug, ref, schemaType, definition);
 
 	const mdx: MDXRemoteSerializeResult<Record<string, unknown>> = await serialize(content, {
-		target: ["esnext"],
+		parseFrontmatter: false,
 	});
 
 	const navData = await getNavBar(slug, content, schemaType, ref);

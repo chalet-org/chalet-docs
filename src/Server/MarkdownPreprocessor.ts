@@ -6,7 +6,7 @@ import { toPascalCase } from "Utility/TextCaseConversions";
 
 const spacer = `\n\n<Spacer />\n\n`;
 
-const jsonNodeToMarkdown = (
+const processJsonSchemaToMarkdown = (
 	name: Optional<string>,
 	slug: string,
 	schema: Optional<JSONSchema7>,
@@ -72,7 +72,7 @@ const jsonNodeToMarkdown = (
 			(!def["type"] || (!!def["type"] && def["type"] !== "object" && def["type"] !== undefined));
 
 		if (isNotDefinition) {
-			result += jsonNodeToMarkdown(null, slug, definitions![definitionName] as JSONSchema7, definitions);
+			result += processJsonSchemaToMarkdown(null, slug, definitions![definitionName] as JSONSchema7, definitions);
 		} else {
 			const displayName = toPascalCase(definitionName);
 			result += `* type: [${displayName}](/${slug}/${definitionName})\n`;
@@ -120,29 +120,35 @@ ${JSON.stringify(defaultValue, undefined, 3)}
 	if (!!anyOf) {
 		result +=
 			`\n<IndentGroup label="any of">\n\n` +
-			anyOf.map((value, i) => jsonNodeToMarkdown(null, slug, value as JSONSchema7, definitions, true)).join("") +
+			anyOf
+				.map((value, i) => processJsonSchemaToMarkdown(null, slug, value as JSONSchema7, definitions, true))
+				.join("") +
 			`\n</IndentGroup>\n\n`;
 	}
 	if (!!oneOf) {
 		result +=
 			`\n<IndentGroup label="one of">\n\n` +
-			oneOf.map((value, i) => jsonNodeToMarkdown(null, slug, value as JSONSchema7, definitions, true)).join("") +
+			oneOf
+				.map((value, i) => processJsonSchemaToMarkdown(null, slug, value as JSONSchema7, definitions, true))
+				.join("") +
 			`\n</IndentGroup>\n\n`;
 	}
 	if (!!allOf) {
 		result +=
 			`\n<IndentGroup label="all of">\n\n` +
-			allOf.map((value, i) => jsonNodeToMarkdown(null, slug, value as JSONSchema7, definitions, true)).join("") +
+			allOf
+				.map((value, i) => processJsonSchemaToMarkdown(null, slug, value as JSONSchema7, definitions, true))
+				.join("") +
 			`\n</IndentGroup>\n\n`;
 	}
 	if (!!items) {
 		result += `\n<IndentGroup label="items">\n\n`;
 		if (Array.isArray(items)) {
 			result += items
-				.map((value, i) => jsonNodeToMarkdown(null, slug, value as JSONSchema7, definitions, true))
+				.map((value, i) => processJsonSchemaToMarkdown(null, slug, value as JSONSchema7, definitions, true))
 				.join(spacer);
 		} else if (typeof items === "object") {
-			result += jsonNodeToMarkdown(null, slug, items as JSONSchema7, definitions);
+			result += processJsonSchemaToMarkdown(null, slug, items as JSONSchema7, definitions);
 		}
 		result += `\n</IndentGroup>\n\n`;
 	}
@@ -153,11 +159,11 @@ ${JSON.stringify(defaultValue, undefined, 3)}
 		let nextNode: JSONSchema7 | undefined = schema;
 		while (nextNode !== undefined) {
 			if (!!nextNode.then && typeof nextNode.then === "object") {
-				result += jsonNodeToMarkdown(null, slug, nextNode.then as JSONSchema7, definitions);
+				result += processJsonSchemaToMarkdown(null, slug, nextNode.then as JSONSchema7, definitions);
 			}
 			if (!!nextNode.else && typeof nextNode.else === "object") {
 				if (!!nextNode.else.$ref) {
-					result += jsonNodeToMarkdown(null, slug, nextNode.else as JSONSchema7, definitions);
+					result += processJsonSchemaToMarkdown(null, slug, nextNode.else as JSONSchema7, definitions);
 					nextNode = undefined;
 				} else {
 					nextNode = nextNode.else;
@@ -181,7 +187,9 @@ ${JSON.stringify(defaultValue, undefined, 3)}
 		result +=
 			`\n<IndentGroup label="properties">\n\n` +
 			Object.entries(properties)
-				.map(([key, value], i) => jsonNodeToMarkdown(key, slug, value as JSONSchema7, definitions, indented))
+				.map(([key, value], i) =>
+					processJsonSchemaToMarkdown(key, slug, value as JSONSchema7, definitions, indented)
+				)
 				.join(spacer) +
 			`\n</IndentGroup>\n\n`;
 	}
@@ -195,7 +203,7 @@ ${JSON.stringify(defaultValue, undefined, 3)}
 				.map(([key, value], i) => {
 					// let res: string = `##### [pattern${i + 1}]\n\n\`${key}\`\n\n`;
 					let res: string = `\`\`${key.replace(/\\b/g, "\\\\b")}\`\`\n\n`;
-					res += jsonNodeToMarkdown(null, slug, value as JSONSchema7, definitions, indented);
+					res += processJsonSchemaToMarkdown(null, slug, value as JSONSchema7, definitions, indented);
 					return res;
 				})
 				.join(spacer) +
@@ -205,4 +213,4 @@ ${JSON.stringify(defaultValue, undefined, 3)}
 	return result;
 };
 
-export { jsonNodeToMarkdown };
+export { processJsonSchemaToMarkdown };
