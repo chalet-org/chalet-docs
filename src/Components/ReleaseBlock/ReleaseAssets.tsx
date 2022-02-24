@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 import { Optional } from "@andrew-r-king/react-kitchen";
 
-import { Icon } from "Components";
+import { hasMinWidth, Icon } from "Components";
 import { GithubAsset, GithubRelease } from "Server/ChaletReleases";
 import { useUiStore } from "Stores";
 import { getThemeVariable } from "Theme";
@@ -59,7 +59,6 @@ const iconSize: string = "3.25rem";
 type Props = Pick<GithubRelease, "assets" | "zipball_url" | "tarball_url">;
 
 const ReleaseAssets = ({ assets, zipball_url, tarball_url }: Props) => {
-	console.log(assets);
 	const { theme } = useUiStore();
 	const info = useMemo(
 		() =>
@@ -217,6 +216,16 @@ const DownloadRow = styled.div`
 	justify-content: space-between;
 	width: 100%;
 	padding: 0.5rem 0;
+
+	> i {
+		display: none;
+	}
+
+	@media ${hasMinWidth(0)} {
+		> i {
+			display: block;
+		}
+	}
 `;
 
 const DownloadSection = styled.div`
@@ -225,7 +234,10 @@ const DownloadSection = styled.div`
 	align-items: left;
 	justify-content: left;
 	width: 100%;
-	padding-left: 1.5rem;
+
+	@media ${hasMinWidth(0)} {
+		padding-left: 1.5rem;
+	}
 `;
 
 type AssetButtonProps = {
