@@ -99,7 +99,11 @@ const Main = styled.main<NavBarProps>`
 		/**/
 	}
 	@media ${hasMinWidth(1)} {
-		/**/
+		&.nav-open {
+			> div {
+				width: auto;
+			}
+		}
 	}
 	@media ${hasMinWidth(2)} {
 		&.nav-open {

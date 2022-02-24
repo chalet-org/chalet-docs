@@ -15,7 +15,7 @@ const MarkdownPage = ({ releases, ...props }: Props) => {
 		<DataPageLayout {...props}>
 			<Header>Download</Header>
 			<hr />
-			{!!releases && releases.map((release, i) => <ReleaseBlock key={i} {...{ release, topMost: false }} />)}
+			{!!releases && releases.map((release, i) => <ReleaseBlock key={i} {...{ release }} />)}
 		</DataPageLayout>
 	);
 };

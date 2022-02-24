@@ -100,7 +100,7 @@ const Styles = styled.div`
 		display: block;
 		position: relative;
 		margin: 0 2rem;
-		border-bottom: 0.125rem solid ${getThemeVariable("border")};
+		border-bottom: 0.125rem solid ${getThemeVariable("header")};
 
 		> input {
 			display: block;

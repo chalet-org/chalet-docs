@@ -1,10 +1,12 @@
 import React from "react";
-import { AiOutlineSearch } from "react-icons/ai";
+import { AiOutlineSearch, AiFillApple, AiFillWindows } from "react-icons/ai";
+import { BiCodeCurly } from "react-icons/bi";
 import { IoCloseOutline } from "react-icons/io5";
+import { VscTerminalLinux } from "react-icons/vsc";
 import { WiMoonAltWaxingGibbous5, WiMoonAltWaningGibbous1 } from "react-icons/wi";
 import styled from "styled-components";
 
-type IconID = "day" | "night" | "search" | "close";
+type IconID = "day" | "night" | "search" | "close" | "apple" | "windows" | "linux" | "source";
 
 type IconStyleProps = {
 	size?: string;
@@ -26,6 +28,14 @@ const getIcon = (id: IconID) => {
 			return <AiOutlineSearch />;
 		case "close":
 			return <IoCloseOutline />;
+		case "apple":
+			return <AiFillApple />;
+		case "windows":
+			return <AiFillWindows />;
+		case "linux":
+			return <VscTerminalLinux />;
+		case "source":
+			return <BiCodeCurly />;
 	}
 	return null;
 };

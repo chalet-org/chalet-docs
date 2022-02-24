@@ -1,15 +1,15 @@
 import { ThemeType } from "./ThemeType";
 
 export const lightTheme: ThemeType = {
-	bodyBackground: "#f3f7f8",
-	codeBackground: "#f3f7f8",
-	background: "#ffffff",
-	mainText: "#585565",
-	header: "#c7ccdc",
-	border: "#e3eaef",
-	primaryColor: "#71072d",
-	secondaryColor: "#f49309",
-	tertiaryColor: "#f6bb5e",
+	bodyBackground: "#e4e9eb",
+	codeBackground: "#e9edef",
+	background: "#f3f7f8",
+	mainText: "#344555",
+	header: "#b3bbca",
+	border: "#d4d6d9",
+	primaryColor: "#f49309",
+	secondaryColor: "#f6bb5e",
+	tertiaryColor: "#71072d",
 	//
 	codeBlack: "#eef5f5",
 	codeWhite: "#000000",

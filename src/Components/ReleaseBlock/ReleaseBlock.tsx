@@ -7,16 +7,14 @@ import { Link } from "Components";
 import type { GithubRelease } from "Server/ChaletReleases";
 import { getThemeVariable } from "Theme";
 
-import { Accordion } from "../Accordion";
 import { mdxComponents } from "../MarkdownComponents";
 import { ReleaseAssets } from "./ReleaseAssets";
 
 type Props = {
 	release: GithubRelease;
-	topMost: boolean;
 };
 
-const ReleaseBlock = ({ release, topMost }: Props) => {
+const ReleaseBlock = ({ release }: Props) => {
 	// console.log(release);
 	const { body, prerelease, published_at, tag_name, assets, tarball_url, zipball_url } = release;
 	const date = useMemo(() => dateFormat(new Date(published_at), "LLL d, yyyy"), [published_at]);
@@ -44,13 +42,7 @@ const ReleaseBlock = ({ release, topMost }: Props) => {
 						assets,
 					}}
 				/>
-				{topMost ? (
-					<MDXRemote {...body} components={mdxComponents} />
-				) : (
-					<Accordion label="Details">
-						<MDXRemote {...body} components={mdxComponents} />
-					</Accordion>
-				)}
+				<MDXRemote {...body} components={mdxComponents} />
 			</Styles>
 		</>
 	);
@@ -106,7 +98,7 @@ const ReleaseType = styled.div`
 	border-radius: 0.5rem;
 
 	&.pre {
-		color: ${getThemeVariable("primaryColor")};
-		border-color: ${getThemeVariable("primaryColor")};
+		color: ${getThemeVariable("codeRed")};
+		border-color: ${getThemeVariable("codeRed")};
 	}
 `;
