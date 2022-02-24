@@ -272,9 +272,7 @@ const parseCustomMarkdown = async (
 		} else {
 			text = await parseSchemaReference(schemaType, text, slug, ref);
 		}
-		text = text.replace(/\$\{(\w+)\}/g, "\\$\\{$1\\}");
 	}
-	console.log(text);
 	text = await parseBottomPageNavigation(text);
 
 	text = parseExplicitLineBreaks(text);
