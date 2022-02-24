@@ -211,20 +211,14 @@ const DownloadContainer = styled.div`
 
 const DownloadRow = styled.div`
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	align-items: center;
 	justify-content: space-between;
 	width: 100%;
 	padding: 0.5rem 0;
 
-	> i {
-		display: none;
-	}
-
 	@media ${hasMinWidth(0)} {
-		> i {
-			display: block;
-		}
+		flex-direction: row;
 	}
 `;
 
@@ -234,8 +228,10 @@ const DownloadSection = styled.div`
 	align-items: left;
 	justify-content: left;
 	width: 100%;
+	padding-top: 1.5rem;
 
 	@media ${hasMinWidth(0)} {
+		padding-top: 0;
 		padding-left: 1.5rem;
 	}
 `;
