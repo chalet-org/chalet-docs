@@ -1,10 +1,14 @@
+import { MDXRemoteProps } from "next-mdx-remote";
+
 import { Dictionary } from "@andrew-r-king/react-kitchen";
 
 import { dynamic } from "Utility";
 
 import { AnchoredHeadingObject, HeadingObject } from "./Heading";
 
-const mdxComponents: Dictionary<React.ComponentType<any>> = {
+type MDXComponents = Dictionary<React.ComponentType<any>>;
+
+const mdxComponents: MDXComponents = {
 	...AnchoredHeadingObject,
 	...HeadingObject,
 	a: dynamic.component("Link"),
@@ -24,7 +28,7 @@ const mdxComponents: Dictionary<React.ComponentType<any>> = {
 	CodeHeader: dynamic.component("CodeHeader"),
 };
 
-const schemaComponents: Dictionary<React.ComponentType<any>> = {
+const schemaComponents: MDXComponents = {
 	...mdxComponents,
 	ul: dynamic.component("UnorderedListSchema"),
 };

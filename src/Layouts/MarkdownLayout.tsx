@@ -101,7 +101,9 @@ const MarkdownLayout = ({ meta, mdx, children, isSchema, ...navProps }: Props) =
 			<Page title={meta?.title ?? "Untitled"}>
 				<Styles ref={pageLayout}>
 					{children}
-					{!!mdx && <MDXRemote {...mdx} components={!!isSchema ? schemaComponents : mdxComponents} />}
+					{!!mdx && (
+						<MDXRemote {...mdx} components={(!!isSchema ? schemaComponents : mdxComponents) as any} />
+					)}
 				</Styles>
 			</Page>
 		</>

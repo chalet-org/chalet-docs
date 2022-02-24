@@ -42,7 +42,7 @@ const ReleaseBlock = ({ release }: Props) => {
 						assets,
 					}}
 				/>
-				<MDXRemote {...body} components={mdxComponents} />
+				<MDXRemote {...body} components={mdxComponents as any} />
 			</Styles>
 		</>
 	);
