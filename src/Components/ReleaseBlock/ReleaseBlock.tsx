@@ -3,7 +3,7 @@ import { MDXRemote } from "next-mdx-remote";
 import React, { useMemo } from "react";
 import styled from "styled-components";
 
-import { Link } from "Components";
+import { AnchoredHeadingObject, Link } from "Components";
 import type { GithubRelease } from "Server/ChaletReleases";
 import { getThemeVariable } from "Theme";
 
@@ -15,36 +15,32 @@ type Props = {
 };
 
 const ReleaseBlock = ({ release }: Props) => {
-	// console.log(release);
 	const { body, prerelease, published_at, tag_name, assets, tarball_url, zipball_url } = release;
 	const date = useMemo(() => dateFormat(new Date(published_at), "LLL d, yyyy"), [published_at]);
+	const Header = AnchoredHeadingObject["AnchoredH2"];
+
 	return (
-		<>
-			<TopBlock>
-				<Link href="https://github.com/chalet-org/chalet/releases">Github Releases</Link>
-			</TopBlock>
-			<Styles>
-				<InfoBlock>
-					<div className="group">
-						<h2>{tag_name}</h2>
-						{!!prerelease ? (
-							<ReleaseType className="pre">Pre-Release</ReleaseType>
-						) : (
-							<ReleaseType>Release</ReleaseType>
-						)}
-					</div>
-					<ReleaseDate>{date}</ReleaseDate>
-				</InfoBlock>
-				<ReleaseAssets
-					{...{
-						tarball_url,
-						zipball_url,
-						assets,
-					}}
-				/>
-				<MDXRemote {...body} components={mdxComponents as any} />
-			</Styles>
-		</>
+		<Styles>
+			<InfoBlock>
+				<div className="group">
+					<Header>{tag_name}</Header>
+					{!!prerelease ? (
+						<ReleaseType className="pre">Pre-Release</ReleaseType>
+					) : (
+						<ReleaseType>Release</ReleaseType>
+					)}
+				</div>
+				<ReleaseDate>{date}</ReleaseDate>
+			</InfoBlock>
+			<ReleaseAssets
+				{...{
+					tarball_url,
+					zipball_url,
+					assets,
+				}}
+			/>
+			<MDXRemote {...body} components={mdxComponents as any} />
+		</Styles>
 	);
 };
 
@@ -61,11 +57,6 @@ const Styles = styled.div`
 	> h1 {
 		line-height: 1.25;
 	}
-`;
-
-const TopBlock = styled.div`
-	display: block;
-	padding-bottom: 2rem;
 `;
 
 const InfoBlock = styled.div`

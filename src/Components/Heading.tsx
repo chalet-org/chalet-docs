@@ -5,7 +5,6 @@ import styled from "styled-components";
 import { Dictionary } from "@andrew-r-king/react-kitchen";
 
 import { Link } from "Components";
-import { useUiStore } from "Stores";
 import { getThemeVariable } from "Theme";
 import { toKebabCase } from "Utility/TextCaseConversions";
 

@@ -41,7 +41,7 @@ export type ResultNavigation = {
 	schemaLinks: HyperLink[];
 };
 
-export type ResultChangelog = {
+export type ResultReleases = {
 	releases?: ResultGithubReleases;
 };
 
@@ -53,7 +53,7 @@ export type ResultMDXPage = ResultNavigation & {
 	mdx: ResultMDX;
 };
 
-export type ResultDataPage = ResultNavigation & ResultChangelog;
+export type ResultDataPage = ResultNavigation & ResultReleases;
 
 export type ResultSearchResults = {
 	url: string;

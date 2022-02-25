@@ -1,5 +1,5 @@
 
-[](/download)
+[Download](/download)
 [Schema Reference](/schema/latest/chalet-json)
 
 :break

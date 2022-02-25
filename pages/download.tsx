@@ -1,23 +1,15 @@
 import { GetServerSidePropsContext } from "next";
 import React from "react";
 
-import { AnchoredHeadingObject, ReleaseBlock } from "Components";
-import { DataPageLayout, DataPageProps } from "Layouts/DataPageLayout";
+import { DownloadPageLayout } from "Layouts";
 import { getPageWithData } from "Server/MarkdownFiles";
 import { ResultDataPage } from "Server/ResultTypes";
 import { withServerErrorHandler } from "Utility";
 
-type Props = DataPageProps & ResultDataPage;
+type Props = ResultDataPage;
 
-const MarkdownPage = ({ releases, ...props }: Props) => {
-	const Header = AnchoredHeadingObject["AnchoredH1"];
-	return (
-		<DataPageLayout {...props}>
-			<Header>Download</Header>
-			<hr />
-			{!!releases && releases.map((release, i) => <ReleaseBlock key={i} {...{ release }} />)}
-		</DataPageLayout>
-	);
+const MarkdownPage = ({ ...props }: Props) => {
+	return <DownloadPageLayout {...props} title="Download" />;
 };
 
 export const getServerSideProps = withServerErrorHandler(async (ctx: GetServerSidePropsContext) => {

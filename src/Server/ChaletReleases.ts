@@ -87,8 +87,8 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 						prerelease,
 						created_at,
 						published_at,
-						tarball_url,
-						zipball_url,
+						tarball_url: `https://github.com/chalet-org/chalet/archive/refs/tags/${tag_name}.tar.gz`,
+						zipball_url: `https://github.com/chalet-org/chalet/archive/refs/tags/${tag_name}.zip`,
 						assets,
 					};
 				}

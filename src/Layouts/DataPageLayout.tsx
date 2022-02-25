@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import { Page, SideNavigation } from "Components";
+import { useRouteChangeScroll } from "Hooks";
 import { ResultNavigation } from "Server/ResultTypes";
 
 export type DataPageProps = React.PropsWithChildren<
@@ -11,6 +12,8 @@ export type DataPageProps = React.PropsWithChildren<
 >;
 
 const DataPageLayout = ({ children, title, ...navProps }: DataPageProps) => {
+	useRouteChangeScroll();
+
 	return (
 		<>
 			{!!navProps.sidebarLinks && <SideNavigation {...navProps} />}

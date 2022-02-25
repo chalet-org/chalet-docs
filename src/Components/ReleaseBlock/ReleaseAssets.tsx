@@ -60,6 +60,7 @@ type Props = Pick<GithubRelease, "assets" | "zipball_url" | "tarball_url">;
 
 const ReleaseAssets = ({ assets, zipball_url, tarball_url }: Props) => {
 	const { theme } = useUiStore();
+	const router = useRouter();
 	const info = useMemo(
 		() =>
 			assets.map((asset) => getPlatformArchFromFilename(asset)).filter((data) => data !== null) as DeducedInfo[],
@@ -85,7 +86,7 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url }: Props) => {
 										key={i}
 										onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
 										onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
-										onClick={(ev) => window.open(browser_download_url)}
+										onClick={(ev) => router.push(browser_download_url)}
 										color={theme.codeBlue}
 									>
 										<div className="main">
@@ -114,7 +115,7 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url }: Props) => {
 										key={i}
 										onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
 										onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
-										onClick={(ev) => window.open(browser_download_url)}
+										onClick={(ev) => router.push(browser_download_url)}
 										color={theme.codeGray}
 									>
 										<div className="main">
@@ -146,7 +147,7 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url }: Props) => {
 										key={i}
 										onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
 										onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
-										onClick={(ev) => window.open(browser_download_url)}
+										onClick={(ev) => router.push(browser_download_url)}
 										color={theme.codeGreen}
 									>
 										<div className="main">
@@ -165,18 +166,20 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url }: Props) => {
 					<Icon id="source" size={iconSize} color={theme.primaryColor} />
 					<DownloadSection>
 						<AssetButton
+							className="source"
 							onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
 							onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
-							onClick={(ev) => window.open(zipball_url)}
+							onClick={(ev) => router.push(zipball_url)}
 							color={theme.primaryColor}
 						>
 							<div className="main">Source code (.zip)</div>
 							<div></div>
 						</AssetButton>
 						<AssetButton
+							className="source"
 							onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
 							onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
-							onClick={(ev) => window.open(tarball_url)}
+							onClick={(ev) => router.push(tarball_url)}
 							color={theme.primaryColor}
 						>
 							<div className="main">Source code (.tar.gz)</div>
@@ -246,7 +249,7 @@ const AssetButton = styled.button<AssetButtonProps>`
 	justify-content: space-between;
 	width: 100%;
 	min-height: 4rem;
-	padding: 1rem;
+	padding: 0.5rem 0.75rem;
 	margin-top: -0.125rem;
 	color: ${getThemeVariable("mainText")};
 	background-color: transparent;
@@ -272,6 +275,20 @@ const AssetButton = styled.button<AssetButtonProps>`
 			font-weight: 400;
 			font-size: 0.75rem;
 		}
+	}
+
+	&.source {
+		min-height: 2rem;
+	}
+
+	&:first-of-type {
+		border-radius: 0.25rem 0.25rem 0 0;
+	}
+	&:last-of-type {
+		border-radius: 0 0 0.25rem 0.25rem;
+	}
+	&:only-of-type {
+		border-radius: 0.25rem;
 	}
 
 	&:hover,

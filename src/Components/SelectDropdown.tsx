@@ -94,6 +94,7 @@ const Styles = styled.div`
 			font-size: 1rem;
 			color: #222;
 			background-color: #fff;
+			border: none;
 		}
 	}
 
