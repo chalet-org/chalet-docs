@@ -1,6 +1,6 @@
 import { css } from "styled-components";
 
-import { Dictionary } from "@andrew-r-king/react-kitchen";
+import { Dictionary } from "@rewrking/react-kitchen";
 
 const globalFonts: Dictionary<string> = {
 	header: '"Poppins", sans-serif',

@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useCallback } from "react";
 
-import { Optional } from "@andrew-r-king/react-kitchen";
+import { Optional } from "@rewrking/react-kitchen";
 
 import { useUiStore } from "Stores";
 import { getQueryVariable } from "Utility/GetQueryVariable";

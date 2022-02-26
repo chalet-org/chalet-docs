@@ -1,6 +1,6 @@
 import { reverse } from "lodash";
 
-import { Optional } from "@andrew-r-king/react-kitchen";
+import { Optional } from "@rewrking/react-kitchen";
 
 const getChaletBranches = async (): Promise<string[]> => {
 	/*const url = `https://api.github.com/repos/chalet-org/chalet/branches`;

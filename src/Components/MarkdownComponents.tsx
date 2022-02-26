@@ -1,6 +1,6 @@
 import { MDXRemoteProps } from "next-mdx-remote";
 
-import { Dictionary } from "@andrew-r-king/react-kitchen";
+import { Dictionary } from "@rewrking/react-kitchen";
 
 import { dynamic } from "Utility";
 

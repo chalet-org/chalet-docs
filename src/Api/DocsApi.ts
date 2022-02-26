@@ -1,4 +1,4 @@
-import { BaseApi } from "@andrew-r-king/react-kitchen";
+import { BaseApi } from "@rewrking/react-kitchen";
 
 import { ResultMDXPage, ResultSearchResults, SchemaType } from "Server/ResultTypes";
 

@@ -4,7 +4,7 @@ import "prismjs/components";
 import React from "react";
 import styled, { css } from "styled-components";
 
-import { Dictionary } from "@andrew-r-king/react-kitchen";
+import { Dictionary } from "@rewrking/react-kitchen";
 
 import { globalFonts } from "Components";
 import { getThemeVariable } from "Theme";

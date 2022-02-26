@@ -1,4 +1,4 @@
-import { createStore, makeRootStoreProvider } from "@andrew-r-king/react-kitchen";
+import { createStore, makeRootStoreProvider } from "@rewrking/react-kitchen";
 
 import { UiState } from "./UiState";
 

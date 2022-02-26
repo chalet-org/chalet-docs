@@ -1,6 +1,6 @@
 import { JSONSchema7, JSONSchema7Definition } from "json-schema";
 
-import { Dictionary, Optional } from "@andrew-r-king/react-kitchen";
+import { Dictionary, Optional } from "@rewrking/react-kitchen";
 
 import { toPascalCase } from "Utility/TextCaseConversions";
 

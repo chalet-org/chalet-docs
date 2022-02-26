@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 
-import { Dictionary } from "@andrew-r-king/react-kitchen";
+import { Dictionary } from "@rewrking/react-kitchen";
 
 import { Link } from "Components";
 import { getThemeVariable } from "Theme";

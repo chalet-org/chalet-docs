@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import React, { useMemo } from "react";
 import styled from "styled-components";
 
-import { Optional } from "@andrew-r-king/react-kitchen";
+import { Optional } from "@rewrking/react-kitchen";
 
 import { hasMinWidth, Icon } from "Components";
 import { GithubAsset, GithubRelease } from "Server/ChaletReleases";

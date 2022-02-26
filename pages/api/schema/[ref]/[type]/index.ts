@@ -1,6 +1,6 @@
 import flatten from "lodash/flatten";
 
-import { Optional } from "@andrew-r-king/react-kitchen";
+import { Optional } from "@rewrking/react-kitchen";
 
 import { getChaletBranches } from "Server/ChaletBranches";
 import { getChaletSchema } from "Server/ChaletSchema";
