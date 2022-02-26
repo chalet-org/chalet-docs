@@ -69,49 +69,46 @@ const getLinkTitleFromPageSlug = (href: string): Promise<HyperLink> => {
 
 type SidebarResult = HyperLink | string;
 
-const getSidebarLinks = async (): Promise<SidebarResult[]> => {
-	const sidebarFile: string = nodePath.join(cwd, mdpages, "_sidebar.md");
-	if (!fs.existsSync(sidebarFile)) {
-		throw new Error("Critical: _sidebar.md was not found");
-	}
-	const fileContent: string = fs.readFileSync(sidebarFile, "utf8");
+const getSidebarLinks = (): Promise<SidebarResult[]> => {
+	return serverCache.get(`sidebar-links`, async () => {
+		const sidebarFile: string = nodePath.join(cwd, mdpages, "_sidebar.md");
+		if (!fs.existsSync(sidebarFile)) {
+			throw new Error("Critical: _sidebar.md was not found");
+		}
+		const fileContent: string = fs.readFileSync(sidebarFile, "utf8");
 
-	const split = fileContent.split(os.EOL);
-	let result: (HyperLink | string)[] = [];
-	for (const line of split) {
-		if (line.startsWith("<!--")) continue;
+		const split = fileContent.split(os.EOL);
+		let result: (HyperLink | string)[] = [];
+		for (const line of split) {
+			if (line.startsWith("<!--")) continue;
 
-		if (line.startsWith(":")) {
-			const id = line.substring(1);
-			if (id === "break") {
-				result.push(id);
-			}
-		} else if (line.startsWith("[")) {
-			let matches = line.match(/^\[(.*)\]\((.+?)\)$/);
-			if (!!matches) {
-				if (matches.length === 3) {
-					if (matches[1].length === 0) {
-						const link = await getLinkTitleFromPageSlug(matches[2]);
-						result.push(link);
-					} else {
-						result.push({
-							href: matches[2],
-							label: matches[1],
-						});
+			if (line.startsWith(":")) {
+				const id = line.substring(1);
+				if (id === "break") {
+					result.push(id);
+				}
+			} else if (line.startsWith("[")) {
+				let matches = line.match(/^\[(.*)\]\((.+?)\)$/);
+				if (!!matches) {
+					if (matches.length === 3) {
+						if (matches[1].length === 0) {
+							const link = await getLinkTitleFromPageSlug(matches[2]);
+							result.push(link);
+						} else {
+							result.push({
+								href: matches[2],
+								label: matches[1],
+							});
+						}
 					}
 				}
+			} else if (line.length > 0) {
+				result.push(line);
 			}
-		} else if (line.length > 0) {
-			result.push(line);
 		}
-	}
-	return result;
+		return result;
+	});
 };
-
-let otherData: Optional<{
-	branches?: string[];
-	tags?: string[];
-}> = null;
 
 const getNavBar = async (
 	slug: string,
@@ -119,32 +116,20 @@ const getNavBar = async (
 	schemaType?: SchemaType,
 	ref?: string
 ): Promise<ResultNavigation> => {
-	if (!otherData || !otherData.branches || !otherData.tags) {
-		otherData = {};
-
-		otherData.branches = await getChaletBranches();
-		otherData.tags = await getChaletTags();
-	}
-
-	const sidebarLinks = await getSidebarLinks();
-	const anchors = await getPageAnchors(content, slug, ref, schemaType);
-
+	const [branches, tags, sidebarLinks, anchors] = await Promise.all([
+		getChaletBranches(),
+		getChaletTags(),
+		getSidebarLinks(),
+		getPageAnchors(content, slug, ref, schemaType),
+	]);
 	let schemaLinks: HyperLink[] = [];
 	if (!!schemaType) {
-		const branchLinks = [...otherData.branches].map((value) => {
-			return {
-				label: value,
-				href: `/schema-dev/${value}/${schemaType}`,
-			};
-		});
-
-		const tagLinks = [...otherData.tags].map((value) => {
+		schemaLinks = [...branches, ...tags].map((value) => {
 			return {
 				label: value,
 				href: `/schema/${value}/${schemaType}`,
 			};
 		});
-		schemaLinks = [...branchLinks, ...tagLinks];
 	}
 	return {
 		anchors,
@@ -170,11 +155,7 @@ const getMdxPage = async (
 		throw new Error(`Invalid schema type requested: ${schemaType}`);
 	}
 
-	const { filename, isNotFoundPage } = getFirstExistingPath(
-		slug === "schema-dev" ? "schema" : slug,
-		allowedExtensions,
-		internal
-	);
+	const { filename, isNotFoundPage } = getFirstExistingPath(slug, allowedExtensions, internal);
 	if (filename.length === 0) {
 		throw new Error(`File not found: ${filename}`);
 	}

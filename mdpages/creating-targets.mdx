@@ -188,7 +188,7 @@ With abstracts out of the way, we can start thinking about how to structure our 
 }
 ```
 
-Some of these properties will be covered here, while others will be explained are detailed in the schema documentation, [here](http://localhost:3000/schema-dev/latest/chalet-json/executable-source-target).
+Some of these properties will be covered here, while others will be explained are detailed in the schema documentation, [here](http://localhost:3000/schema/latest/chalet-json/executable-source-target).
 
 The main required properties for source targets are `language`, `kind`, `settings` and `location` / `files`.
 
@@ -789,7 +789,7 @@ In properties that take paths to directories or files, path substitution is supp
 * `~/`, `${home}` - resolves to the home directory of the machine. On Windows, this is `C:\Users\(Name)`
 * `${env:(Name)}` - resolves an environment variable by name. For example: `${env:MY_LIBRARY_PATH}`
 * `${buildDir}` - resolves to the main build directory for the current configuration & architecture
-* `${externalDir}` - resolves to the root path for external dependencies. See [externalDependencies](/schema-dev/latest/chalet-json?id=external-dependencies)
+* `${externalDir}` - resolves to the root path for external dependencies. See [externalDependencies](/schema/latest/chalet-json?id=external-dependencies)
 * `${externalBuildDir}` - resolves to the build path for an external dependency. For instance, if a CMake project is located at `${externalDir}/foo`, it will build to `${buildDir}/${externalDir}/foo`, so it's easier to write `${externalBuildDir}/foo`
 * `${cwd}` - resolves the current working directory (this shouldn't be needed, but it's here just in case)
 

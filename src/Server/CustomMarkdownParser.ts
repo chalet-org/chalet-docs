@@ -144,7 +144,7 @@ const getPageAnchors = async (
 ): Promise<ResultPageAnchor[]> => {
 	if (slug === "download") {
 		return [];
-	} else if (!!type && (slug === "schema" || slug === "schema-dev")) {
+	} else if (!!type && slug === "schema") {
 		return await getSchemaPageAnchors(type, ref);
 	} else {
 		let anchors: ResultPageAnchor[] = [];

@@ -84,7 +84,7 @@ const getPagesCache = (): Promise<PageCache[]> => {
 		const schemaPageContentRaw = fs.readFileSync(path.join(process.cwd(), schemaPage, "index.mdx"), "utf8");
 		const { data: schemaPageMeta, content: schemaPageContent } = matter(schemaPageContentRaw);
 
-		const schemaPaths = [...tagPaths.map((p) => `/schema/${p}`), ...branchPaths.map((p) => `/schema-dev/${p}`)];
+		const schemaPaths = [...tagPaths, ...branchPaths].map((p) => `/schema/${p}`);
 		const schemaPages = schemaPaths.map((url) => {
 			const id = url.replace(/[\/\\]/g, "_");
 
