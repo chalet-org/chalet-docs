@@ -283,7 +283,6 @@ const parseCustomMarkdown = async (
 	text = parseCodeHeaders(text);
 	text = parseDescriptionList(text);
 
-	console.log(slug);
 	if (slug === "schema") {
 		text = parseMdxSyntax(text);
 	}
