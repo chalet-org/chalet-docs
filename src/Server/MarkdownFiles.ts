@@ -122,15 +122,12 @@ const getNavBar = async (
 		getSidebarLinks(),
 		getPageAnchors(content, slug, ref, schemaType),
 	]);
-	let schemaLinks: HyperLink[] = [];
-	if (!!schemaType) {
-		schemaLinks = [...branches, ...tags].map((value) => {
-			return {
-				label: value,
-				href: `/schema/${value}/${schemaType}`,
-			};
-		});
-	}
+	const schemaLinks: HyperLink[] = [...branches, ...tags].map((value) => {
+		return {
+			label: value,
+			href: `/schema/${value}/${schemaType}`,
+		};
+	});
 	return {
 		anchors,
 		sidebarLinks,

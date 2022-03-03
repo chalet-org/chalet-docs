@@ -3,7 +3,7 @@ export * from "./BlockQuote";
 export * from "./Button";
 export * from "./Code";
 export * from "./GlobalStyles";
-export * from "./GitNavigation";
+export * from "./PageControls";
 export * from "./Heading";
 export * from "./Icon";
 export * from "./ImportantNote";

@@ -55,6 +55,10 @@ export type ResultMDXPage = ResultNavigation & {
 
 export type ResultDataPage = ResultNavigation & ResultReleases;
 
+export type ResultDownloadPage = ResultDataPage & {
+	downloadLinks: HyperLink[];
+};
+
 export type ResultSearchResults = {
 	url: string;
 	title: string;

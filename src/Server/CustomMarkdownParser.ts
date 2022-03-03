@@ -282,7 +282,11 @@ const parseCustomMarkdown = async (
 	text = parseTabs(text);
 	text = parseCodeHeaders(text);
 	text = parseDescriptionList(text);
-	text = parseMdxSyntax(text);
+
+	console.log(slug);
+	if (slug === "schema") {
+		text = parseMdxSyntax(text);
+	}
 
 	// Set line endings back
 	text = text.replace(/\n/g, os.EOL);

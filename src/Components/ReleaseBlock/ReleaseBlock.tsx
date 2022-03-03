@@ -3,7 +3,7 @@ import { MDXRemote } from "next-mdx-remote";
 import React, { useMemo } from "react";
 import styled from "styled-components";
 
-import { AnchoredHeadingObject, Link } from "Components";
+import { HeadingObject } from "Components";
 import type { GithubRelease } from "Server/ChaletReleases";
 import { getThemeVariable } from "Theme";
 
@@ -17,7 +17,7 @@ type Props = {
 const ReleaseBlock = ({ release }: Props) => {
 	const { body, prerelease, published_at, tag_name, assets, tarball_url, zipball_url } = release;
 	const date = useMemo(() => dateFormat(new Date(published_at), "LLL d, yyyy"), [published_at]);
-	const Header = AnchoredHeadingObject["AnchoredH2"];
+	const Header = HeadingObject["h2"];
 
 	return (
 		<Styles>
@@ -47,12 +47,12 @@ const ReleaseBlock = ({ release }: Props) => {
 export { ReleaseBlock };
 
 const Styles = styled.div`
-	background-color: ${getThemeVariable("codeBackground")};
+	/* background-color: ${getThemeVariable("codeBackground")}; */
 	font-size: 1rem;
 	width: 100%;
-	padding: 1rem 2rem;
+	padding: 1rem;
 	/* margin-bottom: 1.75rem; */
-	border: 0.0625rem solid ${getThemeVariable("border")};
+	/* border: 0.0625rem solid ${getThemeVariable("border")}; */
 
 	> h1 {
 		line-height: 1.25;
@@ -65,6 +65,7 @@ const InfoBlock = styled.div`
 	align-items: top;
 	justify-content: space-between;
 	width: 100%;
+	padding-top: 1.5rem;
 	padding-bottom: 1.5rem;
 
 	> .group {

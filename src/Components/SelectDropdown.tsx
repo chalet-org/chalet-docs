@@ -18,7 +18,7 @@ const SelectDropdown = ({ name, label, options, onChange, defaultValue }: Props)
 		if (!!defaultValue) setValue(defaultValue);
 	}, [defaultValue]);
 	return (
-		<Styles className="schema-select">
+		<Styles className="select-dropdown">
 			{!!label && <label htmlFor={name}>{label}: </label>}
 			<select
 				name={name}

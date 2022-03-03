@@ -13,6 +13,10 @@ Documentation
 [](/the-settings-file)
 [](/further-reading)
 
+:break
+IDE Integration
+[](/ides/visual-studio-code)
+
 
 <!-- Other -->
 <!-- [](/contact) -->

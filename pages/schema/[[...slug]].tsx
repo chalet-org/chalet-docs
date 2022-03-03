@@ -1,7 +1,7 @@
 import { GetServerSidePropsContext } from "next";
 import React from "react";
 
-import { GitNavigation } from "Components";
+import { SchemaPageControls } from "Components";
 import { MarkdownLayout, Props } from "Layouts/MarkdownLayout";
 import { getLatestTag } from "Server/ChaletTags";
 import { markdownFiles } from "Server/MarkdownFiles";
@@ -12,7 +12,7 @@ const MarkdownPage = (props: Props) => {
 	const { schemaLinks, anchors } = props;
 	return (
 		<MarkdownLayout {...props}>
-			{!!schemaLinks && <GitNavigation schemaLinks={schemaLinks} anchors={anchors} />}
+			{!!schemaLinks && <SchemaPageControls schemaLinks={schemaLinks} anchors={anchors} />}
 		</MarkdownLayout>
 	);
 };

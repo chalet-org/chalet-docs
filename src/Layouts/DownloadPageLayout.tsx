@@ -1,18 +1,27 @@
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useMemo } from "react";
 import styled from "styled-components";
 
-import { AnchoredHeadingObject, Link, Page, ReleaseBlock, SideNavigation } from "Components";
+import { AnchoredHeadingObject, DownloadPageControls, Link, Page, ReleaseBlock, SideNavigation } from "Components";
 import { useRouteChangeScroll } from "Hooks";
-import { ResultNavigation, ResultReleases } from "Server/ResultTypes";
+import { ResultDownloadPage, ResultReleases } from "Server/ResultTypes";
 
-type Props = ResultNavigation &
+type Props = ResultDownloadPage &
 	ResultReleases & {
 		title?: string;
 	};
 
-const DownloadPageLayout = ({ title, releases, ...navProps }: Props) => {
+const DownloadPageLayout = ({ title, releases, downloadLinks, ...navProps }: Props) => {
+	const router = useRouter();
+	const ref: string = useMemo(() => {
+		const path = router.asPath.split("?")[0];
+		const split = path.split("/");
+		return split?.[2] ?? "";
+	}, [router.asPath]);
+
 	const Header = AnchoredHeadingObject["AnchoredH1"];
 	const latestRelease = !!releases && releases.length > 0 ? releases[0] : null;
+	const release = useMemo(() => releases?.filter((release) => release.tag_name === ref) ?? [], [releases]);
 
 	useRouteChangeScroll();
 
@@ -27,7 +36,11 @@ const DownloadPageLayout = ({ title, releases, ...navProps }: Props) => {
 						{!!latestRelease && <p>Latest version: {latestRelease.tag_name.replace("v", "")}</p>}
 						<Link href="https://github.com/chalet-org/chalet/releases">Github Releases</Link>
 					</TopBlock>
-					{!!releases && releases.map((release, i) => <ReleaseBlock key={i} {...{ release }} />)}
+					<DownloadPageControls downloadLinks={downloadLinks}>
+						{release.map((rel, i) => (
+							<ReleaseBlock key={i} release={rel} />
+						))}
+					</DownloadPageControls>
 				</Styles>
 			</Page>
 		</>
