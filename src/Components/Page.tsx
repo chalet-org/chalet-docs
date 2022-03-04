@@ -70,12 +70,13 @@ type NavBarProps = {
 const Main = styled.main<NavBarProps>`
 	display: block;
 	position: absolute;
-	min-height: 100vh;
+	height: 100vh;
 	top: 0;
 	right: 0;
 	bottom: auto;
 	left: 0;
 	transition: left 0.125s linear;
+	overflow: auto;
 
 	background-color: ${getThemeVariable("background")};
 	color: ${getThemeVariable("mainText")};
@@ -100,6 +101,8 @@ const Main = styled.main<NavBarProps>`
 	}
 	@media ${hasMinWidth(1)} {
 		&.nav-open {
+			overflow: auto;
+
 			> div {
 				width: auto;
 			}
@@ -107,6 +110,8 @@ const Main = styled.main<NavBarProps>`
 	}
 	@media ${hasMinWidth(2)} {
 		&.nav-open {
+			overflow: auto;
+
 			> div {
 				width: auto;
 			}

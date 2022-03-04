@@ -82,6 +82,9 @@ const BaseStyle = createGlobalStyle`
         font-size: 14px;
         background-color: ${getThemeVariable("background")};
 		scroll-behavior: smooth;
+		width: 100%;
+		position: fixed;
+		overflow: hidden;
     }
 
     body {
