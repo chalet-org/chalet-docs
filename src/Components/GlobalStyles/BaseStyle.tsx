@@ -16,6 +16,7 @@ const cssReset = css`
 		position: relative;
 		outline: 0.125rem solid ${getThemeVariable("primaryColor")};
 		z-index: 10000;
+		border-radius: 0.25rem;
 	}
 
 	blockquote,
