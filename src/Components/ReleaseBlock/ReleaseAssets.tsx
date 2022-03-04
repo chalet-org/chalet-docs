@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { Optional } from "@rewrking/react-kitchen";
 
 import { hasMinWidth, Icon } from "Components";
+import { OperatingSystem, useOperatingSystem } from "Hooks";
 import { GithubAsset, GithubRelease } from "Server/ChaletReleases";
 import { useUiStore } from "Stores";
 import { getThemeVariable } from "Theme";
@@ -42,10 +43,12 @@ const getPlatformArchFromFilename = (asset: GithubAsset): Optional<DeducedInfo> 
 	};
 };
 
-const getNiceArchName = (arch: string) => {
+const getNiceArchName = (arch: string, platform: string) => {
 	switch (arch) {
 		case "x86_64":
-			return "64-bit";
+			return platform === "apple" ? "Intel 64-bit" : "64-bit";
+		case "arm64":
+			return platform === "apple" ? "M1 ARM64" : "ARM64";
 		case "arm":
 			return "ARM";
 		case "universal":
@@ -59,7 +62,7 @@ const iconSize: string = "3.25rem";
 type Props = Pick<GithubRelease, "assets" | "zipball_url" | "tarball_url">;
 
 const ReleaseAssets = ({ assets, zipball_url, tarball_url }: Props) => {
-	const { theme } = useUiStore();
+	const { theme, showAllPlatforms } = useUiStore();
 	const router = useRouter();
 	const info = useMemo(
 		() =>
@@ -67,20 +70,24 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url }: Props) => {
 		[assets]
 	);
 	const windows = info.filter((data) => data.platform === "windows");
-	const macos = info.filter((data) => data.platform === "apple");
+	const macos = info
+		.filter((data) => data.platform === "apple")
+		.sort((dataA) => 1)
+		.sort((dataA) => (dataA.arch === "universal" ? -1 : 1));
 	const linux = info.filter((data) => data.platform === "linux").sort((dataA) => (dataA.arch === "x86_64" ? -1 : 1));
+	const [platform] = useOperatingSystem();
 
 	return (
 		<Styles>
 			<DownloadContainer>
-				{windows.length > 0 && (
+				{(platform == OperatingSystem.Windows || showAllPlatforms) && windows.length > 0 && (
 					<DownloadRow>
 						<Icon id="windows" size={iconSize} color={theme.codeBlue} />
 						<DownloadSection>
 							{windows.map((data, i) => {
 								const { platform, filetype, abi } = data;
 								const { browser_download_url, name } = data.asset;
-								const arch = getNiceArchName(data.arch);
+								const arch = getNiceArchName(data.arch, platform);
 								return (
 									<AssetButton
 										key={i}
@@ -102,14 +109,14 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url }: Props) => {
 						</DownloadSection>
 					</DownloadRow>
 				)}
-				{macos.length > 0 && (
+				{(platform == OperatingSystem.MacOS || showAllPlatforms) && macos.length > 0 && (
 					<DownloadRow>
 						<Icon id="apple" size={iconSize} color={theme.codeGray} />
 						<DownloadSection>
 							{macos.map((data, i) => {
 								const { platform, filetype, abi } = data;
 								const { browser_download_url, name } = data.asset;
-								const arch = getNiceArchName(data.arch);
+								const arch = getNiceArchName(data.arch, platform);
 								return (
 									<AssetButton
 										key={i}
@@ -119,14 +126,15 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url }: Props) => {
 										color={theme.codeGray}
 									>
 										<div className="main">
-											MacOS archive (.zip)
+											MacOS{" "}
+											{data.arch === "universal" ? "archive (Recommended)" : "archive (.zip)"}
 											<br />
 											<span>{name}</span>
 										</div>
 										<div>
 											{arch}
 											<br />
-											<span>{data.arch === "universal" ? "ARM64 / x86-64" : ""}</span>
+											<span>{data.arch === "universal" ? "M1 ARM64 / Intel 64-bit" : ""}</span>
 										</div>
 									</AssetButton>
 								);
@@ -134,14 +142,14 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url }: Props) => {
 						</DownloadSection>
 					</DownloadRow>
 				)}
-				{linux.length > 0 && (
+				{(platform == OperatingSystem.Linux || showAllPlatforms) && linux.length > 0 && (
 					<DownloadRow>
 						<Icon id="linux" size={iconSize} color={theme.codeGreen} />
 						<DownloadSection>
 							{linux.map((data, i) => {
 								const { platform, filetype, abi } = data;
 								const { browser_download_url, name } = data.asset;
-								const arch = getNiceArchName(data.arch);
+								const arch = getNiceArchName(data.arch, platform);
 								return (
 									<AssetButton
 										key={i}
@@ -151,7 +159,7 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url }: Props) => {
 										color={theme.codeGreen}
 									>
 										<div className="main">
-											Linux Archive (.zip)
+											Linux archive (.zip)
 											<br />
 											<span>{name}</span>
 										</div>
@@ -196,7 +204,7 @@ export { ReleaseAssets };
 
 const Styles = styled.div`
 	display: block;
-	padding-bottom: 2rem;
+	padding-bottom: 0.5rem;
 `;
 
 const DownloadContainer = styled.div`

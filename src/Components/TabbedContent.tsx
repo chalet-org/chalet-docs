@@ -1,29 +1,15 @@
-import platformJs from "platform";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
+import { useOperatingSystem } from "Hooks";
 import { useUiStore } from "Stores";
 import { getThemeVariable } from "Theme";
 
 type Props = React.PropsWithChildren<{}>;
 
-const getOperatingSystem = (platform?: typeof platformJs.os) => {
-	if (platform && platform.family) {
-		if (platform.family.startsWith("Windows")) {
-			return ["windows", "msvc"];
-		} else if (platform.family.startsWith("OS X") || platform.family.startsWith("iOS")) {
-			return ["macos", "llvm"];
-		} else {
-			return ["linux", "gcc"];
-		}
-	}
-
-	return ["linux", "gcc"];
-};
-
 const isTabOperatingSystem = (name: string): boolean => {
 	const lowerName = name.toLowerCase();
-	const [platform, commonCompiler] = getOperatingSystem(platformJs.os);
+	const [platform, commonCompiler] = useOperatingSystem();
 	return lowerName === platform || lowerName === commonCompiler;
 };
 

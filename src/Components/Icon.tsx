@@ -2,15 +2,16 @@ import React from "react";
 import { AiOutlineSearch, AiFillApple, AiFillWindows } from "react-icons/ai";
 import { BiCodeCurly } from "react-icons/bi";
 import { IoCloseOutline } from "react-icons/io5";
-import { VscTerminalLinux } from "react-icons/vsc";
+import { VscGithub, VscTerminalLinux } from "react-icons/vsc";
 import { WiMoonAltWaxingGibbous5, WiMoonAltWaningGibbous1 } from "react-icons/wi";
 import styled from "styled-components";
 
-type IconID = "day" | "night" | "search" | "close" | "apple" | "windows" | "linux" | "source";
+type IconID = "day" | "night" | "search" | "close" | "apple" | "windows" | "linux" | "source" | "github";
 
 type IconStyleProps = {
 	size?: string;
 	color?: string;
+	hoverColor?: string;
 };
 
 type Props = IconStyleProps & {
@@ -36,6 +37,8 @@ const getIcon = (id: IconID) => {
 			return <VscTerminalLinux />;
 		case "source":
 			return <BiCodeCurly />;
+		case "github":
+			return <VscGithub />;
 	}
 	return null;
 };
@@ -61,6 +64,16 @@ const Styles = styled.i<IconStyleProps>`
 		> circle {
 			color: ${({ color }) => color ?? "inherit"};
 			fill: ${({ color }) => color ?? "inherit"};
+		}
+	}
+
+	&:hover {
+		> svg {
+			> path,
+			> circle {
+				color: ${({ hoverColor }) => hoverColor ?? "inherit"};
+				fill: ${({ hoverColor }) => hoverColor ?? "inherit"};
+			}
 		}
 	}
 `;

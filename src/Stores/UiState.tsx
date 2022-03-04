@@ -18,6 +18,8 @@ class UiState extends BaseState {
 	accordionNotifier: boolean = false;
 	heightNotifier: boolean = false;
 
+	showAllPlatforms: boolean = false;
+
 	@Action
 	initialize = () => {
 		let themeId: Theme;
@@ -79,6 +81,13 @@ class UiState extends BaseState {
 	notifyHeightChange = () => {
 		this.heightNotifier = !this.heightNotifier;
 	};
+
+	@Action
+	setShowAllPlatforms = (inValue: boolean) => {
+		this.showAllPlatforms = inValue;
+	};
+
+	toggleShowAllPlatforms = () => this.setShowAllPlatforms(!this.showAllPlatforms);
 }
 
 export { UiState };

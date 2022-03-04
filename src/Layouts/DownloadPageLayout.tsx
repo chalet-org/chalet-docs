@@ -20,7 +20,7 @@ const DownloadPageLayout = ({ title, releases, downloadLinks, ...navProps }: Pro
 	}, [router.asPath]);
 
 	const Header = AnchoredHeadingObject["AnchoredH1"];
-	const latestRelease = !!releases && releases.length > 0 ? releases[0] : null;
+	// const latestRelease = !!releases && releases.length > 0 ? releases[0] : null;
 	const release = useMemo(() => releases?.filter((release) => release.tag_name === ref) ?? [], [releases]);
 
 	useRouteChangeScroll();
@@ -32,15 +32,15 @@ const DownloadPageLayout = ({ title, releases, downloadLinks, ...navProps }: Pro
 				<Styles>
 					<Header>Download</Header>
 					<hr />
-					<TopBlock>
-						{!!latestRelease && <p>Latest version: {latestRelease.tag_name.replace("v", "")}</p>}
-						<Link href="https://github.com/chalet-org/chalet/releases">Github Releases</Link>
-					</TopBlock>
 					<DownloadPageControls downloadLinks={downloadLinks}>
 						{release.map((rel, i) => (
 							<ReleaseBlock key={i} release={rel} />
 						))}
 					</DownloadPageControls>
+					<BottomBlock>
+						{/* {!!latestRelease && <p>Latest version: {latestRelease.tag_name.replace("v", "")}</p>} */}
+						<Link href="https://github.com/chalet-org/chalet/releases">Github Releases</Link>
+					</BottomBlock>
 				</Styles>
 			</Page>
 		</>
@@ -55,7 +55,7 @@ const Styles = styled.div`
 	padding-bottom: 8rem;
 `;
 
-const TopBlock = styled.div`
+const BottomBlock = styled.div`
 	display: block;
 	padding-bottom: 2rem;
 `;

@@ -1,6 +1,7 @@
 export * from "./Accordion";
 export * from "./BlockQuote";
 export * from "./Button";
+export * from "./Checkbox";
 export * from "./Code";
 export * from "./GlobalStyles";
 export * from "./PageControls";

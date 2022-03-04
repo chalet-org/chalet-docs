@@ -1,7 +1,9 @@
 import { useRouter } from "next/router";
 import React from "react";
 
+import { Checkbox } from "Components/Checkbox";
 import { ResultDownloadPage } from "Server/ResultTypes";
+import { useUiStore } from "Stores";
 
 import { SelectDropdown } from "../SelectDropdown";
 import { PageControlStyles } from "./PageControlStyles";
@@ -10,6 +12,7 @@ type Props = React.PropsWithChildren<Pick<ResultDownloadPage, "downloadLinks">>;
 
 const DownloadPageControls = ({ children, downloadLinks }: Props) => {
 	const router = useRouter();
+	const { showAllPlatforms, toggleShowAllPlatforms } = useUiStore();
 	const path = router.asPath.split("?")[0];
 	const split = path.split("/");
 	const kind: string = split?.[1] ?? "";
@@ -31,7 +34,12 @@ const DownloadPageControls = ({ children, downloadLinks }: Props) => {
 						})
 					}
 				/>
-				<div className="spacer" />
+				<Checkbox
+					name="show-all-platforms"
+					label="Show All Platforms"
+					checked={showAllPlatforms}
+					onClick={toggleShowAllPlatforms}
+				/>
 				<div className="spacer" />
 			</div>
 			{children}

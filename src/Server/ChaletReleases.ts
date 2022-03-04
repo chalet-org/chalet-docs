@@ -1,6 +1,8 @@
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
 
+import { Optional } from "@rewrking/react-kitchen";
+
 import { fetchFromGithub } from "./FetchFromGithub";
 import { ResultMDX } from "./ResultTypes";
 import { serverCache } from "./ServerCache";
@@ -20,7 +22,7 @@ export type GithubRelease = {
 	id: number;
 	tag_name: string;
 	name: string;
-	body: ResultMDX;
+	body: Optional<ResultMDX>;
 	draft: boolean;
 	prerelease: boolean;
 	created_at: string;
@@ -52,11 +54,10 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 					prerelease,
 					created_at,
 					published_at,
-					tarball_url,
-					zipball_url,
 					assets,
 				}) => {
 					let text = body;
+					let mdx: Optional<ResultMDX> = null;
 					if (!!text) {
 						text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
 						text = text.replace(/\[commit\]\((.+?)\)/g, (result: string, p1: string) => {
@@ -72,10 +73,10 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 							return `([#${issue}](${p1}))`;
 						});
 						text = text.replace(/## (.+)/g, "##### $1");
+						mdx = await serialize(text, {
+							parseFrontmatter: false,
+						});
 					}
-					const mdx: MDXRemoteSerializeResult<Record<string, unknown>> = await serialize(text, {
-						parseFrontmatter: false,
-					});
 					return {
 						url,
 						html_url,
