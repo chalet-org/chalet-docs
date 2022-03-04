@@ -96,6 +96,10 @@ const Main = styled.main<NavBarProps>`
 		}
 	}
 
+	&:focus-visible {
+		position: absolute;
+	}
+
 	@media ${hasMinWidth(0)} {
 		/**/
 	}

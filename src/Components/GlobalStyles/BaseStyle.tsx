@@ -13,7 +13,9 @@ const cssReset = css`
 	}
 
 	*:focus-visible {
+		position: relative;
 		outline: 0.125rem solid ${getThemeVariable("primaryColor")};
+		z-index: 10000;
 	}
 
 	blockquote,
@@ -86,8 +88,7 @@ const BaseStyle = createGlobalStyle`
         background-color: ${getThemeVariable("background")};
 		scroll-behavior: smooth;
 		width: 100%;
-		position: fixed;
-		overflow: hidden;
+		position: relative;
     }
 
     body {

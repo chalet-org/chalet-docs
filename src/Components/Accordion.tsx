@@ -44,16 +44,21 @@ const Accordion = ({ label, children }: Props) => {
 
 export { Accordion };
 
-const AccordionHandle = styled.div`
+const AccordionHandle = styled.button`
 	display: block;
 	position: relative;
 	font-weight: 400;
+	color: ${getThemeVariable("mainText")};
 	font-size: 1.125rem;
 	line-height: 2;
+	text-align: left;
 	cursor: pointer;
 	user-select: none;
+	width: 100%;
+	padding: 0;
 	padding-left: 1.5rem;
 	padding-bottom: 0.25rem;
+	background-color: transparent;
 	border-top: 0.0675rem dashed transparent;
 	border-bottom: 0.0625rem dashed transparent;
 	transition: border-top-color 0.125s linear, border-bottom-color 0.125s linear;

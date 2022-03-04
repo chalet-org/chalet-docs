@@ -137,6 +137,10 @@ const SidebarToggle = styled.button`
 		}
 	}
 
+	&:focus-visible {
+		position: fixed;
+	}
+
 	@media ${hasMinWidth(0)} {
 		/**/
 	}
