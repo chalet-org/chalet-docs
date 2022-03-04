@@ -11,6 +11,9 @@ export const darkTheme: ThemeType = {
 	secondaryColor: "#f6bb5e",
 	tertiaryColor: "#71072d",
 	//
+	fadeBackgroundA: "rgba(0,0,0,0.0)",
+	fadeBackgroundB: "rgba(0,0,0,1.0)",
+	//
 	codeBlack: "#0a0a0a",
 	codeWhite: "#dedede",
 	codeGray: "#5d5d7b",

@@ -29,6 +29,7 @@ export { ThemeToggle };
 const Styles = styled.button`
 	background: none;
 	cursor: pointer;
+	padding: 0;
 
 	> i > svg {
 		> path,

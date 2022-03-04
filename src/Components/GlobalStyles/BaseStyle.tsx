@@ -10,7 +10,10 @@ const cssReset = css`
 	::after,
 	::before {
 		box-sizing: border-box;
-		outline: 0;
+	}
+
+	*:focus-visible {
+		outline: 0.125rem solid ${getThemeVariable("primaryColor")};
 	}
 
 	blockquote,

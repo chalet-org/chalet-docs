@@ -16,6 +16,9 @@ export type ThemeType = {
 	secondaryColor: string;
 	tertiaryColor: string;
 	//
+	fadeBackgroundA: string;
+	fadeBackgroundB: string;
+	//
 	codeBlack: string;
 	codeWhite: string;
 	codeGray: string;

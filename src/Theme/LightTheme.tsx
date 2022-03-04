@@ -11,6 +11,9 @@ export const lightTheme: ThemeType = {
 	secondaryColor: "#f6bb5e",
 	tertiaryColor: "#71072d",
 	//
+	fadeBackgroundA: "rgba(255,255,255,0.0)",
+	fadeBackgroundB: "rgba(255,255,255,1.0)",
+	//
 	codeBlack: "#eef5f5",
 	codeWhite: "#000000",
 	codeGray: "#9d9daf",
