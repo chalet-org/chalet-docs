@@ -168,7 +168,7 @@ const getPageAnchors = async (
 
 const parseReadme = async (inText: string): Promise<string> => {
 	const readme = await serverCache.get(`chalet-readme`, async () => {
-		let { changelog: text } = await getChaletFile("README.md");
+		let { text } = await getChaletFile("README.md");
 		if (!!text) {
 			text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
 

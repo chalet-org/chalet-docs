@@ -3,7 +3,8 @@ import React from "react";
 
 import { SchemaPageLayout } from "Layouts";
 import { Props } from "Layouts/MarkdownLayout";
-import { getLatestTag } from "Server/ChaletTags";
+import { getChaletBranches } from "Server/ChaletBranches";
+import { getChaletTags, getLatestTag } from "Server/ChaletTags";
 import { markdownFiles } from "Server/MarkdownFiles";
 import { SchemaType } from "Server/ResultTypes";
 import { withServerErrorHandler } from "Utility";
@@ -48,6 +49,10 @@ export const getServerSideProps = withServerErrorHandler(async (ctx: GetServerSi
 		};
 	}
 
+	const [branches, tags] = await Promise.all([getChaletTags(), getChaletBranches()]);
+	if (!tags.includes(ref) && !branches.includes(ref)) {
+		throw new Error(`Schema for ref not found: ${ref}`);
+	}
 	const page = await markdownFiles.getMdxPage("schema", {
 		ref,
 		definition,

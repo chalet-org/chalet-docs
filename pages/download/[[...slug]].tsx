@@ -2,6 +2,7 @@ import { GetServerSidePropsContext } from "next";
 import React from "react";
 
 import { DownloadPageLayout } from "Layouts";
+import { getChaletBranches } from "Server/ChaletBranches";
 import { getChaletTags, getLatestTag } from "Server/ChaletTags";
 import { getPageWithData } from "Server/MarkdownFiles";
 import { HyperLink, ResultDownloadPage } from "Server/ResultTypes";
@@ -9,7 +10,8 @@ import { withServerErrorHandler } from "Utility";
 
 type Props = ResultDownloadPage;
 
-const DownlaodPage = ({ ...props }: Props) => {
+const DownloadPage = (props: Props) => {
+	console.log(props);
 	return <DownloadPageLayout {...props} title="Download" />;
 };
 
@@ -38,7 +40,10 @@ export const getServerSideProps = withServerErrorHandler(async (ctx: GetServerSi
 		};
 	}
 
-	const tags = await getChaletTags();
+	const [branches, tags] = await Promise.all([getChaletTags(), getChaletBranches()]);
+	if (!tags.includes(ref) && !branches.includes(ref)) {
+		throw new Error(`Download for ref not found: ${ref}`);
+	}
 	const downloadLinks: HyperLink[] = tags.map((value) => {
 		return {
 			label: value,
@@ -55,4 +60,4 @@ export const getServerSideProps = withServerErrorHandler(async (ctx: GetServerSi
 	};
 });
 
-export default DownlaodPage;
+export default DownloadPage;

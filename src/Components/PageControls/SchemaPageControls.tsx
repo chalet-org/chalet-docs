@@ -92,7 +92,7 @@ const SchemaPageControls = ({ schemaLinks, anchors }: Props) => {
 				/>
 			</div>
 			<div className="group">
-				<Link href={isTag ? `/changelog?id=${ref.replace(/\./g, "")}` : `/changelog`}>Changelog</Link>
+				<Link href={isTag ? `/download/${ref}` : `/download`}>Download</Link>
 				<div className="separator" />
 				<Link href={`/api/schema/${ref}/${jsonFile}`}>View as JSON</Link>
 			</div>
