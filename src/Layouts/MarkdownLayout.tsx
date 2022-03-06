@@ -63,6 +63,12 @@ const goToFocusedLink = (pageLayout: Optional<HTMLDivElement>, setFocusedId: (in
 				}
 			}
 		}
+
+		if (scrollY > pageLayoutHeight * 0.5) {
+			const lastAnchor = anchors[anchors.length - 1].id;
+			setFocusedId(lastAnchor);
+			return;
+		}
 	}
 
 	setFocusedId("");
