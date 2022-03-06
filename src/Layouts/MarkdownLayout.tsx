@@ -9,7 +9,6 @@ import { mdxComponents, schemaComponents } from "Components/MarkdownComponents";
 import { useRouteChangeScroll, useWheelScroll } from "Hooks";
 import { ResultMDXPage } from "Server/ResultTypes";
 import { useUiStore } from "Stores";
-import { getWindowHeight } from "Utility";
 
 export type Props = React.PropsWithChildren<
 	ResultMDXPage & {
@@ -29,71 +28,70 @@ const MarkdownLayout = ({ meta, mdx, children, isSchema, ...navProps }: Props) =
 
 	useRouteChangeScroll();
 
-	const setFocusedLink = useCallback(
-		debounce(() => {
-			if (pageLayout.current === null) return;
-			if (router.asPath.startsWith("/schema")) {
-				// disable tracking on schema pages
-				setFocusedId("");
-				return;
-			}
+	const setFocusedLink = useCallback(() => {
+		if (pageLayout.current === null) return;
+		if (router.asPath.startsWith("/schema")) {
+			// disable tracking on schema pages
+			setFocusedId("");
+			return;
+		}
 
-			const windowHeight = getWindowHeight();
-			const pageLayoutHeight = pageLayout.current.getBoundingClientRect().height ?? 0;
-			const scrollPercent = (window.scrollY + windowHeight * 0.5) / pageLayoutHeight;
+		const mainEl = document.getElementById("main");
+		const scrollY = mainEl?.scrollTop ?? 0;
+		const windowHeight = mainEl?.getBoundingClientRect().height ?? 0;
+		const pageLayoutHeight = pageLayout.current.getBoundingClientRect().height ?? 0;
+		const scrollPercent = (scrollY + windowHeight * 0.25) / pageLayoutHeight;
 
-			const links = pageLayout.current.getElementsByTagName("a");
+		const links = pageLayout.current.getElementsByTagName("a");
 
-			if (links.length > 1) {
-				if (!!links) {
-					const firstLinkTop = links[0].offsetTop;
+		if (links.length > 1) {
+			if (!!links) {
+				const firstLinkTop = links[0].offsetTop;
 
-					let arr: AnchorData[] = [];
-					for (let i = 0; i < links.length; ++i) {
-						const dataId = links[i].getAttribute("data-id");
-						if (!!dataId) {
-							arr.push({
-								el: links[i],
-								id: dataId,
-							});
-						}
+				let arr: AnchorData[] = [];
+				for (let i = 0; i < links.length; ++i) {
+					const dataId = links[i].getAttribute("data-id");
+					if (!!dataId) {
+						arr.push({
+							el: links[i],
+							id: dataId,
+						});
 					}
+				}
 
-					for (let i = 0; i < arr.length; ++i) {
-						const { id } = arr[i];
-						const { el } = arr[i + 1] ?? {};
+				for (let i = 0; i < arr.length; ++i) {
+					const { id } = arr[i];
+					const { el } = arr[i + 1] ?? {};
 
-						const nextTop = el?.offsetTop ?? pageLayoutHeight;
+					const nextTop = el?.offsetTop ?? pageLayoutHeight;
 
-						if (window.scrollY > firstLinkTop) {
-							if (nextTop - windowHeight * scrollPercent >= window.scrollY) {
-								setFocusedId(id);
-								return;
-							}
+					if (scrollY > firstLinkTop) {
+						if (nextTop - windowHeight * scrollPercent >= scrollY) {
+							setFocusedId(id);
+							return;
 						}
 					}
 				}
 			}
+		}
 
-			setFocusedId("");
-		}, 10),
-		[pageLayout.current]
-	);
+		setFocusedId("");
+	}, [pageLayout.current]);
 
 	useWheelScroll(
-		(ev) => {
+		debounce((ev) => {
 			if (navOpen) {
 				setFocusedLink();
 			}
-		},
-		[navOpen, focusedId, heightNotifier]
+		}, 15),
+		[navOpen, heightNotifier, setFocusedLink]
 	);
 
 	useEffect(() => {
 		if (navOpen) {
 			setFocusedLink();
 		}
-	}, [navOpen, heightNotifier]);
+	}, [navOpen, focusedId, heightNotifier, setFocusedLink]);
 
 	return (
 		<>

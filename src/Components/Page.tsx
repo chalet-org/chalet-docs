@@ -42,6 +42,7 @@ const Page = ({ title, children }: Props) => {
 				/>
 			</Head>
 			<Main
+				id="main"
 				{...{ navWidth }}
 				className={`${navOpen ? "nav-open" : ""} ${animating ? "animating" : ""}`}
 				onAnimationEnd={() => setAnimating(false)}

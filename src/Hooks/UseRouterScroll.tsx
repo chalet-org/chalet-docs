@@ -14,14 +14,18 @@ const useRouteChangeScroll = () => {
 	const handler = useCallback(() => {
 		if (window.location.search.length === 0) {
 			setFocusedId("");
-			setTimeout(() => window.scrollTo(0, 0), 25);
+			setTimeout(() => {
+				const mainEl = document.getElementById("main");
+				mainEl?.scrollTo(0, 0);
+			}, 25);
 		} else {
 			const id = getQueryVariable("id");
 			if (id.length > 0) {
 				const el: Optional<HTMLElement> = document.getElementById(id);
 				const top: Optional<number> = el?.offsetTop ?? null;
-				if (!!top) {
-					window.scrollTo({ behavior: "smooth", top });
+				const mainEl = document.getElementById("main");
+				if (!!top && !!mainEl) {
+					mainEl.scrollTo({ behavior: "smooth", top });
 				}
 			}
 		}
