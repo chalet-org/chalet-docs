@@ -42,7 +42,7 @@ const DownloadPageControls = ({ children, downloadLinks }: Props) => {
 					onClick={toggleShowAllPlatforms}
 				/>
 				<div className="spacer" />
-				<Link href="https://github.com/chalet-org/chalet/releases">All Releases</Link>
+				<Link href="//github.com/chalet-org/chalet/releases">All Releases</Link>
 			</div>
 			{children}
 		</PageControlStyles>

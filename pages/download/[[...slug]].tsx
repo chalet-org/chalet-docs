@@ -9,7 +9,7 @@ import { withServerErrorHandler } from "Utility";
 
 type Props = ResultDownloadPage;
 
-const MarkdownPage = ({ ...props }: Props) => {
+const DownlaodPage = ({ ...props }: Props) => {
 	return <DownloadPageLayout {...props} title="Download" />;
 };
 
@@ -55,4 +55,4 @@ export const getServerSideProps = withServerErrorHandler(async (ctx: GetServerSi
 	};
 });
 
-export default MarkdownPage;
+export default DownlaodPage;

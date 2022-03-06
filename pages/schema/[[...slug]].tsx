@@ -8,7 +8,7 @@ import { markdownFiles } from "Server/MarkdownFiles";
 import { SchemaType } from "Server/ResultTypes";
 import { withServerErrorHandler } from "Utility";
 
-const MarkdownPage = (props: Props) => {
+const SchemaExplorePage = (props: Props) => {
 	return <SchemaPageLayout {...props} />;
 };
 
@@ -61,4 +61,4 @@ export const getServerSideProps = withServerErrorHandler(async (ctx: GetServerSi
 	};
 });
 
-export default MarkdownPage;
+export default SchemaExplorePage;

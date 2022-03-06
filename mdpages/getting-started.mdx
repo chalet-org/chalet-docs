@@ -8,7 +8,7 @@ title: Getting Started
 
 At the moment, Chalet must be installed manually in non-Windows operating systems, but in the future will be available through Homebrew/package managers. Before working with Chalet, it should be [accessible from PATH](//en.wikipedia.org/wiki/PATH_(variable)).
 
-* [Releases](https://github.com/chalet-org/chalet/releases)
+* [Releases](//github.com/chalet-org/chalet/releases)
 
 \\
 
@@ -21,9 +21,9 @@ Before building, you should have a C/C++ compiler chosen for your platform.
 <!-- tabs:start -->
 |Windows|
 **Install one of the following:**
-* [Visual Studio](https://visualstudio.microsoft.com/) (Recommended)
-* [LLVM](https://llvm.org/)
-* [MinGW-w64 via MSYS2](https://www.msys2.org/)
+* [Visual Studio](//visualstudio.microsoft.com/) (Recommended)
+* [LLVM](//llvm.org/)
+* [MinGW-w64 via MSYS2](//www.msys2.org/)
 * A standalone MinGW build (TDM-GCC, MinGW-w64 from Sourceforge, etc.) 
 
 \
@@ -32,7 +32,7 @@ Before building, you should have a C/C++ compiler chosen for your platform.
 * In the VS Installer, Install C++ related components, including the x64/x86 build tools (and optionally ARM, ARM64).
 * Also install the bundled CMake tools if you wish
 
-> Note: Chalet uses [vswhere](https://github.com/microsoft/vswhere) to get the rest of the Visual Studio environment, so no Path environment variable changes are needed
+> Note: Chalet uses [vswhere](//github.com/microsoft/vswhere) to get the rest of the Visual Studio environment, so no Path environment variable changes are needed
 
 \
 
@@ -70,8 +70,8 @@ pacman -S mingw-w64-x86_64-toolchain mingw-w64-i686-toolchain
 
 |MacOS|
 **Install one of the following:**
-* [Xcode](https://developer.apple.com/xcode/) (Recommended)
-* [Command Line Tools for Xcode](https://developer.apple.com/download/all/?q=%22command%20line%20tools%22)
+* [Xcode](//developer.apple.com/xcode/) (Recommended)
+* [Command Line Tools for Xcode](//developer.apple.com/download/all/?q=%22command%20line%20tools%22)
 
 \
 
@@ -103,7 +103,7 @@ In both, running `which clang` should show `/usr/bin/clang` (although it actuall
 **Install one of the following**
 * Your distribution's compiler (typically GCC)
 * Any GCC cross compiler (ie. arm-linux-gnueabihf)
-* [LLVM](https://llvm.org/)
+* [LLVM](//llvm.org/)
 
 Every Linux build is going to be a little different, so this is more like a set of guidelines.
 
@@ -147,9 +147,9 @@ x86_64-w64-mingw32-gcc
 
 <!-- accordion:start Additional Software -->
 
-* [Git](https://git-scm.com/) - Used in Chalet for fetching & managing external dependencies
-* [Ninja](https://ninja-build.org/) - Make alternative, that is quicker by design due to how it manages dependencies
-* [CMake](https://cmake.org/) - Used to integrate external code into Chalet projects
+* [Git](//git-scm.com/) - Used in Chalet for fetching & managing external dependencies
+* [Ninja](//ninja-build.org/) - Make alternative, that is quicker by design due to how it manages dependencies
+* [CMake](//cmake.org/) - Used to integrate external code into Chalet projects
 
 <!-- accordion:end -->
 

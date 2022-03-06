@@ -8,6 +8,7 @@ Documentation
 [](/getting-started)
 [](/managing-dependencies)
 [](/creating-targets)
+[](/configurations)
 [](/describing-the-distribution)
 [](/command-usage)
 [](/the-settings-file)

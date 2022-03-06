@@ -175,6 +175,7 @@ const parseReadme = async (inText: string): Promise<string> => {
 			text = text.replace(/---\n### (.+?)\n/g, "|$1|");
 
 			text = text.replace(/## (.+?)\n/g, "");
+			text = text.replace(/\(https:(.+)\)/g, "($1)");
 		}
 		return text ?? "";
 	});

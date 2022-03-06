@@ -7,7 +7,7 @@ const SchemaPageLayout = (props: Props) => {
 	const { schemaLinks, anchors } = props;
 	const Header = AnchoredHeadingObject["AnchoredH1"];
 	return (
-		<MarkdownLayout {...props}>
+		<MarkdownLayout {...props} trackScrolling={false}>
 			<Header>Schema Reference</Header>
 			<hr />
 			<PageDescription>Explore the JSON schema for a given Chalet file type.</PageDescription>

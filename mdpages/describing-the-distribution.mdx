@@ -219,7 +219,7 @@ The `icon` property defines an icon for the app. If a `.png` is defined, it will
 The `infoPropertyList` defines an Information Property List for the bundle. It can take multiple values, such as a static `.plist` file, a `.json` file containing the data normally in a `.plist`, or this data can be inlined directly into the chalet.json file. If using either json route, one can use special variables that get resolved at the time of bundling (like with linux desktop entries). They are as follows:
 
 * `${name}`: The bundle's name, so in the examples above, this would be "MyApp"
-* `${bundleName}`: The first 15 characters of ${name}, specifically used for [CFBundleName](https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundlename)
+* `${bundleName}`: The first 15 characters of ${name}, specifically used for [CFBundleName](//developer.apple.com/documentation/bundleresources/information_property_list/cfbundlename)
 * `${mainExecutable}`: The main executable, explained [here](/describing-the-distribution?id=the-main-executable)
 * `${icon}`: The path to the icon. This ends up being the .icns created/copied in the distribution target's folder
 
@@ -311,7 +311,7 @@ Instead of defining "includes" like with bundles or archives, the `positions` im
 
 ## [Windows Nullsoft Installers]
 
-A [NSIS](https://nsis.sourceforge.io/Main_Page) installer can be created, given a distribution target of the kind `windowsNullsoftInstaller`. This takes a given `nsisScript`. This takes in a `.nsi` script and produces the output installer executable that's defined by it. Additional `pluginDirs` can also be defined if the installer script requires additional plugins. As usual, these should be relative paths, but if familiar with NSIS plugins, these paths can contain a `Plugins` folder itself, along with the inner `amd64-unicode`, `x86-ansi`, and `x86-unicode` folders, and Chalet will resolve them.
+A [NSIS](//nsis.sourceforge.io/Main_Page) installer can be created, given a distribution target of the kind `windowsNullsoftInstaller`. This takes a given `nsisScript`. This takes in a `.nsi` script and produces the output installer executable that's defined by it. Additional `pluginDirs` can also be defined if the installer script requires additional plugins. As usual, these should be relative paths, but if familiar with NSIS plugins, these paths can contain a `Plugins` folder itself, along with the inner `amd64-unicode`, `x86-ansi`, and `x86-unicode` folders, and Chalet will resolve them.
 
 ```json
 "MyApp-installer": {
@@ -323,4 +323,4 @@ A [NSIS](https://nsis.sourceforge.io/Main_Page) installer can be created, given 
 }
 ```
 
-<!-- nav:/creating-targets:/command-usage -->
+<!-- nav:/configurations:/command-usage -->

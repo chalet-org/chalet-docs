@@ -79,7 +79,7 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 					}
 					return {
 						url,
-						html_url,
+						html_url: html_url.replace(/^https:(.+)$/, (result: string, p1: string) => p1),
 						id,
 						tag_name,
 						name,

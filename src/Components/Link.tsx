@@ -18,6 +18,11 @@ const Link = ({ children, dataId, onClick, ...props }: Props) => {
 
 	// console.log(props.href);
 
+	if (typeof props.href === "string" && props.href.startsWith("https")) {
+		console.log(props.href);
+		throw new Error("Error: Link expects href without 'https:'. Use '//' instead.");
+	}
+
 	const showActive = props.showActive ?? true;
 	const targetBlank =
 		typeof props.href === "string" && (props.href.startsWith("//") || props.href.startsWith("/api"));
