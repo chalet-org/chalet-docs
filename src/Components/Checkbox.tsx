@@ -41,12 +41,12 @@ const Styles = styled.label`
 		display: grid;
 		place-content: center;
 		appearance: none;
-		background-color: transparent;
+		background-color: ${getThemeVariable("background")};
 		margin: 0;
 		margin-right: 0.75rem;
 		width: 1.25rem;
 		height: 1.25rem;
-		border: 1px dashed ${getThemeVariable("border")};
+		border: 1px dashed transparent;
 		border-radius: 0.25rem;
 		transform: translateY(7.5%);
 		transition: border-color 0.125s linear;

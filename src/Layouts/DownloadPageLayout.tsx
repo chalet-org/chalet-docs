@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import React, { useMemo } from "react";
 import styled from "styled-components";
 
-import { AnchoredHeadingObject, DownloadPageControls, Link, Page, ReleaseBlock, SideNavigation } from "Components";
+import { AnchoredHeadingObject, DownloadPageControls, Page, ReleaseBlock, SideNavigation } from "Components";
 import { useRouteChangeScroll } from "Hooks";
 import { ResultDownloadPage, ResultReleases } from "Server/ResultTypes";
 
@@ -39,7 +39,6 @@ const DownloadPageLayout = ({ title, releases, downloadLinks, ...navProps }: Pro
 					</DownloadPageControls>
 					<BottomBlock>
 						{/* {!!latestRelease && <p>Latest version: {latestRelease.tag_name.replace("v", "")}</p>} */}
-						<Link href="https://github.com/chalet-org/chalet/releases">Github Releases</Link>
 					</BottomBlock>
 				</Styles>
 			</Page>

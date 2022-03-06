@@ -19,6 +19,10 @@ const PageControlStyles = styled.div`
 		flex-direction: row;
 		align-items: center;
 
+		&:nth-of-type(2) {
+			margin-top: 1rem;
+		}
+
 		> .select-dropdown,
 		> .spacer {
 			margin: 0.25rem 0;
@@ -37,17 +41,16 @@ const PageControlStyles = styled.div`
 
 		> a {
 			margin: 0 0.5rem;
-			margin-top: 1rem;
 		}
 
-		> p {
+		> div.separator {
 			display: block;
 			position: relative;
-			font-size: 1.5rem;
-			height: 0;
+			background-color: ${getThemeVariable("border")};
 			margin: 0 0.5rem;
-			transform: translateY(-50%);
-			color: ${getThemeVariable("border")};
+			margin-top: 0.25rem;
+			width: 0.125rem;
+			height: 1.25rem;
 			pointer-events: none;
 		}
 

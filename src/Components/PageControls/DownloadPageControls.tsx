@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import React from "react";
 
+import { Link } from "Components";
 import { Checkbox } from "Components/Checkbox";
 import { ResultDownloadPage } from "Server/ResultTypes";
 import { useUiStore } from "Stores";
@@ -41,6 +42,7 @@ const DownloadPageControls = ({ children, downloadLinks }: Props) => {
 					onClick={toggleShowAllPlatforms}
 				/>
 				<div className="spacer" />
+				<Link href="https://github.com/chalet-org/chalet/releases">All Releases</Link>
 			</div>
 			{children}
 		</PageControlStyles>

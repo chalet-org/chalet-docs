@@ -7,11 +7,11 @@ import { Icon, Link } from "Components";
 import { ResultSearchResults } from "Server/ResultTypes";
 import { getThemeVariable } from "Theme";
 
-type Props = React.PropsWithChildren<{}>;
+type Props = {};
 
 const searchColor = getThemeVariable("header");
 
-const SearchInput = ({ children }: Props) => {
+const SearchInput = (_props: Props) => {
 	const [value, setValue] = useState<string>("");
 	const [resultsFetched, setResultsFetched] = useState<boolean>(false);
 	const [results, setResults] = useState<ResultSearchResults>([]);
@@ -36,9 +36,7 @@ const SearchInput = ({ children }: Props) => {
 						doApiCall(ev.target.value);
 						setValue(ev.target.value);
 					}}
-				>
-					{children}
-				</input>
+				/>
 				{value === "" ? (
 					<Icon id="search" size="1rem" color={searchColor} />
 				) : (
@@ -113,6 +111,10 @@ const Styles = styled.div`
 			&::placeholder {
 				color: ${getThemeVariable("header")};
 			}
+
+			&:focus-visible {
+				outline: none;
+			}
 		}
 
 		> i {
@@ -125,6 +127,14 @@ const Styles = styled.div`
 				cursor: pointer;
 				right: 0.125rem;
 				top: 0.375rem;
+
+				&:hover {
+					color: ${getThemeVariable("primaryColor")};
+				}
+			}
+
+			&:hover:not(.icon-close) {
+				color: ${getThemeVariable("header")};
 			}
 		}
 	}
