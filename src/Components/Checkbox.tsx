@@ -46,10 +46,9 @@ const Styles = styled.label`
 		margin-right: 0.75rem;
 		width: 1.25rem;
 		height: 1.25rem;
-		border: 1px dashed transparent;
 		border-radius: 0.25rem;
 		transform: translateY(7.5%);
-		transition: border-color 0.125s linear;
+		transition: background-color 0.125s linear;
 		cursor: pointer;
 
 		&::before {
@@ -69,10 +68,10 @@ const Styles = styled.label`
 
 	&:hover > input[type="checkbox"],
 	> input[type="checkbox"]:focus-visible {
-		border-color: ${getThemeVariable("primaryColor")};
+		background-color: ${getThemeVariable("primaryColor")};
 
 		&::before {
-			box-shadow: inset 01rem 1rem ${getThemeVariable("secondaryColor")};
+			box-shadow: inset 01rem 1rem ${getThemeVariable("background")};
 		}
 	}å
 `;

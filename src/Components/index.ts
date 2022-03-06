@@ -13,6 +13,7 @@ export * from "./Link";
 export * from "./NavigationLinks";
 export * from "./OrderedList";
 export * from "./Page";
+export * from "./PageDescription";
 export * from "./PageHeading";
 export * from "./PageNavigation";
 export * from "./Paragraph";

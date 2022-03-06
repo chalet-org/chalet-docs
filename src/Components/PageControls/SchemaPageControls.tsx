@@ -3,7 +3,6 @@ import React, { useMemo } from "react";
 
 import { HyperLink, ResultNavigation, SchemaType } from "Server/ResultTypes";
 
-import { AnchoredHeadingObject } from "../Heading";
 import { Link } from "../Link";
 import { SelectDropdown } from "../SelectDropdown";
 import { PageControlStyles } from "./PageControlStyles";
@@ -55,54 +54,49 @@ const SchemaPageControls = ({ schemaLinks, anchors }: Props) => {
 
 	const rootUrl: string = `/${kind}/${ref}/${jsonFile}`;
 	const isTag: boolean = ref !== "main" && ref != "development";
-	const Header = AnchoredHeadingObject["AnchoredH1"];
 
 	return (
-		<>
-			<Header>Schema Reference</Header>
-			<hr />
-			<PageControlStyles>
-				<div className="group dropdowns">
-					<SelectDropdown
-						name="ref-select"
-						label="Version"
-						defaultValue={rootUrl}
-						options={schemaLinks}
-						onChange={(value) =>
-							router.push(value.href, undefined, {
-								scroll: false,
-							})
-						}
-					/>
-					{/* <div className="spacer" /> */}
-					<SelectDropdown
-						name="schema-select"
-						defaultValue={rootUrl}
-						options={memoSchema}
-						onChange={(value) => {
-							router.push(value.href, undefined, {
-								scroll: false,
-							});
-						}}
-					/>
-					<SelectDropdown
-						name="page-select"
-						defaultValue={path}
-						options={memoAnchors}
-						onChange={(value) =>
-							router.push(value.href, undefined, {
-								scroll: false,
-							})
-						}
-					/>
-				</div>
-				<div className="group">
-					<Link href={isTag ? `/changelog?id=${ref.replace(/\./g, "")}` : `/changelog`}>Changelog</Link>
-					<div className="separator" />
-					<Link href={`/api/schema/${ref}/${jsonFile}`}>View as JSON</Link>
-				</div>
-			</PageControlStyles>
-		</>
+		<PageControlStyles>
+			<div className="group dropdowns">
+				<SelectDropdown
+					name="ref-select"
+					label="Version"
+					defaultValue={rootUrl}
+					options={schemaLinks}
+					onChange={(value) =>
+						router.push(value.href, undefined, {
+							scroll: false,
+						})
+					}
+				/>
+				{/* <div className="spacer" /> */}
+				<SelectDropdown
+					name="schema-select"
+					defaultValue={rootUrl}
+					options={memoSchema}
+					onChange={(value) => {
+						router.push(value.href, undefined, {
+							scroll: false,
+						});
+					}}
+				/>
+				<SelectDropdown
+					name="page-select"
+					defaultValue={path}
+					options={memoAnchors}
+					onChange={(value) =>
+						router.push(value.href, undefined, {
+							scroll: false,
+						})
+					}
+				/>
+			</div>
+			<div className="group">
+				<Link href={isTag ? `/changelog?id=${ref.replace(/\./g, "")}` : `/changelog`}>Changelog</Link>
+				<div className="separator" />
+				<Link href={`/api/schema/${ref}/${jsonFile}`}>View as JSON</Link>
+			</div>
+		</PageControlStyles>
 	);
 };
 

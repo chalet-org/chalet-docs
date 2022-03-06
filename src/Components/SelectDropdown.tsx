@@ -81,15 +81,15 @@ const Styles = styled.div`
 		padding-bottom: 0.125rem;
 		z-index: 2;
 		box-shadow: none;
-		border: 1px dashed ${getThemeVariable("background")};
 		border-radius: 0.25rem;
 		background-color: ${getThemeVariable("background")};
 
-		transition: border-color 0.125s linear, color 0.125s linear;
+		transition: background-color 0.125s linear, color 0.125s linear;
 
 		&:hover,
 		&:active {
-			border-color: ${getThemeVariable("primaryColor")};
+			color: ${getThemeVariable("background")};
+			background-color: ${getThemeVariable("primaryColor")};
 		}
 
 		> option {
@@ -106,7 +106,7 @@ const Styles = styled.div`
 		font-size: 1.25rem;
 		line-height: 0;
 		right: 0.75rem;
-		top: 1.125rem;
+		top: 1rem;
 		transform: translateY(-12.5%);
 		width: 0.8rem;
 		height: 0.5rem;
@@ -118,7 +118,7 @@ const Styles = styled.div`
 
 	&:hover {
 		&:after {
-			color: ${getThemeVariable("secondaryColor")};
+			color: ${getThemeVariable("background")};
 		}
 	}
 `;

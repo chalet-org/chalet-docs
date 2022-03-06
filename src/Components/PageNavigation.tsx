@@ -82,6 +82,15 @@ const Styles = styled.div`
 			min-width: 50%;
 			line-height: 0;
 			margin: 0.25rem 0;
+
+			&:before,
+			&:after {
+				display: block;
+				position: absolute;
+				transition: color 0.125s linear;
+				top: calc(50% + 0.0675rem);
+				color: ${getThemeVariable("secondaryColor")};
+			}
 		}
 
 		&.nav-left > button {
@@ -89,10 +98,7 @@ const Styles = styled.div`
 			text-align: left;
 
 			&:before {
-				display: block;
-				position: absolute;
 				content: "\u276F";
-				top: calc(50% + 0.0675rem);
 				transform: rotate(180deg);
 				left: 1rem;
 			}
@@ -103,11 +109,15 @@ const Styles = styled.div`
 			text-align: right;
 
 			&:after {
-				display: block;
-				position: absolute;
 				content: "\u276F";
-				top: 50%;
 				right: 1rem;
+			}
+		}
+
+		&:hover {
+			&.nav-left > button:before,
+			&.nav-right > button:after {
+				color: ${getThemeVariable("background")};
 			}
 		}
 	}

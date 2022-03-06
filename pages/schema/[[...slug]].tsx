@@ -1,20 +1,15 @@
 import { GetServerSidePropsContext } from "next";
 import React from "react";
 
-import { SchemaPageControls } from "Components";
-import { MarkdownLayout, Props } from "Layouts/MarkdownLayout";
+import { SchemaPageLayout } from "Layouts";
+import { Props } from "Layouts/MarkdownLayout";
 import { getLatestTag } from "Server/ChaletTags";
 import { markdownFiles } from "Server/MarkdownFiles";
 import { SchemaType } from "Server/ResultTypes";
 import { withServerErrorHandler } from "Utility";
 
 const MarkdownPage = (props: Props) => {
-	const { schemaLinks, anchors } = props;
-	return (
-		<MarkdownLayout {...props}>
-			{!!schemaLinks && <SchemaPageControls schemaLinks={schemaLinks} anchors={anchors} />}
-		</MarkdownLayout>
-	);
+	return <SchemaPageLayout {...props} />;
 };
 
 export const getServerSideProps = withServerErrorHandler(async (ctx: GetServerSidePropsContext) => {

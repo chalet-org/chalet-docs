@@ -2,7 +2,14 @@ import { useRouter } from "next/router";
 import React, { useMemo } from "react";
 import styled from "styled-components";
 
-import { AnchoredHeadingObject, DownloadPageControls, Page, ReleaseBlock, SideNavigation } from "Components";
+import {
+	AnchoredHeadingObject,
+	DownloadPageControls,
+	Page,
+	PageDescription,
+	ReleaseBlock,
+	SideNavigation,
+} from "Components";
 import { useRouteChangeScroll } from "Hooks";
 import { ResultDownloadPage, ResultReleases } from "Server/ResultTypes";
 
@@ -32,6 +39,10 @@ const DownloadPageLayout = ({ title, releases, downloadLinks, ...navProps }: Pro
 				<Styles>
 					<Header>Download</Header>
 					<hr />
+					<PageDescription>
+						Download one of the Chalet packages for your operating system below, or build from the source
+						code.
+					</PageDescription>
 					<DownloadPageControls downloadLinks={downloadLinks}>
 						{release.map((rel, i) => (
 							<ReleaseBlock key={i} release={rel} />

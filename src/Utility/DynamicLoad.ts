@@ -10,6 +10,7 @@ type Components =
 	| "IndentGroup"
 	| "Link"
 	| "OrderedList"
+	| "PageDescription"
 	| "PageHeading"
 	| "PageNavigation"
 	| "Paragraph"

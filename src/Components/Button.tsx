@@ -44,6 +44,6 @@ const Styles = styled.button`
 	&:hover,
 	&.touch-hover {
 		color: ${getThemeVariable("background")};
-		background-color: ${getThemeVariable("secondaryColor")};
+		background-color: ${getThemeVariable("primaryColor")};
 	}
 `;

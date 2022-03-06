@@ -182,8 +182,7 @@ With abstracts out of the way, we can start thinking about how to structure our 
             "bar"
          ]
       },
-      "files": "src/**.cpp",
-      "runTarget": true
+      "files": "src/**.cpp"
    }
 }
 ```
@@ -744,145 +743,6 @@ Modules have a complicated build process compared to other C++ code, so they are
 
 \\
 
-## [Run Targets]
-
-If a target is runnable (kind is `executable` or `script`), one only needs to set `runTarget` to `true` in order to choose it as the target that gets run during `chalet buildrun` and `chalet run`. If more than one target has the `runTarget` property, or none have it, then the first runnable target is chosen.
-
-```json
-"first-target": {
-   "kind": "executable",
-   "files": "src/**.cpp"
-},
-"second-target": {
-   "kind": "script",
-   "file": "scripts/do_something.sh",
-   "runTarget": true
-}
-```
-
-An executable target can also take the `runArguments` and `runDependencies` properties. The `runArguments` property is simply an array of arguments to pass to the executable, while `runDependencies` is meant for shared libraries that have to be copied to the build folder at the time of execution. In most cases, it's not needed as long as the shared library is accessible from PATH, but if LoadLibrary is called in Windows api for example, it might be necessary to have the file in the same path as the executable.
-
-```json
-"first-target": {
-   "kind": "executable",
-   "files": "src/**.cpp",
-   "runTarget": true,
-   "runArguments": [
-      "--foo",
-      "-i",
-      "bar"
-   ],
-   "runDependencies.windows": [
-      "${env:SOME_PATH}/stubborn_lib.dll"
-   ]
-}
-```
-
-> Note: If a run target is specified from the command line, it will take precedence over any targets with the `runTarget` property.
-
-\\
-
-## [Path Substitution]
-
-In properties that take paths to directories or files, path substitution is supported for certain variables that describe locations of the build that could vary between machines. The following is supported:
-
-* `~/`, `${home}` - resolves to the home directory of the machine. On Windows, this is `C:\Users\(Name)`
-* `${env:(Name)}` - resolves an environment variable by name. For example: `${env:MY_LIBRARY_PATH}`
-* `${buildDir}` - resolves to the main build directory for the current configuration & architecture
-* `${externalDir}` - resolves to the root path for external dependencies. See [externalDependencies](/schema/latest/chalet-json?id=external-dependencies)
-* `${externalBuildDir}` - resolves to the build path for an external dependency. For instance, if a CMake project is located at `${externalDir}/foo`, it will build to `${buildDir}/${externalDir}/foo`, so it's easier to write `${externalBuildDir}/foo`
-* `${cwd}` - resolves the current working directory (this shouldn't be needed, but it's here just in case)
-
-Example:
-
-```json
-"searchPaths": [
-   "${externalBuildDir}/foo/arbitrary-path"
-],
-"targets": {
-   "my-target": {
-      "settings:Cxx": {
-         "includeDirs": [
-            "${env:MY_BAR_LIB}/include"
-         ],
-         "includeDirs.windows": [
-            "${env:ProgramFiles}/bar/include"
-         ],
-         "includeDirs.!windows": [
-            "~/libs/bar/include"
-         ]
-      },
-      "files": "${externalDir}/foo/**.cpp",
-   },
-   "other-target": {
-      "settings:Cxx": {
-         "includeDirs": [
-            "${externalDir}/foo/include"
-         ],
-         "libDirs": [
-            "${externalBuildDir}/foo"
-         ],
-         "links": [
-            "foo"
-         ]
-      }
-   }
-}
-```
-
-\\
-
-## [Advanced: Fine Tuning]
-
-**Per-toolchain properties**
-
-As a last resort, `compileOptions` and `linkerOptions` can pass certain options directly to the build at the time of a compilation unit's compile, or at link time. As Chalet evolves, more options will be leveraged as properties, and the goal will be to reduce the need for this as much as possible. Both of these properties take a single string of options. 
-
-These properties, in addition to `warnings`, `defines`, `links`, `staticLinks`, `includeDirs` and `libDirs` can also be defined _per compiler toolchain_. This is done by defining them as an object, followed by either the architecture triple or a toolchain name. Like with abstracts, the `*` property is applied to all. If both a matching target triple and a toolchain name are defined, the triple's is read first, followed by the toolchain name's values. Partial triple names can also be used, but the more specific, the better.
-
-If you require an even more refined build, you can certainly combine CMake with Chalet.
-
-> Note: This feature is still experimental and things may not work as expected
-
-```json
-"compileOptions": {
-   "arm-linux-gnueabihf": "...",
-   "arm64-apple-darwin": "...",
-   "x86_64-pc-windows-msvc": "...",
-   "w64-mingw32": "..."
-}
-```
-
-`w64-mingw32` could refer to either `x86_64-w64-mingw32` or `i686-w64-mingw32`.
-
-```json
-"libDirs": {
-   "*": [
-      "${externalDir}/foo/lib",
-      "${externalDir}/bar/lib"
-   ],
-   "arm64-apple-darwin": [
-      "${externalDir}/vendor/macos/lib"
-   ],
-   "arm64-apple-darwin.debug": [
-      "${externalDir}/vendor/macos-debug/lib"
-   ],
-   "x86_64-pc-windows-msvc": [
-      "${externalDir}/vendor/msvc/lib"
-   ]
-}
-```
-
-> Note: `warnings` in this case is for defining specific warnings, not presets. 
-
-\
-
-**Linker Scripts**
-
-At the moment, this is just supported with GCC & Clang, but you can supply a linker script to the the linker via the `linkerScript` property.
-
-\\
-
 ## [Chalet Targets]
 
 Chalet targets are like saying "I have a Chalet project in a separate repository and want it to build during this project's build."  This is a feature that may not get a lot of use in these early days, but could serve as a foundation for package management in the future. One would want to combine this feature with `externalDependencies`, which would pull down a git repository prior to building.
@@ -1003,6 +863,134 @@ Process targets are a means to call another executable directly using Chalet's s
 ```
 
 The `path` property can either be the full path to an executable (not recommended), or a searchable executable name that can be found from a terminal (in PATH). The `arguments` property can take any arguments that are required by the process.
+
+\\
+
+## [Run Targets]
+
+A target is considered runnable if the kind is `executable`, `script` or `cmakeProject`. If it's runnable, it can be used during `chalet buildrun` and `chalet run` commands. If the kind is `cmakeProject`, it will require the `runExecutable` property.
+
+```json
+"first-target": {
+   "kind": "executable",
+   "files": "src/**.cpp",
+   "defaultRunArguments": [
+      "--foo",
+      "-i",
+      "bar"
+   ],
+   "copyFilesOnRun.windows": [
+      "${env:SOME_PATH}/stubborn_lib.dll"
+   ]
+},
+"second-target": {
+   "kind": "script",
+   "file": "scripts/do_something.sh"
+}
+```
+
+An executable target can also take the `defaultRunArguments` and `copyFilesOnRun` properties. The `defaultRunArguments` property is simply an array of the default arguments to run. These values will be cached in settings, where it can be changed on-demand. `copyFilesOnRun` is meant for shared libraries that have to be copied to the build folder at the time of execution. In most cases, it's not needed as long as the shared library is accessible from PATH, but if for example, WinApi's LoadLibrary is called, it might be necessary to have the file in the same path as the executable.
+
+\\
+
+## [Path Substitution]
+
+In properties that take paths to directories or files, path substitution is supported for certain variables that describe locations of the build that could vary between machines. The following is supported:
+
+* `~/`, `${home}` - resolves to the home directory of the machine. On Windows, this is `C:\Users\(Name)`
+* `${env:(Name)}` - resolves an environment variable by name. For example: `${env:MY_LIBRARY_PATH}`
+* `${buildDir}` - resolves to the main build directory for the current configuration & architecture
+* `${externalDir}` - resolves to the root path for external dependencies. See [externalDependencies](/schema/latest/chalet-json?id=external-dependencies)
+* `${externalBuildDir}` - resolves to the build path for an external dependency. For instance, if a CMake project is located at `${externalDir}/foo`, it will build to `${buildDir}/${externalDir}/foo`, so it's easier to write `${externalBuildDir}/foo`
+* `${cwd}` - resolves the current working directory (this shouldn't be needed, but it's here just in case)
+
+Example:
+
+```json
+"searchPaths": [
+   "${externalBuildDir}/foo/arbitrary-path"
+],
+"targets": {
+   "my-target": {
+      "settings:Cxx": {
+         "includeDirs": [
+            "${env:MY_BAR_LIB}/include"
+         ],
+         "includeDirs.windows": [
+            "${env:ProgramFiles}/bar/include"
+         ],
+         "includeDirs.!windows": [
+            "~/libs/bar/include"
+         ]
+      },
+      "files": "${externalDir}/foo/**.cpp",
+   },
+   "other-target": {
+      "settings:Cxx": {
+         "includeDirs": [
+            "${externalDir}/foo/include"
+         ],
+         "libDirs": [
+            "${externalBuildDir}/foo"
+         ],
+         "links": [
+            "foo"
+         ]
+      }
+   }
+}
+```
+
+\\
+
+## [Advanced: Fine Tuning]
+
+**Per-toolchain properties**
+
+As a last resort, `compileOptions` and `linkerOptions` can pass certain options directly to the build at the time of a compilation unit's compile, or at link time. As Chalet evolves, more options will be leveraged as properties, and the goal will be to reduce the need for this as much as possible. Both of these properties take a single string of options. 
+
+These properties, in addition to `warnings`, `defines`, `links`, `staticLinks`, `includeDirs` and `libDirs` can also be defined _per compiler toolchain_. This is done by defining them as an object, followed by either the architecture triple or a toolchain name. Like with abstracts, the `*` property is applied to all. If both a matching target triple and a toolchain name are defined, the triple's is read first, followed by the toolchain name's values. Partial triple names can also be used, but the more specific, the better.
+
+If you require an even more refined build, you can certainly combine CMake with Chalet.
+
+> Note: This feature is still experimental and things may not work as expected
+
+```json
+"compileOptions": {
+   "arm-linux-gnueabihf": "...",
+   "arm64-apple-darwin": "...",
+   "x86_64-pc-windows-msvc": "...",
+   "w64-mingw32": "..."
+}
+```
+
+`w64-mingw32` could refer to either `x86_64-w64-mingw32` or `i686-w64-mingw32`.
+
+```json
+"libDirs": {
+   "*": [
+      "${externalDir}/foo/lib",
+      "${externalDir}/bar/lib"
+   ],
+   "arm64-apple-darwin": [
+      "${externalDir}/vendor/macos/lib"
+   ],
+   "arm64-apple-darwin.debug": [
+      "${externalDir}/vendor/macos-debug/lib"
+   ],
+   "x86_64-pc-windows-msvc": [
+      "${externalDir}/vendor/msvc/lib"
+   ]
+}
+```
+
+> Note: `warnings` in this case is for defining specific warnings, not presets. 
+
+\
+
+**Linker Scripts**
+
+At the moment, this is just supported with GCC & Clang, but you can supply a linker script to the the linker via the `linkerScript` property.
 
 
 <!-- nav:/managing-dependencies:/describing-the-distribution -->
