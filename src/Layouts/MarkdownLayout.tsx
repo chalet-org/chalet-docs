@@ -24,11 +24,7 @@ type AnchorData = {
 	id: string;
 };
 
-const goToFocusedLink = (
-	pageLayout: Optional<HTMLDivElement>,
-	focusedId: string,
-	setFocusedId: (inValue: string) => void
-) => {
+const goToFocusedLink = (pageLayout: Optional<HTMLDivElement>, setFocusedId: (inValue: string) => void) => {
 	if (pageLayout === null) return;
 
 	const mainEl = document.getElementById("main");
@@ -69,11 +65,11 @@ const goToFocusedLink = (
 		}
 	}
 
-	setFocusedId(focusedId.length > 0 ? focusedId : "");
+	setFocusedId("");
 };
 
 const MarkdownLayout = ({ meta, mdx, children, isSchema, trackScrolling = true, ...navProps }: Props) => {
-	const { focusedId, setFocusedId, navOpen } = useUiStore();
+	const { setFocusedId, navOpen } = useUiStore();
 	const pageLayout = useRef<HTMLDivElement>(null);
 	const router = useRouter();
 
@@ -81,16 +77,19 @@ const MarkdownLayout = ({ meta, mdx, children, isSchema, trackScrolling = true, 
 
 	useEffect(() => {
 		if (navOpen && trackScrolling) {
-			const id = typeof router.query.id === "string" ? router.query.id : focusedId;
-			goToFocusedLink(pageLayout.current, id, setFocusedId);
+			const id = typeof router.query.id === "string" ? router.query.id : "";
+			setFocusedId(id);
 		}
 	}, [navOpen, trackScrolling, router.query.id]);
 
-	const wheelCallback = debounce((ev) => {
-		if (navOpen && trackScrolling) {
-			goToFocusedLink(pageLayout.current, focusedId, setFocusedId);
-		}
-	}, 15);
+	const wheelCallback = useCallback(
+		debounce((ev) => {
+			if (navOpen && trackScrolling) {
+				goToFocusedLink(pageLayout.current, setFocusedId);
+			}
+		}, 10),
+		[navOpen, trackScrolling, pageLayout.current]
+	);
 
 	return (
 		<>

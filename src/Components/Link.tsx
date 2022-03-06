@@ -47,9 +47,7 @@ const Link = ({ children, dataId, onClick, ...props }: Props) => {
 					onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
 					onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
 					onClick={(ev) => {
-						if (!router.asPath.startsWith("/schema")) {
-							setFocusedId(dataId ?? "");
-						}
+						setFocusedId(dataId ?? "");
 						onClick?.(ev);
 					}}
 				>
