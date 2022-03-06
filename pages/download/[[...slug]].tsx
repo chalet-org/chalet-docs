@@ -40,7 +40,7 @@ export const getServerSideProps = withServerErrorHandler(async (ctx: GetServerSi
 		};
 	}
 
-	const [branches, tags] = await Promise.all([getChaletTags(), getChaletBranches()]);
+	const [tags, branches] = await Promise.all([getChaletTags(), getChaletBranches()]);
 	if (!tags.includes(ref) && !branches.includes(ref)) {
 		throw new Error(`Download for ref not found: ${ref}`);
 	}
