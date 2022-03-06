@@ -50,6 +50,7 @@ const Styles = styled.label`
 		border-radius: 0.25rem;
 		transform: translateY(7.5%);
 		transition: border-color 0.125s linear;
+		cursor: pointer;
 
 		&::before {
 			content: "";
