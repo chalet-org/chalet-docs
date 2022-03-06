@@ -46,7 +46,7 @@ const Styles = styled.label`
 		margin-right: 0.75rem;
 		width: 1.25rem;
 		height: 1.25rem;
-		border: 0.125rem solid ${getThemeVariable("border")};
+		border: 1px dashed ${getThemeVariable("border")};
 		border-radius: 0.25rem;
 		transform: translateY(7.5%);
 		transition: border-color 0.125s linear;
@@ -69,11 +69,10 @@ const Styles = styled.label`
 
 	&:hover > input[type="checkbox"],
 	> input[type="checkbox"]:focus-visible {
-			border-color: ${getThemeVariable("secondaryColor")};
+		border-color: ${getThemeVariable("primaryColor")};
 
-			&::before {
-				box-shadow: inset 01rem 1rem ${getThemeVariable("secondaryColor")};
-			}
+		&::before {
+			box-shadow: inset 01rem 1rem ${getThemeVariable("secondaryColor")};
 		}
-	}
+	}å
 `;

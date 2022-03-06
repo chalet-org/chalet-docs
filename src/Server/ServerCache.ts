@@ -52,7 +52,7 @@ class ServerCache {
 		while (text.length < lineWidth - outTime.length) {
 			text += ".";
 		}
-		text += `${outTime} ${cyan}${cached}`;
+		text += `${outTime} ${cyan}${cached}${reset}`;
 		console.log(text);
 	};
 

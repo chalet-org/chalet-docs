@@ -1,21 +1,16 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
-import { useOperatingSystem } from "Hooks";
+import { OperatingSystem, PreferredCompiler, useOperatingSystem } from "Hooks";
 import { useUiStore } from "Stores";
 import { getThemeVariable } from "Theme";
 
 type Props = React.PropsWithChildren<{}>;
 
-const isTabOperatingSystem = (name: string): boolean => {
-	const lowerName = name.toLowerCase();
-	const [platform, commonCompiler] = useOperatingSystem();
-	return lowerName === platform || lowerName === commonCompiler;
-};
-
 const TabbedContent = ({ children }: Props) => {
 	const { notifyAccordions } = useUiStore();
 
+	const [platform, commonCompiler] = useOperatingSystem();
 	const [activeTab, setActiveTab] = useState<number>(-1);
 
 	useEffect(() => {
@@ -34,7 +29,8 @@ const TabbedContent = ({ children }: Props) => {
 			const index = i;
 			let tab = activeTab;
 			if (tab === -1 && child.props.children && typeof child.props.children === "string") {
-				if (isTabOperatingSystem(child.props.children)) {
+				const lowerName = child.props.children.toLowerCase();
+				if (lowerName === platform || lowerName === commonCompiler) {
 					tab = index;
 				}
 			}

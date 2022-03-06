@@ -66,6 +66,7 @@ const Styles = styled.div`
 	> select {
 		display: block;
 		position: relative;
+		-webkit-appearance: none;
 		appearance: none;
 		width: 100%;
 		flex: 3;
@@ -79,22 +80,22 @@ const Styles = styled.div`
 		padding: 0 0.75rem;
 		padding-bottom: 0.125rem;
 		z-index: 2;
-		/* border: 1px solid ${getThemeVariable("background")}; */
+		box-shadow: none;
+		border: 1px dashed ${getThemeVariable("background")};
 		border-radius: 0.25rem;
 		background-color: ${getThemeVariable("background")};
 
-		transition: background-color 0.125s linear, color 0.125s linear;
+		transition: border-color 0.125s linear, color 0.125s linear;
 
-		&:hover {
-			color: ${getThemeVariable("background")};
-			background-color: ${getThemeVariable("secondaryColor")};
+		&:hover,
+		&:active {
+			border-color: ${getThemeVariable("primaryColor")};
 		}
 
 		> option {
 			font-size: 1rem;
 			color: #222;
 			background-color: #fff;
-			border: none;
 		}
 	}
 
@@ -105,11 +106,11 @@ const Styles = styled.div`
 		font-size: 1.25rem;
 		line-height: 0;
 		right: 0.75rem;
-		top: 50%;
+		top: 1.125rem;
 		transform: translateY(-12.5%);
-		width: 0.8em;
-		height: 0.5em;
-		color: ${getThemeVariable("mainText")};
+		width: 0.8rem;
+		height: 0.5rem;
+		color: ${getThemeVariable("secondaryColor")};
 		z-index: 3;
 		pointer-events: none;
 		transition: color 0.125s linear;
@@ -117,7 +118,7 @@ const Styles = styled.div`
 
 	&:hover {
 		&:after {
-			color: ${getThemeVariable("background")};
+			color: ${getThemeVariable("secondaryColor")};
 		}
 	}
 `;
