@@ -1,7 +1,6 @@
 import { ThemeType } from "./ThemeType";
 
 export const darkTheme: ThemeType = {
-	bodyBackground: "#000000",
 	codeBackground: "#0a0a0a",
 	background: "#111111",
 	mainText: "#d9d9d9",
@@ -10,9 +9,6 @@ export const darkTheme: ThemeType = {
 	primaryColor: "#f49309",
 	secondaryColor: "#f6bb5e",
 	tertiaryColor: "#71072d",
-	//
-	fadeBackgroundA: "rgba(10,10,10,0.0)",
-	fadeBackgroundB: "rgba(10,10,10,1.0)",
 	//
 	codeBlack: "#0a0a0a",
 	codeWhite: "#dedede",

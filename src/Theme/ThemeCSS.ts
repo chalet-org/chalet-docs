@@ -1,7 +1,6 @@
 import { ThemeType } from "./ThemeType";
 
 const ThemeIndex: ThemeType = {
-	bodyBackground: "bg-body",
 	codeBackground: "bg-code",
 	background: "bg",
 	mainText: "main-text",
@@ -10,9 +9,6 @@ const ThemeIndex: ThemeType = {
 	primaryColor: "primary-color",
 	secondaryColor: "secondary-color",
 	tertiaryColor: "tertiary-color",
-	//
-	fadeBackgroundA: "fade-background-a",
-	fadeBackgroundB: "fade-background-b",
 	//
 	codeBlack: "code-black",
 	codeWhite: "code-white",

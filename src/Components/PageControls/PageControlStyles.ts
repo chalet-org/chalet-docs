@@ -17,15 +17,17 @@ const PageControlStyles = styled.div`
 	> .group {
 		display: flex;
 		flex-direction: row;
-		align-items: center;
+		align-items: left;
 
 		&:nth-of-type(2) {
 			margin-top: 1rem;
 		}
 
-		> .select-dropdown,
 		> .spacer {
-			margin: 0.25rem 0;
+			display: none;
+		}
+		> .select-dropdown {
+			margin: 0 0.25rem;
 			flex: 1;
 
 			&:nth-of-type(1) {
@@ -37,10 +39,6 @@ const PageControlStyles = styled.div`
 			&:nth-of-type(3) {
 				flex: 3;
 			}
-		}
-
-		> a {
-			margin: 0 0.5rem;
 		}
 
 		> div.separator {
@@ -65,11 +63,38 @@ const PageControlStyles = styled.div`
 	}
 
 	@media ${hasMinWidth(0)} {
-		> .group.dropdowns {
-			flex-direction: row;
+		> .group {
+			align-items: center;
 
+			> .spacer {
+				display: block;
+				margin: 0.25rem 0;
+				flex: 1;
+
+				&:nth-of-type(1) {
+					flex: 2;
+				}
+				&:nth-of-type(2) {
+					flex: 2;
+				}
+				&:nth-of-type(3) {
+					flex: 3;
+				}
+			}
 			> .select-dropdown {
+				margin: 0.25rem 0;
+			}
+
+			> a {
 				margin: 0 0.5rem;
+			}
+
+			&.dropdowns {
+				flex-direction: row;
+
+				> .select-dropdown {
+					margin: 0 0.5rem;
+				}
 			}
 		}
 	}

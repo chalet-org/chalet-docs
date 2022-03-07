@@ -164,6 +164,7 @@ type StyleProps = {
 const codeCss = css<StyleProps>`
 	position: relative;
 	color: ${getThemeVariable("codeWhite")};
+	text-shadow: 0 0 1px rgba(255, 255, 255, 0.33);
 	word-spacing: normal;
 	word-break: normal;
 	word-wrap: normal;

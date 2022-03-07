@@ -3,6 +3,8 @@ import styled from "styled-components";
 
 import { getThemeVariable } from "Theme";
 
+import { hasMinWidth } from "./GlobalStyles";
+
 type Props = {
 	name: string;
 	label: string;
@@ -35,7 +37,7 @@ const Styles = styled.label`
 	align-items: center;
 	cursor: pointer;
 	user-select: none;
-	padding: 0 1rem;
+	padding: 1rem 0;
 
 	> input[type="checkbox"] {
 		display: grid;
@@ -73,5 +75,13 @@ const Styles = styled.label`
 		&::before {
 			box-shadow: inset 01rem 1rem ${getThemeVariable("background")};
 		}
-	}å
+	}
+
+	@media ${hasMinWidth(0)} {
+		padding: 0 1rem;
+	}
+	@media ${hasMinWidth(1)} {
+	}
+	@media ${hasMinWidth(2)} {
+	}
 `;

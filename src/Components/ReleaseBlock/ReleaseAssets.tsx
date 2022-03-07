@@ -209,6 +209,10 @@ export { ReleaseAssets };
 const Styles = styled.div`
 	display: block;
 	padding-bottom: 0.5rem;
+
+	@media ${hasMinWidth(0)} {
+		padding-bottom: 0.5rem;
+	}
 `;
 
 const DownloadContainer = styled.div`
@@ -218,10 +222,18 @@ const DownloadContainer = styled.div`
 	justify-content: center;
 	position: relative;
 	width: 100%;
-	padding: 1.125rem 1.5rem;
+	padding: 1.125rem 0.25rem;
 	border: 0.0625rem solid ${getThemeVariable("border")};
 	background-color: ${getThemeVariable("background")};
 	margin-top: -0.0625rem;
+
+	@media ${hasMinWidth(0)} {
+		padding: 1.125rem 1.5rem;
+	}
+	@media ${hasMinWidth(1)} {
+	}
+	@media ${hasMinWidth(2)} {
+	}
 `;
 
 const DownloadRow = styled.div`

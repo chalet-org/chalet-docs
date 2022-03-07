@@ -235,21 +235,13 @@ const StyledAside = styled.aside<AsideProps>`
 		bottom: 0;
 		z-index: 100;
 
-		${makeLinearGradient("transparent", getThemeVariable("codeBackground"), 180)}
-		background: ${getThemeVariable("codeBackground")};
-		background: linear-gradient(
-			180deg,
-			${getThemeVariable("fadeBackgroundA")} 0%,
-			${getThemeVariable("fadeBackgroundB")} 30%
-		);
-
 		> .theme-toggle {
 			display: block;
 			position: fixed;
 			width: 2rem;
 			height: 2rem;
 			top: auto;
-			bottom: 2.125rem;
+			bottom: 1.75rem;
 			left: -4.125rem;
 			right: auto;
 			transition: left 0.125s linear;

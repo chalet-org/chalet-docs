@@ -1,18 +1,14 @@
 import { ThemeType } from "./ThemeType";
 
 export const lightTheme: ThemeType = {
-	bodyBackground: "#e4e9eb",
-	codeBackground: "#e9edef",
-	background: "#f3f7f8",
-	mainText: "#344555",
-	header: "#b3bbca",
-	border: "#d4d6d9",
-	primaryColor: "#f49309",
-	secondaryColor: "#f6bb5e",
+	codeBackground: "#f3f5fa", // ebeef0
+	background: "#ffffff",
+	mainText: "#233444",
+	header: "#a3abba",
+	border: "#d9dadf",
+	primaryColor: "#e48300",
+	secondaryColor: "#f49309",
 	tertiaryColor: "#71072d",
-	//
-	fadeBackgroundA: "rgba(233,237,239,0.0)",
-	fadeBackgroundB: "rgba(233,237,239,1.0)",
 	//
 	codeBlack: "#eef5f5",
 	codeWhite: "#000000",

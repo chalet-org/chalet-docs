@@ -3,7 +3,7 @@ import { MDXRemote } from "next-mdx-remote";
 import React, { useMemo } from "react";
 import styled from "styled-components";
 
-import { HeadingObject, Icon, Link } from "Components";
+import { hasMinWidth, HeadingObject, Icon, Link } from "Components";
 import type { GithubRelease } from "Server/ChaletReleases";
 import { useUiStore } from "Stores";
 import { getThemeVariable } from "Theme";
@@ -27,15 +27,17 @@ const ReleaseBlock = ({ release }: Props) => {
 				<ReleaseDate>{date}</ReleaseDate>
 				<div className="group">
 					<Header>{name}</Header>
-					{!!prerelease ? (
-						<ReleaseType className="pre">Pre-Release</ReleaseType>
-					) : (
-						<ReleaseType>Release</ReleaseType>
-					)}
-					<div className="spacer" />
-					<Link href={html_url}>
-						<Icon id="github" size="1.5rem" color={theme.mainText} hoverColor={theme.primaryColor} />
-					</Link>
+					<div className="sub-group">
+						{!!prerelease ? (
+							<ReleaseType className="pre">Pre-Release</ReleaseType>
+						) : (
+							<ReleaseType>Release</ReleaseType>
+						)}
+						<div className="spacer" />
+						<Link href={html_url}>
+							<Icon id="github" size="1.5rem" color={theme.mainText} hoverColor={theme.primaryColor} />
+						</Link>
+					</div>
 				</div>
 			</InfoBlock>
 			{!!body && (
@@ -60,12 +62,16 @@ const Styles = styled.div`
 	/* background-color: ${getThemeVariable("codeBackground")}; */
 	font-size: 1rem;
 	width: 100%;
-	padding: 0.5rem;
+	padding: 0;
 	/* margin-bottom: 1.75rem; */
 	/* border: 0.0625rem solid ${getThemeVariable("border")}; */
 
 	> h1 {
 		line-height: 1.25;
+	}
+
+	@media ${hasMinWidth(0)} {
+		padding: 0.5rem;
 	}
 `;
 
@@ -78,12 +84,34 @@ const InfoBlock = styled.div`
 
 	> .group {
 		display: flex;
-		flex-direction: row;
-		align-items: center;
+		flex-direction: column;
+		align-items: left;
 
-		> .spacer {
-			display: block;
+		> .sub-group {
+			display: flex;
+			flex-direction: row;
+			align-items: bottom;
 			flex-grow: 1;
+
+			> a {
+				display: block;
+			}
+
+			> .spacer {
+				display: block;
+				flex-grow: 1;
+			}
+		}
+	}
+
+	@media ${hasMinWidth(0)} {
+		> .group {
+			flex-direction: row;
+			align-items: center;
+
+			> .sub-group {
+				margin-left: 1rem;
+			}
 		}
 	}
 `;
@@ -101,7 +129,7 @@ const ReleaseDate = styled.div`
 const ReleaseType = styled.div`
 	display: block;
 	color: ${getThemeVariable("secondaryColor")};
-	margin: 0 1rem;
+	margin: 0;
 	padding: 0.125rem 0.75rem;
 	padding-top: 0;
 	border: 0.0675rem solid ${getThemeVariable("secondaryColor")};

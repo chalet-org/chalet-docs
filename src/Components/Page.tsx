@@ -25,7 +25,7 @@ const Page = ({ title, children }: Props) => {
 	}, [initialize, initialized]);
 
 	useEffect(() => {
-		document.body.style.backgroundColor = theme.bodyBackground;
+		document.body.style.backgroundColor = theme.background;
 	}, [theme]);
 
 	useEffect(() => {

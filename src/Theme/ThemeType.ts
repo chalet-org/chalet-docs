@@ -6,7 +6,6 @@
 */
 
 export type ThemeType = {
-	bodyBackground: string;
 	codeBackground: string;
 	background: string;
 	mainText: string;
@@ -15,9 +14,6 @@ export type ThemeType = {
 	primaryColor: string;
 	secondaryColor: string;
 	tertiaryColor: string;
-	//
-	fadeBackgroundA: string;
-	fadeBackgroundB: string;
 	//
 	codeBlack: string;
 	codeWhite: string;
