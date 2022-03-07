@@ -11,7 +11,6 @@ import { withServerErrorHandler } from "Utility";
 type Props = ResultDownloadPage;
 
 const DownloadPage = (props: Props) => {
-	console.log(props);
 	return <DownloadPageLayout {...props} title="Download" />;
 };
 

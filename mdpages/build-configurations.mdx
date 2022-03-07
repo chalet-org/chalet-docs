@@ -1,0 +1,130 @@
+---
+title: Build Configurations
+---
+
+# [${meta.title}]
+
+---
+
+Build configurations in Chalet control some of the key properties of the build, like the optimization level, debug symbols, sanitizers, and profiling - anything that requires a distinct build.
+
+\\
+
+## [Default Configurations]
+
+Chalet contains several default build configurations:
+
+
+```json
+"defaultConfigurations": [
+   "Release",
+   "Debug",
+   "RelWithDebInfo",
+   "MinSizeRel",
+   "RelStable",
+   "Profile"
+   "DebugSanitize",
+   "DebugSanitizeAddress",
+   "DebugSanitizeThread",
+   "DebugSanitizeMemory",
+   "DebugSanitizeLeak",
+   "DebugSanitizeUndefined",
+   "DebugSanitizeHW",
+   "DebugSanitizeHWAddress"
+]
+```
+
+```json
+"configurations": {
+   "Release": {
+      "optimizationLevel": "2",
+      "debugSymbols": false,
+      "linkTimeOptimization": true,
+      "stripSymbols": true,
+      "enableProfiling": false,
+      "sanitize": false
+   },
+   "Debug": {
+      "optimizationLevel": "0",
+      "debugSymbols": true,
+      "linkTimeOptimization": false,
+      "stripSymbols": false,
+      "enableProfiling": false,
+      "sanitize": false
+   },
+   "RelWithDebInfo": {
+      "optimizationLevel": "2",
+      "debugSymbols": true,
+      "linkTimeOptimization": false,
+      "stripSymbols": false,
+      "enableProfiling": false,
+      "sanitize": false
+   },
+   "MinSizeRel": {
+      "optimizationLevel": "size",
+      "debugSymbols": false,
+      "linkTimeOptimization": false,
+      "stripSymbols": true,
+      "enableProfiling": false,
+      "sanitize": false
+   },
+   "RelStable": {
+      "optimizationLevel": "2",
+      "debugSymbols": false,
+      "linkTimeOptimization": false,
+      "stripSymbols": true,
+      "enableProfiling": false,
+      "sanitize": false
+   },
+   "Profile": {
+      "optimizationLevel": "0",
+      "debugSymbols": true,
+      "linkTimeOptimization": false,
+      "stripSymbols": false,
+      "enableProfiling": true,
+      "sanitize": false
+   },
+   "DebugSanitize": {
+      // Debug
+      "sanitize": [
+         "address",
+         "undefined",
+         "leak",
+      ]
+   },
+   "DebugSanitizeAddress": {
+      // Debug
+      "sanitize": "address"
+   },
+   "DebugSanitizeThread": {
+      // Debug
+      "sanitize": "thread"
+   },
+   "DebugSanitizeMemory": {
+      // Debug
+      "sanitize": "memory"
+   },
+   "DebugSanitizeLeak": {
+      // Debug
+      "sanitize": "leak"
+   },
+   "DebugSanitizeUndefined": {
+      // Debug
+      "sanitize": "undefined"
+   },
+   "DebugSanitizeHW": {
+      // Debug
+      "sanitize": [
+         "hwaddress",
+         "undefined",
+         "leak"
+      ]
+   },
+   "DebugSanitizeHWAddress": {
+      // (Debug)
+      "sanitize": "hwaddress"
+   },
+}
+```
+
+<!-- nav:/creating-targets:/describing-the-distribution -->
