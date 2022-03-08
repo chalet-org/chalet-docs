@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 // import Image from "next/image";
 import styled from "styled-components";
 
+import { useOperatingSystem } from "Hooks";
 import { useUiStore } from "Stores";
 import { getThemeVariable } from "Theme";
 
@@ -32,6 +33,8 @@ const Page = ({ title, children }: Props) => {
 		setAnimating(true);
 	}, [navOpen]);
 
+	const [os] = useOperatingSystem();
+
 	return (
 		<>
 			<Head>
@@ -44,7 +47,7 @@ const Page = ({ title, children }: Props) => {
 			<Main
 				id="main"
 				{...{ navWidth }}
-				className={`${navOpen ? "nav-open" : ""} ${animating ? "animating" : ""}`}
+				className={`${os} ${navOpen ? "nav-open" : ""} ${animating ? "animating" : ""}`}
 				onAnimationEnd={() => setAnimating(false)}
 			>
 				<Container>{!initialized ? "" : children}</Container>
@@ -77,7 +80,8 @@ const Main = styled.main<NavBarProps>`
 	bottom: auto;
 	left: 0;
 	transition: left 0.125s linear;
-	overflow: auto;
+	overflow-y: auto;
+	overflow-x: hidden;
 	scrollbar-width: thin;
 	scrollbar-color: ${getThemeVariable("secondaryColor")} transparent;
 
@@ -85,10 +89,10 @@ const Main = styled.main<NavBarProps>`
 	color: ${getThemeVariable("mainText")};
 
 	&::-webkit-scrollbar-thumb {
-		background-color: ${getThemeVariable("secondaryColor")};
+		background-color: ${getThemeVariable("primaryColor")};
 
 		&:hover {
-			background-color: ${getThemeVariable("primaryColor")};
+			background-color: ${getThemeVariable("secondaryColor")};
 		}
 	}
 

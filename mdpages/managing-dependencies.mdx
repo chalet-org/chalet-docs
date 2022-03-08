@@ -77,13 +77,13 @@ The `branch` & `commit` properties can also be combined:
 }
 ```
 
-If a repository only references the branch or doesn't use a branch, commit, or tag, then the repository will be updatable whenever newer commits are pushed to it. However, this update process is only done when one re-runs `chalet configure` since checking & updating the repos from the build commands can take extra time, and may unexpectedly break a build if a repository is unstable.
+If a repository only references the branch or doesn't use a branch, commit, or tag, then the repository will be updatable whenever newer commits are pushed to it. However, this update process is only done when one re-runs `chalet configure` since checking & updating the repos from the build commands can take extra time, and may unexpectedly break a build if a repository is unstable. If a branch, tag, or commit is changed in `externalDependencies`, the repository will be re-fetched before the next build.
 
 \\
 
 ## [The External Directory]
 
-Chalet uses a folder called `chalet_external` to store anything added with `externalDependencies`. It performs shallow clones of the repositories, does not store their git history, and keeps track of the given branch or ref separately in a central cache. It's expected that the code cloned down is managed elsewhere. The external directory can be changed via the `--external-dir` or `-e` command line option. Some might want to use `external` or `vendor` for instance if that makes more sense to them. 
+Chalet uses a folder called `chalet_external` to store anything added with `externalDependencies`. It performs shallow clones of the repositories, and keeps track of the given branch or ref separately in a central cache. It's expected that the code cloned down is managed elsewhere. The external directory can be changed via the `--external-dir` or `-e` command line option. Some might want to use `external` or `vendor` for instance. 
 
 The directory can be referenced in chalet.json with the `${externalDir}` path substitution variable explained [in the next section](/creating-targets?id=path-substitution).
 

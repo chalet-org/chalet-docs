@@ -38,11 +38,11 @@ const cssReset = css`
 	}
 
 	::-webkit-scrollbar-thumb {
-		background-color: ${getThemeVariable("header")};
+		background-color: ${getThemeVariable("border")};
 		height: 10.9rem;
 
 		&:hover {
-			background-color: ${getThemeVariable("codeGray")};
+			background-color: ${getThemeVariable("header")};
 		}
 	}
 
@@ -116,6 +116,7 @@ const BaseStyle = createGlobalStyle`
         background-color: ${getThemeVariable("background")};
 		scroll-behavior: smooth;
 		width: 100%;
+		display: block;
 		position: relative;
     }
 

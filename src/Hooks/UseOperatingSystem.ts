@@ -15,11 +15,11 @@ export enum PreferredCompiler {
 
 const useOperatingSystem = (): [OperatingSystem, PreferredCompiler] => {
 	const platform: [OperatingSystem, PreferredCompiler] = useMemo(() => {
-		const platform = platformJs.os;
-		if (platform && platform.family) {
-			if (platform.family.startsWith("Windows")) {
+		const os = platformJs.os;
+		if (os && os.family) {
+			if (os.family.startsWith("Windows")) {
 				return [OperatingSystem.Windows, PreferredCompiler.MSVC];
-			} else if (platform.family.startsWith("OS X") || platform.family.startsWith("iOS")) {
+			} else if (os.family.startsWith("OS X") || os.family.startsWith("iOS")) {
 				return [OperatingSystem.MacOS, PreferredCompiler.LLVM];
 			}
 		}
