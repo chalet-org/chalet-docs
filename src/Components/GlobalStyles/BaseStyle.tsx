@@ -39,7 +39,6 @@ const cssReset = css`
 
 	::-webkit-scrollbar-thumb {
 		background-color: ${getThemeVariable("border")};
-		height: 10.9rem;
 
 		&:hover {
 			background-color: ${getThemeVariable("header")};

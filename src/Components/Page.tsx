@@ -83,7 +83,7 @@ const Main = styled.main<NavBarProps>`
 	overflow-y: auto;
 	overflow-x: hidden;
 	scrollbar-width: thin;
-	scrollbar-color: ${getThemeVariable("secondaryColor")} transparent;
+	scrollbar-color: ${getThemeVariable("primaryColor")} transparent;
 
 	background-color: ${getThemeVariable("background")};
 	color: ${getThemeVariable("mainText")};
