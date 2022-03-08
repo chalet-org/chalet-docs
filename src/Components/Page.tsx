@@ -78,9 +78,19 @@ const Main = styled.main<NavBarProps>`
 	left: 0;
 	transition: left 0.125s linear;
 	overflow: auto;
+	scrollbar-width: thin;
+	scrollbar-color: ${getThemeVariable("secondaryColor")} transparent;
 
 	background-color: ${getThemeVariable("background")};
 	color: ${getThemeVariable("mainText")};
+
+	&::-webkit-scrollbar-thumb {
+		background-color: ${getThemeVariable("secondaryColor")};
+
+		&:hover {
+			background-color: ${getThemeVariable("primaryColor")};
+		}
+	}
 
 	&.nav-open {
 		left: ${(props) => props.navWidth};

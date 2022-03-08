@@ -12,11 +12,38 @@ const cssReset = css`
 		box-sizing: border-box;
 	}
 
+	html,
+	body,
+	div,
+	aside,
+	main {
+		scrollbar-width: thin;
+		scrollbar-color: ${getThemeVariable("header")} transparent;
+	}
+
 	*:focus-visible {
 		position: relative;
 		outline: 0.125rem solid ${getThemeVariable("primaryColor")};
 		z-index: 10000;
 		border-radius: 0.25rem;
+	}
+
+	::-webkit-scrollbar {
+		width: 0.5rem;
+		height: 0.5rem;
+	}
+
+	::-webkit-scrollbar-track-piece {
+		background-color: transparent;
+	}
+
+	::-webkit-scrollbar-thumb {
+		background-color: ${getThemeVariable("header")};
+		height: 10.9rem;
+
+		&:hover {
+			background-color: ${getThemeVariable("codeGray")};
+		}
 	}
 
 	blockquote,

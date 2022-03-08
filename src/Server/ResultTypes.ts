@@ -33,6 +33,7 @@ export type ResultMDX = MDXRemoteSerializeResult<Record<string, unknown>>;
 export type HyperLink = {
 	href: string;
 	label: string;
+	track?: boolean;
 };
 
 export type ResultNavigation = {

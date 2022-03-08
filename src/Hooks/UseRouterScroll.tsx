@@ -13,7 +13,7 @@ const useRouteChangeScroll = () => {
 
 	const handler = useCallback(() => {
 		if (window.location.search.length === 0) {
-			setFocusedId("");
+			setFocusedId(router.asPath);
 			setTimeout(() => {
 				const mainEl = document.getElementById("main");
 				mainEl?.scrollTo(0, 0);

@@ -91,9 +91,13 @@ const getSidebarLinks = (): Promise<SidebarResult[]> => {
 				let matches = line.match(/^\[(.*)\]\((.+?)\)$/);
 				if (!!matches) {
 					if (matches.length === 3) {
-						if (matches[1].length === 0) {
+						const track = matches[1] === "@";
+						if (matches[1].length === 0 || track) {
 							const link = await getLinkTitleFromPageSlug(matches[2]);
-							result.push(link);
+							result.push({
+								...link,
+								track,
+							});
 						} else {
 							result.push({
 								href: matches[2],

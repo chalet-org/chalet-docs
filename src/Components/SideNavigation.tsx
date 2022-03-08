@@ -31,6 +31,7 @@ const SideNavigation = ({ children, ...navProps }: Props) => {
 	return (
 		<>
 			<SidebarToggle
+				className={`sidebar ${navOpen ? "open" : ""}`}
 				onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
 				onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
 				onClick={(ev) => {
@@ -114,8 +115,9 @@ const SidebarToggle = styled.button`
 	padding: 1rem;
 	margin: 1rem;
 	cursor: pointer;
-	background: ${getThemeVariable("codeBackground")};
+	background: transparent;
 	border-radius: 0.25rem;
+	transition: background-color 0.125s linear;
 
 	> span {
 		background-color: ${getThemeVariable("header")};
@@ -130,6 +132,10 @@ const SidebarToggle = styled.button`
 		}
 	}
 
+	&.open {
+		background-color: ${getThemeVariable("codeBackground")};
+	}
+
 	&:hover,
 	&.touch-hover {
 		> span {
@@ -139,15 +145,6 @@ const SidebarToggle = styled.button`
 
 	&:focus-visible {
 		position: fixed;
-	}
-
-	@media ${hasMinWidth(0)} {
-		/**/
-	}
-	@media ${hasMinWidth(1)} {
-		background: none;
-	}
-	@media ${hasMinWidth(2)} {
 	}
 `;
 
@@ -209,6 +206,10 @@ const StyledAside = styled.aside<AsideProps>`
 			text-decoration-color: ${getThemeVariable("primaryColor")};
 		}
 
+		&:active {
+			background-color: ${getThemeVariable("background")};
+		}
+
 		&.active {
 			background-color: ${getThemeVariable("background")};
 			border-left-color: ${getThemeVariable("tertiaryColor")};
@@ -228,13 +229,6 @@ const StyledAside = styled.aside<AsideProps>`
 	}
 
 	> div.nav-fade {
-		display: block;
-		position: fixed;
-		width: calc(${(props) => props.width} - 0.125rem);
-		height: 7.5rem;
-		bottom: 0;
-		z-index: 100;
-
 		> .theme-toggle {
 			display: block;
 			position: fixed;

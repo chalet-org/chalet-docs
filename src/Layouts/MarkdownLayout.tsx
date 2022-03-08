@@ -1,20 +1,20 @@
 import debounce from "lodash/debounce";
-import { MDXRemote } from "next-mdx-remote";
+import { MDXRemote, MDXRemoteProps } from "next-mdx-remote";
 import { useRouter } from "next/router";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import styled from "styled-components";
 
 import { Optional } from "@rewrking/react-kitchen";
 
 import { Page, SideNavigation } from "Components";
-import { mdxComponents, schemaComponents } from "Components/MarkdownComponents";
-import { useRouteChangeScroll, useWheelScroll } from "Hooks";
+import { MDXComponents, mdxComponents } from "Components/MarkdownComponents";
+import { useRouteChangeScroll } from "Hooks";
 import { ResultMDXPage } from "Server/ResultTypes";
 import { useUiStore } from "Stores";
 
 export type Props = React.PropsWithChildren<
 	ResultMDXPage & {
-		isSchema?: boolean;
+		components?: MDXComponents;
 		trackScrolling?: boolean;
 	}
 >;
@@ -24,7 +24,11 @@ type AnchorData = {
 	id: string;
 };
 
-const goToFocusedLink = (pageLayout: Optional<HTMLDivElement>, setFocusedId: (inValue: string) => void) => {
+const goToFocusedLink = (
+	pageLayout: Optional<HTMLDivElement>,
+	path: string,
+	setFocusedId: (inValue: string) => void
+) => {
 	if (pageLayout === null) return;
 
 	const mainEl = document.getElementById("main");
@@ -58,7 +62,7 @@ const goToFocusedLink = (pageLayout: Optional<HTMLDivElement>, setFocusedId: (in
 
 			if (scrollY > firstLinkTop) {
 				if (nextTop - windowHeight * scrollPercent >= scrollY) {
-					setFocusedId(id);
+					setFocusedId(path.endsWith(id) ? path : id);
 					return;
 				}
 			}
@@ -66,15 +70,15 @@ const goToFocusedLink = (pageLayout: Optional<HTMLDivElement>, setFocusedId: (in
 
 		if (scrollY > pageLayoutHeight * 0.5) {
 			const lastAnchor = anchors[anchors.length - 1].id;
-			setFocusedId(lastAnchor);
+			setFocusedId(path.endsWith(lastAnchor) ? path : lastAnchor);
 			return;
 		}
 	}
 
-	setFocusedId("");
+	setFocusedId(path);
 };
 
-const MarkdownLayout = ({ meta, mdx, children, isSchema, trackScrolling = true, ...navProps }: Props) => {
+const MarkdownLayout = ({ meta, mdx, children, components, trackScrolling = true, ...navProps }: Props) => {
 	const { setFocusedId, navOpen } = useUiStore();
 	const pageLayout = useRef<HTMLDivElement>(null);
 	const router = useRouter();
@@ -83,7 +87,7 @@ const MarkdownLayout = ({ meta, mdx, children, isSchema, trackScrolling = true, 
 
 	useEffect(() => {
 		if (navOpen && trackScrolling) {
-			const id = typeof router.query.id === "string" ? router.query.id : "";
+			const id = typeof router.query.id === "string" ? router.query.id : router.asPath;
 			setFocusedId(id);
 		}
 	}, [navOpen, trackScrolling, router.query.id]);
@@ -91,10 +95,11 @@ const MarkdownLayout = ({ meta, mdx, children, isSchema, trackScrolling = true, 
 	const wheelCallback = useCallback(
 		debounce((ev) => {
 			if (navOpen && trackScrolling) {
-				goToFocusedLink(pageLayout.current, setFocusedId);
+				const path = router.asPath.split("?")[0];
+				goToFocusedLink(pageLayout.current, path, setFocusedId);
 			}
 		}, 10),
-		[navOpen, trackScrolling, pageLayout.current]
+		[navOpen, trackScrolling, pageLayout.current, router.asPath]
 	);
 
 	return (
@@ -103,9 +108,7 @@ const MarkdownLayout = ({ meta, mdx, children, isSchema, trackScrolling = true, 
 			<Page title={meta?.title ?? "Untitled"}>
 				<Styles ref={pageLayout} onWheel={wheelCallback}>
 					{children}
-					{!!mdx && (
-						<MDXRemote {...mdx} components={(!!isSchema ? schemaComponents : mdxComponents) as any} />
-					)}
+					{!!mdx && <MDXRemote {...mdx} components={(components ?? mdxComponents) as any} />}
 				</Styles>
 			</Page>
 		</>

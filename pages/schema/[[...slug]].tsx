@@ -15,8 +15,13 @@ const SchemaExplorePage = (props: Props) => {
 
 export const getServerSideProps = withServerErrorHandler(async (ctx: GetServerSidePropsContext) => {
 	const { slug } = ctx.query;
-	if (!slug || (typeof slug !== "string" && slug.length === 0)) {
-		throw new Error("Params not found");
+	if (!slug || (typeof slug !== "string" && slug.length < 2)) {
+		return {
+			redirect: {
+				destination: `/schema/latest/${SchemaType.ChaletJson}`,
+				permanent: true,
+			},
+		};
 	}
 
 	if (

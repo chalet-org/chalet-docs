@@ -95,6 +95,11 @@ const InfoBlock = styled.div`
 
 			> a {
 				display: block;
+
+				> i > svg > path,
+				> i > svg > circle {
+					transition: color 0.125s linear, fill 0.125s linear;
+				}
 			}
 
 			> .spacer {

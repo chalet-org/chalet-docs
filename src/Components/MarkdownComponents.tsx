@@ -6,7 +6,7 @@ import { dynamic } from "Utility";
 
 import { AnchoredHeadingObject, HeadingObject } from "./Heading";
 
-type MDXComponents = Dictionary<React.ComponentType<any>>;
+export type MDXComponents = Dictionary<React.ComponentType<any>>;
 
 const mdxComponents: MDXComponents = {
 	...AnchoredHeadingObject,

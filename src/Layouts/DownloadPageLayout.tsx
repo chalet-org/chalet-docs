@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import styled from "styled-components";
 
 import {
@@ -12,6 +12,7 @@ import {
 } from "Components";
 import { useRouteChangeScroll } from "Hooks";
 import { ResultDownloadPage, ResultReleases } from "Server/ResultTypes";
+import { useUiStore } from "Stores";
 
 type Props = ResultDownloadPage &
 	ResultReleases & {
@@ -20,6 +21,8 @@ type Props = ResultDownloadPage &
 
 const DownloadPageLayout = ({ title, releases, downloadLinks, ...navProps }: Props) => {
 	const router = useRouter();
+	const { setFocusedId } = useUiStore();
+
 	const ref: string = useMemo(() => {
 		const path = router.asPath.split("?")[0];
 		const split = path.split("/");

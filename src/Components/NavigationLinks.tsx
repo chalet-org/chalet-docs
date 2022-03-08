@@ -14,10 +14,11 @@ import { getThemeVariable } from "Theme";
 type LinkWithAnchorProps = React.PropsWithChildren<
 	Pick<ResultNavigation, "anchors"> & {
 		href: NextLinkProps["href"];
+		trackHeadings?: boolean;
 	}
 >;
 
-const LinkWithAnchors = ({ href, anchors, children }: LinkWithAnchorProps) => {
+const LinkWithAnchors = ({ href, trackHeadings, anchors, children }: LinkWithAnchorProps) => {
 	href = href.toString();
 	const router = useRouter();
 	const { setNavOpen } = useUiStore();
@@ -31,7 +32,7 @@ const LinkWithAnchors = ({ href, anchors, children }: LinkWithAnchorProps) => {
 
 	return (
 		<li>
-			<Link href={href} onClick={onClick}>
+			<Link href={href} dataId={href} onClick={onClick} trackHeadings={trackHeadings}>
 				{children}
 			</Link>
 			{(base === href || base2 === href) && (
@@ -40,7 +41,7 @@ const LinkWithAnchors = ({ href, anchors, children }: LinkWithAnchorProps) => {
 						const dataId = anchor.to.includes("=") ? anchor.to.split("=")[1] : undefined;
 						return (
 							<li key={j}>
-								<Link href={`${href}${anchor.to}`} onClick={onClick} dataId={dataId}>
+								<Link href={`${href}${anchor.to}`} onClick={onClick} dataId={dataId} trackHeadings>
 									{anchor.text}
 								</Link>
 							</li>
@@ -74,7 +75,7 @@ const NavigationLinks = ({ sidebarLinks, anchors }: Props) => {
 					}
 				} else {
 					return (
-						<LinkWithAnchors href={link.href} anchors={anchors} key={i}>
+						<LinkWithAnchors href={link.href} anchors={anchors} key={i} trackHeadings={link.track}>
 							{link.label}
 						</LinkWithAnchors>
 					);
