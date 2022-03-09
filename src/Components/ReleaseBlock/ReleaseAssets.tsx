@@ -82,7 +82,7 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url }: Props) => {
 			<DownloadContainer>
 				{(platform == OperatingSystem.Windows || showAllPlatforms) && windows.length > 0 && (
 					<DownloadRow>
-						<Icon id="windows" size={iconSize} color={theme.codeBlue} />
+						<Icon id="windows" size={iconSize} color={theme.codeBlue} hoverColor={theme.codeBlue} />
 						<DownloadSection>
 							{windows.map((data, i) => {
 								const { platform: dataPlatform, filetype, abi } = data;
@@ -113,7 +113,7 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url }: Props) => {
 				)}
 				{(platform == OperatingSystem.MacOS || showAllPlatforms) && macos.length > 0 && (
 					<DownloadRow>
-						<Icon id="apple" size={iconSize} color={theme.codeGray} />
+						<Icon id="apple" size={iconSize} color={theme.codeGray} hoverColor={theme.codeGray} />
 						<DownloadSection>
 							{macos.map((data, i) => {
 								const { platform: dataPlatform, filetype, abi } = data;
@@ -148,7 +148,7 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url }: Props) => {
 				)}
 				{(platform == OperatingSystem.Linux || showAllPlatforms) && linux.length > 0 && (
 					<DownloadRow>
-						<Icon id="linux" size={iconSize} color={theme.codeGreen} />
+						<Icon id="linux" size={iconSize} color={theme.codeGreen} hoverColor={theme.codeGreen} />
 						<DownloadSection>
 							{linux.map((data, i) => {
 								const { platform: dataPlatform, filetype, abi } = data;
@@ -175,7 +175,7 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url }: Props) => {
 					</DownloadRow>
 				)}
 				<DownloadRow>
-					<Icon id="source" size={iconSize} color={theme.primaryColor} />
+					<Icon id="source" size={iconSize} color={theme.primaryColor} hoverColor={theme.primaryColor} />
 					<DownloadSection>
 						<AssetButton
 							className="source"

@@ -8,6 +8,7 @@ Documentation
 [@](/getting-started)
 [@](/managing-dependencies)
 [@](/creating-targets)
+[@](/cxx-compile-settings)
 [@](/build-configurations)
 [@](/describing-the-distribution)
 [@](/command-usage)

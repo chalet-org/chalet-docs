@@ -1,0 +1,407 @@
+---
+title: C/C++ Compile Settings
+---
+
+# [${meta.title}]
+
+---
+
+In source targets, C/C++ settings may be described in a similar fashion as one would if they were interacting with a compiler from the command line. This is designed to be as intuitive and straightforward as possible, while maintaining the same flexibility.
+
+
+```json
+"targets": {
+   "my-project": {
+      "kind": "executable",
+      "language": "C++",
+      "settings:Cxx": {
+         "pch": "src/PCH.hpp",
+         "cppStandard": "c++20",
+         "warnings": "strict",
+         "threads": true,
+         "rtti": false,
+         "exceptions": true,
+         "staticLinking": false,
+         "defines": [
+            "LIB_FOO"
+         ],
+         "defines:debug": [
+            "_DEBUG"
+         ],
+         "includeDirs": [
+            "${externalDir}/foo/include",
+            "${externalDir}/bar/include"
+         ],
+         "libDirs": [
+            "${externalDir}/foo/lib"
+         ],
+         "links": [
+            "foo"
+         ],
+         "links.windows": [
+            "bar"
+         ]
+      },
+      "files": "src/**.cpp"
+   }
+}
+```
+
+Some of these properties will be covered here, while others will be explained are detailed in the schema documentation, [here](http://localhost:3000/schema/latest/chalet-json/executable-source-target).
+
+\\
+
+## [Language Standard]
+
+The C and C++ language standard are represented as `cStandard` and `cppStandard` respectively. If using GCC and clang, the language standard is given directly to the compiler, while if using MSVC, it's reinterpreted to a supported flag.
+
+Examples:
+
+```json
+// /std:c++20 in MSVC (19.29 or higher)
+"cppStandard": "c++20"
+"cppStandard": "gnu++2b"
+
+// /std:c++17 in MSVC (19.11 or higher)
+"cppStandard": "c++17" 
+
+// /std:c17 in MSVC (19.28 or higher)
+"cStandard": "gnu17"
+
+// /std:c11 in MSVC (19.28 or higher)
+"cStandard": "c11"
+```
+
+MSVC will fall back to `/std:latest` if the standard isn't recognized.
+
+> Note: With this approach, One can try out new C++ versions without needing an update of chalet first
+
+\\
+
+## [Include Directories]
+
+These are directories (preferably relative) to be included during compilation, and tell the compiler where header files are located. This is expressed with the `includeDirs` property, where all [Path Substitutions](/creating-targets?id=path-substitution) and glob patterns apply. The simplest example is the following:
+
+```json
+"includeDirs": [
+   "src"
+]
+```
+
+This means the `src` folder is a root of included paths, so folders are required in `#include` directives.
+
+```cpp
+#include "foo.hpp"         // src/foo.hpp
+#include "bar/bar.hpp"     // src/folder/bar.hpp
+```
+
+```json
+"includeDirs": [
+   "${externalDir}/foo/include",
+]
+```
+
+Typically this means if a library has subdirectories, you have to declare your include directives in code as: 
+
+```cpp
+#include <subdir/foo.hpp>  // ${externalDir}/foo/include/subdir/foo.hpp
+```
+
+Some might want to do the following:
+
+```cpp
+#include <foo.hpp>         // ${externalDir}/foo/include/subdir/foo.hpp
+#include "bar.hpp"         // src/folder/bar.hpp
+```
+
+Glob patterns are also supported for this reason, so one can include a directory recursively:
+
+```json
+"includeDirs": [
+   "${externalDir}/foo/include/**",
+   "src/**"
+]
+```
+
+However, the problem with this approach is that simply adding a folder will add another include path to the build command, forcing a recompile of that target, so it would be more desirable to either place all sources in a single folder, or use the previous subfolder approach. This would ultimately come down to personal preference.
+
+> Note: compiler include paths are automatically added.
+
+See also: [Advanced: Fine Tuning](/cxx-compile-settings?id=advanced-fine-tuning)
+
+\\
+
+## [Library Search Paths]
+
+These are directories (preferably relative) that are used to search for static or dynamic libraries at link time. If you're looking to link a library called `foo`, you must tell the linker where `foo.lib` or `libfoo.a` exist. This is expressed with the `libDirs` property, where all [Path Substitutions](/creating-targets?id=path-substitution) and glob patterns are supported.
+
+Example:
+
+```json
+"libDirs": [
+   "${externalBuildDir}/foo/lib"
+]
+"libDirs.windows": [
+   "${env:ProgramFiles}/bar/lib"
+]
+"libDirs.!windows": [
+   "~/libraries/bar/lib"
+]
+```
+
+> Note: compiler lib paths are automatically added.
+
+See also: [Advanced: Fine Tuning](/cxx-compile-settings?id=advanced-fine-tuning)
+
+\\
+
+## [Preprocessor Definitions]
+
+These are preprocessor symbols to pass to the compiler **per target**. These are typically used to define something globally that affects how the target gets compiled for its usage. 
+
+For example, in a debug build, you're probably going to want to define `DEBUG` or `_DEBUG` (this is not done for you).
+
+```json
+"abstracts:*": {
+   "settings:Cxx": {
+      "defines.debug": [
+         "_DEBUG"
+      ]
+   }
+}
+```
+
+See also: [Advanced: Fine Tuning](/cxx-compile-settings?id=advanced-fine-tuning)
+
+\\
+
+## [Warnings]
+
+Deciding which warnings to use is a central part of working with C++. There are two ways to declare them: As a preset, or as a GNU-style list.
+
+\
+
+**Warning Presets**
+
+Presets are inherently opinionated. Their goal is to provide an abstraction that can be interpreted by all compilers. With GCC & clang, they will populate a list of warnings behinds the scenes, try to limit them based on the compiler version, and pass them along. Both compilers tend to support each other in that if a warning is available on one, but not the other, it tends to just be a no-op. When in doubt: test.
+
+```json
+"my-target": {
+   "settings:Cxx": {
+     "warnings": "strict"
+   }
+}
+```
+
+In GCC/Clang, the presets are as follows:
+
+* **none** - No warnings (default). This is the same as not defining `warnings` at all.
+* **minimal** - Equivalent to `-Wall`.
+* **extra** - Equivalent to **minimal** + `-Wextra`.
+* **pedantic** - Equivalent to **extra** + `-Wpedantic`.
+* **error** - Equivalent to **pedantic** + `-Werror`. Warnings will be treated as errors.
+* **strict** - Equivalent to **error** + `-Wunused` `-Wcast-align` `-Wdouble-promotion` `-Wformat=2` `-Wmissing-declarations` `-Wmissing-include-dirs` `-Wnon-virtual-dtor` `-Wredundant-decls`. Warnings will be treated as errors.
+* **strictPedantic** - Equivalent to **strict** + `-Wunreachable-code` `-Wshadow`. Warnings will be treated as errors.
+* **veryStrict** - Equivalent to **strictPedantic** + `-Wnoexcept` `-Wundef` `-Wconversion` `-Wcast-qual` `-Wfloat-equal` `-Winline` `-Wold-style-cast` `-Wstrict-null-sentinel` `-Woverloaded-virtual` `-Wsign-conversion` `-Wsign-promo`. Warnings will be treated as errors.
+
+In MSVC, presets are interpreted as the warning level:
+
+* **none** - No warnings (default). This is the same as not defining `warnings` at all.
+* **minimal** - Equivalent to `/W1`.
+* **extra** - Equivalent to `/W2`.
+* **pedantic** - Equivalent to `/W3`.
+* **error** - Equivalent to `/W3 /WX`. Warnings will be treated as errors.
+* **strict**, **strictPedantic** & **veryStrict**  - Equivalent to `/W4 /WX`. Warnings will be treated as errors.
+
+> Note: If you'd like to use `/Wall`, it must be added manually.
+
+> Note: These may change between some Chalet versions (probably not very often), as they have the potential to be pretty contentious. [Debate](//github.com/chalet-org/chalet/discussions) is welcomed.
+
+\
+
+**Explicit GNU-style List**
+
+Warnings can be defined manually, as a list of their GNU names, minus the `-W` prefix. If the compiler is GCC or clang, the list is passed along directly to the compile commands, without any further validation (although this behavior may get tweaked in the future).
+
+```json
+"my-target": {
+   "settings:Cxx": {
+      "warnings": [
+         "all",
+         "error",
+         "unused",
+         "shadow",
+         "unreachable-code",
+         "format=2"
+      ]
+   }
+}
+```
+
+In MSVC, warning flags will be cross-referenced based on how presets are defined above, so if "pedantic" is present in the list, the flag will be `/W3`. If "error" or any of the strict/veryStrict GNU names are present, `/WX` will get added.
+
+See also: [Advanced: Fine Tuning](/cxx-compile-settings?id=advanced-fine-tuning)
+
+\\
+
+## [Precompiled Headers]
+
+For the unfamiliar, this is a convention used to speed up the build process by compiling common headers up front. A single precompiled header can be defined per source target using the `pch` property. One can include as many headers as they wish to inside of the precompiled header itself.
+
+```json
+"my-target": {
+   "files": "src/**.cpp",
+   "settings:Cxx": {
+      "pch": "src/PCH.hpp"
+   }
+}
+```
+
+This will automatically include that header in every source file of that target. Although there's nothing stopping one from doing so, it's not necessary to include it again at the top of source files via `#include`. Every compiler handles precompiled headers a little differently under the hood, so Chalet abstracts that away for you.
+
+> Note: In `universal` architecture builds on MacOS, a separate precompiled header is created for each architecture.
+
+\\
+
+## [Dynamic Linking]
+
+Linking shared libraries is quite simple in Chalet. Like with the `-l` option in GCC/Clang, only the base name of the library needs to be supplied. Thus, `libfoo.a` would be linked as `foo`. If you are using MSVC, and the library is `foo.lib`, the link is again just `foo`.
+
+```json
+"links": [
+   "foo"
+],
+"links.debug": [
+   "bar-d"
+],
+"links.!debug": [
+   "bar"
+],
+"links.windows": [
+   "user32"
+]
+```
+
+If linking to another target, the target must build prior to the current target, and one only needs to supply the target name to `links`.
+
+```json
+"first-target": {
+   "kind": "sharedLibrary",
+   "files": "src/foo/**.cpp",
+},
+"second-target": {
+   "settings:Cxx": {
+      "links": [
+         "first-target"
+      ]
+   }
+}
+```
+
+You might run into a situation where a library is only supported on a certain platform, or is only relevant in a Debug build. Expressing that is quite easy:
+
+```json
+"first-target": {
+   "kind": "sharedLibrary",
+   "condition": "windows",
+   "files": "src/foo/**.cpp"
+},
+"second-target": {
+   "settings:Cxx": {
+      "links.windows": [
+         "first-target"
+      ]
+   }
+```
+
+See also: [Advanced: Fine Tuning](/cxx-compile-settings?id=advanced-fine-tuning)
+
+
+\\
+
+## [Static Linking]
+
+Static links work the same way as shared, but use the `staticLinks` property instead. However, static library targets will have an output filename with a "-s" suffix behind the scenes. If linking to a prebuilt static library, or one built with CMake for instance, the suffix will need to be added, if applicable.
+
+```json
+"first-target": {
+   "kind": "staticLibrary",
+   "files": "src/foo/**.cpp"
+},
+"second-target": {
+   "settings:Cxx": {
+      "staticLinks": [
+         "first-target"
+      ]
+   }
+}
+```
+
+The actual file being linked in that example is `libfirst-target-s.a`, but we only care about the target name here.
+
+See also: [Advanced: Fine Tuning](/cxx-compile-settings?id=advanced-fine-tuning)
+
+\
+
+<!-- accordion:start Static Linking Compiler Libraries (libstdc++ etc) -->
+
+There's an extra property for this: `staticLinking`, but has different behavior on each toolchain. For those familar with GCC, it does not use `-static` (which links every link following it statically, including compiler libraries) but instead uses the explicit versions:
+
+```
+-static-libgcc
+-static-libasan
+-static-libtsan
+-static-liblsan
+-static-libubsan
+-static-libstdc++
+```
+
+This is particularly useful with MinGW, as it means not having to distribute as many .dll files, whereas on linux it may be less desireable.
+
+In LLVM, `staticLinking` just passes `-static-libsan` at the moment, and in MSVC, does nothing.
+
+<!-- accordion:end -->
+
+\\
+
+## [C++ Modules]
+
+To enable modules (requires C++20 - currently only works with MSVC), set `cppModules` to true. This will treat **all** source files in that target location as modules. 
+
+```json
+"modules-target": {
+   "settings:Cxx": {
+      "cppModules": true
+   }
+}
+```
+
+If mixing with non-module C++ code, one must create a static library target without `cppModules`, import those headers in your module code, and statically link the non-modules target.
+
+```json
+"non-modules-target": {
+   "kind": "staticLibrary",
+   "settings:Cxx": {
+      "includeDirs": [
+         "include/foo"
+      ]
+   },
+   "files": "src/foo/**.cpp"
+},
+"modules-target": {
+   "settings:Cxx": {
+      "cppModules": true,
+      "includeDirs": [
+         "include/foo"
+      ],
+      "staticLinks": [
+         "non-modules-target"
+      ]
+   },
+   "files": "src/bar/**.cpp"
+}
+```
+
+Modules have a complicated build process compared to other C++ code, so they are built natively through Chalet, instead of using Ninja/Make. Fortunately, this is very fast, and comparable to doing so in msbuild/inside Visual Studio. Other build targets still use Ninja/Make. Because module source code file extensions can technically be anything in the same way as regular C++ code, it makes the most sense to separate out the two types of source code in the build.
+
+<!-- nav:/creating-targets:/build-configurations -->
