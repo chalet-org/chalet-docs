@@ -15,11 +15,11 @@ In source targets, C/C++ settings may be described in a similar fashion as one w
       "kind": "executable",
       "language": "C++",
       "settings:Cxx": {
-         "pch": "src/PCH.hpp",
+         "precompiledHeader": "src/PCH.hpp",
          "cppStandard": "c++20",
          "warnings": "strict",
          "threads": true,
-         "rtti": false,
+         "runtimeTypeInformation": false,
          "exceptions": true,
          "staticLinking": false,
          "defines": [
@@ -246,13 +246,13 @@ See also: [Advanced: Fine Tuning](/cxx-compile-settings?id=advanced-fine-tuning)
 
 ## [Precompiled Headers]
 
-For the unfamiliar, this is a convention used to speed up the build process by compiling common headers up front. A single precompiled header can be defined per source target using the `pch` property. One can include as many headers as they wish to inside of the precompiled header itself.
+For the unfamiliar, this is a convention used to speed up the build process by compiling common headers up front. A single precompiled header can be defined per source target using the `precompiledHeader` property. One can include as many headers as they wish to inside of the precompiled header itself.
 
 ```json
 "my-target": {
    "files": "src/**.cpp",
    "settings:Cxx": {
-      "pch": "src/PCH.hpp"
+      "precompiledHeader": "src/PCH.hpp"
    }
 }
 ```
@@ -321,7 +321,7 @@ See also: [Advanced: Fine Tuning](/cxx-compile-settings?id=advanced-fine-tuning)
 
 ## [Static Linking]
 
-Static links work the same way as shared, but use the `staticLinks` property instead. However, static library targets will have an output filename with a "-s" suffix behind the scenes. If linking to a prebuilt static library, or one built with CMake for instance, the suffix will need to be added, if applicable.
+Static links work the same way as shared, but use the `staticLinks` property instead.
 
 ```json
 "first-target": {
@@ -337,30 +337,38 @@ Static links work the same way as shared, but use the `staticLinks` property ins
 }
 ```
 
-The actual file being linked in that example is `libfirst-target-s.a`, but we only care about the target name here.
+The actual file being linked in that example is either `libfirst-target.a` or `first-target.lib` depending on the compiler, but the target name is what's important to `staticLinks`.
 
 See also: [Advanced: Fine Tuning](/cxx-compile-settings?id=advanced-fine-tuning)
 
-\
+\\
 
-<!-- accordion:start Static Linking Compiler Libraries (libstdc++ etc) -->
+## [Static Runtime Libraries]
 
-There's an extra property for this: `staticLinking`, but has different behavior on each toolchain. For those familar with GCC, it does not use `-static` (which links every link following it statically, including compiler libraries) but instead uses the explicit versions:
+For the unfamiliar: when an application or shared library is linked, one can choose whether the runtime is linked dynamically (default) or statically. This means additional shared library dependencies. In Chalet, there's an extra property for this: `staticRuntimeLibrary`, and has slightly different behavior on each toolchain.
 
-```
+In GCC, the following flags are used:
+
+```bash
 -static-libgcc
--static-libasan
--static-libtsan
--static-liblsan
--static-libubsan
 -static-libstdc++
 ```
 
-This is particularly useful with MinGW, as it means not having to distribute as many .dll files, whereas on linux it may be less desireable.
+Depending on the sanitizers used by the build configuration, the following will also be enabled:
 
-In LLVM, `staticLinking` just passes `-static-libsan` at the moment, and in MSVC, does nothing.
+```bash
+-static-libasan  # address
+-static-libtsan  # thread
+-static-liblsan  # leaks
+-static-libubsan # undefined
+```
 
-<!-- accordion:end -->
+In LLVM, `-static-libsan` is used alongside sanitize=address at the moment with `staticRuntimeLibrary`.
+
+On linux, statically linking the runtime libraries may not be wise, but in the case of MinGW on Windows, it means not having to ship your application with files like `libgcc_s_seh-1.dll`, `libstdc++-6.dll` and `libpthread-1.dll`.
+
+In MSVC, `/MTd` is passed instead of `/MDd` in debug builds, and `/MT` is passed instead of `/MD` in non-debug builds. statically linking the runtime libraries in MSVC means not requiring `api-ms-win-crt-*.dll` files when it comes time to distribute
+
 
 \\
 

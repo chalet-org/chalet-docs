@@ -30,7 +30,6 @@
 		"lodash": "^4.17.21",
 		"next": "12.1.0",
 		"next-mdx-remote": "4.0.0",
-		"perf_hooks": "^0.0.1",
 		"platform": "^1.3.6",
 		"prismjs": "^1.24.1",
 		"react": "17.0.2",

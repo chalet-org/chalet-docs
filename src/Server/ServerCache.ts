@@ -1,5 +1,3 @@
-import { performance } from "perf_hooks";
-
 import { Dictionary } from "@rewrking/react-kitchen";
 
 // import { isDevelopment } from "./IsDevelopment";
