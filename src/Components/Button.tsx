@@ -32,7 +32,6 @@ const Styles = styled.button`
 	position: relative;
 	font-weight: 400;
 	padding: 1.25rem 1rem;
-	padding-bottom: 1.325rem;
 	line-height: 1;
 	color: ${getThemeVariable("mainText")};
 	background-color: transparent;

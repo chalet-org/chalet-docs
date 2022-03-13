@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 // import Image from "next/image";
 import styled from "styled-components";
 
-import { useOperatingSystem } from "Hooks";
 import { useUiStore } from "Stores";
 import { getThemeVariable } from "Theme";
 
@@ -33,8 +32,6 @@ const Page = ({ title, children }: Props) => {
 		setAnimating(true);
 	}, [navOpen]);
 
-	const [os] = useOperatingSystem();
-
 	return (
 		<>
 			<Head>
@@ -47,7 +44,7 @@ const Page = ({ title, children }: Props) => {
 			<Main
 				id="main"
 				{...{ navWidth }}
-				className={`${os} ${navOpen ? "nav-open" : ""} ${animating ? "animating" : ""}`}
+				className={`${navOpen ? "nav-open" : ""} ${animating ? "animating" : ""}`}
 				onAnimationEnd={() => setAnimating(false)}
 			>
 				<Container>{!initialized ? "" : children}</Container>

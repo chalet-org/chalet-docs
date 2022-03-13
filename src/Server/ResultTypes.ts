@@ -60,8 +60,10 @@ export type ResultDownloadPage = ResultDataPage & {
 	downloadLinks: HyperLink[];
 };
 
-export type ResultSearchResults = {
+export type SearchResult = {
 	url: string;
 	title: string;
 	text: string;
-}[];
+};
+
+export type ResultSearchResults = SearchResult[];

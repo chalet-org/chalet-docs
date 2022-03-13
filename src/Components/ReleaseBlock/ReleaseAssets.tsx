@@ -96,7 +96,7 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url }: Props) => {
 										onClick={(ev) => router.push(browser_download_url)}
 										color={theme.codeBlue}
 									>
-										<div className="main">
+										<div className="bold">
 											Windows{" "}
 											{platform == OperatingSystem.Windows && filetype === "installer"
 												? "installer (Recommended)"
@@ -127,7 +127,7 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url }: Props) => {
 										onClick={(ev) => router.push(browser_download_url)}
 										color={theme.codeGray}
 									>
-										<div className="main">
+										<div className="bold">
 											MacOS{" "}
 											{platform == OperatingSystem.MacOS && data.arch === "universal"
 												? "archive (Recommended)"
@@ -162,7 +162,7 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url }: Props) => {
 										onClick={(ev) => router.push(browser_download_url)}
 										color={theme.codeGreen}
 									>
-										<div className="main">
+										<div className="bold">
 											Linux archive (.zip)
 											<br />
 											<span>{name}</span>
@@ -184,7 +184,7 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url }: Props) => {
 							onClick={(ev) => router.push(zipball_url)}
 							color={theme.primaryColor}
 						>
-							<div className="main">Source code (.zip)</div>
+							<div className="bold">Source code (.zip)</div>
 							<div></div>
 						</AssetButton>
 						<AssetButton
@@ -194,7 +194,7 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url }: Props) => {
 							onClick={(ev) => router.push(tarball_url)}
 							color={theme.primaryColor}
 						>
-							<div className="main">Source code (.tar.gz)</div>
+							<div className="bold">Source code (.tar.gz)</div>
 							<div></div>
 						</AssetButton>
 					</DownloadSection>
@@ -286,7 +286,7 @@ const AssetButton = styled.button<AssetButtonProps>`
 	> div {
 		line-height: 1.125;
 
-		&.main {
+		&.bold {
 			font-weight: 600;
 			text-align: left;
 		}

@@ -2,7 +2,6 @@ import { useRouter } from "next/router";
 import React from "react";
 import styled from "styled-components";
 
-import { useUiStore } from "Stores";
 import { getThemeVariable } from "Theme";
 
 import { Button } from "./Button";
@@ -88,7 +87,6 @@ const Styles = styled.div`
 				display: block;
 				position: absolute;
 				transition: color 0.125s linear;
-				top: calc(50% + 0.0675rem);
 				color: ${getThemeVariable("secondaryColor")};
 			}
 		}
@@ -98,8 +96,8 @@ const Styles = styled.div`
 			text-align: left;
 
 			&:before {
-				content: "\u276F";
-				transform: rotate(180deg);
+				content: "\u276E";
+				top: 50%;
 				left: 1rem;
 			}
 		}
@@ -110,6 +108,7 @@ const Styles = styled.div`
 
 			&:after {
 				content: "\u276F";
+				top: 50%;
 				right: 1rem;
 			}
 		}

@@ -4,7 +4,9 @@ import { ResultSearchResults } from "Server/ResultTypes";
 import { ApiReq, ApiRes } from "Utility";
 
 const getSearchResults = (search: string, pages: PageCache[], resultLength: number = 80): ResultSearchResults => {
-	let result: ResultSearchResults = [];
+	const urls: string[] = [];
+	const titles: string[] = [];
+	const texts: string[] = [];
 
 	let lastPosition: number = 0;
 	const getResultFromText = (inText: string, page: PageCache, outputText: boolean = true) => {
@@ -14,11 +16,18 @@ const getSearchResults = (search: string, pages: PageCache[], resultLength: numb
 			if (lastPosition === -1) {
 				break;
 			} else {
-				result.push({
-					url: page.url,
-					title: page.title,
-					text: outputText ? inText.substring(lastPosition, lastPosition + resultLength).split("\n")[0] : "",
-				});
+				const url = page.url;
+				const title = page.title;
+				const text = outputText
+					? inText.substring(lastPosition, lastPosition + resultLength).split("\n")[0]
+					: "";
+
+				if (!(titles.includes(title) && texts.includes(text))) {
+					urls.push(url);
+					titles.push(title);
+					texts.push(text);
+				}
+
 				lastPosition += search.length;
 			}
 		}
@@ -27,6 +36,17 @@ const getSearchResults = (search: string, pages: PageCache[], resultLength: numb
 	for (const page of pages) {
 		getResultFromText(page.title, page, false);
 		getResultFromText(page.content, page);
+	}
+
+	let result: ResultSearchResults = [];
+	if (urls.length === titles.length && titles.length === texts.length) {
+		for (let i = 0; i < urls.length; ++i) {
+			result.push({
+				url: urls[i],
+				title: titles[i],
+				text: texts[i],
+			});
+		}
 	}
 
 	return result;
@@ -48,6 +68,7 @@ const handler = middleware.use(["auth"], async (req: ApiReq, res: ApiRes<ResultS
 		// console.log(results);
 		res.status(200).json(results);
 	} catch (err: any) {
+		console.error(err);
 		res.status(404).json({
 			...err,
 		});

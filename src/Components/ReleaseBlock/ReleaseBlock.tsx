@@ -87,6 +87,10 @@ const InfoBlock = styled.div`
 		flex-direction: column;
 		align-items: left;
 
+		> h2 {
+			padding-bottom: 0;
+		}
+
 		> .sub-group {
 			display: flex;
 			flex-direction: row;

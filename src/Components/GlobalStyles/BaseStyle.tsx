@@ -138,7 +138,7 @@ const BaseStyle = createGlobalStyle`
 		font-weight: 500;
         margin: 0;
 		padding-top: 0;
-		padding-bottom: 0;
+		padding-bottom: 0.75rem;
     }
 
 	h1 {
