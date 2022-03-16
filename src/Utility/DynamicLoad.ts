@@ -17,6 +17,8 @@ type Components =
 	| "Spacer"
 	| "Stub"
 	| "TabbedContent"
+	| "Tagline"
+	| "TermDemo"
 	| "UnorderedList"
 	| "UnorderedListSchema";
 

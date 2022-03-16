@@ -23,6 +23,8 @@ export * from "./SideNavigation";
 export * from "./Spacer";
 export * from "./Stub";
 export * from "./TabbedContent";
+export * from "./Tagline";
+export * from "./TermDemo";
 export * from "./ThemeToggle";
 export * from "./ThemeProvider";
 export * from "./UnorderedList";

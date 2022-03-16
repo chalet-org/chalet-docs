@@ -27,6 +27,8 @@ const mdxComponents: MDXComponents = {
 	Spacer: dynamic.component("Spacer"),
 	CodeHeader: dynamic.component("CodeHeader"),
 	PageDescription: dynamic.component("PageDescription"),
+	TermDemo: dynamic.component("TermDemo"),
+	Tagline: dynamic.component("Tagline"),
 };
 
 const schemaComponents: MDXComponents = {
