@@ -1,15 +1,17 @@
-import React from "react";
+import React, { useMemo } from "react";
 import styled from "styled-components";
 
 import { getThemeVariable } from "Theme";
+import { getOperatingSystem } from "Utility";
 
 import { hasMinWidth } from "./GlobalStyles";
 
 const TermDemo = () => {
+	const os = useMemo(getOperatingSystem, []);
 	return (
 		<Styles>
 			<DemoImageFrame>
-				<DemoImage src="/images/chalet-demo.gif" alt="chalet" />
+				<DemoImage src={`/images/chalet-demo-${os}.gif`} alt="chalet" />
 			</DemoImageFrame>
 		</Styles>
 	);
