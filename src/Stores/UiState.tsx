@@ -31,6 +31,8 @@ class UiState extends BaseState {
 
 		this.setTheme(LocalStorage.get<Theme>("themeId", themeId));
 		this.navOpen = LocalStorage.get("navOpen", "true") == "true";
+		const tooLarge = window.matchMedia?.("(min-width: 960px)").matches ?? true;
+		if (!tooLarge) this.setNavOpen(false);
 		this.initialized = true;
 	};
 
