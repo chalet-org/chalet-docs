@@ -1,12 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 
-import { hasMinWidth, Link, SearchInput, ThemeToggle } from "Components";
+import { Link, SearchInput, ThemeToggle } from "Components";
 import { useKeyPress } from "Hooks";
 import { ResultNavigation } from "Server/ResultTypes";
 import { useUiStore } from "Stores";
 import { getThemeVariable } from "Theme";
-import { makeLinearGradient } from "Utility";
 
 import { NavigationLinks } from "./NavigationLinks";
 
@@ -43,11 +42,7 @@ const SideNavigation = ({ children, ...navProps }: Props) => {
 				<span />
 				<span />
 			</SidebarToggle>
-			<StyledAside
-				className={`sidebar ${navOpen ? "open" : ""}`}
-				width={navWidth}
-				onAnimationEnd={() => setAnimating(false)}
-			>
+			<StyledAside className={`sidebar ${navOpen ? "open" : ""}`} width={navWidth}>
 				<Logo>
 					<Link href="/" showActive={false}>
 						<img src="/images/chalet-logo.svg" alt="chalet-logo" />

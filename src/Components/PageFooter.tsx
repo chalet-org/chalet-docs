@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { getThemeVariable } from "Theme";
 
 import { Container } from "./Container";
-import { StickyBackground } from "./StickyBackground";
 
 type Props = {};
 
