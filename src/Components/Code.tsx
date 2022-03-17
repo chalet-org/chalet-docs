@@ -310,11 +310,11 @@ const codeCss = css<StyleProps>`
 		}
 		&.chalet {
 			color: ${getThemeVariable("codeYellow")};
-			font-weight: 600;
+			font-weight: 700;
 		}
 		&.chalet-cmd {
 			color: ${getThemeVariable("codeBlue")};
-			font-weight: 600;
+			font-weight: 700;
 		}
 		&.chalet-toolchain-preset,
 		&.chalet-architecture {

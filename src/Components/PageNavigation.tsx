@@ -63,7 +63,7 @@ const Styles = styled.div`
 	flex-direction: column;
 	justify-content: space-between;
 	padding-top: 0.5rem;
-	padding-bottom: 3rem;
+	padding-bottom: 2rem;
 
 	> div {
 		text-align: right;
@@ -118,6 +118,11 @@ const Styles = styled.div`
 			&.nav-right > button:after {
 				color: ${getThemeVariable("background")};
 			}
+		}
+
+		&.nav-left > button.touch-hover:before,
+		&.nav-right > button.touch-hover:after {
+			color: ${getThemeVariable("background")};
 		}
 	}
 

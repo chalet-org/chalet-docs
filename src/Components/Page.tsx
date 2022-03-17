@@ -6,7 +6,9 @@ import styled from "styled-components";
 import { useUiStore } from "Stores";
 import { getThemeVariable } from "Theme";
 
+import { Container } from "./Container";
 import { hasMinWidth } from "./GlobalStyles";
+import { PageFooter } from "./PageFooter";
 
 type Props = {
 	children?: React.ReactNode;
@@ -48,16 +50,8 @@ const Page = ({ title, children }: Props) => {
 				onAnimationEnd={() => setAnimating(false)}
 			>
 				<Container>{!initialized ? "" : children}</Container>
+				<PageFooter />
 			</Main>
-			{/*<footer>
-				<a
-					href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					<Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-				</a>
-			</footer>*/}
 		</>
 	);
 };
@@ -83,6 +77,11 @@ const Main = styled.main<NavBarProps>`
 	scrollbar-color: ${getThemeVariable("primaryColor")} transparent;
 
 	background-color: ${getThemeVariable("background")};
+	background: ${getThemeVariable("mainBackgroundUrl")};
+	/* background by SVGBackgrounds.com */
+	background-size: cover;
+	background-position: 100% center;
+	background-repeat: no-repeat;
 	color: ${getThemeVariable("mainText")};
 
 	&::-webkit-scrollbar-thumb {
@@ -133,12 +132,4 @@ const Main = styled.main<NavBarProps>`
 			}
 		}
 	}
-`;
-
-const Container = styled.div`
-	display: block;
-	position: relative;
-	max-width: 54rem;
-	padding: 1rem;
-	margin: 0 auto;
 `;

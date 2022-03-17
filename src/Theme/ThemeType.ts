@@ -6,6 +6,7 @@
 */
 
 export type ThemeType = {
+	mainBackgroundUrl: string;
 	codeBackground: string;
 	background: string;
 	mainText: string;

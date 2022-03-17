@@ -98,7 +98,7 @@ const Styles = styled.div`
 		display: block;
 		position: relative;
 		margin: 0 2rem;
-		border-bottom: 1px solid ${getThemeVariable("header")};
+		border-bottom: 0.125rem solid ${getThemeVariable("border")};
 
 		> input {
 			display: block;
@@ -141,11 +141,13 @@ const Styles = styled.div`
 
 	> div.search-results {
 		display: block;
+		position: relative;
 		padding: 0 2rem;
 		margin-top: -0.125rem;
 		background-color: ${getThemeVariable("background")};
 		border-top: 0.125rem solid ${getThemeVariable("border")};
 		border-bottom: 0.125rem solid ${getThemeVariable("border")};
+		z-index: 10;
 
 		> p.search-result-count {
 			display: block;

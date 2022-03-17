@@ -11,6 +11,7 @@ class UiState extends BaseState {
 	theme: ThemeType = darkTheme;
 
 	navOpen: boolean = false;
+	animating: boolean = false;
 	navWidth: string = "18rem";
 
 	focusedId: string = "examples";
@@ -58,6 +59,11 @@ class UiState extends BaseState {
 	setNavOpen = (inValue: boolean) => {
 		this.navOpen = inValue;
 		LocalStorage.set("navOpen", this.navOpen ? "true" : "false");
+	};
+
+	@Action
+	setAnimating = (inValue: boolean) => {
+		this.animating = inValue;
 	};
 
 	@Action

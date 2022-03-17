@@ -2,7 +2,7 @@ import { createGlobalStyle, css } from "styled-components";
 
 import { getThemeVariable } from "Theme";
 
-import { fontImports, globalFonts } from "./Fonts";
+import { globalFonts } from "./Fonts";
 import { hasMinWidth } from "./Responsiveness";
 
 const cssReset = css`
@@ -108,7 +108,6 @@ const cssReset = css`
 
 const BaseStyle = createGlobalStyle`
     ${cssReset}
-	${fontImports}
 
     html {
         font-size: 14px;

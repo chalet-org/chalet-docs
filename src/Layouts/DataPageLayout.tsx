@@ -29,5 +29,5 @@ export { DataPageLayout };
 const Styles = styled.div`
 	display: block;
 	padding-top: 3rem;
-	padding-bottom: 8rem;
+	padding-bottom: 3rem;
 `;

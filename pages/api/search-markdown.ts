@@ -34,8 +34,8 @@ const getSearchResults = (search: string, pages: PageCache[], resultLength: numb
 	};
 
 	for (const page of pages) {
-		getResultFromText(page.title, page, false);
-		getResultFromText(page.content, page);
+		if (page.title) getResultFromText(page.title, page, false);
+		if (page.content) getResultFromText(page.content, page);
 	}
 
 	let result: ResultSearchResults = [];

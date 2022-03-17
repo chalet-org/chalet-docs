@@ -19,9 +19,9 @@ const runAuthMiddleware = async (req: ApiReq, res: ApiRes<any>) => {
 		}
 	} catch (err: any) {
 		console.error(err);
-		res.status(500).json({
-			message: "Internal Server Error",
-			statusCode: 500,
+		res.status(401).json({
+			message: "Unauthorized",
+			statusCode: 401,
 		});
 	}
 };

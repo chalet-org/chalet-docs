@@ -1,6 +1,7 @@
 import { ThemeType } from "./ThemeType";
 
 const ThemeIndex: ThemeType = {
+	mainBackgroundUrl: "main-background-url",
 	codeBackground: "bg-code",
 	background: "bg",
 	mainText: "main-text",

@@ -5,6 +5,7 @@
 
 ```
 NODE_ENV=development
+NEXT_PUBLIC_API_TOKEN=
 ```
 
 3. Add `export GITHUB_TOKEN=(your token)` to your shell somewhere ( in `.zshrc` or `.bashrc`). `source` the file, or restart your shell afterwards

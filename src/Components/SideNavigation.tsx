@@ -43,7 +43,11 @@ const SideNavigation = ({ children, ...navProps }: Props) => {
 				<span />
 				<span />
 			</SidebarToggle>
-			<StyledAside className={`sidebar ${navOpen ? "open" : ""}`} width={navWidth}>
+			<StyledAside
+				className={`sidebar ${navOpen ? "open" : ""}`}
+				width={navWidth}
+				onAnimationEnd={() => setAnimating(false)}
+			>
 				<Logo>
 					<Link href="/" showActive={false}>
 						<img src="/images/chalet-logo.svg" alt="chalet-logo" />
@@ -96,6 +100,10 @@ const Logo = styled.div`
 		> img {
 			width: 3.5rem;
 			height: auto;
+		}
+
+		&:active {
+			background: transparent !important;
 		}
 	}
 
