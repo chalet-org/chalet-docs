@@ -21,7 +21,7 @@ In chalet.json, one can use the `defaultConfigurations` to narrow down which of 
    "Debug",
    "RelWithDebInfo",
    "MinSizeRel",
-   "RelStable",
+   "RelHighOpt",
    "Profile"
    "DebugSanitize",
    "DebugSanitizeAddress",
@@ -45,7 +45,7 @@ An example build configuration is as follows:
    "Release": {
       "optimizationLevel": "2",
       "debugSymbols": false,
-      "linkTimeOptimization": true,
+      "interproceduralOptimization": true,
       "stripSymbols": true,
       "enableProfiling": false,
       "sanitize": false
@@ -53,13 +53,61 @@ An example build configuration is as follows:
 }
 ```
 
+In each build configuration, these are several available properties.
+
 \\
 
-# [Properties]
+# [Optimization Level]
 
+The first one is the `optimizationLevel`. It defines the optimization level passed into the compiler, and mostly follows GNU conventions. Thus, the expected values are `0` `1` `2` `3` `debug` `size` and `fast`. If the property is omitted, no optimization level will be used (implying the compiler's default).
 
-Test 2
+In GCC/Clang, the values map mostly 1:1:
 
+* **0** - `-O0`, or no optimizations.
+* **1** - `-O1`
+* **2** - `-O2`
+* **3** - `-O3`
+* **debug** - `-Od`
+* **size** - `-Os`
+* **fast** - `-Ofast`
+
+In MSVC, the mapping is as follows:
+
+* **0** - `/Od`, or no optimizations.
+* **1** - `/O1`
+* **2** - `/O2`
+* **3** - `/Ox`
+* **debug** - `/Od`
+* **size** - `/Os`
+* **fast** - `/Ot`
+
+> Note: To understand each optimization level further, refer to your compiler's documentation.
+
+\\
+
+## [Debug Symbols]
+
+The `debugSymbols` property is a boolean value that determines whether the build will contain symbols required for debugging. In GCC/Clang, this will apply the `-g3` compiler option, which includes everything that `-g` does, along with macro expansion support.
+
+In MSVC, this triggers several compiler option variations that will produce a similar build on Windows machines (and `*.pdb` files).
+
+\\
+
+## [Interprocedural Optimization]
+
+TODO
+
+\\
+
+## [Enable Profiling]
+
+TODO
+
+\\
+
+## [Sanitizers]
+
+TODO
 
 
 
@@ -72,48 +120,42 @@ Test 2
    "Release": {
       "optimizationLevel": "2",
       "debugSymbols": false,
-      "linkTimeOptimization": true,
-      "stripSymbols": true,
+      "interproceduralOptimization": false,
       "enableProfiling": false,
       "sanitize": false
    },
    "Debug": {
       "optimizationLevel": "0",
       "debugSymbols": true,
-      "linkTimeOptimization": false,
-      "stripSymbols": false,
+      "interproceduralOptimization": false,
       "enableProfiling": false,
       "sanitize": false
    },
    "RelWithDebInfo": {
       "optimizationLevel": "2",
       "debugSymbols": true,
-      "linkTimeOptimization": false,
-      "stripSymbols": false,
+      "interproceduralOptimization": false,
       "enableProfiling": false,
       "sanitize": false
    },
    "MinSizeRel": {
       "optimizationLevel": "size",
       "debugSymbols": false,
-      "linkTimeOptimization": false,
-      "stripSymbols": true,
+      "interproceduralOptimization": false,
       "enableProfiling": false,
       "sanitize": false
    },
-   "RelStable": {
-      "optimizationLevel": "2",
+   "RelHighOpt": {
+      "optimizationLevel": "3",
       "debugSymbols": false,
-      "linkTimeOptimization": false,
-      "stripSymbols": true,
+      "interproceduralOptimization": true,
       "enableProfiling": false,
       "sanitize": false
    },
    "Profile": {
       "optimizationLevel": "0",
       "debugSymbols": true,
-      "linkTimeOptimization": false,
-      "stripSymbols": false,
+      "interproceduralOptimization": false,
       "enableProfiling": true,
       "sanitize": false
    },

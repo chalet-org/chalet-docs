@@ -224,6 +224,10 @@ const BaseStyle = createGlobalStyle`
 		padding-left: 1rem;
 	}
 
+	dl {
+		padding-top: 0.5rem;
+	}
+
 	dd {
 		padding-left: 1.25rem;
 		padding-bottom: 1rem;
