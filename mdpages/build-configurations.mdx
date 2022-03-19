@@ -6,13 +6,13 @@ title: Build Configurations
 
 ---
 
-Build configurations in Chalet control some of the key properties of the build, like the optimization level, debug symbols, sanitizers, and profiling - anything that requires a distinct build.
+Build configurations in Chalet control some of the key properties of the build, like the optimization level, debug symbols, sanitizers, and profiling - anything that requires a distinct build, but isn't specific to the project being built.
 
 \\
 
-## [Default Configurations]
+## [Overview]
 
-Chalet contains several default build configurations:
+In chalet.json, one can use the `defaultConfigurations` to narrow down which of the default build configurations that are allowed in the project. Chalet contains several default build configurations:
 
 
 ```json
@@ -33,6 +33,39 @@ Chalet contains several default build configurations:
    "DebugSanitizeHWAddress"
 ]
 ```
+
+\
+
+Build configurations themselves are defined with the `configurations` property. This way, one can say "use a handful of the defaults, but define my own `Release` configuration," or possibly "use no defaults, and define my own configurations" altogether. 
+
+An example build configuration is as follows:
+
+```json
+"configurations": {
+   "Release": {
+      "optimizationLevel": "2",
+      "debugSymbols": false,
+      "linkTimeOptimization": true,
+      "stripSymbols": true,
+      "enableProfiling": false,
+      "sanitize": false
+   }
+}
+```
+
+\\
+
+# [Properties]
+
+
+Test 2
+
+
+
+
+\\
+
+## [Default Configurations]
 
 ```json
 "configurations": {

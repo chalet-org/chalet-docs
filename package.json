@@ -3,7 +3,7 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"start": "nodemon --exec \"next dev\"",
+		"start": "next-remote-watch ./mdpages/",
 		"start:next-dev": "next dev",
 		"build": "next build",
 		"serve": "next start",
@@ -30,6 +30,7 @@
 		"lodash": "^4.17.21",
 		"next": "12.1.0",
 		"next-mdx-remote": "4.0.0",
+		"next-remote-watch": "^1.0.0",
 		"perf_hooks": "^0.0.1",
 		"platform": "^1.3.6",
 		"prismjs": "^1.24.1",
@@ -57,7 +58,6 @@
 		"babel-plugin-styled-components": "^1.13.2",
 		"eslint": "7.31.0",
 		"eslint-config-next": "11.0.1",
-		"nodemon": "^2.0.12",
 		"prettier": "^2.3.2",
 		"typescript": "^4.5.5"
 	}
