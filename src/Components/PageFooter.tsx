@@ -18,13 +18,13 @@ const PageFooter = (_props: Props) => {
 			<Container>
 				<LinkBox>
 					<div className="left">
-						<a href="#">Link 1</a>
+						{/* <a href="#">Link 1</a>
 						<a href="#">Link 2</a>
-						<a href="#">Link 3</a>
-						<a href="#">Contact</a>
+						<a href="#">Link 3</a> */}
+						<a href="/contact">Contact</a>
 					</div>
 					<div className="right">
-						<a href="#">Link 1</a>
+						{/* <a href="#">Link 1</a> */}
 						<Link href="//www.github.com/chalet-org">
 							<Icon id="github" size="1.5rem" color={theme.mainText} hoverColor={theme.primaryColor} />
 						</Link>
@@ -40,6 +40,7 @@ export { PageFooter };
 const Styles = styled.footer`
 	display: block;
 	position: relative;
+	flex-shrink: 0;
 	width: 100%;
 `;
 

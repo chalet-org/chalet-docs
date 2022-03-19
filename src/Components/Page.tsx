@@ -50,6 +50,7 @@ const Page = ({ title, children }: Props) => {
 				onAnimationEnd={() => setAnimating(false)}
 			>
 				<Container>{!initialized ? "" : children}</Container>
+				<Spacer />
 				<PageFooter />
 			</Main>
 		</>
@@ -63,8 +64,9 @@ type NavBarProps = {
 };
 
 const Main = styled.main<NavBarProps>`
-	display: block;
+	display: flex;
 	position: absolute;
+	flex-direction: column;
 	height: 100vh;
 	top: 0;
 	right: 0;
@@ -119,7 +121,7 @@ const Main = styled.main<NavBarProps>`
 			overflow: auto;
 
 			> div {
-				width: auto;
+				width: 100%;
 			}
 		}
 	}
@@ -128,8 +130,12 @@ const Main = styled.main<NavBarProps>`
 			overflow: auto;
 
 			> div {
-				width: auto;
+				width: 100%;
 			}
 		}
 	}
+`;
+
+const Spacer = styled.div`
+	flex: 1 0 auto;
 `;
