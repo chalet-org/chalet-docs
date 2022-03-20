@@ -134,7 +134,7 @@ const BaseStyle = createGlobalStyle`
 
 	div.table-container {
 		width: 100%;
-		overflow: scroll;
+		overflow: auto;
 		margin-top: 1rem;
 		margin-bottom: 2rem;
 	}
