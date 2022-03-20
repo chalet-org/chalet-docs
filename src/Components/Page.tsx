@@ -49,9 +49,15 @@ const Page = ({ title, children }: Props) => {
 				className={`${navOpen ? "nav-open" : ""} ${animating ? "animating" : ""}`}
 				onAnimationEnd={() => setAnimating(false)}
 			>
-				<Container>{!initialized ? "" : children}</Container>
-				<Spacer />
-				<PageFooter />
+				{!!initialized ? (
+					<>
+						<Container>{children}</Container>
+						<Spacer />
+						<PageFooter />
+					</>
+				) : (
+					""
+				)}
 			</Main>
 		</>
 	);
