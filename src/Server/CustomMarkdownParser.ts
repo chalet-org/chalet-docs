@@ -23,27 +23,34 @@ const trimLineBreaksFromEdges = (text: string) => {
 };
 
 const parseTables = (text: string) => {
-	const ret = text.replace(/(((\| ([\w\d` -\/]+))+ \|\n)+)\n/g, (_match: string, p1: string) => {
-		// TODO: alignment
+	const ret = text.replace(
+		/(((\| ([\w\d` -:,~\=\(\)\[\]\{\}\$\?\/\\]+))+ \|\n)+)\n/g,
+		(_match: string, p1: string) => {
+			// TODO: alignment
 
-		let thead: string = "";
-		let rows: string[] = [];
-		const rest = p1.replace(/((\| ([\w\d` -\/]+))+ \|\n)((\| ([- ]+))+ \|\n)/, (tmatch: string, tp1: string) => {
-			const labels: string[] = tp1.match(/ ([\w\d` -\/]+) /g)?.map((th: string) => `<th>${th}</th>`) ?? [];
-			thead = `<thead><tr>${labels.join("")}</tr></thead>`;
-			return "";
-		});
+			let thead: string = "";
+			let rows: string[] = [];
+			const rest = p1.replace(
+				/((\| ([\w\d` -:,~\=\(\)\[\]\{\}\$\?\/\\]+))+ \|\n)((\| ([- ]+))+ \|\n)/,
+				(tmatch: string, tp1: string) => {
+					const labels: string[] =
+						tp1.match(/ ([\w\d` -:,~\=\(\)\[\]\{\}\$\?\/\\]+) /g)?.map((th: string) => `<th>${th}</th>`) ??
+						[];
+					thead = `<thead><tr>${labels.join("")}</tr></thead>`;
+					return "";
+				}
+			);
 
-		rest.replace(/((\| ([\w\d` -\/]+))+ +\|\n)/g, (tmatch: string, tp1: string) => {
-			let labels: string[] = tp1.match(/ ([\w\d` -\/]+) /g)?.map((th: string) => `<td>${th}</td>`) ?? [];
-			rows.push(`<tr>${labels.join("")}</tr>`);
-			return "";
-		});
+			rest.replace(/((\| ([\w\d` -:,~\=\(\)\[\]\{\}\$\?\/\\]+))+ +\|\n)/g, (tmatch: string, tp1: string) => {
+				let labels: string[] =
+					tp1.match(/ ([\w\d` -:,~\=\(\)\[\]\{\}\$\?\/\\]+) /g)?.map((th: string) => `<td>${th}</td>`) ?? [];
+				rows.push(`<tr>${labels.join("")}</tr>`);
+				return "";
+			});
 
-		return `<table>${thead}<tbody>${rows.join("")}</tbody></table>\n`;
-	});
-
-	// console.log(ret);
+			return `<div className="table-container"><table>${thead}<tbody>${rows.join("")}</tbody></table></div>\n\n`;
+		}
+	);
 
 	return ret;
 };

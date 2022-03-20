@@ -255,11 +255,11 @@ Targets can be excluded with the `condition` property, and work the exact same w
 
 Source files can either be added individually or via a glob pattern. In both scenarios, source files will be based on their extensions:
 
-* C++: Any extension other than the ones below, but most common are `cpp` `cc` `cxx` `c++` `C`
-* C: `c` (case-sensitive)
-* Windows Resource: `rc` / `RC`
-* Objective-C: `m` / `M`
-* Objective-C++: `mm`
+| C++              | Any extension other than the ones below, but most common are: `cpp` `cc` `cxx` `c++` `C` |
+| C                | `c` (case-sensitive) |
+| Windows Resource | `rc` / `RC` |
+| Objective-C      | `m` / `M` |
+| Objective-C++    | `mm` |
 
 C++ header files should not be specified at all, so for instance if you're using `.cpp` and `.h` files, only add 
 
@@ -386,10 +386,10 @@ CMake projects can be built as a build step / target of a Chalet project. This i
 
 At the moment, these are the generators used:
 
-* **Ninja** - If the toolchain's `strategy` is ninja, this will always be the generator.
-* **Visual Studio ## ####** - If using MSVC and not using Ninja, this generator will be based on the version of MSVC detected (up to Visual Studio 17 2022).
-* **MinGW Makefiles** - If on Windows, and the toolchain does not use Ninja or MSVC.
-* **Unix Makefiles** - If not Windows, and the toolchain does not use Ninja.
+| Ninja  | If the toolchain's `strategy` is ninja, this will always be the generator |
+| Visual Studio ## #### | If using MSVC and not using Ninja, this generator will be based on the version of MSVC detected (up to Visual Studio 17 2022). |
+| MinGW Makefiles  | If on Windows, and the toolchain does not use Ninja or MSVC |
+| Unix Makefiles  | If not Windows, and the toolchain does not use Ninja |
 
 To build another CMake project, set `kind` to `cmakeProject`, and define the `location` as the directory where the `CMakeLists.txt` of the project exists. If using a custom build file name, you can specify it with `buildFile`. This is passed directly to the `-C` CMake option.
 
@@ -426,13 +426,14 @@ Chalet will attempt to add appropriate cache entries with `-D` based on its own 
 Script targets are quite simple. They are triggered by setting the `kind` property to `script`. In addition to the `condition` and `description` properties, they only take a `script` property (that can also be suffixed with a property condition.
 
 The following file extensions are supported:
-* `.sh` - Bash / Unix shell
-* `.bat` - Windows Batch
-* `.ps1` - Powershell ([Powershell Core](//github.com/PowerShell/PowerShell) is also supported on non-windows)
-* `.py` - Python
-* `.rb` - Ruby
-* `.pl` - Perl
-* `.lua` - Lua
+
+| `.sh`  | Bash / Unix shell |
+| `.bat` | Windows Batch |
+| `.ps1` | Powershell ([Powershell Core](//github.com/PowerShell/PowerShell) is also supported on non-windows) |
+| `.py`  | Python |
+| `.rb`  | Ruby |
+| `.pl`  | Perl |
+| `.lua` | Lua |
 
 Portable shebangs — `#!/usr/bin/env (executable)` — are supported with any extension.
 
@@ -515,12 +516,12 @@ An executable target can also take the `defaultRunArguments` and `copyFilesOnRun
 
 In properties that take paths to directories or files, path substitution is supported for certain variables that describe locations of the build that could vary between machines. The following is supported:
 
-* `~/`, `${home}` - resolves to the home directory of the machine. On Windows, this is `C:\Users\(Name)`
-* `${env:(Name)}` - resolves an environment variable by name. For example: `${env:MY_LIBRARY_PATH}`
-* `${buildDir}` - resolves to the main build directory for the current configuration & architecture
-* `${externalDir}` - resolves to the root path for external dependencies. See [externalDependencies](/schema/latest/chalet-json?id=external-dependencies)
-* `${externalBuildDir}` - resolves to the build path for an external dependency. For instance, if a CMake project is located at `${externalDir}/foo`, it will build to `${buildDir}/${externalDir}/foo`, so it's easier to write `${externalBuildDir}/foo`
-* `${cwd}` - resolves the current working directory (this shouldn't be needed, but it's here just in case)
+| `~/`, `${home}`       | The home directory of the machine. On Windows, this is `C:\Users\(Name)` |
+| `${env:(Name)}`       | An environment variable by name. For example: `${env:MY_LIBRARY_PATH}` |
+| `${buildDir}`         | The main build directory for the current configuration & architecture |
+| `${externalDir}`      | The root path for external dependencies. See [externalDependencies](/schema/latest/chalet-json?id=external-dependencies) |
+| `${externalBuildDir}` | The build path for an external dependency. For instance, if a CMake project is located at `${externalDir}/foo`, it will build to `${buildDir}/${externalDir}/foo`, so it's easier to write `${externalBuildDir}/foo` |
+| `${cwd}`              | The current working directory (this shouldn't be needed, but it's here just in case) |
 
 Example:
 

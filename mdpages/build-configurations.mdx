@@ -58,7 +58,9 @@ In each build configuration, these are several available properties.
 
 # [Optimization Level]
 
-The first one is the `optimizationLevel`. It defines the optimization level passed into the compiler, and mostly follows GNU conventions. Thus, the expected values are `0` `1` `2` `3` `debug` `size` and `fast`. If the property is omitted, no optimization level will be used (implying the compiler's default).
+The first one is the `optimizationLevel`. It defines the optimization level passed into the compiler, and mostly follows GNU conventions. Thus, the expected values are `0` `1` `2` `3` `debug` `size` and `fast`. If the property is omitted, no optimization level will be used (implying the compiler's default). 
+
+The mapping for these are more or less 1:1:
 
 |       | GCC / Clang | MSVC  |
 | ----- | ----------- | ----- |
@@ -69,27 +71,6 @@ The first one is the `optimizationLevel`. It defines the optimization level pass
 | debug | `-Od`       | `/Od` |
 | size  | `-Os`       | `/Os` |
 | fast  | `-Ofast`    | `/Ot` |
-
-
-In GCC/Clang, the values map mostly 1:1:
-
-* **0** - `-O0`, or no optimizations.
-* **1** - `-O1`
-* **2** - `-O2`
-* **3** - `-O3`
-* **debug** - `-Od`
-* **size** - `-Os`
-* **fast** - `-Ofast`
-
-In MSVC, the mapping is as follows:
-
-* **0** - `/Od`, or no optimizations.
-* **1** - `/O1`
-* **2** - `/O2`
-* **3** - `/Ox`
-* **debug** - `/Od`
-* **size** - `/Os`
-* **fast** - `/Ot`
 
 > Note: To understand each optimization level further, refer to your compiler's documentation.
 

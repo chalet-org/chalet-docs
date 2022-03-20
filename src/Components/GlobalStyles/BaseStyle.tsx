@@ -132,36 +132,48 @@ const BaseStyle = createGlobalStyle`
 		font-family: ${globalFonts.code};
     }
 
-	table {
-		table-layout: fixed;
-		/* width: 100%; */
-		border-collapse: collapse;
+	div.table-container {
+		width: 100%;
+		overflow: scroll;
 		margin-top: 1rem;
 		margin-bottom: 2rem;
+	}
+
+	table {
+		min-width: 30rem;
+		max-width: calc(100% - 0.125rem);
+		border-collapse: collapse;
 	}
 
 	th, td {
 		padding: 0 1rem;
 		text-align: left;
-		min-width: 6rem;
+		vertical-align: top;
+		/* max-width: 24rem; */
 
 		&:first-of-type {
+			font-weight: 600;
+			min-width: 6rem;
+		}
+
+		> strong {
 			font-weight: 600;
 		}
 	}
 
 	th {
 		font-weight: 600;
+		min-width: 12rem;
 	}
 
-	td:first-of-type {
+	td {
 		border: 0.125rem solid ${getThemeVariable("border")};
+
+		&:not(:first-of-type) {
+			background-color: ${getThemeVariable("codeBackground")};
+		}
 	}
 
-	td:not(:first-of-type) {
-		background-color: ${getThemeVariable("codeBackground")};
-		border: 0.125rem solid ${getThemeVariable("border")};
-	}
 
     h1, h2, h3, h4, h5, h6 {
 		font-family: ${globalFonts.header};

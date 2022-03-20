@@ -193,27 +193,17 @@ Presets are inherently opinionated. Their goal is to provide an abstraction that
 }
 ```
 
-In GCC/Clang, the presets are as follows:
+|                 | GCC / Clang | MSVC  |
+| --------------- | ----------- | ----- |
+| none (default)  | No warnings       | No warnings |
+| minimal         | `-Wall`       | `/W1` |
+| extra           | **minimal** + `-Wextra`       | `/W2` |
+| pedantic        | **extra** + `-Wpedantic`      | `/W3` |
+| strict          | **pedantic** + `-Wunused` `-Wcast-align` `-Wdouble-promotion` `-Wformat=2` `-Wmissing-declarations` `-Wmissing-include-dirs` `-Wnon-virtual-dtor` `-Wredundant-decls`       | `/W4` |
+| strictPedantic  | **strict** + `-Wunreachable-code` `-Wshadow`    | `/W4` |
+| veryStrict      | **strictPedantic** + `-Wnoexcept` `-Wundef` `-Wconversion` `-Wcast-qual` `-Wfloat-equal` `-Winline` `-Wold-style-cast` `-Wstrict-null-sentinel` `-Woverloaded-virtual` `-Wsign-conversion` `-Wsign-promo`    | `/W4` |
 
-* **none** - No warnings (default). This is the same as not defining `warnings` at all.
-* **minimal** - Equivalent to `-Wall`.
-* **extra** - Equivalent to **minimal** + `-Wextra`.
-* **pedantic** - Equivalent to **extra** + `-Wpedantic`.
-* **error** - Equivalent to **pedantic** + `-Werror`. Warnings will be treated as errors.
-* **strict** - Equivalent to **error** + `-Wunused` `-Wcast-align` `-Wdouble-promotion` `-Wformat=2` `-Wmissing-declarations` `-Wmissing-include-dirs` `-Wnon-virtual-dtor` `-Wredundant-decls`. Warnings will be treated as errors.
-* **strictPedantic** - Equivalent to **strict** + `-Wunreachable-code` `-Wshadow`. Warnings will be treated as errors.
-* **veryStrict** - Equivalent to **strictPedantic** + `-Wnoexcept` `-Wundef` `-Wconversion` `-Wcast-qual` `-Wfloat-equal` `-Winline` `-Wold-style-cast` `-Wstrict-null-sentinel` `-Woverloaded-virtual` `-Wsign-conversion` `-Wsign-promo`. Warnings will be treated as errors.
-
-In MSVC, presets are interpreted as the warning level:
-
-* **none** - No warnings (default). This is the same as not defining `warnings` at all.
-* **minimal** - Equivalent to `/W1`.
-* **extra** - Equivalent to `/W2`.
-* **pedantic** - Equivalent to `/W3`.
-* **error** - Equivalent to `/W3 /WX`. Warnings will be treated as errors.
-* **strict**, **strictPedantic** & **veryStrict**  - Equivalent to `/W4 /WX`. Warnings will be treated as errors.
-
-> Note: If you'd like to use `/Wall`, it must be added manually.
+> Note: In MSVC, if you'd like to use `/Wall`, it must be added manually.
 
 > Note: These may change between some Chalet versions (probably not very often), as they have the potential to be pretty contentious. [Debate](//github.com/chalet-org/chalet/discussions) is welcomed.
 
@@ -228,7 +218,6 @@ Warnings can be defined manually, as a list of their GNU names, minus the `-W` p
    "settings:Cxx": {
       "warnings": [
          "all",
-         "error",
          "unused",
          "shadow",
          "unreachable-code",
@@ -238,10 +227,21 @@ Warnings can be defined manually, as a list of their GNU names, minus the `-W` p
 }
 ```
 
-In MSVC, warning flags will be cross-referenced based on how presets are defined above, so if "pedantic" is present in the list, the flag will be `/W3`. If "error" or any of the strict/veryStrict GNU names are present, `/WX` will get added.
+In MSVC, warning flags will be cross-referenced based on the the presets above, so if "pedantic" is present in the list, the flag will be `/W3`. 
 
 See also: [Advanced: Fine Tuning](/cxx-compile-settings?id=advanced-fine-tuning)
 
+**Warnings as Errors**
+
+To enable warnings as errrs, sipmly set `treatWarningsAsErrors` to true. It's equivalent to adding "error" to the warning list.
+
+```json
+"my-target": {
+   "settings:Cxx": {
+     "treatWarningsAsErrors": true
+   }
+}
+```
 \\
 
 ## [Precompiled Headers]

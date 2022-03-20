@@ -188,10 +188,10 @@ Comment=
 Icon=${icon}
 ```
 
-* `${name}`: The bundle's name, so in the examples above, this would be "MyApp"
-* `${path}`: The full path to the application bundle's directory (or subdirectory)
-* `${mainExecutable}`: The main executable, explained [here](/describing-the-distribution?id=the-main-executable)
-* `${icon}`: The path to the icon. This ends up being the copy placed in the distribution target's folder
+| `${name}`           | The bundle's name, so in the examples above, this would be "MyApp" |
+| `${path}`           | The full path to the application bundle's directory (or subdirectory) |
+| `${mainExecutable}` | The main executable, explained [here](/describing-the-distribution?id=the-main-executable) |
+| `${icon}`           | The path to the icon. This ends up being the copy placed in the distribution target's folder |
 
 \\
 
@@ -218,10 +218,10 @@ The `icon` property defines an icon for the app. If a `.png` is defined, it will
 
 The `infoPropertyList` defines an Information Property List for the bundle. It can take multiple values, such as a static `.plist` file, a `.json` file containing the data normally in a `.plist`, or this data can be inlined directly into the chalet.json file. If using either json route, one can use special variables that get resolved at the time of bundling (like with linux desktop entries). They are as follows:
 
-* `${name}`: The bundle's name, so in the examples above, this would be "MyApp"
-* `${bundleName}`: The first 15 characters of ${name}, specifically used for [CFBundleName](//developer.apple.com/documentation/bundleresources/information_property_list/cfbundlename)
-* `${mainExecutable}`: The main executable, explained [here](/describing-the-distribution?id=the-main-executable)
-* `${icon}`: The path to the icon. This ends up being the .icns created/copied in the distribution target's folder
+| `${name}`           | The bundle's name, so in the examples above, this would be "MyApp" |
+| `${bundleName}`     | The first 15 characters of ${name}, specifically used for [CFBundleName](//developer.apple.com/documentation/bundleresources/information_property_list/cfbundlename) |
+| `${mainExecutable}` | The main executable, explained [here](/describing-the-distribution?id=the-main-executable) |
+| `${icon}`           | The path to the icon. This ends up being the .icns created/copied in the distribution target's folder |
 
 **Code Signing**
 
