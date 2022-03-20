@@ -22,6 +22,32 @@ const trimLineBreaksFromEdges = (text: string) => {
 	return text;
 };
 
+const parseTables = (text: string) => {
+	const ret = text.replace(/(((\| ([\w\d` -\/]+))+ \|\n)+)\n/g, (_match: string, p1: string) => {
+		// TODO: alignment
+
+		let thead: string = "";
+		let rows: string[] = [];
+		const rest = p1.replace(/((\| ([\w\d` -\/]+))+ \|\n)((\| ([- ]+))+ \|\n)/, (tmatch: string, tp1: string) => {
+			const labels: string[] = tp1.match(/ ([\w\d` -\/]+) /g)?.map((th: string) => `<th>${th}</th>`) ?? [];
+			thead = `<thead><tr>${labels.join("")}</tr></thead>`;
+			return "";
+		});
+
+		rest.replace(/((\| ([\w\d` -\/]+))+ +\|\n)/g, (tmatch: string, tp1: string) => {
+			let labels: string[] = tp1.match(/ ([\w\d` -\/]+) /g)?.map((th: string) => `<td>${th}</td>`) ?? [];
+			rows.push(`<tr>${labels.join("")}</tr>`);
+			return "";
+		});
+
+		return `<table>${thead}<tbody>${rows.join("")}</tbody></table>\n`;
+	});
+
+	// console.log(ret);
+
+	return ret;
+};
+
 const parseExplicitLineBreaks = (text: string): string => {
 	text = text.replace(/\n\\\n/g, `\n<Spacer />\n`);
 	return text.replace(/\n\\\\\n/g, `\n<Spacer size="lg" />\n`);
@@ -276,6 +302,7 @@ const parseCustomMarkdown = async (
 	}
 	text = await parseBottomPageNavigation(text);
 
+	text = parseTables(text);
 	text = parseExplicitLineBreaks(text);
 	text = parseImportantNotes(text);
 	text = parseAnchoredHeaders(text);

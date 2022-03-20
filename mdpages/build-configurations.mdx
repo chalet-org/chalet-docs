@@ -45,8 +45,7 @@ An example build configuration is as follows:
    "Release": {
       "optimizationLevel": "2",
       "debugSymbols": false,
-      "interproceduralOptimization": true,
-      "stripSymbols": true,
+      "interproceduralOptimization": false,
       "enableProfiling": false,
       "sanitize": false
    }
@@ -60,6 +59,17 @@ In each build configuration, these are several available properties.
 # [Optimization Level]
 
 The first one is the `optimizationLevel`. It defines the optimization level passed into the compiler, and mostly follows GNU conventions. Thus, the expected values are `0` `1` `2` `3` `debug` `size` and `fast`. If the property is omitted, no optimization level will be used (implying the compiler's default).
+
+|       | GCC / Clang | MSVC  |
+| ----- | ----------- | ----- |
+| 0     | `-O0`       | `/Od` |
+| 1     | `-O1`       | `/O1` |
+| 2     | `-O2`       | `/O2` |
+| 3     | `-O3`       | `/Ox` |
+| debug | `-Od`       | `/Od` |
+| size  | `-Os`       | `/Os` |
+| fast  | `-Ofast`    | `/Ot` |
+
 
 In GCC/Clang, the values map mostly 1:1:
 
@@ -90,6 +100,8 @@ In MSVC, the mapping is as follows:
 The `debugSymbols` property is a boolean value that determines whether the build will contain symbols required for debugging. In GCC/Clang, this will apply the `-g3` compiler option, which includes everything that `-g` does, along with macro expansion support.
 
 In MSVC, this triggers several compiler option variations that will produce a similar build on Windows machines (and `*.pdb` files).
+
+> Note: Preprocessor definitions such as `_DEBUG` `DEBUG` and `NDEBUG` are **not** automatically defined. You will need to add them per project.
 
 \\
 

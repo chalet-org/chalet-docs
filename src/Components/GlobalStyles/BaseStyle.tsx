@@ -132,6 +132,37 @@ const BaseStyle = createGlobalStyle`
 		font-family: ${globalFonts.code};
     }
 
+	table {
+		table-layout: fixed;
+		/* width: 100%; */
+		border-collapse: collapse;
+		margin-top: 1rem;
+		margin-bottom: 2rem;
+	}
+
+	th, td {
+		padding: 0 1rem;
+		text-align: left;
+		min-width: 6rem;
+
+		&:first-of-type {
+			font-weight: 600;
+		}
+	}
+
+	th {
+		font-weight: 600;
+	}
+
+	td:first-of-type {
+		border: 0.125rem solid ${getThemeVariable("border")};
+	}
+
+	td:not(:first-of-type) {
+		background-color: ${getThemeVariable("codeBackground")};
+		border: 0.125rem solid ${getThemeVariable("border")};
+	}
+
     h1, h2, h3, h4, h5, h6 {
 		font-family: ${globalFonts.header};
 		font-weight: 500;
