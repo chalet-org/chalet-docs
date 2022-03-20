@@ -7,6 +7,7 @@ type Components =
 	| "CodePre"
 	| "CodeHeader"
 	| "CodePreFromMarkdown"
+	| "ContactForm"
 	| "IndentGroup"
 	| "Link"
 	| "OrderedList"
@@ -23,5 +24,12 @@ type Components =
 	| "UnorderedListSchema";
 
 export const dynamic = {
-	component: (component: Components) => nextDynamic(async () => (await import("Components"))[component] as any),
+	component: (component: Components) =>
+		nextDynamic(async () => {
+			const cmp = (await import("Components"))[component] as any;
+			if (cmp === undefined) {
+				throw new Error(`Component "${component}" was not found for dynamic import`);
+			}
+			return cmp;
+		}),
 };

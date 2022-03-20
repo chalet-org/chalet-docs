@@ -29,6 +29,7 @@ const mdxComponents: MDXComponents = {
 	PageDescription: dynamic.component("PageDescription"),
 	TermDemo: dynamic.component("TermDemo"),
 	Tagline: dynamic.component("Tagline"),
+	ContactForm: dynamic.component("ContactForm"),
 };
 
 const schemaComponents: MDXComponents = {

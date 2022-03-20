@@ -4,6 +4,7 @@ export * from "./Button";
 export * from "./Checkbox";
 export * from "./Code";
 export * from "./Container";
+export * from "./ContactForm";
 export * from "./GlobalStyles";
 export * from "./PageControls";
 export * from "./Heading";

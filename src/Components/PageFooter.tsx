@@ -26,7 +26,12 @@ const PageFooter = (_props: Props) => {
 					<div className="right">
 						{/* <a href="#">Link 1</a> */}
 						<Link href="//www.github.com/chalet-org">
-							<Icon id="github" size="1.5rem" color={theme.mainText} hoverColor={theme.primaryColor} />
+							<Icon
+								id="github"
+								size="1.125rem"
+								color={theme.secondaryColor}
+								hoverColor={theme.primaryColor}
+							/>
 						</Link>
 					</div>
 				</LinkBox>
@@ -57,7 +62,7 @@ const Background = styled.div`
 
 const LinkBox = styled.div`
 	display: flex;
-	justify-content: space-between;
+	justify-content: flex-end;
 	align-items: center;
 	line-height: 0;
 	padding: 0.5rem 0;
