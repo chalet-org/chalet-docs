@@ -81,7 +81,7 @@ The mapping for these are more or less 1:1:
 
 The `debugSymbols` property is a boolean value that determines whether the build will contain symbols required for debugging. In GCC/Clang, this will apply the `-g3` compiler option, which includes everything that `-g` does, along with macro expansion support.
 
-In MSVC, this triggers several compiler option variations that will produce a similar build on Windows machines (and `*.pdb` files).
+In MSVC, this triggers several compiler options that will produce a similar build on Windows machines (and `*.pdb` files).
 
 > Note: Preprocessor definitions such as `_DEBUG` `DEBUG` and `NDEBUG` are **not** automatically defined. You will need to add them per project.
 
@@ -89,13 +89,32 @@ In MSVC, this triggers several compiler option variations that will produce a si
 
 ## [Interprocedural Optimization]
 
-TODO
+If the `interproceduralOptimization` property is set to true, whole-program optimizations and/or link-time optimizations will be considered. In general, it means more optimizations can be performed on the binary, but require a newer compiler version (MSVC >= 19.30, GCC >= 9.x). The following compile options are used:
 
+|       | Compiler | Linker | Archiver |
+| ----- | -------- | ------ | -------- |
+| MSVC  | `/GL` | `/LTCG:INCREMENTAL` `/LTCGOUT:file.iobj` | `/LTCG` |
+| GCC   | `--fno-fat-lto-objects` `-flto` | `-flto` | -- |
+| Clang | -- | -- | -- |
+
+> Note: Clang support will be investigated in the future.
+
+In all cases, further optimizations are performed on the binaries, but in the case of MSVC, it means quicker compile times. The one caveat being that dumping the assembly of individual objects becomes impossible, because with the current technique, it's done after the objects are created. The only default configuration that uses interprocedural optimizations is `RelHighOpt`.
+ 
 \\
 
 ## [Enable Profiling]
 
-TODO
+If `enableProfiling` is set to true, profiling features are enabled. This is different on each compiler toolchain, but in general: profiling flags are added to the build, and running the target invokes a profiler if available instead of simply running the binary.
+
+|              | Compiler | Linker | Profiler |
+| ------------ | -------- | ------ | -------- |
+| MSVC         | --       | `/profile` | Generates a `.vsp`, launches in Visual Studio Instruments |
+| Apple Clang  | --       | --     | Generates in `xctrace` or cli `instruments`, launches in Xcode Instruments if using XCode's path with xcode-select. Falls back to `sample` |
+| GCC          | `-pg`    | `-pg`  | Launches in `gprof` if available |
+| MinGW        | `-pg`    | `-pg`  | Launches in `gprof` if available, but won't work with many MinGW distributions. |
+| Clang        | `-pg`    | `-pg`  | Launches in `gprof` if available, but Windows Clang does not have a default. |
+
 
 \\
 

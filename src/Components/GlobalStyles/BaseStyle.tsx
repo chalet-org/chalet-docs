@@ -140,7 +140,7 @@ const BaseStyle = createGlobalStyle`
 	}
 
 	table {
-		min-width: 30rem;
+		/* min-width: 30rem; */
 		max-width: calc(100% - 0.125rem);
 		border-collapse: collapse;
 	}
@@ -153,7 +153,11 @@ const BaseStyle = createGlobalStyle`
 
 		&:first-of-type {
 			font-weight: 600;
-			min-width: 6rem;
+			/* min-width: 4rem; */
+		}
+
+		&:not(:first-of-type) {
+			min-width: 8rem;
 		}
 
 		> strong {
@@ -163,7 +167,7 @@ const BaseStyle = createGlobalStyle`
 
 	th {
 		font-weight: 600;
-		min-width: 12rem;
+		/* min-width: 12rem; */
 	}
 
 	td {
