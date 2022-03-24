@@ -1,8 +1,6 @@
 import React from "react";
 
-type Props = {
-	children?: React.ReactNode;
-};
+type Props = React.PropsWithChildren<{}>;
 
 const Stub = ({ children }: Props) => <>{children}</>;
 

@@ -10,10 +10,9 @@ import { Container } from "./Container";
 import { hasMinWidth } from "./GlobalStyles";
 import { PageFooter } from "./PageFooter";
 
-type Props = {
-	children?: React.ReactNode;
+type Props = React.PropsWithChildren<{
 	title: string;
-};
+}>;
 
 const Page = ({ title, children }: Props) => {
 	const { theme, initialize, initialized, navWidth, navOpen } = useUiStore();

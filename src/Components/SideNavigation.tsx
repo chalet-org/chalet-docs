@@ -9,9 +9,7 @@ import { getThemeVariable } from "Theme";
 
 import { NavigationLinks } from "./NavigationLinks";
 
-type Props = ResultNavigation & {
-	children?: React.ReactNode;
-};
+type Props = React.PropsWithChildren<{}>;
 
 const SideNavigation = ({ children, ...navProps }: Props) => {
 	const { toggleNavigation, navOpen, navWidth, initialized } = useUiStore();

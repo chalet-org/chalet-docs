@@ -3,9 +3,7 @@ import styled from "styled-components";
 
 import { getThemeVariable } from "Theme";
 
-type Props = {
-	children?: React.ReactNode;
-};
+type Props = React.PropsWithChildren<{}>;
 
 const BlockQuote = (props: Props) => {
 	return <Styles className="quote">{props.children}</Styles>;
