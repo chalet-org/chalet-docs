@@ -120,13 +120,32 @@ If `enableProfiling` is set to true, profiling features are enabled. This is dif
 
 ## [Sanitizers]
 
-TODO
+Chalet provides an easy way to enable sanitizers, if available by the compiler toolchain and platform. If not using any sanitizers in the build configuration, one can set the `sanitize` property to `false`, otherwise, this property can either take a single sanitizer or an array of compatible sanitizers.
 
+Accepted values are:
+
+| **address**   | Address sanitizer (MSVC, Clang, AppleClang, GCC) |
+| **undefined** | Undefined behavior sanitizer (Clang, AppleClang, GCC) |
+| **leak**      | Leak sanitizer (Clang, GCC) |
+| **thread**    | Thread sanitizer (Clang, AppleClang, GCC) |
+| **memory**    | Memory sanitizer (Clang) |
+| **hwaddress** | Hardwar-assisted address sanitizer (Clang, GCC - arm64 targets only) |
+
+
+If using `staticRuntimeLibrary` in the compile settings, certain sanitizers can be statically linked.
+
+See also: [Static Runtime Libraries](/cxx-compile-settings?id=static-runtime-libraries)
+
+> Note: Sanitizers in MinGW and Intel Classic are not supported.
 
 
 \\
 
 ## [Default Configurations]
+
+With the above in mind, it may be easy to guess which properties are enabled in each of the default build configurations.
+
+The entire list is described below:
 
 ```json
 "configurations": {
@@ -173,7 +192,7 @@ TODO
       "sanitize": false
    },
    "DebugSanitize": {
-      // Debug
+      // Same as 'Debug'
       "sanitize": [
          "address",
          "undefined",
@@ -181,27 +200,27 @@ TODO
       ]
    },
    "DebugSanitizeAddress": {
-      // Debug
+      // Same as 'Debug'
       "sanitize": "address"
    },
    "DebugSanitizeThread": {
-      // Debug
+      // Same as 'Debug'
       "sanitize": "thread"
    },
    "DebugSanitizeMemory": {
-      // Debug
+      // Same as 'Debug'
       "sanitize": "memory"
    },
    "DebugSanitizeLeak": {
-      // Debug
+      // Same as 'Debug'
       "sanitize": "leak"
    },
    "DebugSanitizeUndefined": {
-      // Debug
+      // Same as 'Debug'
       "sanitize": "undefined"
    },
    "DebugSanitizeHW": {
-      // Debug
+      // Same as 'Debug'
       "sanitize": [
          "hwaddress",
          "undefined",
@@ -209,10 +228,33 @@ TODO
       ]
    },
    "DebugSanitizeHWAddress": {
-      // (Debug)
+      // Same as 'Debug'
       "sanitize": "hwaddress"
    },
 }
 ```
+
+\\
+
+## [Example: Add a custom Release configuration]
+
+If in a project, one wants to use the default Debug & Profile configuration, but use a custom Release configuration with an `optimizationLevel` of `3`, they would define the following:
+
+```json
+"defaultConfigurations": [
+   "Debug",
+   "Profile"
+],
+"configurations": {
+   "Release": {
+      "optimizationLevel": "3",
+      "debugSymbols": false,
+      "interproceduralOptimization": false,
+      "enableProfiling": false,
+      "sanitize": false
+   }
+}
+```
+
 
 <!-- nav:/cxx-compile-settings:/describing-the-distribution -->
