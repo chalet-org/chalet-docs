@@ -320,6 +320,30 @@ At the moment, these are used based on the given target architecture of the buil
 
 ## [Themes]
 
-TODO
+The `theme` property can either be a preset string or an object of key/value pairs that describe the theme.
+
+Details of each can be viewed in the latest schema [here](/schema/latest/settings-json?id=theme).
+
+```json
+"theme": "default"
+```
+
+> Note: Run `chalet termtest` in order to see what the theme presets look like.
+
+```json
+"theme": {
+   "info": "reset",
+   "flair": "black",
+   "header": "brightYellowBold",
+   "build": "brightBlue",
+   "assembly": "brightMagenta",
+   "success": "brightGreenBold",
+   "error": "brightRedBold",
+   "warning": "brightYellowBold",
+   "note": "brightCyanBold"
+}
+```
+
+To disable the theme, set `theme` to `none`.
 
 <!-- nav:/command-usage:/further-reading -->
