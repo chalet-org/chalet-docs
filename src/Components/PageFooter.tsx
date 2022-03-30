@@ -21,7 +21,7 @@ const PageFooter = (_props: Props) => {
 						{/* <a href="#">Link 1</a>
 						<a href="#">Link 2</a>
 						<a href="#">Link 3</a> */}
-						<a href="/contact">Contact</a>
+						<Link href="/contact">Contact</Link>
 					</div>
 					<div className="right">
 						{/* <a href="#">Link 1</a> */}
