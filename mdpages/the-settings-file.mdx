@@ -6,6 +6,320 @@ title: The Settings File
 
 ---
 
+From a high level, settings in Chalet are anything specific to the local development environment. These can be options for customizing the build experience, custom toolchains, as well as other executable paths Chalet requires to function.
+
+\\
+
+## [Overview]
+
+There are two types of settings files:
+
+| .chaletconfig | Global settings (generated in the `HOME` directory) |
+| .chaletrc | Local settings (generated in the project directory) |
+
+Both contain the same structure, and for the most part are designed to be managed by Chalet, but a user can go in and change options and paths manually if they wish.
+
+The global settings file is designed to be generated first, with some defaults and some basic structuring. Local settings on the other hand are specific to each project. When a project is configured, the global settings are copied into local settings first, then local settings are updated based on command line inputs. 
+
+If a user wants to define a compiler toolchain for a specific project, they would do so in local settings. Otherwise if they want to import that configuration into each project upon configuring, they would add the toolchain to global settings.
+
+The basic layout is as follows:
+
+```json
+{
+   "options": { ... },
+   "toolchains": { ... },
+   "tools": { ... },
+   "appleSdks": { ... }, // MacOS only
+   "theme": "default"
+}
+```
+
+\\
+
+## [Options]
+
+The first block is the options, and most of them will be familiar, because with a couple exceptions, they mirror the [Build Actions](/command-usage?id=build-actions) command-line options.
+
+```json
+"options": {
+   "dumpAssembly": false,
+   "showCommands": false,
+   "benchmark": true,
+   "launchProfiler": true,
+   "keepGoing": true,
+   "generateCompileCommands": false,
+   "maxJobs": 16,
+   "toolchain": "apple-llvm",
+   "configuration": "Release",
+   "architecture": "auto",
+   "inputFile": "chalet.json",
+   "envFile": ".env",
+   "rootDir": "",
+   "outputDir": "build",
+   "externalDir": "chalet_external",
+   "distributionDir": "dist",
+   "signingIdentity": "${env:MACOS_SIGNING_IDENTITY}",
+   "runTarget": "executable-target",
+   "runArguments": {
+      "executable-target": "-foo"
+   }
+}
+```
+
+
+<!-- dl:start -->
+
+``runTarget``
+
+<dd>
+
+The executable or script target to run .
+
+</dd>
+
+``runArguments``
+
+<dd>
+
+An object of key/values where the key is the run target name, and the value is the run arguments that were used last.
+
+</dd>
+
+``inputFile``
+
+<dd>
+
+The input file location to use, relative to the working directory, unless defined otherwise.
+
+default: `chalet.json`
+
+</dd>
+
+``rootDir``
+
+<dd>
+
+The root directory to run the build from. If blank, means the same directory as the settings file.
+
+</dd>
+
+``externalDir``
+
+<dd>
+
+The directory to install external dependencies into.
+
+default: `chalet_external`
+
+</dd>
+
+``outputDir``
+
+<dd>
+
+The output directory of the build.
+
+default: `build`
+
+</dd>
+
+``distributionDir``
+
+<dd>
+
+The root directory for all distribution bundles.
+
+default: `dist`
+
+</dd>
+
+``configuration``
+
+<dd>
+
+The build configuration to use.
+
+default: `Release`
+
+</dd>
+
+``toolchain``
+
+<dd>
+
+A toolchain preset to use, or a user-made toolchain.
+
+default: 
+* MacOS: `apple-llvm`
+* Windows: `vs-stable`
+* Linux: `gcc`
+
+Presets:
+* `llvm`
+* `gcc`
+
+Windows Presets:
+* `vs-stable`
+* `vs-latest`
+* `vs-2022`
+* `vs-2019`
+* `vs-2017`
+* `intel-llvm-vs-2019`
+* `intel-llvm-vs-2017`
+
+MacOS Presets:
+* `apple-llvm`
+* `intel-classic`
+
+</dd>
+
+``arch``
+
+<dd>
+
+Target architecture.
+
+default: `auto`
+
+</dd>
+
+``envFile``
+
+<dd>
+
+A file to load environment variables from.
+
+default: `.env`
+
+</dd>
+
+``maxJobs``
+
+<dd>
+
+The number of jobs to run during compilation.
+
+default: `16`
+
+</dd>
+
+``showCommands``
+
+<dd>
+
+Show the commands run during the build.
+
+</dd>
+
+``dumpAssembly``
+
+<dd>
+
+Create an .asm dump of each object file during the build.
+
+</dd>
+
+``benchmark``
+
+<dd>
+
+Show all build times (total build time, build targets, other steps).
+
+</dd>
+
+``launchProfiler``
+
+<dd>
+
+If running profile targets, launch the preferred profiler afterwards.
+
+</dd>
+
+``keepGoing``
+
+<dd>
+
+If there's a build error, continue as much of the build as possible.
+
+</dd>
+
+``generateCompileCommands``
+
+<dd>
+
+Generate a compile_commands.json file for Clang tooling use.
+
+</dd>
+
+<!-- dl:end -->
+
+
+\\
+
+## [Toolchains]
+
+TODO
+
+\\
+
+## [Tools]
+
+The `tools` structure includes paths to any other executable that Chalet requires on the given platform. Chalet will detect whatever has priority in the PATH variable, but any resulting paths need to be changed, this can be done after configuring and before building.
+
+Here's some example paths on MacOS:
+
+```json
+"tools": {
+   "bash": "/bin/bash",
+   "codesign": "/usr/bin/codesign",
+   "git": "/Applications/Xcode.app/Contents/Developer/usr/bin/git",
+   "hdiutil": "/usr/bin/hdiutil",
+   "install_name_tool": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/install_name_tool",
+   "osascript": "/usr/bin/osascript",
+   "otool": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/otool",
+   "plutil": "/usr/bin/plutil",
+   "sample": "/Applications/Xcode.app/Contents/Developer/usr/bin/sample",
+   "sips": "/usr/bin/sips",
+   "tiffutil": "/usr/bin/tiffutil",
+   "xcodebuild": "/Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild",
+   "xcrun": "/usr/bin/xcrun",
+   "zip": "/usr/bin/zip"
+}
+```
+
+\\
+
+## [Apple SDKs]
+
+(MacOS only)
+
+On MacOS, The SDK paths are cached so that user can tweak them if they wish. Paths are generated for: `appletvos` `appletvsimulator` `macosx` `watchos` `watchsimulator` `iphoneos` and `iphonesimulator`.
+
+For instance, If xcode-select is set to use Xcode, the `macosx` path may resolve to the following:
+
+```json
+"appleSdks": {
+   "macosx": "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk",
+   ...
+}
+```
+
+At the moment, these are used based on the given target architecture of the build, so if the triple ends with an id specified below, the matching SDK path will be used as the `sysroot` during compilation.
+
+| Architecture triple ends with: | SDK: |
+| ------------------------------ | ---- |
+| `darwin` `darwin##` `macosx` or `macosx##` | `macosx` |
+| `ios` or `ios##` | `iphoneos` |
+| `tvos` or `tvos##`       | `appletvos` |
+| `watchos` or `watchos##` | `watchos` |
+
+> Note: Anything other than `macosx` is experimental. Although SDK paths for simulators are generated, actual support will be a future addition.
+
+\\
+
+## [Themes]
+
 TODO
 
 <!-- nav:/command-usage:/further-reading -->
