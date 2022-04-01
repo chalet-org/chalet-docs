@@ -150,27 +150,41 @@ default: `Release`
 
 A toolchain preset to use, or a user-made toolchain.
 
-default: 
-* MacOS: `apple-llvm`
-* Windows: `vs-stable`
-* Linux: `gcc`
+<!-- tabs:start -->
+|Windows|
+
+default: `vs-stable`
 
 Presets:
-* `llvm`
-* `gcc`
-
-Windows Presets:
 * `vs-stable`
 * `vs-latest`
 * `vs-2022`
 * `vs-2019`
 * `vs-2017`
+* `llvm`
+* `gcc`
 * `intel-llvm-vs-2019`
 * `intel-llvm-vs-2017`
 
-MacOS Presets:
+|MacOS|
+
+default: `apple-llvm`
+
+Presets:
 * `apple-llvm`
+* `llvm`
+* `gcc`
 * `intel-classic`
+
+|Linux|
+
+default: `gcc`
+
+Presets:
+* `llvm`
+* `gcc`
+
+<!-- tabs:end -->
 
 </dd>
 
@@ -259,13 +273,154 @@ Generate a compile_commands.json file for Clang tooling use.
 
 ## [Toolchains]
 
-TODO
+The `toolchains` structure describes a toolchain that has either been detected from a given preset at the command line (for instance, `-t llvm -a x86_64`) or a toolchain manually defined by a user. When a toolchain is generated, the best available executable candidates are found, but it may sometimes be necessary to check and make changes.
+
+Below is an example toolchain that generates for `apple-llvm` on MacOS.
+
+```json
+"toolchains": {
+   "apple-llvm": {
+      "version": "13.1.6",
+      "strategy": "ninja",
+      "buildPathStyle": "target-triple",
+      "compilerCpp": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+      "compilerC": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+      "compilerWindowsResource": "",
+      "linker": "/Applications/Xcode.app/Contents/Developer/usr/bin/ld",
+      "archiver": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool",
+      "profiler": "",
+      "disassembler": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/otool",
+      "cmake": "/usr/local/bin/cmake",
+      "make": "/Applications/Xcode.app/Contents/Developer/usr/bin/make",
+      "ninja": "/usr/local/bin/ninja"
+   }
+}
+```
+
+Paths for `cmake`, `make` and `ninja` are part of the toolchains so that one can define bundled versions (in the case of Visual Studio), or other drop-in replacements.
+
+<!-- dl:start -->
+
+``version``
+
+<dd>
+
+A version string to identify the toolchain. If MSVC, this must be the full version string of the Visual Studio Installation. (vswhere's installationVersion string)
+
+</dd>
+
+``strategy``
+
+<dd>
+
+The strategy to use during the build. When the toolchain is generated, it defaults to `ninja` (if detected), but falls back to `makefile` otherwise. If building on a CI server, it will default to `native-experimental` but expects no existing builds present. 
+
+| ninja                | Uses the Ninja version defined by the `ninja` property. |
+| makefile             | Uses the GNU Make version defined by the `make` property. |
+| native-experimental  | Experimental support to build entirely with Chalet. |
+
+</dd>
+
+``buildPathStyle``
+
+<dd>
+
+The build path style, with the configuration appended following an underscore. Examples:
+
+| configuration  | ex: `build/Debug` |
+| architecture   | ex: `build/x64_Debug` |
+| target-triple  | ex: `build/x64-linux-gnu_Debug` |
+| toolchain-name | ex: `build/my-cool-toolchain_name_Debug` |
+
+</dd>
+
+``compilerCpp``
+
+<dd>
+
+The executable path to the toolchain's C++ compiler.
+
+</dd>
+
+``compilerC``
+
+<dd>
+
+The executable path to the toolchain's C compiler.
+
+</dd>
+
+``compilerWindowsResource``
+
+<dd>
+
+The executable path to the resource compiler. This can be either rc.exe, llvm-rc.exe, or windres.exe. Cross-compiling via MinGW on Linux is supported.
+
+</dd>
+
+``linker``
+
+<dd>
+
+The executable path to the toolchain's linker - typically ld with GCC, lld with LLVM, or link.exe with Visual Studio.
+
+</dd>
+
+``archiver``
+
+<dd>
+
+The executable path to the toolchain's static library archive utility - typically ar with GCC, libtool on MacOS, or lib.exe with Visual Studio.
+
+</dd>
+
+``profiler``
+
+<dd>
+
+The executable path to the toolchain's command-line profiler (if applicable) - for instance, gprof with GCC.
+
+</dd>
+
+``disassembler``
+
+<dd>
+
+The executable path to the toolchain's disassembler (if applicable) - for instance, objdump with GCC, dumpbin with MSVC, and otool with Apple LLVM.
+
+</dd>
+
+``cmake``
+
+<dd>
+
+The executable path to CMake.
+
+</dd>
+
+``make``
+
+<dd>
+
+The executable path to GNU make, or NMAKE/Qt Jom with Visual Studio.
+
+</dd>
+
+``ninja``
+
+<dd>
+
+The executable path to Ninja.
+
+</dd>
+
+<!-- dl:end -->
 
 \\
 
 ## [Tools]
 
-The `tools` structure includes paths to any other executable that Chalet requires on the given platform. Chalet will detect whatever has priority in the PATH variable, but any resulting paths need to be changed, this can be done after configuring and before building.
+The `tools` structure includes paths to any other executables required on the platform. Chalet will detect whatever has priority in the PATH variable, but any resulting paths need to be changed, this can be done after configuring and before building.
 
 Here's some example paths on MacOS:
 
@@ -346,4 +501,4 @@ Details of each can be viewed in the latest schema [here](/schema/latest/setting
 
 To disable the theme, set `theme` to `none`.
 
-<!-- nav:/command-usage:/further-reading -->
+<!-- nav:/command-usage:/other-topics -->

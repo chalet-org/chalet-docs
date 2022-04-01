@@ -93,29 +93,24 @@ type CodeProps = Props & {
 const CodePre = ({ children, lang }: CodeProps) => {
 	return (
 		<PreStyles fonts={globalFonts} data-lang={lang}>
-			<code
-				className={`language-${lang}`}
-				dangerouslySetInnerHTML={{
-					__html: !!Prism.languages[lang]
-						? Prism.highlight(children ?? "", Prism.languages[lang], lang)
-						: children,
-				}}
-			/>
+			<pre>
+				<code
+					className={`language-${lang}`}
+					dangerouslySetInnerHTML={{
+						__html: !!Prism.languages[lang]
+							? Prism.highlight(children ?? "", Prism.languages[lang], lang)
+							: children,
+					}}
+				/>
+			</pre>
 		</PreStyles>
 	);
 };
 
 const CodeHeader = ({ children, lang }: CodeProps) => {
 	return (
-		<HeaderStyles fonts={globalFonts} data-lang={lang}>
-			<code
-				// className={`language-${lang}`}
-				dangerouslySetInnerHTML={{
-					__html: !!Prism.languages[lang]
-						? Prism.highlight(children ?? "", Prism.languages[lang], lang)
-						: children,
-				}}
-			/>
+		<HeaderStyles fonts={globalFonts}>
+			<code>{children}</code>
 		</HeaderStyles>
 	);
 };
@@ -134,18 +129,20 @@ const CodePreFromMarkdown = ({ children, ...props }: Props) => {
 
 				return (
 					<PreStyles fonts={globalFonts} data-lang={lang}>
-						<code
-							className={`language-${lang}`}
-							dangerouslySetInnerHTML={{
-								__html: !!Prism.languages[lang]
-									? Prism.highlight(
-											(childProps?.children as string) ?? "",
-											Prism.languages[lang],
-											lang
-									  )
-									: childProps?.children,
-							}}
-						/>
+						<pre>
+							<code
+								className={`language-${lang}`}
+								dangerouslySetInnerHTML={{
+									__html: !!Prism.languages[lang]
+										? Prism.highlight(
+												(childProps?.children as string) ?? "",
+												Prism.languages[lang],
+												lang
+										  )
+										: childProps?.children,
+								}}
+							/>
+						</pre>
 					</PreStyles>
 				);
 			})}
@@ -166,8 +163,7 @@ const codeCss = css<StyleProps>`
 	color: ${getThemeVariable("codeWhite")};
 	text-shadow: 0 0 1px rgba(255, 255, 255, 0.33);
 	word-spacing: normal;
-	word-break: normal;
-	word-wrap: normal;
+	white-space: pre;
 	tab-size: 4;
 	hyphens: none;
 	outline: 0;
@@ -397,19 +393,25 @@ const HeaderStyles = styled.dt<StyleProps>`
 	}
 `;
 
-const PreStyles = styled.pre<StyleProps>`
+const PreStyles = styled.div<StyleProps>`
 	display: block;
-	/* max-height: 24rem; */
-	margin: 0.75rem 0;
-	padding: 1rem 1.25rem;
-	white-space: pre-wrap;
-	line-height: 1.5;
-	overflow: auto;
-	font-size: 0.875rem;
-	font-weight: 400;
-	background-color: ${getThemeVariable("codeBackground")};
+	position: relative;
 
-	${codeCss}
+	> pre {
+		display: block;
+		position: relative;
+		/* max-height: 24rem; */
+		margin: 0.75rem 0;
+		padding: 1rem 1.25rem;
+		white-space: pre-wrap;
+		line-height: 1.5;
+		overflow: auto;
+		font-size: 0.875rem;
+		font-weight: 400;
+		background-color: ${getThemeVariable("codeBackground")};
+
+		${codeCss}
+	}
 
 	&:after {
 		content: attr(data-lang);

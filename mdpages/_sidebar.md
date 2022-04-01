@@ -13,7 +13,7 @@ Documentation
 [@](/describing-the-distribution)
 [@](/command-usage)
 [@](/the-settings-file)
-[@](/further-reading)
+[@](/other-topics)
 
 :break
 IDE Integration
