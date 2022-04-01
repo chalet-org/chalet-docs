@@ -26,8 +26,6 @@ const parseTables = (text: string) => {
 	const ret = text.replace(
 		/(((\| ([\w\d` -:,~\=\(\)\[\]\{\}\$\?\/\\]+))+ \|\n)+)\n/g,
 		(_match: string, p1: string) => {
-			// TODO: alignment
-
 			let thead: string = "";
 			let rows: string[] = [];
 			const rest = p1.replace(

@@ -90,7 +90,7 @@ export { SearchInput };
 const Styles = styled.div`
 	display: block;
 	padding: 1rem 0;
-	padding-bottom: 2rem;
+	padding-bottom: 1rem;
 	width: 100%;
 	color: ${getThemeVariable("mainText")};
 

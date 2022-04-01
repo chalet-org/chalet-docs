@@ -113,12 +113,11 @@ const SidebarToggle = styled.button`
 	bottom: 0;
 	left: 0;
 	z-index: 99;
-	padding: 1rem;
-	margin: 1rem;
+	padding: 0.25rem;
+	margin: 1.75rem;
 	cursor: pointer;
 	background: transparent;
 	border-radius: 0.25rem;
-	transition: background-color 0.125s linear;
 
 	> span {
 		background-color: ${getThemeVariable("header")};
@@ -191,14 +190,14 @@ const StyledAside = styled.aside<AsideProps>`
 
 		strong {
 			padding: 0;
-			line-height: 2;
+			line-height: 1.667;
 			padding-bottom: 0.125rem;
 		}
 	}
 
 	a {
 		display: block;
-		line-height: 2;
+		line-height: 1.667;
 		padding-bottom: 0.125rem;
 		border-left: 0.25rem solid transparent;
 
@@ -226,7 +225,7 @@ const StyledAside = styled.aside<AsideProps>`
 		display: block;
 		position: relative;
 		width: 100%;
-		padding: 4rem;
+		padding: 2rem;
 	}
 
 	> div.nav-fade {

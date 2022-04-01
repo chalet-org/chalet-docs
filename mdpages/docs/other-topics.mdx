@@ -16,13 +16,13 @@ C++20 modules are an exciting, new frontier in the wild world of C++, and it's s
 
 Modules have a complicated build process compared to other C++ code, so they are built natively through Chalet, instead of using Ninja/Make. Fortunately, this is very fast, and comparable to doing so in msbuild or within Visual Studio. If the build strategy is set to `ninja` or `make`, other build targets will still use them, and module targets will ignore that strategy and use its own. 
 
-Because module source code file extensions can technically be anything in the same way as regular C++ code, it makes the most sense to separate out the two types of source code in the build into separate targets, and define the extensions in [Files](/creating-targets?id=adding-source-files) how you'd like them to be. A traditional C++ file in a module target would get treated as a module otherwise.
+Because module source code file extensions can technically be anything in the same way as regular C++ code, it makes the most sense to separate out the two types of source code in the build into separate targets, and define the extensions in [Files](/docs/creating-targets?id=adding-source-files) how you'd like them to be. A traditional C++ file in a module target would get treated as a module otherwise.
 
 Also of note, standard library header imports are supported without any additional settings, so feel free to `import <iostream>`. 
 
 To get started with modules, initialize a project with `chalet init` and answer **yes** to **Enable C++20 modules?** in the questionnaire.
 
-See also: [C++ Modules](/cxx-compile-settings?id=c-modules)
+See also: [C++ Modules](/docs/cxx-compile-settings?id=c-modules)
 
 \\
 
@@ -64,4 +64,4 @@ If it's not found in either location, the build will fail.
 At the moment, Chalet looks for `CI=1` or `CI=true` and makes a couple adjustments during its run. The main thing that changes is that the build strategy used is `native-experimental`. Although it is experimental, the only thing the native strategy doesn't do yet is dependency checks. Additionally, any irregular output, like loading ellipses, are disabled.
 
 
-<!-- nav:/the-settings-file: -->
+<!-- nav:/docs/the-settings-file: -->

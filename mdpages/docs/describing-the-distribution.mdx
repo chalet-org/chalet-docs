@@ -190,7 +190,7 @@ Icon=${icon}
 
 | `${name}`           | The bundle's name, so in the examples above, this would be "MyApp" |
 | `${path}`           | The full path to the application bundle's directory (or subdirectory) |
-| `${mainExecutable}` | The main executable, explained [here](/describing-the-distribution?id=the-main-executable) |
+| `${mainExecutable}` | The main executable, explained [here](/docs/describing-the-distribution?id=the-main-executable) |
 | `${icon}`           | The path to the icon. This ends up being the copy placed in the distribution target's folder |
 
 \\
@@ -220,7 +220,7 @@ The `infoPropertyList` defines an Information Property List for the bundle. It c
 
 | `${name}`           | The bundle's name, so in the examples above, this would be "MyApp" |
 | `${bundleName}`     | The first 15 characters of ${name}, specifically used for [CFBundleName](//developer.apple.com/documentation/bundleresources/information_property_list/cfbundlename) |
-| `${mainExecutable}` | The main executable, explained [here](/describing-the-distribution?id=the-main-executable) |
+| `${mainExecutable}` | The main executable, explained [here](/docs/describing-the-distribution?id=the-main-executable) |
 | `${icon}`           | The path to the icon. This ends up being the .icns created/copied in the distribution target's folder |
 
 **Code Signing**
@@ -235,7 +235,7 @@ Notarization is not done at all. You will need to do that through a script.
 
 ## [Scripts]
 
-Scripts work the same way as their target counterparts, so that one can do more with their distribution than what Chalet can offer. Refining the structure of the distribution folder, running additional programs, and generating generating additional files can be easily accomplished this way. To get started, set kind to `script`, followed by path to the script added in the `script` property. For further details, refer back to [here](/creating-targets?id=script-targets).
+Scripts work the same way as their target counterparts, so that one can do more with their distribution than what Chalet can offer. Refining the structure of the distribution folder, running additional programs, and generating generating additional files can be easily accomplished this way. To get started, set kind to `script`, followed by path to the script added in the `script` property. For further details, refer back to [here](/docs/creating-targets?id=script-targets).
 
 ```json
 "post-bundle": {
@@ -323,4 +323,4 @@ A [NSIS](//nsis.sourceforge.io/Main_Page) installer can be created, given a dist
 }
 ```
 
-<!-- nav:/build-configurations:/command-usage -->
+<!-- nav:/docs/build-configurations:/docs/command-usage -->

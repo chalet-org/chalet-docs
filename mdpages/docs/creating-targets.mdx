@@ -212,7 +212,7 @@ Most properties support conditions that describe whether to include or exclude t
 
 * `debug` / `!debug` if the build configuration uses debug symbols (Debug/RelWithDebInfo/Profile) or doesn't use them.
 * `(platform)` / `!(platform)` where platform is or isn't `macos` `linux` & `windows`
-* For targeting compilers and architectures, see [Advanced: Fine Tuning](/cxx-compile-settings?id=advanced-fine-tuning)
+* For targeting compilers and architectures, see [Advanced: Fine Tuning](/docs/cxx-compile-settings?id=advanced-fine-tuning)
 
 Conditions are contextual, so not all properties support all conditions.
 
@@ -331,7 +331,7 @@ Files can also be expressed as an object with `include` and `exclude`. Excludes 
 }
 ```
 
-> Note: Because files can be declared differently, no assumptions are made about [include directories](/creating-targets?id=include-directories), so if `src/**.cpp` is the pattern used, `src` should be included 
+> Note: Because files can be declared differently, no assumptions are made about [include directories](/docs/creating-targets?id=include-directories), so if `src/**.cpp` is the pattern used, `src` should be included 
 
 \
 
@@ -561,4 +561,4 @@ Example:
 ```
 
 
-<!-- nav:/managing-dependencies:/cxx-compile-settings -->
+<!-- nav:/docs/managing-dependencies:/docs/cxx-compile-settings -->
