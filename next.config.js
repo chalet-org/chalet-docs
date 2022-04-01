@@ -10,6 +10,11 @@ module.exports = {
 				destination: "/docs/getting-started",
 				permanent: true,
 			},
+			{
+				source: "/ides",
+				destination: "/ides/visual-studio-code",
+				permanent: true,
+			},
 		];
 	},
 	webpack: (config, { isServer }) => {
