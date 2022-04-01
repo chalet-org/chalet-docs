@@ -3,6 +3,15 @@
 
 module.exports = {
 	reactStrictMode: true,
+	redirects: async () => {
+		return [
+			{
+				source: "/docs",
+				destination: "/docs/getting-started",
+				permanent: true,
+			},
+		];
+	},
 	webpack: (config, { isServer }) => {
 		if (!isServer) {
 			config.resolve.fallback = {
