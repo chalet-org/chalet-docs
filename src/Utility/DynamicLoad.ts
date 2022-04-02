@@ -12,6 +12,7 @@ type Components =
 	| "Link"
 	| "OrderedList"
 	| "PageDescription"
+	| "PageCategory"
 	| "PageHeading"
 	| "PageNavigation"
 	| "Paragraph"

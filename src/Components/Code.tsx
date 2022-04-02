@@ -107,7 +107,7 @@ const CodePre = ({ children, lang }: CodeProps) => {
 	);
 };
 
-const CodeHeader = ({ children, lang }: CodeProps) => {
+const CodeHeader = ({ children }: Pick<CodeProps, "children">) => {
 	return (
 		<HeaderStyles fonts={globalFonts}>
 			<code>{children}</code>

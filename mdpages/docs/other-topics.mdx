@@ -2,6 +2,7 @@
 title: Other Topics
 ---
 
+<PageCategory id="docs" />
 # [${meta.title}]
 
 ---
@@ -63,5 +64,7 @@ If it's not found in either location, the build will fail.
 
 At the moment, Chalet looks for `CI=1` or `CI=true` and makes a couple adjustments during its run. The main thing that changes is that the build strategy used is `native-experimental`. Although it is experimental, the only thing the native strategy doesn't do yet is dependency checks. Additionally, any irregular output, like loading ellipses, are disabled.
 
-
-<!-- nav:/docs/the-settings-file: -->
+<PageNavigation 
+    left={{ to: "/docs/the-settings-file", label: "The Settings File" }}
+    right={{ to: "/integrations/integration-development", label: "Integrations: Development" }}
+/>

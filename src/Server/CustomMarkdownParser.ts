@@ -70,7 +70,7 @@ const parseAnchoredHeaders = (text: string): string => {
 
 const parseCodeHeaders = (text: string): string => {
 	return text.replace(/\n``(.+)``/g, (match: string, p1: string) => {
-		return `\n<CodeHeader lang="bash">{"${p1}"}</CodeHeader>`;
+		return `\n<CodeHeader>{"${p1}"}</CodeHeader>`;
 	});
 };
 
@@ -198,6 +198,7 @@ const getPageAnchors = async (
 };
 
 const parseReadme = async (inText: string): Promise<string> => {
+	console.log("parseReadme");
 	const readme = await serverCache.get(`chalet-readme`, async () => {
 		let { text } = await getChaletFile("README.md");
 		if (!!text) {
@@ -293,7 +294,7 @@ const parseCustomMarkdown = async (
 
 	text = parseReferencedMetaData(text, meta);
 
-	if (slug === "getting-started") {
+	if (slug.endsWith("getting-started")) {
 		text = await parseReadme(text);
 	}
 

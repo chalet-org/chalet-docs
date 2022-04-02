@@ -2,7 +2,7 @@ import { performance } from "perf_hooks";
 
 import { Dictionary } from "@rewrking/react-kitchen";
 
-// import { isDevelopment } from "./IsDevelopment";
+import { isDevelopment } from "./IsDevelopment";
 
 type AnsiColorsForeground = 30 | 31 | 32 | 33 | 34 | 35 | 36 | 37;
 type AnsiColrosForegroundBright = 90 | 91 | 92 | 93 | 94 | 95 | 96 | 97;
@@ -38,8 +38,8 @@ class ServerCache {
 	private cache: Dictionary<CacheEntry<any>> = {};
 
 	constructor() {
-		// this.development = isDevelopment;
-		this.development = false;
+		this.development = isDevelopment;
+		// this.development = false;
 
 		const hours = 4;
 		this.cacheSeconds = 60 * 60 * hours;

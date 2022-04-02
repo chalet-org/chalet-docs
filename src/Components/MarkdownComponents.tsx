@@ -27,6 +27,7 @@ const mdxComponents: MDXComponents = {
 	Spacer: dynamic.component("Spacer"),
 	CodeHeader: dynamic.component("CodeHeader"),
 	PageDescription: dynamic.component("PageDescription"),
+	PageCategory: dynamic.component("PageCategory"),
 	TermDemo: dynamic.component("TermDemo"),
 	Tagline: dynamic.component("Tagline"),
 	ContactForm: dynamic.component("ContactForm"),

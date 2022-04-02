@@ -11,8 +11,8 @@ module.exports = {
 				permanent: true,
 			},
 			{
-				source: "/ides",
-				destination: "/ides/visual-studio-code",
+				source: "/integrations",
+				destination: "/integrations/visual-studio-code",
 				permanent: true,
 			},
 		];

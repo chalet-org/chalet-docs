@@ -61,11 +61,7 @@ const NavigationLinks = ({ sidebarLinks, anchors }: Props) => {
 			{sidebarLinks.map((link, i) => {
 				if (typeof link === "string") {
 					if (link === "break") {
-						return (
-							<NavBreak key={i}>
-								<hr />
-							</NavBreak>
-						);
+						return <NavBreak key={i} />;
 					} else {
 						return (
 							<li key={i}>
@@ -86,15 +82,7 @@ const NavigationLinks = ({ sidebarLinks, anchors }: Props) => {
 };
 
 const NavBreak = styled.div`
-	padding: 0 2rem;
-
-	> hr {
-		margin-bottom: 1rem;
-
-		&:after {
-			background: ${getThemeVariable("codeBackground")};
-		}
-	}
+	padding: 0.5rem 2rem;
 `;
 
 export { NavigationLinks };

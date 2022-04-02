@@ -18,6 +18,7 @@ export * from "./Page";
 export * from "./PageDescription";
 export * from "./PageHeading";
 export * from "./PageNavigation";
+export * from "./PageCategory";
 export * from "./PageFooter";
 export * from "./Paragraph";
 export * from "./ReleaseBlock";
