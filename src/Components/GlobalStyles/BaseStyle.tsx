@@ -153,6 +153,7 @@ const BaseStyle = createGlobalStyle`
 
 		&:first-of-type {
 			font-weight: 600;
+			white-space: pre;
 			/* min-width: 4rem; */
 		}
 

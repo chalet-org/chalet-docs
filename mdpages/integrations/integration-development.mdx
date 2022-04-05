@@ -7,13 +7,37 @@ title: Integration Development
 
 ---
 
-One of the main design goal of Chalet is to provide an easy to use command line interface that can be integrated in as many IDEs and code editors as possible.
+One of the main design goal of Chalet is to provide an easy to use command line interface that can be integrated in as many IDEs and code editors as possible. In order to make this happen, additional facilities are provided.
 
 \\
 
 ## [Overview]
 
+In order to receive information about a project, one can use:
+
+```bash
+chalet query <type> [ARG...]
+```
+
+See also: [Command Usage: Query](/docs/command-usage?id=query)
+
 TODO
+
+```json
+{
+   "configurations": [
+      "Release",
+      "Debug"
+   ],
+   "targets": [
+      "new-project"
+   ],
+   "runTargets": [
+      "new-project"
+   ],
+   "defaultRunTarget": "new-project"
+}
+```
 
 
 <PageNavigation 

@@ -233,27 +233,41 @@ default: `Release`
 
 A toolchain preset to use, or a user-made toolchain.
 
-default: 
-* MacOS: `apple-llvm`
-* Windows: `vs-stable`
-* Linux: `gcc`
+<!-- tabs:start -->
+|Windows|
+
+default: `vs-stable`
 
 Presets:
-* `llvm`
-* `gcc`
-
-Windows Presets:
 * `vs-stable`
 * `vs-latest`
 * `vs-2022`
 * `vs-2019`
 * `vs-2017`
+* `llvm`
+* `gcc`
 * `intel-llvm-vs-2019`
 * `intel-llvm-vs-2017`
 
-MacOS Presets:
+|MacOS|
+
+default: `apple-llvm`
+
+Presets:
 * `apple-llvm`
+* `llvm`
+* `gcc`
 * `intel-classic`
+
+|Linux|
+
+default: `gcc`
+
+Presets:
+* `llvm`
+* `gcc`
+
+<!-- tabs:end -->
 
 </dd>
 
@@ -414,7 +428,7 @@ The path to a JSON file to examine, if not the local/global settings.
 
 <dd>
 
-Use the local settings (.chaletrc)
+Use the local settings: `.chaletrc`
 
 </dd>
 
@@ -423,7 +437,7 @@ Use the local settings (.chaletrc)
 
 <dd>
 
-Use the global settings (~/.chaletconfig)
+Use the global settings: `~/.chaletconfig`
 
 </dd>
 
@@ -453,10 +467,10 @@ Export the Chalet project to another project format.
 
 <dd>
 
-The project format kind to export.
+The project format kind to export. (experimental)
 
 Types:
-* `codeblocks` - CodeBlocks IDE
+| codeblocks |  CodeBlocks IDE |
 
 </dd>
 
@@ -500,23 +514,25 @@ See also: [Integration Development](/integrations/integration-development)
 
 The data type to query. It must be one of the following:
 
-Types:
-* `schema-settings-json` - The entire `.chaletrc` / `.chaletconfig` schema in JSON format
-* `state-chalet-json` - State applicable to the chalet.json for the current project in JSON format
-* `state-settings-json` - State applicable to the `.chaletrc` / `.chaletconfig` for the current project in JSON format
-* `user-toolchains` - The list of user-specified or cached toolchains for the project
-* `toolchain` - The current toolchain selected for the project
-* `theme-names` - The list of terminal theme names available
-* `configurations` - The current build configuration selected for the project
-* `schema-chalet-json` - The entire chalet.json schema in JSON format
-* `run-target` - The current run target for the project
-* `list-names` - The list of available data types to query for (this list)
-* `configuration` - The current build configuration for the project
-* `architectures` - Any architectures used by the current toolchain
-* `commands` - The full list of chalet commands
-* `toolchain-presets` - The list of toolchain presets available on the platform
-* `architecture` - The current build architecture for the project
-* `all-toolchains` - The list of toolchain presets and user toolchains for the project
+Query results in tab-separated lists:
+| user-toolchains | The list of user-specified or cached toolchains for the project |
+| toolchain | The current toolchain selected for the project |
+| theme-names | The list of terminal theme names available |
+| configurations | The current build configuration selected for the project |
+| run-target | The current run target for the project |
+| list-names | The list of available data types to query for (this list) |
+| configuration | The current build configuration for the project |
+| architectures | Any architectures used by the current toolchain |
+| commands | The full list of chalet commands |
+| toolchain-presets | The list of toolchain presets available on the platform |
+| architecture | The current build architecture for the project |
+| all-toolchains | The list of toolchain presets and user toolchains for the project |
+
+Query results in JSON format:
+| schema-settings-json | The entire `.chaletrc` / `.chaletconfig` schema in JSON format |
+| schema-chalet-json | The entire chalet.json schema in JSON format |
+| state-chalet-json | State applicable to the chalet.json for the current project in JSON format |
+| state-settings-json | State applicable to the `.chaletrc` / `.chaletconfig` for the current project in JSON format |
 
 </dd>
 

@@ -1,6 +1,11 @@
 {
-	"name": "docs",
+	"name": "chalet-docs",
 	"version": "0.1.0",
+	"description": "Chalet documentation & website",
+	"homepage": "https://www.chalet-work.space",
+	"author": "Andrew R. King",
+	"license": "BSD-3-Clause",
+	"readme": "README.md",
 	"private": true,
 	"scripts": {
 		"start": "next-remote-watch ./mdpages/",
