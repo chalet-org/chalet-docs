@@ -1,11 +1,73 @@
 ---
-title: Managing Dependencies
+title: The Build File
 ---
 
 <PageCategory id="docs" />
 # [${meta.title}]
 
 ---
+
+The philosophy behind Chalet projects is quite simple: Abstract away only what needs to be abstracted, and unify as much of the build as possible. The build file, `chalet.json` is vehicle for this philosophy. From a high level, it's structured as follows:
+
+```json
+{
+   ... (metadata)
+   "seachPaths": [ ... ],
+   "defaultConfigurations": [ ... ],
+   "configurations": { ... },
+   "externalDependencies": { ... },
+   "abstracts": { ... },
+   "targets": { ... },
+   "distribution": { ... },
+}
+```
+
+| metadata | Metadata related to the entire workspace. |
+| seachPaths | Additional relative paths to search for compiled dependencies not otherwise picked up. |
+| defaultConfigurations | An array fo default build configurations to use. |
+| configurations | Custom build configurations |
+| externalDependencies | External dependencies to fetch before building. (ie. from git) |
+| targets | Build targets. |
+| abstracts | Abstract build targets that build targets can inherit from. |
+| distribution | Distribution targets. |
+
+\\
+
+## [Workspace Metadata]
+
+Workspace metadata is simply a set of strings used to describe the project. These can be referenced in various places later on. The following properties are supported:
+
+| name | The workspace name. |
+| version | A version string that can take up to four components. |
+| author | The author or maintainer of the workspace. |
+| description | A description of the workspace. |
+| license | The name of file that describes the license. |
+| readme | The name of the readme file. |
+| homepage | The homepage website of the project. |
+
+```json
+{
+   "name": "Example Name",
+   "version": "4.0.1",
+   "author": "Jane Doe",
+   "description": "A brand new project",
+   "license": "LICENSE.txt",
+   "readme": "README.md",
+   "homepage": "www.foo.town",
+   ...
+}
+```
+
+\
+
+**See also:**
+
+[Project Metadata](/docs/creating-targets?id=project-metadata)  
+[Configure Files](/docs/creating-targets?id=configure-files)
+
+\\
+
+## [Managing Dependencies]
 
 Before diving into build target details, one should consider how to import libraries and external code. In general, it's best to figure out a way to separate that code from your project's code. if using git, one can use submodules for this, scripts, or an external package manager in combination with adding appropriate paths to `.gitignore`.
 
@@ -98,11 +160,5 @@ The subfolder name of the cloned repository will always be the object node's nam
 ```
 
 ... will be cloned into `${externalDir}/bar-repo` (or `chalet_external/bar-repo` by default).
-
-\\
-
-## [Using Package Managers]
-
-At the moment, other package managers like [Conan](//conan.io) and [vcpkg](//vcpkg.io) can be integrated using [Process Targets](/docs/creating-targets?id=process-targets), [Script Targets](/docs/creating-targets?id=script-targets), or they can invoked via CMake in [CMake Targets](/docs/creating-targets?id=cmake-targets), but there is no official integration for them.
 
 <!-- nav:/docs/getting-started:/docs/creating-targets -->

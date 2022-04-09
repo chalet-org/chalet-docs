@@ -7,13 +7,13 @@ title: Creating Targets
 
 ---
 
-The philosophy behind Chalet projects is quite simple: Abstract away only what needs to be abstracted, and unify as much of the build as possible.
+By far the most important part of a Chalet project is its targets. Targets are defined in sequential order, and describe individual source compilation targets, CMake projects, other Chalet project, or scripts.
 
 \\
 
 ## [Target Types]
 
-By far the most important part of a Chalet project is its targets. Targets are defined in sequential order, and describe individual source compilation targets, CMake projects, other Chalet project, or scripts.
+The following are the kinds of targets supported:
 
 * Source Target - A folder, set of folders, or files with compilation options. Two types can be made:
    * [Executable Source Target](/schema/latest/chalet-json/target-source-executable) - Describes an executable file to output
@@ -336,7 +336,7 @@ Files can also be expressed as an object with `include` and `exclude`. Excludes 
 
 \\
 
-## [Metadata]
+## [Project Metadata]
 
 TODO
 
@@ -572,4 +572,4 @@ Example:
 ```
 
 
-<!-- nav:/docs/managing-dependencies:/docs/cxx-compile-settings -->
+<!-- nav:/docs/the-build-file:/docs/cxx-compile-settings -->

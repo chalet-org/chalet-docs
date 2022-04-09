@@ -23,7 +23,11 @@ Also of note, standard library header imports are supported without any addition
 
 To get started with modules, initialize a project with `chalet init` and answer **yes** to **Enable C++20 modules?** in the questionnaire.
 
-See also: [C++ Modules](/docs/cxx-compile-settings?id=c-modules)
+\
+
+**See also:**
+
+[C++ Modules](/docs/cxx-compile-settings?id=c-modules)
 
 \\
 
@@ -63,6 +67,13 @@ If it's not found in either location, the build will fail.
 ## [Continuous Integration]
 
 At the moment, Chalet looks for `CI=1` or `CI=true` and makes a couple adjustments during its run. The main thing that changes is that the build strategy used is `native-experimental`. Although it is experimental, the only thing the native strategy doesn't do yet is dependency checks. Additionally, any irregular output, like loading ellipses, are disabled.
+
+\\
+
+## [Package Managers]
+
+At the moment, other package managers like [Conan](//conan.io) and [vcpkg](//vcpkg.io) can be integrated using [Process Targets](/docs/creating-targets?id=process-targets), [Script Targets](/docs/creating-targets?id=script-targets), or they can invoked via CMake in [CMake Targets](/docs/creating-targets?id=cmake-targets), but there is no official integration for them.
+
 
 <PageNavigation 
     left={{ to: "/docs/the-settings-file", label: "The Settings File" }}

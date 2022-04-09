@@ -5,7 +5,7 @@
 :break
 Documentation
 [@](/docs/getting-started)
-[@](/docs/managing-dependencies)
+[@](/docs/the-build-file)
 [@](/docs/creating-targets)
 [@](/docs/cxx-compile-settings)
 [@](/docs/build-configurations)
