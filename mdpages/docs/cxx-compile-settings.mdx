@@ -132,6 +132,51 @@ See also: [Advanced: Fine Tuning](/docs/cxx-compile-settings?id=advanced-fine-tu
 
 \\
 
+## [Build Suffixes]
+
+The build suffix is a simple mechanism to share compiled objects between multiple source targets. By default, the following directory structures are used:
+
+| `(buildOutputDir)/obj.(suffix)` | Compiled objects |
+| `(buildOutputDir)/asm.(suffix)` | Object disassemblies (optional) |
+| `(buildDir)/int.(suffix)` | Intermediate files (shared among build configurations) |
+
+Without changing anything, the suffix is the name of the source target. Changing the `buildSuffix` property to a previous build target name will share the object files between the two targets. One use case for this could be tests, where there's a main executable and a tests executable. This would be configured like so:
+
+```json
+"first-target": {
+   "kind": "executable",
+   "files": [
+      "src/*/**.cpp", // all subfolders in src
+      "src/main.cpp" // main in src
+   ],
+   "settings:Cxx": {
+      "includeDirs": [
+         "src"
+      ]
+   }
+},
+"second-target": {
+   "kind": "executable",
+   "files": [
+      "src/*/**.cpp", // all subfolders in src
+      "test/**.cpp" // all tests (and its own main)
+   ],
+   "settings:Cxx": {
+      "buildSuffix": "first-target", // use the same folders as the first target
+      "includeDirs": [
+         "src",
+         "test"
+      ]
+   }
+}
+```
+
+> Note: `files` in `first-target` could also be written as `src/**.cpp`, but it's split up for clarity.
+
+An original build suffix can also be set for related targets where its appropriate. For example, `"buildSuffix": "sources"` in both of the targets above.
+
+\\
+
 ## [Library Search Paths]
 
 These are directories (preferably relative) that are used to search for static or dynamic libraries at link time. If you're looking to link a library called `foo`, you must tell the linker where `foo.lib` or `libfoo.a` exist. This is expressed with the `libDirs` property, where all [Path Substitutions](/docs/creating-targets?id=path-substitution) and glob patterns are supported.

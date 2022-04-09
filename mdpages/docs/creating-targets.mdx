@@ -173,7 +173,7 @@ When the `kind` property is either `executable` `sharedLibrary` or `staticLibrar
 
 ## [Target Descriptions]
 
-All target types can take a `description` property that explicitly change the header to something else. For example, if the list of targets look something like:
+All target types can take a `outputDescription` property that explicitly change the header to something else. For example, if the list of targets look something like:
 
 ```json
 "targets": {
@@ -187,12 +187,12 @@ The default output would be:
 ▼  Build: my-target
 ```
 
-If the description is changed:
+If the outputDescription is changed:
 
 ```json
 "targets": {
    "my-target": {
-      "description": "My super cool project!"
+      "outputDescription": "My super cool project!"
    }
 }
 ```
@@ -203,7 +203,7 @@ The output would become:
 ▼  My super cool project!
 ```
 
-> Note: Unicode is supported (given the capabilities of the terminal). As long as the chalet.json itself is Unicode, the description should display correctly.
+> Note: Unicode is supported (given the capabilities of the terminal). As long as the chalet.json itself is Unicode, the outputDescription should display correctly.
 
 \\
 
@@ -334,7 +334,17 @@ Files can also be expressed as an object with `include` and `exclude`. Excludes 
 
 > Note: Because files can be declared differently, no assumptions are made about [include directories](/docs/creating-targets?id=include-directories), so if `src/**.cpp` is the pattern used, `src` should be included 
 
-\
+\\
+
+## [Metadata]
+
+TODO
+
+\\
+
+## [Configure Files]
+
+TODO
 
 \\
 

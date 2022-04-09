@@ -28,11 +28,11 @@ The command-line command to create the distribution is:
 chalet bundle
 ```
 
-Like with `build`, this will sequentially go through each distribution target and perform a given task that they describe. If a distribution target requires a certain build, these will be determined prior, and those builds will be run. Also like with build targets, distributions can be described via the `description` property:
+Like with `build`, this will sequentially go through each distribution target and perform a given task that they describe. If a distribution target requires a certain build, these will be determined prior, and those builds will be run. Also like with build targets, distributions can be described via the `outputDescription` property:
 
 ```json
 "MyApp": {
-   "description": "Bundling my application..."
+   "outputDescription": "Bundling my application..."
 }
 ```
 
