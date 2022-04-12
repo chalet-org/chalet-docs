@@ -16,7 +16,9 @@ const cssReset = css`
 	body,
 	div,
 	aside,
-	main {
+	main,
+	code,
+	pre {
 		scrollbar-width: thin;
 		scrollbar-color: ${getThemeVariable("header")} transparent;
 	}
