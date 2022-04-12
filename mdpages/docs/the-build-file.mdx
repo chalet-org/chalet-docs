@@ -23,7 +23,7 @@ The philosophy behind Chalet projects is quite simple: Abstract away only what n
 ```
 
 | metadata | Metadata related to the entire workspace. |
-| seachPaths | Additional relative paths to search for compiled dependencies not otherwise picked up. |
+| seachPaths | Additional relative paths to search for compiled dependencies not otherwise found. |
 | defaultConfigurations | An array fo default build configurations to use. |
 | configurations | Custom build configurations |
 | externalDependencies | External dependencies to fetch before building. (ie. from git) |
@@ -44,6 +44,8 @@ Workspace metadata is simply a set of strings used to describe the project. Thes
 | license | The name of file that describes the license. |
 | readme | The name of the readme file. |
 | homepage | The homepage website of the project. |
+
+Example:
 
 ```json
 {
@@ -148,7 +150,7 @@ If a repository only references the branch or doesn't use a branch, commit, or t
 
 Chalet uses a folder called `chalet_external` to store anything added with `externalDependencies`. It performs shallow clones of the repositories, and keeps track of the given branch or ref separately in a central cache. It's expected that the code cloned down is managed elsewhere. The external directory can be changed via the `--external-dir` or `-e` command line option. Some might want to use `external` or `vendor` for instance. 
 
-The directory can be referenced in chalet.json with the `${externalDir}` path substitution variable explained [in the next section](/docs/creating-targets?id=path-substitution).
+The directory can be referenced in chalet.json with the `${externalDir}` variable substitution variable explained at [Variable Substitution](/docs/creating-targets?id=variable-substitution).
 
 The subfolder name of the cloned repository will always be the object node's name. For example, the following:
 

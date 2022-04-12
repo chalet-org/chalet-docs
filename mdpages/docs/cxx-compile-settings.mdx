@@ -81,7 +81,7 @@ MSVC will fall back to `/std:latest` if the standard isn't recognized.
 
 ## [Include Directories]
 
-These are directories (preferably relative) to be included during compilation, and tell the compiler where header files are located. This is expressed with the `includeDirs` property, where all [Path Substitutions](/docs/creating-targets?id=path-substitution) and glob patterns apply. The simplest example is the following:
+These are directories (preferably relative) to be included during compilation, and tell the compiler where header files are located. This is expressed with the `includeDirs` property, where all [Variable Substitution](/docs/creating-targets?id=variable-substitution) and glob patterns apply. The simplest example is the following:
 
 ```json
 "includeDirs": [
@@ -183,7 +183,7 @@ An original build suffix can also be set for related targets where its appropria
 
 ## [Library Search Paths]
 
-These are directories (preferably relative) that are used to search for static or dynamic libraries at link time. If you're looking to link a library called `foo`, you must tell the linker where `foo.lib` or `libfoo.a` exist. This is expressed with the `libDirs` property, where all [Path Substitutions](/docs/creating-targets?id=path-substitution) and glob patterns are supported.
+These are directories (preferably relative) that are used to search for static or dynamic libraries at link time. If you're looking to link a library called `foo`, you must tell the linker where `foo.lib` or `libfoo.a` exist. This is expressed with the `libDirs` property, where all [Variable Substitution](/docs/creating-targets?id=variable-substitution) and glob patterns are supported.
 
 Example:
 

@@ -338,7 +338,33 @@ Files can also be expressed as an object with `include` and `exclude`. Excludes 
 
 ## [Project Metadata]
 
-TODO
+Project metadata is the same as [Workspace metadata](/docs/the-build-file?id=workspace-metadata), but the key difference is in how it is referenced later in [Configure Files](/docs/creating-targets?id=configure-files) and [Variable substitutions](/docs/creating-targets?id=variable-substitution). In projects, simply add the `metadata` property, and the inner properties are the same as they are at the workspace level. The following are supported:
+
+| name | The individual project's name. |
+| version | A version string that can take up to four components (if different from the workspace). |
+| author | The author or maintainer of the project (if different from the workspace). |
+| description | A description of the project. |
+| license | The name of file that describes the project's license (if different from the workspace). |
+| readme | The name of the readme file (if different from the workspace). |
+| homepage | The homepage website of the project (if different from the workspace). |
+
+Example:
+
+```json
+"my-target": {
+   "kind": "executable",
+   "metadata": {
+      "name": "Example Name",
+      "version": "4.0.1",
+      "author": "Jane Doe",
+      "description": "A brand new project",
+      "license": "LICENSE.txt",
+      "readme": "README.md",
+      "homepage": "www.foo.town"
+   },
+   ...
+}
+```
 
 \\
 
@@ -523,16 +549,51 @@ An executable target can also take the `defaultRunArguments` and `copyFilesOnRun
 
 \\
 
-## [Path Substitution]
+## [Variable Substitution]
 
-In properties that take paths to directories or files, path substitution is supported for certain variables that describe locations of the build that could vary between machines. The following is supported:
+In some areas, variable substitution is supported for environment variables, metadata, and relative paths that could vary between machines.
 
-| `~/`, `${home}`       | The home directory of the machine. On Windows, this is `C:\Users\(Name)` |
-| `${env:(Name)}`       | An environment variable by name. For example: `${env:MY_LIBRARY_PATH}` |
-| `${buildDir}`         | The main build directory for the current configuration & architecture |
-| `${externalDir}`      | The root path for external dependencies. See [externalDependencies](/schema/latest/chalet-json?id=external-dependencies) |
+In build target contexts, the following is supported:
+
+| `${buildDir}` | The main build directory for the current configuration & architecture |
+| `${cwd}` | The current working directory (this shouldn't be needed, but it's here just in case) |
+| `${configuration}` | The current build configuration |
+| `${externalDir}` | The root path for external dependencies. See [externalDependencies](/schema/latest/chalet-json?id=external-dependencies) |
 | `${externalBuildDir}` | The build path for an external dependency. For instance, if a CMake project is located at `${externalDir}/foo`, it will build to `${buildDir}/${externalDir}/foo`, so it's easier to write `${externalBuildDir}/foo` |
-| `${cwd}`              | The current working directory (this shouldn't be needed, but it's here just in case) |
+| `${home}`, `~/` | The home directory of the machine. On Windows, this is `C:\Users\(Name)` |
+| `${name}` | The name of the build target |
+| `${env:(Name)}` | An environment variable by name. For example: `${env:MY_LIBRARY_PATH}` |
+| `${meta:(Name)}` | Metadata with context of an individual source target's `metadata` properties. `meta:workspaceXXX` always returns workspace metadata, while `meta:XXXX` could return workspace or source target metadata. |
+
+In distribution target contexts, the following is supported:
+
+| `${cwd}` | The current working directory (this shouldn't be needed, but it's here just in case) |
+| `${configuration}` | The name of the build configuration being used for the distribution target. `Release` in most cases. |
+| `${distributionDir}` | The main output directory for the distribution |
+| `${externalDir}` | The root path for external dependencies. See [externalDependencies](/schema/latest/chalet-json?id=external-dependencies) |
+| `${home}`, `~/` | The home directory of the machine. On Windows, this is `C:\Users\(Name)` |
+| `${name}` | The name of the distribution target |
+| `${env:(Name)}` | An environment variable by name. For example: `${env:MY_LIBRARY_PATH}` |
+| `${meta:(Name)}` | Workspace metadata only. `meta:workspaceXXXX` and `meta:XXXX` return the same values. |
+
+Metadata variables:
+
+| `${meta:name}` | `${meta:workspaceName}` |
+| `${meta:description}` | `${meta:workspaceDescription}` |
+| `${meta:homepage}` | `${meta:workspaceHomepage}` |
+| `${meta:author}` | `${meta:workspaceAuthor}` |
+| `${meta:license}` | `${meta:workspaceLicense}` |
+| `${meta:readme}` | `${meta:workspaceReadme}` |
+| `${meta:version}` | `${meta:workspaceVersion}` |
+| `${meta:versionMajor}` | `${meta:workspaceVersionMajor}` |
+| `${meta:versionMinor}` | `${meta:workspaceVersionMinor}` |
+| `${meta:versionPatch}` | `${meta:workspaceVersionPatch}` |
+| `${meta:versionTweak}` | `${meta:workspaceVersionTweak}` |
+
+**See also:**
+
+[Workspace Metadata](/docs/the-build-file?id=workspace-metadata)
+[Project Metadata](/docs/creating-targets?id=project-metadata)
 
 Example:
 
