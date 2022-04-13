@@ -370,7 +370,27 @@ Example:
 
 ## [Configure Files]
 
-TODO
+Configure files allow one to take the contents of a file, replace variables with metadata, build paths or other information, and and output the file during the build in order to get that information into your program. The most common use-case for this is versioning, where a C++ header is the output.
+
+To use configure files, simply set `configureFiles` to a string or an array of strings to paths of files that must be processed. The files must end in `.in`, but can be anything. They are guaranteed to be processed after Chalet initialized and before the build starts.
+
+```json
+"first-project": {
+   "files": "foo/**.{cpp,rc}",
+   "configureFiles": "foo/config.h.in"
+}
+"second-project": {
+   "files": "bar/**.{cpp,rc}",
+   "configureFiles": [
+      "bar/config1.h.in",
+      "bar/config2.h.in"
+   ]
+}
+```
+
+**See also:**
+
+[Variable Substitution](/docs/creating-targets?id=variable-substitution)
 
 \\
 
