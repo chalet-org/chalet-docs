@@ -388,6 +388,20 @@ To use configure files, simply set `configureFiles` to a string or an array of s
 }
 ```
 
+All [variable substitutions](/docs/creating-targets?id=variable-substitution) are supported, as well as the variables below in either `${VAR}` or `%VAR%` style. To provide some compatibility with CMake projects, the variables `CMAKE_PROJECT_*` work as well, and return the same values as `WORKSPACE_*`.
+
+| `PROJECT_NAME` | `WORKSPACE_NAME` |
+| `PROJECT_DESCRIPTION` | `WORKSPACE_DESCRIPTION` |
+| `PROJECT_HOMEPAGE_URL` | `WORKSPACE_HOMEPAGE_URL` |
+| `PROJECT_AUTHOR` | `WORKSPACE_AUTHOR` |
+| `PROJECT_LICENSE` | `WORKSPACE_LICENSE` |
+| `PROJECT_README` | `WORKSPACE_README` |
+| `PROJECT_VERSION` | `WORKSPACE_VERSION` |
+| `PROJECT_VERSION_MAJOR` | `WORKSPACE_VERSION_MAJOR` |
+| `PROJECT_VERSION_MINOR` | `WORKSPACE_VERSION_MINOR` |
+| `PROJECT_VERSION_PATCH` | `WORKSPACE_VERSION_PATCH` |
+| `PROJECT_VERSION_TWEAK` | `WORKSPACE_VERSION_TWEAK` |
+
 **See also:**
 
 [Variable Substitution](/docs/creating-targets?id=variable-substitution)
