@@ -555,6 +555,8 @@ In some areas, variable substitution is supported for environment variables, met
 
 In build target contexts, the following is supported:
 
+| `${arch}` | The current build architecture |
+| `${archTriple}` | The current build architecture triple |
 | `${buildDir}` | The main build directory for the current configuration & architecture |
 | `${cwd}` | The current working directory (this shouldn't be needed, but it's here just in case) |
 | `${configuration}` | The current build configuration |
@@ -568,6 +570,7 @@ In build target contexts, the following is supported:
 In distribution target contexts, the following is supported:
 
 | `${cwd}` | The current working directory (this shouldn't be needed, but it's here just in case) |
+| `${arch}` | The current build architecture |
 | `${configuration}` | The name of the build configuration being used for the distribution target. `Release` in most cases. |
 | `${distributionDir}` | The main output directory for the distribution |
 | `${externalDir}` | The root path for external dependencies. See [externalDependencies](/schema/latest/chalet-json?id=external-dependencies) |
