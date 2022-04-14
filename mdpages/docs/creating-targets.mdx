@@ -516,6 +516,10 @@ The following examples are all valid:
    "description": "The very first script",
    "file.!windows": "scripts/script.sh",
    "file.windows": "scripts/script.bat",
+   "arguments": [
+      "foo",
+      "bar"
+   ]
 }
 "my-second-script": {
    "kind": "script",
@@ -530,9 +534,16 @@ The following examples are all valid:
 }
 "my-third-script": {
    "kind": "script",
-   "file": "scripts/script.py"
+   "file": "scripts/script.py",
+   "arguments": [
+      "${buildDir}",
+      "${archTriple}",
+      "${meta:workspaceName}"
+   ]
 }
 ```
+
+The `arguments` property can take any arguments that are required by the script, and support [variable substitutions](/docs/creating-targets?id=variable-substitution) to pass along information about the build.
 
 \\
 
@@ -552,7 +563,7 @@ Process targets are a means to call another executable directly using Chalet's s
 }
 ```
 
-The `path` property can either be the full path to an executable (not recommended), or a searchable executable name that can be found from a terminal (in PATH). The `arguments` property can take any arguments that are required by the process.
+The `path` property can either be the full path to an executable (not recommended), or a searchable executable name that can be found from a terminal (in PATH). The `arguments` property can take any arguments that are required by the process, and support [variable substitutions](/docs/creating-targets?id=variable-substitution) to pass along information about the build.
 
 \\
 
@@ -597,23 +608,15 @@ In build target contexts, the following is supported:
 | `${externalDir}` | The root path for external dependencies. See [externalDependencies](/schema/latest/chalet-json?id=external-dependencies) |
 | `${externalBuildDir}` | The build path for an external dependency. For instance, if a CMake project is located at `${externalDir}/foo`, it will build to `${buildDir}/${externalDir}/foo`, so it's easier to write `${externalBuildDir}/foo` |
 | `${home}`, `~/` | The home directory of the machine. On Windows, this is `C:\Users\(Name)` |
-| `${name}` | The name of the build target |
+| `${name}` | The name of the build/distribution target |
 | `${env:(Name)}` | An environment variable by name. For example: `${env:MY_LIBRARY_PATH}` |
 | `${meta:(Name)}` | Metadata with context of an individual source target's `metadata` properties. `meta:workspaceXXX` always returns workspace metadata, while `meta:XXXX` could return workspace or source target metadata. |
 
-In distribution target contexts, the following is supported:
+In distribution target contexts, the above is supported, in addition to:
 
-| `${cwd}` | The current working directory (this shouldn't be needed, but it's here just in case) |
-| `${arch}` | The current build architecture |
-| `${configuration}` | The name of the build configuration being used for the distribution target. `Release` in most cases. |
 | `${distributionDir}` | The main output directory for the distribution |
-| `${externalDir}` | The root path for external dependencies. See [externalDependencies](/schema/latest/chalet-json?id=external-dependencies) |
-| `${home}`, `~/` | The home directory of the machine. On Windows, this is `C:\Users\(Name)` |
-| `${name}` | The name of the distribution target |
-| `${env:(Name)}` | An environment variable by name. For example: `${env:MY_LIBRARY_PATH}` |
-| `${meta:(Name)}` | Workspace metadata only. `meta:workspaceXXXX` and `meta:XXXX` return the same values. |
 
-Metadata variables:
+The metadata variables are as follows:
 
 | `${meta:name}` | `${meta:workspaceName}` |
 | `${meta:description}` | `${meta:workspaceDescription}` |

@@ -28,6 +28,12 @@ The command-line command to create the distribution is:
 chalet bundle
 ```
 
+However, it is recommended to explicitly give the bundle command the build configuration:
+
+```bash
+chalet -c Release bundle
+```
+
 Like with `build`, this will sequentially go through each distribution target and perform a given task that they describe. If a distribution target requires a certain build, these will be determined prior, and those builds will be run. Also like with build targets, distributions can be described via the `outputDescription` property:
 
 ```json
@@ -64,7 +70,6 @@ A bundle distribution target describes a group of files and folders, and if you'
 "distribution": {
    "MyApp": {
       "kind": "bundle",
-      "configuration": "Release",
       "buildTargets": [
           "shared-lib",
           "my-executable"
@@ -74,8 +79,6 @@ A bundle distribution target describes a group of files and folders, and if you'
 ```
 
 In settings, Chalet has a "distributionDir" property (`-d` or `--distribution-dir` from the command line), that defines the root path for distribution targets, that defaults to `dist`. 
-
-`configuration` tells Chalet which build configuration to use for the distribution target. In this case, it's `Release`, but if `configuration` is omitted, then `Release` will be chosen automatically (or if using custom configurations - a Release-like). If the chosen configuration hasn't been built yet, it will be built prior to bundling.
 
 `buildTargets` are an array of build target names to include in the distribution target. In the above example, the output files of `shared-lib` `my-executable` are copied to `dist`. 
 
@@ -241,7 +244,11 @@ Scripts work the same way as their target counterparts, so that one can do more 
 ```json
 "post-bundle": {
    "kind": "script",
-   "file": "scripts/my_script.sh"
+   "file": "scripts/my_script.sh",
+   "arguments": [
+      "${distributionDir}/foo",
+      "${meta:version}"
+   ]
 }
 ```
 
