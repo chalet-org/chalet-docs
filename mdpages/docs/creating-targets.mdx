@@ -209,46 +209,167 @@ The output would become:
 
 ## [Property Conditions]
 
-Most properties support conditions that describe whether to include or exclude them from the build. These are simply suffixes that describe the build configuration or platform:
+Most properties support conditions that describe whether to include or exclude them from the build. The syntax for conditions is relatively simple. At the end of a property, add square brackets  `[` `]`, and inside them, one can express a number of things that limit when the property's value is read. Take the following example:
 
-* `debug` / `!debug` if the build configuration uses debug symbols (Debug/RelWithDebInfo/Profile) or doesn't use them.
-* `(platform)` / `!(platform)` where platform is or isn't `macos` `linux` & `windows`
-* For targeting compilers and architectures, see [Advanced: Fine Tuning](/docs/cxx-compile-settings?id=advanced-fine-tuning)
+```json
+"links[configuration:debugSymbols]": [ "foo-d" ]
+```
 
-Conditions are contextual, so not all properties support all conditions.
+When the build configuration has debug symbols, (aka in Debug,RelWithDebInfo,Profile), link against `foo-d`. Chalet always expects pairs of `key:value`. In the above, `configuration` is the kay, and `debugSymbols` is the value. To use the same key with multiple values, the syntax is: `key:{value1,value2}`, and would match `value1` **OR** `value2`. Any number of values is supported.
 
-If a single property (such as "links") is defined with multiple conditions, each one will be read in the order they're declared.
+Since debug/release is a common thing to express, the short-hand version of the above example is this:
+
+```json
+"links[:debug]": [
+   "foo-d"
+]
+```
+
+The key in this case is blank, because The value of `debug` has only one meaning. Platforms can also be expressed this way, with either `platform:value` or `:value`. Platform values are currently `windows`, `macos` and `linux`.
+
+```json
+"links[platform:windows]": [
+   "foo"
+],
+"links[:windows]": [
+   "foo"
+],
+```
+
+The following would express `linux` **OR** `macos`:
+
+```json
+"links[platform:{linux,macos}]": [
+   "bar"
+],
+"links[:{linux,macos}]": [
+   "bar"
+],
+```
+
+To express **NOT**, simply place an exclamation mark in front of the value, but after the colon:
+
+```json
+"links[:!debug]": [ // NOT debug
+   "foo"
+],
+"links[:debug]": [ // debug
+   "foo-d"
+],
+```
+
+The toolchain can also be expressed in conditions and must use the `toolchain` key. The value can technically be anything as long as it matches against a toolchain name or target triple. The latter should be preferred, as the toolchain name isn't guaranteed. There's nothing stopping someone from editing their toolchain name, but the triple will always be defined by the compiler (and Chalet in some edge cases).
+
+```json
+"defines[toolchain:x86_64-apple-darwin]": [
+   "MY_PROJ_MAC_X86_64"
+],
+"defines[toolchain:x64-pc-windows-msvc]": [
+   "MY_PROJ_MSVC_X64"
+],
+"defines[toolchain:w64-mingw32]": [ // matches against w64-mingw32 of any architecture
+   "MY_PROJ_MINGW"
+]
+```
+
+Environment variables can also be expressed, but currently only whether one is defined or not. For example:
+
+```json
+"defines[env:CI]": [ // matches if defined
+   "MY_PROJ_CI_BUILD"
+],
+"defines[env:!CI]": [ // matches if not defined
+   "MY_PROJ_NO_CI_BUILD"
+]
+```
+
+This would define a variable if `CI` is defined or not defined by the system. the value of the environment variable itself is not checked.
+
+To express multiple conditions, they can be combined with `+` for **AND**, or `|` for **OR**. If there are more than 2 conditions, operators are mutually exclusive, so only one or the other can be used. 
+
+Also of note is that values are still always **OR**, so consider that in the below example. 
+
+```json
+"links[platform:{linux,macos}+configuration:debugSymbols]": [
+   "bar"
+]
+"links[platform:{linux,macos}+:debug]": [
+   "bar"
+]
+```
+
+The above `links` property would be used if the platform is `linux` **OR** `macos` **AND** the configuration has debug symbols. If the `+` were a `|`, it would evaluate to `linux` **OR** `macos` **OR** if the configuration has debug symbols. This may come up in the context of cross-compilation and script targets -- MinGW compiles programs for Windows, but can be compiled from Windows or Linux, so it might be desireable to make a condition for the toolchain itself **OR** the Windows platform.
+
+Next, consider the following example:
+
+```json
+"links[:{!linux,!macos}]": [ // bad!
+   "bar"
+]
+"links[platform:{!linux,!macos}]": [ // bad!
+   "bar"
+]
+```
+
+This is technically allowed, but would express **NOT** `linux` **OR NOT** `macos`, which wouldn't make sense -- it would end up evaluating to both on both platforms. Curly braces always represent **OR** between multiple values. The correct way to do this would be to separate them with `+`, so that it reads **NOT** `linux` **AND NOT** `macos`.
+
+```json
+"links[:!linux+:!macos]": [ // good!
+   "bar"
+],
+"links[platform:!linux+platform:!macos]": [ // good!
+   "bar"
+]
+```
+
+**Ordering**
+
+If a single property is defined with multiple conditions, each one will be read in the order they're declared.
 
 ```json
 "settings:Cxx": {
    "links": [
       "foo"
    ],
-   "links.debug": [
+   "links[:debug]": [
       "bar"
    ],
-   "links.windows": [
+   "links[:windows]": [
       "another"
    ]
 }
 ```
 
-In the above example, if one is building the Debug configuration on windows, `foo` is added first, followed by `bar` and then `another`. If Release: `foo` is still added first followed by `another`.
+In the above example, if one is building the Debug configuration on windows, The `foo` link is added first, followed by `bar` and then `another`. If Release: `foo` is still added first followed by `another`.
 
-\
+The following table is the full list of accepted values:
 
-**Excluding Targets**
+| Key | Values | Short-hand |
+| ---- | ---- | ---- |
+| platform | `:windows` `:macos` `:linux` | Yes (same w/o key) |
+| condition | `:debugSymbols` `:enableProfiling` `:interproceduralOptimization` | `:debug` |
+| toolchain | toolchain name, target triple, or partial of either | No |
+| env | Environment variable by name, checks if defined | No |
 
-Targets can be excluded with the `condition` property, and work the exact same way as property conditions:
+
+\\
+
+## [Excluding Targets]
+
+Targets can be excluded with the `condition` property, and work the exact same way as property conditions, but must start and end with square brackets.
 
 ```json
 "first-target": {
-   "condition": "debug.!windows"
+   "condition": "[:debug+:!windows]"
 }
 "second-target": {
-   "condition": "linux"
+   "condition": "[:linux]"
 }
 ```
+
+**See also:**
+
+[Property Conditions](/docs/creating-targets?id=property-conditions)
 
 \\
 
@@ -308,10 +429,10 @@ Property conditions are also supported:
 "files": [
    "src/Foo/**.cpp"
 ]
-"files.windows": [
+"files[:windows]": [
    "src/Windows/**.cpp"
 ]
-"files.macos": [
+"files[:macos]": [
    "src/MacOS/**.cpp"
 ]
 ```
@@ -323,10 +444,10 @@ Files can also be expressed as an object with `include` and `exclude`. Excludes 
 ```json
 "files": {
    "include": "src/**.cpp",
-   "exclude.!macos": [
+   "exclude[:!macos]": [
       "src/MacOS"
    ],
-   "exclude.!linux": [
+   "exclude[:!linux]": [
       "Linux"
    ]
 }
@@ -443,7 +564,7 @@ The only other property is `recheck` which if true, will check the project for c
 ```json
 "my-chalet-target": {
    "kind": "chaletProject",
-   "condition": "!windows",
+   "condition": "[:!windows]",
    "location": "${externalDir}/bar",
    "recheck": false
 }
@@ -469,7 +590,7 @@ The only other property is `recheck` which if true, will check the project for c
 ```json
 "my-cmake-target": {
    "kind": "cmakeProject",
-   "condition": "!windows",
+   "condition": "[:!windows]",
    "location": "${externalDir}/foo",
    "recheck": false
 }
@@ -514,8 +635,8 @@ The following examples are all valid:
 "my-first-script": {
    "kind": "script",
    "description": "The very first script",
-   "file.!windows": "scripts/script.sh",
-   "file.windows": "scripts/script.bat",
+   "file[:!windows]": "scripts/script.sh",
+   "file[:windows]": "scripts/script.bat",
    "arguments": [
       "foo",
       "bar"
@@ -523,13 +644,13 @@ The following examples are all valid:
 }
 "my-second-script": {
    "kind": "script",
-   "condition": "windows",
-   "file.debug": "scripts/script_Debug.bat",
-   "file.!debug": "scripts/script_Release.bat"
+   "condition": "[:windows]",
+   "file[:debug]": "scripts/script_Debug.bat",
+   "file[:!debug]": "scripts/script_Release.bat"
 }
 "my-second-script": {
    "kind": "script",
-   "condition": "windows",
+   "condition": "[:windows]",
    "file": "scripts/script.ps1"
 }
 "my-third-script": {
@@ -580,7 +701,7 @@ A target is considered runnable if the kind is `executable`, `script` or `cmakeP
       "-i",
       "bar"
    ],
-   "copyFilesOnRun.windows": [
+   "copyFilesOnRun[:windows]": [
       "${env:SOME_PATH}/stubborn_lib.dll"
    ]
 },
@@ -647,10 +768,10 @@ Example:
          "includeDirs": [
             "${env:MY_BAR_LIB}/include"
          ],
-         "includeDirs.windows": [
+         "includeDirs[:windows]": [
             "${env:ProgramFiles}/bar/include"
          ],
-         "includeDirs.!windows": [
+         "includeDirs[:!windows]": [
             "~/libs/bar/include"
          ]
       },

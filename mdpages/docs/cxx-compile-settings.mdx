@@ -26,7 +26,7 @@ In source targets, C/C++ settings may be described in a similar fashion as one w
          "defines": [
             "LIB_FOO"
          ],
-         "defines:debug": [
+         "defines[:debug]": [
             "_DEBUG"
          ],
          "includeDirs": [
@@ -39,7 +39,7 @@ In source targets, C/C++ settings may be described in a similar fashion as one w
          "links": [
             "foo"
          ],
-         "links.windows": [
+         "links[:windows]": [
             "bar"
          ]
       },
@@ -128,12 +128,6 @@ However, the problem with this approach is that simply adding a folder will add 
 
 > Note: compiler include paths are automatically added.
 
-\
-
-**See also:**
-
-[Advanced: Fine Tuning](/docs/cxx-compile-settings?id=advanced-fine-tuning)
-
 \\
 
 ## [Build Suffixes]
@@ -191,21 +185,15 @@ Example:
 "libDirs": [
    "${externalBuildDir}/foo/lib"
 ]
-"libDirs.windows": [
+"libDirs[:windows]": [
    "${env:ProgramFiles}/bar/lib"
 ]
-"libDirs.!windows": [
+"libDirs[:!windows]": [
    "~/libraries/bar/lib"
 ]
 ```
 
 > Note: compiler lib paths are automatically added.
-
-\
-
-**See also:**
-
-[Advanced: Fine Tuning](/docs/cxx-compile-settings?id=advanced-fine-tuning)
 
 \\
 
@@ -218,18 +206,12 @@ For example, in a debug build, you're probably going to want to define `DEBUG` o
 ```json
 "abstracts:*": {
    "settings:Cxx": {
-      "defines.debug": [
+      "defines[:debug]": [
          "_DEBUG"
       ]
    }
 }
 ```
-
-\
-
-**See also:**
-
-[Advanced: Fine Tuning](/docs/cxx-compile-settings?id=advanced-fine-tuning)
 
 \\
 
@@ -287,12 +269,6 @@ Warnings can be defined manually, as a list of their GNU names, minus the `-W` p
 
 In MSVC, warning flags will be cross-referenced based on the the presets above, so if "pedantic" is present in the list, the flag will be `/W3`. 
 
-\
-
-**See also:**
-
-[Advanced: Fine Tuning](/docs/cxx-compile-settings?id=advanced-fine-tuning)
-
 **Warnings as Errors**
 
 To enable warnings as errrs, sipmly set `treatWarningsAsErrors` to true. It's equivalent to adding "error" to the warning list.
@@ -333,13 +309,13 @@ Linking shared libraries is quite simple in Chalet. Like with the `-l` option in
 "links": [
    "foo"
 ],
-"links.debug": [
+"links[:debug]": [
    "bar-d"
 ],
-"links.!debug": [
+"links[:!debug]": [
    "bar"
 ],
-"links.windows": [
+"links[:windows]": [
    "user32"
 ]
 ```
@@ -365,23 +341,16 @@ You might run into a situation where a library is only supported on a certain pl
 ```json
 "first-target": {
    "kind": "sharedLibrary",
-   "condition": "windows",
+   "condition": "[:windows]",
    "files": "src/foo/**.cpp"
 },
 "second-target": {
    "settings:Cxx": {
-      "links.windows": [
+      "links[:windows]": [
          "first-target"
       ]
    }
 ```
-
-\
-
-**See also:**
-
-[Advanced: Fine Tuning](/docs/cxx-compile-settings?id=advanced-fine-tuning)
-
 
 \\
 
@@ -404,12 +373,6 @@ Static links work the same way as shared, but use the `staticLinks` property ins
 ```
 
 The actual file being linked in that example is either `libfirst-target.a` or `first-target.lib` depending on the compiler, but the target name is what's important to `staticLinks`.
-
-\
-
-**See also:**
-
-[Advanced: Fine Tuning](/docs/cxx-compile-settings?id=advanced-fine-tuning)
 
 \\
 

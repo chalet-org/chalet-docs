@@ -27,6 +27,8 @@ export { PageCategory };
 const Styles = styled.h6`
 	display: block;
 	font-weight: 400;
+	text-transform: uppercase;
+	letter-spacing: 0.125rem;
 	padding-bottom: 0;
 	color: ${getThemeVariable("primaryColor")};
 `;

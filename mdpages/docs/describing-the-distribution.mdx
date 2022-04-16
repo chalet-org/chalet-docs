@@ -20,7 +20,6 @@ They also take a `kind` property that tells Chalet how to proceed with each dist
 * [Archive](/schema/latest/chalet-json/dist-archive) - Describes files/folders to include in a .zip archive
 * [Script](/schema/latest/chalet-json/dist-script) - A path to an individual script to run
 * [MacOS Disk Image](/schema/latest/chalet-json/dist-macos-disk-image) - Describes a MacOS DMG disk image to create
-* [Windows Nullsoft Installer](/schema/latest/chalet-json/dist-windows-nullsoft-installer) - Describes a Nullsoft installer to create for Windows applications
 
 The command-line command to create the distribution is:
 
@@ -56,7 +55,7 @@ Distribution targets can be excluded with the `condition` property, but only tak
 
 ```json
 "some-target": {
-   "condition": "windows"
+   "condition": "[:windows]"
 }
 ```
 
@@ -261,7 +260,7 @@ Chalet can also generate zip archives as a distribution step with kind set to `a
 ```json
 "MyApp-archive": {
    "kind": "archive",
-   "condition": "windows",
+   "condition": "[:windows]",
    "include": [
       "my-installer.exe",
       "LICENSE.txt"
@@ -312,22 +311,6 @@ Instead of defining "includes" like with bundles or archives, the `positions` im
          "y": 188
       }
    }
-}
-```
-
-\\
-
-## [Windows Nullsoft Installers]
-
-A [NSIS](//nsis.sourceforge.io/Main_Page) installer can be created, given a distribution target of the kind `windowsNullsoftInstaller`. This takes a given `nsisScript`. This takes in a `.nsi` script and produces the output installer executable that's defined by it. Additional `pluginDirs` can also be defined if the installer script requires additional plugins. As usual, these should be relative paths, but if familiar with NSIS plugins, these paths can contain a `Plugins` folder itself, along with the inner `amd64-unicode`, `x86-ansi`, and `x86-unicode` folders, and Chalet will resolve them.
-
-```json
-"MyApp-installer": {
-   "kind": "windowsNullsoftInstaller",
-   "nsisScript": "windowsInstaller/install_script.nsi",
-   "pluginDirs": [
-      "windowsInstaller/plugins"
-   ]
 }
 ```
 
