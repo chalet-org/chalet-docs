@@ -65,7 +65,7 @@ const LinkBox = styled.div`
 	justify-content: flex-end;
 	align-items: center;
 	line-height: 0;
-	padding: 0.5rem 0;
+	padding: 1rem 0;
 
 	> .left {
 		display: flex;
