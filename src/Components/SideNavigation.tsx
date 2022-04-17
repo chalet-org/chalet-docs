@@ -200,9 +200,11 @@ const StyledAside = styled.aside<AsideProps>`
 		line-height: 1.667;
 		padding-bottom: 0.125rem;
 		border-left: 0.25rem solid transparent;
+		text-decoration: underline;
+		text-decoration-color: transparent;
+		transition: text-decoration-color 0.125s linear;
 
 		&:hover {
-			text-decoration: underline;
 			text-decoration-color: ${getThemeVariable("primaryColor")};
 		}
 

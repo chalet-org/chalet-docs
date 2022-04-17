@@ -220,10 +220,10 @@ const BaseStyle = createGlobalStyle`
 	hr {
 		border: none;
 		outline: 0;
-		background-color: ${getThemeVariable("border")};
+		background-color: ${getThemeVariable("header")};
 		margin: 1rem auto;
 		margin-bottom: 2rem;
-		height: 0.0675rem;
+		height: 0.0625rem;
 		width: 100%;
 		text-align: center;
 		font-size: 1.125rem;
@@ -233,7 +233,7 @@ const BaseStyle = createGlobalStyle`
 			display: block;
 			position: relative;
 			top: 0.325rem;
-			height: 0.125rem;
+			height: 0.0625rem;
 			width: 100%;
 			background-color: ${getThemeVariable("primaryColor")};
 		}
@@ -247,7 +247,7 @@ const BaseStyle = createGlobalStyle`
 			width: 0.666rem;
 			height: 0.666rem;
 			margin: 0 auto;
-			transform: translateX(-50%) translateY(-10%) scaleX(8) scaleY(0.5) rotate(45deg);
+			transform: translateX(-50%) translateY(-2.5%) scaleX(8) scaleY(0.333) rotate(45deg);
 		}
 	}
 
