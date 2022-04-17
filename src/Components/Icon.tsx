@@ -2,11 +2,22 @@ import React from "react";
 import { AiOutlineSearch, AiFillApple, AiFillWindows } from "react-icons/ai";
 import { BiCodeCurly } from "react-icons/bi";
 import { IoCloseOutline } from "react-icons/io5";
-import { VscGithub, VscTerminalLinux } from "react-icons/vsc";
+import { VscGithub, VscTerminalLinux, VscTerminalUbuntu, VscTerminalDebian } from "react-icons/vsc";
 import { WiMoonAltWaxingGibbous5, WiMoonAltWaningGibbous1 } from "react-icons/wi";
 import styled from "styled-components";
 
-type IconID = "day" | "night" | "search" | "close" | "apple" | "windows" | "linux" | "source" | "github";
+type IconID =
+	| "day"
+	| "night"
+	| "search"
+	| "close"
+	| "apple"
+	| "windows"
+	| "linux"
+	| "ubuntu"
+	| "debian"
+	| "source"
+	| "github";
 
 type IconStyleProps = {
 	size?: string;
@@ -35,6 +46,10 @@ const getIcon = (id: IconID) => {
 			return <AiFillWindows />;
 		case "linux":
 			return <VscTerminalLinux />;
+		case "ubuntu":
+			return <VscTerminalUbuntu />;
+		case "debian":
+			return <VscTerminalDebian />;
 		case "source":
 			return <BiCodeCurly />;
 		case "github":
@@ -59,6 +74,7 @@ const Styles = styled.i<IconStyleProps>`
 	> svg {
 		width: ${({ size }) => size ?? "1rem"};
 		height: ${({ size }) => size ?? "1rem"};
+		color: ${({ color }) => color ?? "inherit"};
 
 		> path,
 		> circle {

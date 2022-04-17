@@ -74,7 +74,12 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url }: Props) => {
 		.filter((data) => data.platform === "apple")
 		.sort((dataA) => 1)
 		.sort((dataA) => (dataA.arch === "universal" ? -1 : 1));
-	const linux = info.filter((data) => data.platform === "linux").sort((dataA) => (dataA.arch === "x86_64" ? -1 : 1));
+	const linux = info
+		.filter((data) => data.platform === "linux" && data.abi !== "debian")
+		.sort((dataA) => (dataA.arch === "x86_64" ? -1 : 1));
+	const debian = info
+		.filter((data) => data.platform === "linux" && data.abi === "debian")
+		.sort((dataA) => (dataA.arch === "x86_64" ? -1 : 1));
 	const [platform] = useOperatingSystem();
 
 	return (
@@ -140,6 +145,35 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url }: Props) => {
 											<br />
 											<span>{data.arch === "universal" ? "M1 ARM64 / Intel 64-bit" : ""}</span>
 										</div>
+									</AssetButton>
+								);
+							})}
+						</DownloadSection>
+					</DownloadRow>
+				)}
+				{(platform == OperatingSystem.Linux || showAllPlatforms) && debian.length > 0 && (
+					<DownloadRow>
+						<Icon id="debian" size={iconSize} color={theme.codeRed} hoverColor={theme.codeRed} />
+						<DownloadSection>
+							{debian.map((data, i) => {
+								const { platform: dataPlatform, filetype, arch: dataArch, abi } = data;
+								const { browser_download_url, name } = data.asset;
+								const arch = getNiceArchName(data.arch, OperatingSystem.Linux);
+								return (
+									<AssetButton
+										key={i}
+										onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
+										onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
+										onClick={(ev) => router.push(browser_download_url)}
+										color={theme.codeRed}
+									>
+										<div className="bold">
+											{dataArch === "arm" ? "Raspberry Pi OS" : "Debian / Ubuntu"} package (.deb /
+											.zip)
+											<br />
+											<span>{name}</span>
+										</div>
+										<div>{arch}</div>
 									</AssetButton>
 								);
 							})}
