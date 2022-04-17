@@ -223,7 +223,7 @@ const BaseStyle = createGlobalStyle`
 		background-color: ${getThemeVariable("border")};
 		margin: 1rem auto;
 		margin-bottom: 2rem;
-		height: 0.0625rem;
+		height: 0.0675rem;
 		width: 100%;
 		text-align: center;
 		font-size: 1.125rem;
@@ -233,21 +233,21 @@ const BaseStyle = createGlobalStyle`
 			display: block;
 			position: relative;
 			top: 0.325rem;
-			height: 0.0625rem;
+			height: 0.125rem;
 			width: 100%;
-			background-color: ${getThemeVariable("border")};
+			background-color: ${getThemeVariable("primaryColor")};
 		}
 
 		&:after {
-			content: 'Λ';
-			display: inline-block;
+			content: ' ';
+			display: block;
 			position: relative;
-			top: -1.0675rem;
 			padding: 0 0;
-			background: ${getThemeVariable("background")};
-			color: ${getThemeVariable("border")};
-			font-size: 0.675rem;
-			transform: scaleX(150%);
+			background: ${getThemeVariable("secondaryColor")};
+			width: 0.666rem;
+			height: 0.666rem;
+			margin: 0 auto;
+			transform: translateX(-50%) translateY(-10%) scaleX(8) scaleY(0.5) rotate(45deg);
 		}
 	}
 
