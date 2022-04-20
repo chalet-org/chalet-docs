@@ -261,6 +261,7 @@ Chalet can also generate zip archives as a distribution step with kind set to `a
 "MyApp-archive": {
    "kind": "archive",
    "condition": "[:windows]",
+   "format": "zip",
    "include": [
       "my-installer.exe",
       "LICENSE.txt"
@@ -272,11 +273,12 @@ Chalet can also generate zip archives as a distribution step with kind set to `a
 ```json
 "MyApp-archive": {
    "kind": "archive",
+   "format": "zip",
    "include": "*"
 }
 ```
 
-> Note: This is equivalent to running `zip` in the command line on Linux/Mac, and Powershell's `Compress-Archive` on Windows.
+This is equivalent to running `zip` in the command line on Linux/Mac, and Powershell's `Compress-Archive` on Windows. The `format` can be changed to `tar` to create a tarball (with .tar.gz extension).
 
 \\
 

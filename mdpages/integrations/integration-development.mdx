@@ -7,25 +7,40 @@ title: Integration Development
 
 ---
 
-One of the main design goal of Chalet is to provide an easy to use command line interface that can make integrating with IDEs and code editors simple. In order to make this happen, additional facilities are provided. 
+One of the main design goal of Chalet is to provide an easy to use command line interface that allows for easy integration with IDEs and code editors. There are some handy commands to make this happen.
 
 \\
 
 ## [Overview]
 
-In order to receive information about a project, one can use:
+In order to receive information about a project, Chalet can be queried to either get a list or some JSON back. This is done with the `query` subcommand. 
 
 ```bash
 chalet query <type> [ARG...]
 ```
 
-\
+This command takes in a string of something to query for, and maybe an argument.
+
+For example, to retrieve the JSON schema for both build and settings files, the following commands would be used:
+
+```bash
+chalet query schema-chalet-json
+chalet query schema-settings-json
+```
+
+At the moment, this command just gets the schemas for the current version of Chalet. From there, they can be used by editors if they're supported.
 
 **See also:**
 
 [Command Usage: Query](/docs/command-usage?id=query)
 
-TODO
+\\
+
+## [Reading State]
+
+State can be thought of in this way: Any time there's a change in either the build file, or the settings file, the state should be read back to the editor. Ultimately, how this is done is up to the implementer, but the state queries are designed to pass along those changes, along with anything that the installed version of Chalet supports. 
+
+In the case of build file state changes, it could mean build target name changes (specifically run targets), or build configuration changes. Here's an example result from a project called `foo`.
 
 ```json
 {
@@ -34,12 +49,45 @@ TODO
       "Debug"
    ],
    "targets": [
-      "new-project"
+      "foo"
    ],
    "runTargets": [
-      "new-project"
+      "foo"
    ],
-   "defaultRunTarget": "new-project"
+   "defaultRunTarget": "foo"
+}
+```
+
+If `defaultConfigrations` in the root of the build file was limited to just `Debug` and `Release`, `configurations` would return them, and any custom configurations that were defined. This is the same list returned from `chalet query configurations`.
+
+```json
+{
+	"allToolchains": [
+		"apple-llvm",
+		"x86_64-apple-darwin-gnu",
+		"llvm",
+		"gcc",
+		"intel-classic"
+	],
+	"toolchainPresets": [
+		"apple-llvm",
+		"llvm",
+		"gcc",
+		"intel-classic"
+	],
+	"userToolchains": [
+		"apple-llvm",
+		"x86_64-apple-darwin-gnu"
+	],
+	"architecture": "auto",
+	"configuration": "Release",
+	"architectures": [
+		"auto",
+		"universal",
+		"x86_64",
+		"arm64"
+	],
+	"toolchain": "apple-llvm"
 }
 ```
 
