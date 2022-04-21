@@ -198,7 +198,6 @@ const getPageAnchors = async (
 };
 
 const parseReadme = async (inText: string): Promise<string> => {
-	console.log("parseReadme");
 	const readme = await serverCache.get(`chalet-readme`, async () => {
 		let { text } = await getChaletFile("README.md");
 		if (!!text) {
@@ -208,6 +207,7 @@ const parseReadme = async (inText: string): Promise<string> => {
 
 			text = text.replace(/## (.+?)\n/g, "");
 			text = text.replace(/\(https:(.+)\)/g, "($1)");
+			text = text.substring(text.indexOf("|"));
 		}
 		return text ?? "";
 	});
