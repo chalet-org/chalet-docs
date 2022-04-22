@@ -41,9 +41,7 @@ prints version information and exits
 
 <!-- dl:end -->
 
-\
-
----
+\\
 
 ## [Init]
 
@@ -80,9 +78,7 @@ The project template to use during initialization (ex: cmake)
 
 <!-- dl:end -->
 
-\
-
----
+\\
 
 ## [Build Actions]
 
@@ -281,6 +277,19 @@ default: `auto`
 
 </dd>
 
+``-b``
+``--build-strategy``
+
+<dd>
+
+The build strategy to use for the selected toolchain.
+
+| ninja                | Uses the Ninja version defined by the `ninja` property. |
+| makefile             | Uses the GNU Make version defined by the `make` property. |
+| native-experimental  | Experimental support to build entirely with Chalet. |
+
+</dd>
+
 ``-e``
 ``--env-file``
 
@@ -361,9 +370,7 @@ Show only build output.
 
 <!-- dl:end -->
 
-\
-
----
+\\
 
 ## [Configuration Actions]
 
@@ -442,9 +449,7 @@ Use the global settings: `~/.chaletconfig`
 
 <!-- dl:end -->
 
-\
-
----
+\\
 
 ## [Project Export]
 
@@ -475,9 +480,7 @@ Types:
 
 <!-- dl:end -->
 
-\
-
----
+\\
 
 ## [Terminal Capabilities]
 
@@ -487,9 +490,7 @@ chalet termtest
 
 Display all color themes and terminal capabilities.
 
-\
-
----
+\\
 
 ## [Query]
 
