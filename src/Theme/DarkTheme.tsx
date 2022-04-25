@@ -6,7 +6,7 @@ export const darkTheme: ThemeType = {
 	background: "#111111",
 	mainText: "#d9d9d9",
 	header: "#474351",
-	border: "#1d1d24",
+	border: "#272336",
 	primaryColor: "#f49309",
 	secondaryColor: "#f6bb5e",
 	tertiaryColor: "#71072d",

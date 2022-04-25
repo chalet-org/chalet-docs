@@ -139,6 +139,7 @@ const BaseStyle = createGlobalStyle`
 		overflow: auto;
 		margin-top: 1rem;
 		margin-bottom: 2rem;
+		padding-left: 0.0675rem; /* This is kind of a hack to fix a weird table offset on the left */
 	}
 
 	table {
