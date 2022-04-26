@@ -84,12 +84,12 @@ An example of how abstracts could be used is if stricter warnings are desired on
 "abstracts": {
    "strict-warnings": {
       "settings:Cxx": {
-         "warnings": "strict"
+         "warningsPreset": "strict"
       }
    },
    "min-warnings": {
       "settings:Cxx": {
-         "warnings": "minimal"
+         "warningsPreset": "minimal"
       }
    }
 },
@@ -124,7 +124,7 @@ Another way of writing the strict/minimal example, utilizing `*` would be:
 ```json
 "abstracts:*": {
    "settings:Cxx": {
-      "warnings": "strict"
+      "warningsPreset": "strict"
    }
 },
 "targets": {
@@ -132,13 +132,13 @@ Another way of writing the strict/minimal example, utilizing `*` would be:
    "second-target": {},
    "third-target": {
       "settings:Cxx": {
-         "warnings": "minimal"
+         "warningsPreset": "minimal"
       }
    }
 }
 ```
 
-`"warnings": "minimal"` would simply override `"warnings": "strict"` in this case.
+`"warningsPreset": "minimal"` would simply override `"warningsPreset": "strict"` in this case.
 
 This pattern is useful in situations where one target needs to be compiled as C, while the rest as C++. Another example is that perhaps one target is code you maintain, while another target is code coming from a library written by somebody else.
 

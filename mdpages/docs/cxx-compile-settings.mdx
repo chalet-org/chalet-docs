@@ -18,7 +18,7 @@ In source targets, C/C++ settings may be described in a similar fashion as one w
       "settings:Cxx": {
          "precompiledHeader": "src/PCH.hpp",
          "cppStandard": "c++20",
-         "warnings": "strict",
+         "warningsPreset": "strict",
          "threads": true,
          "runtimeTypeInformation": false,
          "exceptions": true,
@@ -228,7 +228,7 @@ Presets are inherently opinionated. Their goal is to provide an abstraction that
 ```json
 "my-target": {
    "settings:Cxx": {
-     "warnings": "strict"
+     "warningsPreset": "strict"
    }
 }
 ```
