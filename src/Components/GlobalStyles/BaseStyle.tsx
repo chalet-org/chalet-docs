@@ -330,7 +330,7 @@ const rootStyles = css`
 
 	body {
 		opacity: 0;
-		transition: opacity 0.125s linear;
+		transition: opacity 0.125s linear 0.125s;
 	}
 
 	body.ready {
