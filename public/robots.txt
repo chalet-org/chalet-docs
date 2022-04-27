@@ -1,6 +1,16 @@
-Sitemap: https://www.chalet-work.space/api/sitemap.xml
-
 User-Agent: *
 Allow: /*
-
+Disallow: /*?id=
+Disallow: /schema/*
 Disallow: /api/*
+
+User-Agent: Mediapartners-Google
+Disallow: /*
+
+User-Agent: AdsBot-Google
+Disallow: /*
+
+User-Agent: adidxbot
+Disallow: /*
+
+Sitemap: https://www.chalet-work.space/api/sitemap.xml
