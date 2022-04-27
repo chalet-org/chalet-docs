@@ -1,14 +1,13 @@
 import { AppProps } from "next/app";
-import Router from "next/router";
+// import Router from "next/router";
 import React from "react";
 
-import ProgressBar from "@badrap/bar-of-progress";
-import { Optional } from "@rewrking/react-kitchen";
-
+// import ProgressBar from "@badrap/bar-of-progress";
+// import { Optional } from "@rewrking/react-kitchen";
 import { BaseStyle } from "Components";
 import { Providers } from "Stores";
 
-let progress: Optional<ProgressBar> = null;
+/*let progress: Optional<ProgressBar> = null;
 if (progress === null) {
 	progress = new ProgressBar({
 		size: "0.25rem",
@@ -20,7 +19,7 @@ if (progress === null) {
 	Router.events.on("routeChangeStart", progress.start);
 	Router.events.on("routeChangeComplete", progress.finish);
 	Router.events.on("routeChangeError", progress.finish);
-}
+}*/
 
 type Props = AppProps;
 
