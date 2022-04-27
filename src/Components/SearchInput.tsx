@@ -92,7 +92,7 @@ const Styles = styled.div`
 	padding: 1rem 0;
 	padding-bottom: 1rem;
 	width: 100%;
-	color: ${getThemeVariable("mainText")};
+	color: ${getThemeVariable("primaryText")};
 
 	> div.search-bar {
 		display: block;
@@ -105,7 +105,7 @@ const Styles = styled.div`
 			width: calc(100% - 1.75rem);
 			border: none;
 			background-color: transparent;
-			color: ${getThemeVariable("mainText")};
+			color: ${getThemeVariable("primaryText")};
 			caret-color: ${getThemeVariable("primaryColor")};
 
 			&::placeholder {

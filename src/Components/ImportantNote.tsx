@@ -16,7 +16,7 @@ const Styles = styled.div`
 	background-color: ${getThemeVariable("codeBackground")};
 	border: 0.125rem solid ${getThemeVariable("border")};
 	border-radius: 0.5rem;
-	color: ${getThemeVariable("mainText")};
+	color: ${getThemeVariable("primaryText")};
 	margin: 0.75rem 0;
 	padding: 1rem 1.25rem;
 `;

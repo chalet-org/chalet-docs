@@ -73,7 +73,7 @@ const Styles = styled.div`
 		font-size: 1rem;
 		cursor: pointer;
 		background-color: transparent;
-		color: ${getThemeVariable("mainText")};
+		color: ${getThemeVariable("primaryText")};
 		border: none;
 		font-family: inherit;
 		font-size: inherit;

@@ -67,14 +67,14 @@ for (const size of ["h1", "h2", "h3", "h4", "h5", "h6"] as HeadingSize[]) {
 
 		> a {
 			font-weight: 600;
-			color: ${getThemeVariable("mainText")};
+			color: ${getThemeVariable("primaryText")};
 			text-decoration: underline;
 			text-decoration-color: transparent;
 			transition: text-decoration-color 0.125s linear;
 
 			&:hover {
 				text-decoration-color: ${getThemeVariable("primaryColor")};
-				color: ${getThemeVariable("mainText")};
+				color: ${getThemeVariable("primaryText")};
 			}
 		}
 	`;

@@ -25,7 +25,7 @@ const PageFooter = (_props: Props) => {
 					</div>
 					<div className="right">
 						{/* <a href="#">Link 1</a> */}
-						<Link href="//www.github.com/chalet-org">
+						<Link href="//www.github.com/chalet-org" title="Github">
 							<Icon
 								id="github"
 								size="1.125rem"

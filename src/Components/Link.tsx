@@ -9,10 +9,11 @@ type Props = React.PropsWithChildren<NextLinkProps> & {
 	showActive?: boolean;
 	trackHeadings?: boolean;
 	dataId?: string;
+	title?: string;
 	onClick?: React.MouseEventHandler;
 };
 
-const Link = ({ children, dataId, onClick, ...props }: Props) => {
+const Link = ({ children, dataId, onClick, title, ...props }: Props) => {
 	const router = useRouter();
 
 	const { focusedId } = useUiStore();
@@ -31,7 +32,7 @@ const Link = ({ children, dataId, onClick, ...props }: Props) => {
 
 	if (targetBlank && typeof props.href === "string") {
 		return (
-			<Styles href={props.href} data-id={dataId} rel="noreferrer noopener" target="_blank">
+			<Styles href={props.href} data-id={dataId} title={title} rel="noreferrer noopener" target="_blank">
 				{children}
 			</Styles>
 		);
@@ -49,6 +50,7 @@ const Link = ({ children, dataId, onClick, ...props }: Props) => {
 					data-id={dataId}
 					onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
 					onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
+					title={title}
 					onClick={onClick}
 				>
 					{children}

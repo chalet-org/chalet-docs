@@ -106,11 +106,11 @@ const Styles = styled.div`
 		transition: color 0.125s linear, border-top-color 0.125s linear;
 
 		&:not(.active):hover {
-			color: ${getThemeVariable("mainText")};
+			color: ${getThemeVariable("primaryText")};
 		}
 
 		&.active {
-			color: ${getThemeVariable("mainText")};
+			color: ${getThemeVariable("primaryText")};
 			background-color: ${getThemeVariable("background")};
 			border-top: 0.25rem solid ${getThemeVariable("primaryColor")};
 			border-bottom-color: ${getThemeVariable("background")};

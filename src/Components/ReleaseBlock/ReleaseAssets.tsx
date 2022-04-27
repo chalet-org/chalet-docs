@@ -309,7 +309,7 @@ const AssetButton = styled.button<AssetButtonProps>`
 	min-height: 4rem;
 	padding: 0.5rem 0.75rem;
 	margin-top: -0.125rem;
-	color: ${getThemeVariable("mainText")};
+	color: ${getThemeVariable("primaryText")};
 	background-color: transparent;
 	border: 0.125rem solid ${getThemeVariable("border")};
 	cursor: pointer;

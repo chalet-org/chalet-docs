@@ -6,10 +6,11 @@ import { getThemeVariable } from "Theme";
 type Props = React.PropsWithChildren<{
 	className?: string;
 	label?: string;
+	title?: string;
 	onClick?: () => void;
 }>;
 
-const Button = ({ children, className, label, onClick }: Props) => {
+const Button = ({ children, className, label, title, onClick }: Props) => {
 	return (
 		<Styles
 			className={className}
@@ -19,6 +20,7 @@ const Button = ({ children, className, label, onClick }: Props) => {
 				ev.preventDefault();
 				onClick?.();
 			}}
+			title={title}
 		>
 			{label ?? children}
 		</Styles>
@@ -33,7 +35,7 @@ const Styles = styled.button`
 	font-weight: 400;
 	padding: 1.25rem 1rem;
 	line-height: 1;
-	color: ${getThemeVariable("mainText")};
+	color: ${getThemeVariable("primaryText")};
 	background-color: transparent;
 	border-radius: 0.25rem;
 	cursor: pointer;

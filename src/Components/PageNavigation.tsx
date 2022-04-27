@@ -32,6 +32,7 @@ const PageNavigation = ({ left, right }: Props) => {
 								});
 							}}
 							label={left.label ?? "Previous"}
+							title="Previous Topic"
 						/>
 					</div>
 				) : (
@@ -46,6 +47,7 @@ const PageNavigation = ({ left, right }: Props) => {
 								});
 							}}
 							label={right.label ?? "Next"}
+							title="Next Topic"
 						/>
 					</div>
 				) : (

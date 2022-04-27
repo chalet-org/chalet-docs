@@ -31,7 +31,7 @@ const Styles = styled.div`
 		background-size: cover;
 		background-position: -50vw -19rem;
 		background-repeat: no-repeat;
-		color: ${getThemeVariable("mainText")};
+		color: ${getThemeVariable("primaryText")};
 		top: 0;
 		left: 0;
 		overflow: hidden;

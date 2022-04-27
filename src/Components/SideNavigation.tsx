@@ -35,6 +35,7 @@ const SideNavigation = ({ children, ...navProps }: Props) => {
 					ev.preventDefault();
 					toggleNavigation();
 				}}
+				title="Menu toggle"
 			>
 				<span />
 				<span />
@@ -83,6 +84,11 @@ const Logo = styled.div`
 
 		> a {
 			text-decoration: none !important;
+			color: ${getThemeVariable("primaryText")};
+
+			&:active {
+				background-color: transparent !important;
+			}
 		}
 	}
 
@@ -167,7 +173,7 @@ const StyledAside = styled.aside<AsideProps>`
 	padding-top: 2rem;
 
 	background-color: ${getThemeVariable("codeBackground")};
-	color: ${getThemeVariable("mainText")};
+	color: ${getThemeVariable("primaryText")};
 
 	ul,
 	> p {
@@ -219,7 +225,6 @@ const StyledAside = styled.aside<AsideProps>`
 	}
 
 	a:not(.active) {
-		color: inherit;
 		font-weight: 400;
 	}
 
@@ -260,6 +265,7 @@ const NavGroup = styled.div`
 	padding-bottom: 1rem;
 
 	> ul > li > a {
+		color: inherit;
 		padding-left: 1.75rem;
 	}
 	> ul > li > strong {
@@ -268,6 +274,7 @@ const NavGroup = styled.div`
 
 	> ul > li > ul > li > a {
 		padding-left: 2.75rem;
+		color: ${getThemeVariable("secondaryText")};
 	}
 
 	> ul > li > ul > li > ul > li > a {
@@ -283,5 +290,17 @@ const NavGroup = styled.div`
 		&:hover {
 			text-decoration: none;
 		}
+	}
+
+	a.active {
+		color: ${getThemeVariable("secondaryColor")};
+
+		&:hover {
+			color: ${getThemeVariable("primaryColor")};
+		}
+	}
+
+	a:not(.active):hover {
+		color: ${getThemeVariable("primaryText")};
 	}
 `;

@@ -30,6 +30,7 @@ const Accordion = ({ label, children }: Props) => {
 					ev.preventDefault();
 					setOpen(!open);
 				}}
+				title={open ? "Collapse" : "Expand"}
 			>
 				{!!label ? label : open ? "Collapse" : "Expand"}
 			</AccordionHandle>
@@ -48,7 +49,7 @@ const AccordionHandle = styled.button`
 	display: block;
 	position: relative;
 	font-weight: 400;
-	color: ${getThemeVariable("mainText")};
+	color: ${getThemeVariable("primaryText")};
 	font-size: 1.125rem;
 	line-height: 2;
 	text-align: left;

@@ -9,7 +9,8 @@ export type ThemeType = {
 	mainBackgroundUrl: string;
 	codeBackground: string;
 	background: string;
-	mainText: string;
+	primaryText: string;
+	secondaryText: string;
 	header: string;
 	border: string;
 	primaryColor: string;

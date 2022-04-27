@@ -290,7 +290,7 @@ const codeCss = css<StyleProps>`
 			font-weight: 400;
 
 			+ .string {
-				color: ${getThemeVariable("mainText")};
+				color: ${getThemeVariable("primaryText")};
 			}
 		}
 	}

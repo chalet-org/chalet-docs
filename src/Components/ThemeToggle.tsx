@@ -16,6 +16,7 @@ const ThemeToggle = () => {
 			onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
 			onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
 			onClick={toggleTheme}
+			title="Theme toggle"
 		>
 			<Icon id={themeId} size="2rem" color={color} />
 		</Styles>

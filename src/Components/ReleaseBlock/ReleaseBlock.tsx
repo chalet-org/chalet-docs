@@ -35,7 +35,7 @@ const ReleaseBlock = ({ release }: Props) => {
 						)}
 						<div className="spacer" />
 						<Link href={html_url}>
-							<Icon id="github" size="1.5rem" color={theme.mainText} hoverColor={theme.primaryColor} />
+							<Icon id="github" size="1.5rem" color={theme.primaryText} hoverColor={theme.primaryColor} />
 						</Link>
 					</div>
 				</div>

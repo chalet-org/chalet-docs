@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 // import Image from "next/image";
 import styled from "styled-components";
@@ -23,14 +24,18 @@ const Page = ({ title, children }: Props) => {
 		}
 	}, [initialize, initialized]);
 
+	const pageTitle = `${title} :: Chalet`;
+
 	return (
 		<>
 			<Head>
-				<title>{title} :: Chalet</title>
+				<title>{pageTitle}</title>
 				<meta
 					name="viewport"
 					content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
 				/>
+				<meta property="og:title" content={pageTitle} />
+				<meta name="twitter:title" content={pageTitle} />
 			</Head>
 			<Main
 				id="main"
@@ -79,7 +84,7 @@ const Main = styled.main<NavBarProps>`
 	background-size: cover;
 	background-position: 100% center;
 	background-repeat: no-repeat;
-	color: ${getThemeVariable("mainText")};
+	color: ${getThemeVariable("primaryText")};
 
 	&::-webkit-scrollbar-thumb {
 		background-color: ${getThemeVariable("primaryColor")};

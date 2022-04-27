@@ -22,7 +22,7 @@ const Styles = styled.div`
 
 	> h1 {
 		line-height: 1;
-		color: ${getThemeVariable("mainText")};
+		color: ${getThemeVariable("primaryText")};
 		font-size: 3.5rem;
 		align-self: center;
 		text-transform: uppercase;
