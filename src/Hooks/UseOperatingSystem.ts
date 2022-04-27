@@ -1,13 +1,13 @@
 import platformJs from "platform";
 import { useMemo } from "react";
 
-export enum OperatingSystem {
+export const enum OperatingSystem {
 	Windows = "windows",
 	MacOS = "macos",
 	Linux = "linux",
 }
 
-export enum PreferredCompiler {
+export const enum PreferredCompiler {
 	MSVC = "msvc",
 	LLVM = "llvm",
 	GCC = "gcc",

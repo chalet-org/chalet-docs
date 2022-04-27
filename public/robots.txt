@@ -1,16 +1,27 @@
-User-Agent: *
-Allow: /*
-Disallow: /*?id=
-Disallow: /schema/*
-Disallow: /api/*
-
 User-Agent: Mediapartners-Google
-Disallow: /*
+Disallow: /
 
 User-Agent: AdsBot-Google
-Disallow: /*
+Disallow: /
 
-User-Agent: adidxbot
-Disallow: /*
+User-Agent: Googlebot-News
+Disallow: /
+
+User-Agent: Googlebot-Image
+Disallow: /
+
+User-Agent: Googlebot-Video
+Disallow: /
+
+User-Agent: MSNBot-Media
+Disallow: /
+
+User-Agent: AdIdxBot
+Disallow: /
+
+User-Agent: *
+Disallow: /schema
+Disallow: /api/
+Allow: /api/sitemap.xml$
 
 Sitemap: https://www.chalet-work.space/api/sitemap.xml

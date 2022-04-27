@@ -3,7 +3,7 @@ import { MDXRemoteSerializeResult } from "next-mdx-remote";
 
 import { ResultGithubReleases } from "./ChaletReleases";
 
-export enum SchemaType {
+export const enum SchemaType {
 	ChaletJson = "chalet-json",
 	SettingsJson = "settings-json",
 }
