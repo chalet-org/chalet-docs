@@ -226,10 +226,10 @@ const BaseStyle = createGlobalStyle`
 	hr {
 		border: none;
 		outline: 0;
-		background-color: ${getThemeVariable("header")};
+		background-color: ${getThemeVariable("border")};
 		margin: 1rem auto;
 		margin-bottom: 2rem;
-		height: 0.0625rem;
+		height: 0.125rem;
 		width: 100%;
 		text-align: center;
 		font-size: 1.125rem;

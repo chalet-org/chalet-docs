@@ -65,7 +65,7 @@ pacman -S mingw-w64-x86_64-toolchain mingw-w64-i686-toolchain
 **If using a standalone MinGW build:**
 * Install/extract it where you please. It is recommended to use sub-folders for 32-bit and 64-bit versions if compiling for both, and to use the convention `mingw32` and `mingw64` for those subfolder names
 * Add `(folder)\mingw64\bin` to Path directly in Windows Environment Variables (not recommended) or create a .env file in your project to modify Path
-* If you know the architecture triple used in the toolchain, you can configure chalet using that + '-gcc', or simply use `gcc`
+* If you know the architecture triple used in the toolchain, you can configure chalet using 'gcc'
 
 > Note: If both 32 and 64 version are installed, split those installations into `mingw32` and `mingw64`. Chalet only needs one of the bin folders in PATH. It will reinterpret the path based on the requested architecture of the build in order to find the correct compiler.
 
@@ -114,18 +114,14 @@ base-devel git cmake ninja gdb
 ```
 
 **If using GCC:**
-* Chalet will detect GCC by default, so nothing further should be necessary. Use the 'gcc' toolchain preset to explicitly request it, or the name of toolchain's target triple + '-gcc'
+* Chalet will detect GCC by default on linux, so nothing further should be necessary. Use the 'gcc' toolchain preset to explicitly request it. The architecture will be detected automatically, but can be specified with the target triple, if using a cross-compiler. Chalet will check for `(triple)-gcc` in path. 
 
-Examples:
+Example triples:
 ```bash
-x86_64-linux-gnu-gcc
-i686-linux-gnu-gcc
-
-# Cross compiler for ARM w/ FPU
-arm-linux-gnueabihf-gcc
-
-# Cross compiler for MinGW 64-bit Windows
-x86_64-w64-mingw32-gcc
+x86_64-linux-gnu
+i686-linux-gnu
+arm-linux-gnueabihf # Cross compiler for ARM w/ FPU
+x86_64-w64-mingw32  # Cross compiler for MinGW 64-bit Windows
 ```
 
 **If using LLVM:**
@@ -277,6 +273,14 @@ chalet configure -t x86_64-x64-mingw32-gcc
 # Homebrew GCC on Mac
 chalet configure -t gcc-11 
 ```
+
+The architecture triple itself can also be used with the `gcc` preset. This is equivalent to "(triple)-gcc".
+
+```bash
+chalet configure -t gcc -a x86_64-linux-gnu
+chalet configure -t gcc -a x86_64-x64-mingw32
+```
+
 
 |Intel|
 
