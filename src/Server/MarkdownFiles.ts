@@ -144,7 +144,9 @@ const getMdxPage = async (
 	query: Dictionary<string | undefined>,
 	internal: boolean = false
 ): Promise<ResultMDXPage> => {
-	const { definition, ref } = query;
+	const { ref } = query;
+	let { definition } = query;
+	if (definition === "&quot;") definition = "";
 
 	const schemaType = query.type as SchemaType | undefined;
 	if (

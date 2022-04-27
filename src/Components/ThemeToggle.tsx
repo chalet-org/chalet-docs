@@ -2,24 +2,22 @@ import React from "react";
 import styled from "styled-components";
 
 import { useUiStore } from "Stores";
-import { getThemeVariable, Theme } from "Theme";
+import { getThemeVariable } from "Theme";
 
 import { Icon } from "./Icon";
 
 const color = getThemeVariable("header");
 
-type Props = {};
-
-const ThemeToggle = (props: Props) => {
-	const { setTheme, themeId } = useUiStore();
+const ThemeToggle = () => {
+	const { themeId, toggleTheme } = useUiStore();
 	return (
 		<Styles
 			className="theme-toggle"
 			onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
 			onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
-			onClick={() => setTheme(themeId === Theme.Light ? Theme.Dark : Theme.Light)}
+			onClick={toggleTheme}
 		>
-			<Icon id={themeId === Theme.Light ? "night" : "day"} size="2rem" color={color} />
+			<Icon id={themeId} size="2rem" color={color} />
 		</Styles>
 	);
 };

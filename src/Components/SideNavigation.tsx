@@ -246,7 +246,7 @@ const StyledAside = styled.aside<AsideProps>`
 
 	&.open {
 		left: 0;
-		border-right: 0.125rem solid ${getThemeVariable("border")};
+		/* border-right: 0.125rem solid ${getThemeVariable("border")}; */
 
 		> div.nav-fade {
 			> .theme-toggle {

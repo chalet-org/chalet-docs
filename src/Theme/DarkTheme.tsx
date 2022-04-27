@@ -1,7 +1,7 @@
 import { ThemeType } from "./ThemeType";
 
 export const darkTheme: ThemeType = {
-	mainBackgroundUrl: 'url("/images/flat-mountains-dark.svg")',
+	mainBackgroundUrl: "url(/images/flat-mountains-dark.svg)",
 	codeBackground: "#0a0a0a",
 	background: "#111111",
 	mainText: "#d9d9d9",

@@ -1,6 +1,6 @@
 import { createGlobalStyle, css } from "styled-components";
 
-import { getThemeVariable } from "Theme";
+import { darkTheme, getRootThemeCss, getThemeVariable, lightTheme, Theme } from "Theme";
 
 import { globalFonts } from "./Fonts";
 import { hasMinWidth } from "./Responsiveness";
@@ -20,7 +20,7 @@ const cssReset = css`
 	code,
 	pre {
 		scrollbar-width: thin;
-		scrollbar-color: ${getThemeVariable("header")} transparent;
+		scrollbar-color: ${getThemeVariable("border")} transparent;
 	}
 
 	*:focus-visible {
@@ -109,30 +109,30 @@ const cssReset = css`
 `;
 
 const BaseStyle = createGlobalStyle`
-    ${cssReset}
+	${cssReset};
 
-    html {
-        font-size: 14px;
-        background-color: ${getThemeVariable("background")};
+	html {
+		font-size: 14px;
+		background-color: ${getThemeVariable("background")};
 		scroll-behavior: smooth;
 		width: 100%;
 		display: block;
 		position: relative;
-    }
+	}
 
-    body {
-        margin: 0;
-        padding: 0;
+	body {
+		margin: 0;
+		padding: 0;
 		font-family: ${globalFonts.paragraph};
 		font-size: 1.125rem;
 		line-height: 1.625;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-    }
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
 
-    code {
+	code {
 		font-family: ${globalFonts.code};
-    }
+	}
 
 	div.table-container {
 		width: 100%;
@@ -148,7 +148,8 @@ const BaseStyle = createGlobalStyle`
 		border-collapse: collapse;
 	}
 
-	th, td {
+	th,
+	td {
 		padding: 0 1rem;
 		text-align: left;
 		vertical-align: top;
@@ -182,14 +183,18 @@ const BaseStyle = createGlobalStyle`
 		}
 	}
 
-
-    h1, h2, h3, h4, h5, h6 {
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
 		font-family: ${globalFonts.header};
 		font-weight: 500;
-        margin: 0;
+		margin: 0;
 		padding-top: 0;
 		padding-bottom: 0.75rem;
-    }
+	}
 
 	h1 {
 		font-size: 2.25rem;
@@ -230,7 +235,7 @@ const BaseStyle = createGlobalStyle`
 		font-size: 1.125rem;
 
 		&:before {
-			content: ' ';
+			content: " ";
 			display: block;
 			position: relative;
 			top: 0.325rem;
@@ -240,7 +245,7 @@ const BaseStyle = createGlobalStyle`
 		}
 
 		&:after {
-			content: ' ';
+			content: " ";
 			display: block;
 			position: relative;
 			padding: 0 0;
@@ -252,9 +257,9 @@ const BaseStyle = createGlobalStyle`
 		}
 	}
 
-    a {
+	a {
 		cursor: pointer;
-        text-decoration: none;
+		text-decoration: none;
 		color: ${getThemeVariable("secondaryColor")};
 		transition: color 0.125s linear;
 
@@ -262,9 +267,10 @@ const BaseStyle = createGlobalStyle`
 		&.touch-hover {
 			color: ${getThemeVariable("primaryColor")};
 		}
-    }
+	}
 
-	ul,ol {
+	ul,
+	ol {
 		margin: 0;
 		padding-top: 0.25rem;
 		padding-bottom: 0.75rem;
@@ -295,7 +301,7 @@ const BaseStyle = createGlobalStyle`
 
 	@media ${hasMinWidth(0)} {
 		html {
-        	font-size: 16px;
+			font-size: 16px;
 		}
 	}
 	@media ${hasMinWidth(1)} {
@@ -306,4 +312,30 @@ const BaseStyle = createGlobalStyle`
 	}
 `;
 
-export { BaseStyle };
+//
+// Plain CSS only here
+//
+const rootStyles = css`
+	html.${Theme.Light} {
+		${getRootThemeCss(lightTheme)}
+
+		background: ${lightTheme.background};
+	}
+
+	html.${Theme.Dark} {
+		${getRootThemeCss(darkTheme)}
+
+		background: ${darkTheme.background};
+	}
+
+	body {
+		opacity: 0;
+		transition: opacity 0.125s linear;
+	}
+
+	body.ready {
+		opacity: 1;
+	}
+`;
+
+export { rootStyles, BaseStyle };

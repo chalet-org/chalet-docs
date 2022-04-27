@@ -1,5 +1,5 @@
 import Head from "next/head";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 // import Image from "next/image";
 import styled from "styled-components";
 
@@ -15,23 +15,13 @@ type Props = React.PropsWithChildren<{
 }>;
 
 const Page = ({ title, children }: Props) => {
-	const { theme, initialize, initialized, navWidth, navOpen } = useUiStore();
-
-	const [animating, setAnimating] = useState<boolean>(false);
+	const { initialize, initialized, navWidth, navOpen, animating, setAnimating } = useUiStore();
 
 	useEffect(() => {
 		if (!initialized) {
 			initialize();
 		}
 	}, [initialize, initialized]);
-
-	useEffect(() => {
-		document.body.style.backgroundColor = theme.background;
-	}, [theme]);
-
-	useEffect(() => {
-		setAnimating(true);
-	}, [navOpen]);
 
 	return (
 		<>
@@ -48,7 +38,7 @@ const Page = ({ title, children }: Props) => {
 				className={`${navOpen ? "nav-open" : ""} ${animating ? "animating" : ""}`}
 				onAnimationEnd={() => setAnimating(false)}
 			>
-				{!!initialized ? (
+				{initialized ? (
 					<>
 						<Container>{children}</Container>
 						<Spacer />

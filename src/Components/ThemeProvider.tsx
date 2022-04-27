@@ -4,6 +4,12 @@ import { createGlobalStyle } from "styled-components";
 import { useUiStore } from "Stores";
 import { getRootThemeCss, ThemeType } from "Theme";
 
+const GlobalCssVariables = createGlobalStyle<ThemeType>`
+	:root {
+		${getRootThemeCss}
+	}
+`;
+
 const ThemeProvider = () => {
 	const { theme } = useUiStore();
 
@@ -11,9 +17,3 @@ const ThemeProvider = () => {
 };
 
 export { ThemeProvider };
-
-const GlobalCssVariables = createGlobalStyle<ThemeType>`
-	:root {
-		${getRootThemeCss}
-	}
-`;

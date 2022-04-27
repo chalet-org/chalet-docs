@@ -21,12 +21,14 @@ const useRouteChangeScroll = () => {
 		} else {
 			const id = getQueryVariable("id");
 			if (id.length > 0) {
-				const el: Optional<HTMLElement> = document.getElementById(id);
-				const top: Optional<number> = el?.offsetTop ?? null;
-				const mainEl = document.getElementById("main");
-				if (!!top && !!mainEl) {
-					mainEl.scrollTo({ behavior: "smooth", top });
-				}
+				setTimeout(() => {
+					const el: Optional<HTMLElement> = document.getElementById(id);
+					const top: Optional<number> = el?.offsetTop ?? null;
+					const mainEl = document.getElementById("main");
+					if (!!top && !!mainEl) {
+						mainEl.scrollTo({ behavior: "smooth", top });
+					}
+				}, 50);
 			}
 		}
 	}, [router.asPath]);

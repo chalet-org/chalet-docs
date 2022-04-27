@@ -1,16 +1,15 @@
-import { BaseState, Action, Optional } from "@rewrking/react-kitchen";
+import { BaseState, Action } from "@rewrking/react-kitchen";
 
-import { HyperLink } from "Server/ResultTypes";
 import { Theme, ThemeType, darkTheme, lightTheme } from "Theme";
 import { LocalStorage } from "Utility";
 
 class UiState extends BaseState {
 	initialized: boolean = false;
 
-	themeId: Theme = Theme.Dark;
-	theme: ThemeType = darkTheme;
+	themeId: Theme = Theme.Light;
+	theme: ThemeType = lightTheme;
 
-	navOpen: boolean = false;
+	navOpen: boolean = true;
 	animating: boolean = false;
 	navWidth: string = "18rem";
 
@@ -23,18 +22,37 @@ class UiState extends BaseState {
 
 	@Action
 	initialize = () => {
-		let themeId: Theme;
-		if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
-			themeId = Theme.Dark;
-		} else {
-			themeId = Theme.Light;
-		}
+		this.setTheme(LocalStorage.get<Theme>("themeId", this.getPreferredTheme()));
 
-		this.setTheme(LocalStorage.get<Theme>("themeId", themeId));
 		this.navOpen = LocalStorage.get("navOpen", "true") == "true";
+
 		const tooLarge = window.matchMedia?.("(min-width: 960px)").matches ?? true;
 		if (!tooLarge) this.setNavOpen(false);
+
+		setTimeout(() => {
+			document.body.classList.add("ready");
+		}, 50);
+
 		this.initialized = true;
+	};
+
+	private getPreferredTheme = (): Theme => {
+		if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+			return Theme.Dark;
+		} else {
+			return Theme.Light;
+		}
+	};
+
+	private setThemeInBody = (inValue: Theme) => {
+		if (typeof document !== "undefined") {
+			const classes = document.documentElement.className.split(" ");
+			for (const cname of classes) {
+				if (cname.length === 0) continue;
+				document.documentElement.classList.remove(cname);
+			}
+			document.documentElement.classList.add(inValue);
+		}
 	};
 
 	private setThemeInternal = (inValue: ThemeType) => {
@@ -43,22 +61,34 @@ class UiState extends BaseState {
 
 	@Action
 	setTheme = (theme: Theme) => {
-		this.themeId = theme;
-		LocalStorage.set("themeId", this.themeId);
-		switch (theme) {
-			case Theme.Dark:
-				return this.setThemeInternal(darkTheme);
-			case Theme.Light:
-				return this.setThemeInternal(lightTheme);
-			default:
-				throw new Error("Code theme not implemented");
+		try {
+			this.themeId = theme;
+			this.setThemeInBody(theme);
+			LocalStorage.set("themeId", this.themeId);
+			switch (theme) {
+				case Theme.Dark:
+					return this.setThemeInternal(darkTheme);
+				case Theme.Light:
+					return this.setThemeInternal(lightTheme);
+				default:
+					throw new Error("Code theme not implemented");
+			}
+		} catch (err: any) {
+			console.warn(err.message);
+			this.setTheme(this.getPreferredTheme());
 		}
+	};
+
+	@Action
+	toggleTheme = () => {
+		this.setTheme(this.themeId === Theme.Dark ? Theme.Light : Theme.Dark);
 	};
 
 	@Action
 	setNavOpen = (inValue: boolean) => {
 		this.navOpen = inValue;
 		LocalStorage.set("navOpen", this.navOpen ? "true" : "false");
+		this.animating = true;
 	};
 
 	@Action

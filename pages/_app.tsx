@@ -6,7 +6,6 @@ import ProgressBar from "@badrap/bar-of-progress";
 import { Optional } from "@rewrking/react-kitchen";
 
 import { BaseStyle } from "Components";
-import { ThemeProvider } from "Components/ThemeProvider";
 import { Providers } from "Stores";
 
 let progress: Optional<ProgressBar> = null;
@@ -28,7 +27,6 @@ type Props = AppProps;
 const Main = ({ Component, pageProps }: Props) => {
 	return (
 		<Providers>
-			<ThemeProvider />
 			<BaseStyle />
 			<Component {...pageProps} />
 			{/* Modal */}

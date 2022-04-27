@@ -6,9 +6,11 @@ import { VscGithub, VscTerminalLinux, VscTerminalUbuntu, VscTerminalDebian } fro
 import { WiMoonAltWaxingGibbous5, WiMoonAltWaningGibbous1 } from "react-icons/wi";
 import styled from "styled-components";
 
-type IconID =
-	| "day"
-	| "night"
+import { Theme } from "Theme";
+
+export type IconID =
+	| Theme.Light
+	| Theme.Dark
 	| "search"
 	| "close"
 	| "apple"
@@ -30,11 +32,13 @@ type Props = IconStyleProps & {
 	onClick?: React.MouseEventHandler;
 };
 
+// Note: for Theme, these are the icons that show when the theme is active
+//
 const getIcon = (id: IconID) => {
 	switch (id) {
-		case "day":
+		case Theme.Dark:
 			return <WiMoonAltWaxingGibbous5 />;
-		case "night":
+		case Theme.Light:
 			return <WiMoonAltWaningGibbous1 />;
 		case "search":
 			return <AiOutlineSearch />;

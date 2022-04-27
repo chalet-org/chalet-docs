@@ -1,7 +1,7 @@
 import { ThemeType } from "./ThemeType";
 
 export const lightTheme: ThemeType = {
-	mainBackgroundUrl: 'url("/images/flat-mountains-light.svg")',
+	mainBackgroundUrl: "url(/images/flat-mountains-light.svg)",
 	codeBackground: "#f0f1f4", // ebeef0
 	background: "#ffffff",
 	mainText: "#233444",

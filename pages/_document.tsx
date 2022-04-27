@@ -1,6 +1,8 @@
 import Document, { Html, Head, Main, NextScript } from "next/document";
 import React from "react";
 
+import { rootStyles } from "Components";
+
 class MyDocument extends Document {
 	render() {
 		return (
@@ -15,6 +17,9 @@ class MyDocument extends Document {
 						href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@300;400;600;700&family=Poppins:wght@400;500&family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap"
 						rel="stylesheet"
 					/>
+					<meta name="color-scheme" content="dark light" />
+					<style>{rootStyles}</style>
+					<script type="text/javascript" src="/js/theme-startup.js" />
 				</Head>
 				<body>
 					<Main />
