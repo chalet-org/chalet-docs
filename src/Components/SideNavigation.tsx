@@ -274,7 +274,20 @@ const NavGroup = styled.div`
 
 	> ul > li > ul > li > a {
 		padding-left: 2.75rem;
-		color: ${getThemeVariable("secondaryText")};
+		color: inherit;
+		position: relative;
+
+		&:before {
+			content: " ";
+			display: block;
+			position: absolute;
+			left: 1.875rem;
+			top: 50%;
+			transform: translateY(-50%);
+			width: 0.125rem;
+			height: 0.25rem;
+			background-color: ${getThemeVariable("codeBlue")};
+		}
 	}
 
 	> ul > li > ul > li > ul > li > a {
