@@ -41,7 +41,7 @@ const parseTables = (text: string) => {
 
 			rest.replace(/((\| ([\w\d` -:,~\=\(\)\[\]\{\}\$\?\/\\]+))+ +\|\n)/g, (tmatch: string, tp1: string) => {
 				let labels: string[] =
-					tp1.match(/ ([\w\d` -:,~\=\(\)\[\]\{\}\$\?\/\\]+) /g)?.map((th: string) => `<td>${th}</td>`) ?? [];
+					tp1.match(/ ([\w\d` -:,~\=\(\)\[\]\{\}\$\?\/\\]*) /g)?.map((th: string) => `<td>${th}</td>`) ?? [];
 				rows.push(`<tr>${labels.join("")}</tr>`);
 				return "";
 			});

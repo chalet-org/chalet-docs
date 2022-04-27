@@ -199,7 +199,7 @@ const codeCss = css<StyleProps>`
 			color: ${getThemeVariable("codeGreen")};
 		}
 		&.attr-value {
-			color: ${getThemeVariable("codeLightYellow")};
+			color: ${getThemeVariable("codeYellow")};
 		}
 		&.boolean {
 			color: ${getThemeVariable("codeYellow")};

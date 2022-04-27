@@ -21,15 +21,9 @@ export type ThemeType = {
 	codeWhite: string;
 	codeGray: string;
 	codeRed: string;
-	codeLightRed: string;
 	codeGreen: string;
-	codeLightGreen: string;
 	codeYellow: string;
-	codeLightYellow: string;
 	codeBlue: string;
-	codeLightBlue: string;
 	codeMagenta: string;
-	codeLightMagenta: string;
 	codeCyan: string;
-	codeLightCyan: string;
 };

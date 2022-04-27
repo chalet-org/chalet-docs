@@ -346,10 +346,15 @@ The following table is the full list of accepted values:
 
 | Key | Values | Short-hand |
 | ---- | ---- | ---- |
-| platform | `:windows` `:macos` `:linux` | Yes (same w/o key) |
-| condition | `:debugSymbols` `:enableProfiling` `:interproceduralOptimization` | `:debug` |
+| platform | `:windows` | `:windows` |
+|  | `:macos` | `:macos` |
+|  | `:linux` | `:linux` |
+| condition | `:debugSymbols` | `:debug` |
+|  | `:enableProfiling` | No |
+|  | `:interproceduralOptimization` | No |
 | toolchain | toolchain name, target triple, or partial of either | No |
-| architecture | The cpu architecture to match (ex. `x86_64` `i686` `arm64` | No |
+| architecture | The cpu architecture to match (ex. `x86_64` `i686` `arm64`) | No |
+| options | `:runTarget` (build targets only) | `:runTarget` |
 | env | Environment variable by name, checks if defined | No |
 
 

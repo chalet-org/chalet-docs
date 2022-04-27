@@ -13,7 +13,7 @@ class UiState extends BaseState {
 	animating: boolean = false;
 	navWidth: string = "18rem";
 
-	focusedId: string = "examples";
+	focusedId: string = "";
 
 	accordionNotifier: boolean = false;
 	heightNotifier: boolean = false;
@@ -37,7 +37,7 @@ class UiState extends BaseState {
 	};
 
 	private getPreferredTheme = (): Theme => {
-		if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+		if (window.matchMedia?.("(prefers-color-scheme: dark)").matches ?? false) {
 			return Theme.Dark;
 		} else {
 			return Theme.Light;

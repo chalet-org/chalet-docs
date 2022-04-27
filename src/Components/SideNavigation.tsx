@@ -285,8 +285,8 @@ const NavGroup = styled.div`
 			top: 50%;
 			transform: translateY(-50%);
 			width: 0.125rem;
-			height: 0.25rem;
-			background-color: ${getThemeVariable("codeBlue")};
+			height: 1rem;
+			background-color: ${getThemeVariable("header")};
 		}
 	}
 

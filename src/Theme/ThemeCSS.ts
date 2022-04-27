@@ -16,17 +16,11 @@ const ThemeIndex: ThemeType = {
 	codeWhite: "code-white",
 	codeGray: "code-gray",
 	codeRed: "code-red",
-	codeLightRed: "code-light-red",
 	codeGreen: "code-green",
-	codeLightGreen: "code-light-green",
 	codeYellow: "code-yellow",
-	codeLightYellow: "code-light-yellow",
 	codeBlue: "code-blue",
-	codeLightBlue: "code-light-blue",
 	codeMagenta: "code-magenta",
-	codeLightMagenta: "code-light-magenta",
 	codeCyan: "code-cyan",
-	codeLightCyan: "code-light-cyan",
 };
 
 const values = Object.entries(ThemeIndex);
