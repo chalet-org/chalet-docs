@@ -6,6 +6,7 @@ import React from "react";
 // import { Optional } from "@rewrking/react-kitchen";
 import { BaseStyle } from "Components";
 import { Providers } from "Stores";
+import { usePanelbear } from "Utility";
 
 /*let progress: Optional<ProgressBar> = null;
 if (progress === null) {
@@ -21,9 +22,13 @@ if (progress === null) {
 	Router.events.on("routeChangeError", progress.finish);
 }*/
 
+const PANELBEAR_ID: string = process.env.NEXT_PUBLIC_PANELBEAR_ID ?? "";
+
 type Props = AppProps;
 
 const Main = ({ Component, pageProps }: Props) => {
+	usePanelbear(PANELBEAR_ID);
+
 	return (
 		<Providers>
 			<BaseStyle />

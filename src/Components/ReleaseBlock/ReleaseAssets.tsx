@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import React, { useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import styled from "styled-components";
 
 import { Optional } from "@rewrking/react-kitchen";
@@ -9,6 +9,7 @@ import { OperatingSystem, useOperatingSystem } from "Hooks";
 import { GithubAsset, GithubRelease } from "Server/ChaletReleases";
 import { useUiStore } from "Stores";
 import { getThemeVariable } from "Theme";
+import { Panelbear } from "Utility";
 
 type DeducedInfo = {
 	asset: GithubAsset;
@@ -59,9 +60,9 @@ const getNiceArchName = (arch: string, platform: OperatingSystem) => {
 
 const iconSize: string = "3.25rem";
 
-type Props = Pick<GithubRelease, "assets" | "zipball_url" | "tarball_url">;
+type Props = Pick<GithubRelease, "assets" | "zipball_url" | "tarball_url" | "tag_name">;
 
-const ReleaseAssets = ({ assets, zipball_url, tarball_url }: Props) => {
+const ReleaseAssets = ({ assets, zipball_url, tarball_url, tag_name }: Props) => {
 	const { theme, showAllPlatforms } = useUiStore();
 	const router = useRouter();
 	const info = useMemo(
@@ -82,6 +83,18 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url }: Props) => {
 		.sort((dataA) => (dataA.arch === "x86_64" ? -1 : 1));
 	const [platform] = useOperatingSystem();
 
+	const onDownload = useCallback(
+		async (url: string, ...data: string[]) => {
+			try {
+				Panelbear.trackDownload(`${tag_name}_${data.join("-")}`);
+				await router.push(url);
+			} catch (err) {
+				console.error(err);
+			}
+		},
+		[router, tag_name]
+	);
+
 	return (
 		<Styles>
 			<DownloadContainer>
@@ -98,7 +111,9 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url }: Props) => {
 										key={i}
 										onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
 										onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
-										onClick={(ev) => router.push(browser_download_url)}
+										onClick={(ev) =>
+											onDownload(browser_download_url, data.arch, dataPlatform, abi, filetype)
+										}
 										color={theme.codeBlue}
 									>
 										<div className="bold">
@@ -129,7 +144,9 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url }: Props) => {
 										key={i}
 										onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
 										onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
-										onClick={(ev) => router.push(browser_download_url)}
+										onClick={(ev) =>
+											onDownload(browser_download_url, data.arch, dataPlatform, abi, filetype)
+										}
 										color={theme.codeGray}
 									>
 										<div className="bold">
@@ -164,7 +181,9 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url }: Props) => {
 										key={i}
 										onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
 										onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
-										onClick={(ev) => router.push(browser_download_url)}
+										onClick={(ev) =>
+											onDownload(browser_download_url, data.arch, dataPlatform, abi, filetype)
+										}
 										color={theme.codeRed}
 									>
 										<div className="bold">
@@ -193,7 +212,9 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url }: Props) => {
 										key={i}
 										onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
 										onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
-										onClick={(ev) => router.push(browser_download_url)}
+										onClick={(ev) =>
+											onDownload(browser_download_url, data.arch, dataPlatform, abi, filetype)
+										}
 										color={theme.codeGreen}
 									>
 										<div className="bold">
@@ -215,7 +236,7 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url }: Props) => {
 							className="source"
 							onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
 							onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
-							onClick={(ev) => router.push(zipball_url)}
+							onClick={(ev) => onDownload(zipball_url, "source", "zip")}
 							color={theme.primaryColor}
 						>
 							<div className="bold">Source code (.zip)</div>
@@ -225,7 +246,7 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url }: Props) => {
 							className="source"
 							onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
 							onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
-							onClick={(ev) => router.push(tarball_url)}
+							onClick={(ev) => onDownload(tarball_url, "source", "tar")}
 							color={theme.primaryColor}
 						>
 							<div className="bold">Source code (.tar.gz)</div>

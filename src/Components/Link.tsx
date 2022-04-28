@@ -32,7 +32,14 @@ const Link = ({ children, dataId, onClick, title, ...props }: Props) => {
 
 	if (targetBlank && typeof props.href === "string") {
 		return (
-			<Styles href={props.href} data-id={dataId} title={title} rel="noreferrer noopener" target="_blank">
+			<Styles
+				href={props.href}
+				data-id={dataId}
+				title={title}
+				onClick={onClick}
+				rel="noreferrer noopener"
+				target="_blank"
+			>
 				{children}
 			</Styles>
 		);

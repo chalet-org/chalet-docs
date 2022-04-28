@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import { useUiStore } from "Stores";
 import { getThemeVariable } from "Theme";
+import { Panelbear } from "Utility";
 
 import { Container } from "./Container";
 import { Icon } from "./Icon";
@@ -18,14 +19,10 @@ const PageFooter = (_props: Props) => {
 			<Container>
 				<LinkBox>
 					<div className="left">
-						{/* <a href="#">Link 1</a>
-						<a href="#">Link 2</a>
-						<a href="#">Link 3</a> */}
 						<Link href="/contact">Contact</Link>
 					</div>
 					<div className="right">
-						{/* <a href="#">Link 1</a> */}
-						<Link href="//www.github.com/chalet-org" title="Github">
+						<Link href="//www.github.com/chalet-org" title="Github" onClick={Panelbear.trackGithubClick}>
 							<Icon
 								id="github"
 								size="1.125rem"

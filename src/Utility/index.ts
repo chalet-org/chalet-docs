@@ -6,3 +6,4 @@ export * from "./DynamicLoad";
 export * from "./Window";
 export * from "./WithServerErrorHandler";
 export * from "./GetOperatingSystem";
+export * from "./PanelbearUtil";
