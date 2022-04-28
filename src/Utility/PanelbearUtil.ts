@@ -5,30 +5,34 @@ import * as PanelbearImpl from "@panelbear/panelbear-js";
 
 import { isDevelopment } from "Server/IsDevelopment";
 
+const PANELBEAR_ID: string = process.env.NEXT_PUBLIC_PANELBEAR_ID ?? "";
+
 const config: PanelbearImpl.PanelbearConfig = {
 	debug: isDevelopment,
 	enabled: !isDevelopment,
+	honorDNT: true,
 };
+const canUsePanelbear: boolean = (config.enabled ?? true) && PANELBEAR_ID.length > 0;
 
 const handleRouteChange = () => PanelbearImpl.trackPageview();
 
-const usePanelbear = (site: string) => {
+const usePanelbear = () => {
 	const router = useRouter();
 
 	useEffect(() => {
-		if (config.enabled ?? true) {
-			PanelbearImpl.load(site, config);
+		if (canUsePanelbear) {
+			PanelbearImpl.load(PANELBEAR_ID, config);
 			PanelbearImpl.trackPageview();
 
 			router.events.on("routeChangeComplete", handleRouteChange);
 		}
 
 		return () => {
-			if (config.enabled ?? true) {
+			if (canUsePanelbear) {
 				router.events.off("routeChangeComplete", handleRouteChange);
 			}
 		};
-	}, [site]);
+	}, []);
 };
 
 class Panelbear {

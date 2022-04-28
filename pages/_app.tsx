@@ -22,12 +22,10 @@ if (progress === null) {
 	Router.events.on("routeChangeError", progress.finish);
 }*/
 
-const PANELBEAR_ID: string = process.env.NEXT_PUBLIC_PANELBEAR_ID ?? "";
-
 type Props = AppProps;
 
 const Main = ({ Component, pageProps }: Props) => {
-	usePanelbear(PANELBEAR_ID);
+	usePanelbear();
 
 	return (
 		<Providers>
