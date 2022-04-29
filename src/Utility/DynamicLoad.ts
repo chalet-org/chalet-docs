@@ -10,6 +10,7 @@ type Components =
 	| "ContactForm"
 	| "IndentGroup"
 	| "Link"
+	| "NotFoundTerminal"
 	| "OrderedList"
 	| "PageDescription"
 	| "PageCategory"

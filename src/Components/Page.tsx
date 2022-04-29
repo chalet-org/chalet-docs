@@ -24,7 +24,7 @@ const Page = ({ title, children }: Props) => {
 		}
 	}, [initialize, initialized]);
 
-	const pageTitle = `${title} :: Chalet`;
+	const pageTitle = `Chalet :: ${title}`;
 
 	return (
 		<>

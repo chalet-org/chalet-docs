@@ -31,6 +31,7 @@ const mdxComponents: MDXComponents = {
 	TermDemo: dynamic.component("TermDemo"),
 	Tagline: dynamic.component("Tagline"),
 	ContactForm: dynamic.component("ContactForm"),
+	NotFoundTerminal: dynamic.component("NotFoundTerminal"),
 };
 
 const schemaComponents: MDXComponents = {

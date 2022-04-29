@@ -13,6 +13,7 @@ export * from "./ImportantNote";
 export * from "./IndentGroup";
 export * from "./Link";
 export * from "./NavigationLinks";
+export * from "./NotFoundTerminal";
 export * from "./OrderedList";
 export * from "./Page";
 export * from "./PageDescription";
