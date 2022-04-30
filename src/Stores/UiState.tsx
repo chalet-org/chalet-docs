@@ -14,6 +14,7 @@ class UiState extends BaseState {
 	navWidth: string = "18rem";
 
 	focusedId: string = "";
+	findText: string = "";
 
 	accordionNotifier: boolean = false;
 	heightNotifier: boolean = false;
@@ -126,6 +127,15 @@ class UiState extends BaseState {
 	};
 
 	toggleShowAllPlatforms = () => this.setShowAllPlatforms(!this.showAllPlatforms);
+
+	@Action
+	findTextOnPage = (inValue: string) => {
+		this.findText = inValue;
+	};
+
+	resetFindText = () => {
+		this.findText = "";
+	};
 }
 
 export { UiState };

@@ -1,6 +1,6 @@
 import { BaseApi } from "@rewrking/react-kitchen";
 
-import { ResultMDXPage, ResultSearchResults, SchemaType } from "Server/ResultTypes";
+import { ResultSearchResults } from "Server/ResultTypes";
 
 class DocsApi extends BaseApi {
 	constructor() {

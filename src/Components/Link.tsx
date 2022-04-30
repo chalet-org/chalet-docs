@@ -22,7 +22,6 @@ const Link = ({ children, dataId, onClick, title, ...props }: Props) => {
 		console.log(props.href);
 		throw new Error("Error: Link expects href without 'https:'. Use '//' instead.");
 	}*/
-
 	const showActive = props.showActive ?? true;
 	const trackHeadings = props.trackHeadings ?? false;
 	const targetBlank =

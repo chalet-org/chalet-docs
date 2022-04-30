@@ -187,8 +187,7 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url, tag_name }: Props) =>
 										color={theme.codeRed}
 									>
 										<div className="bold">
-											{dataArch === "arm" ? "Raspberry Pi OS" : "Debian / Ubuntu"} package (.deb /
-											.zip)
+											{dataArch === "arm" ? "Debian" : "Debian / Ubuntu"} package (.deb / .zip)
 											<br />
 											<span>{name}</span>
 										</div>
