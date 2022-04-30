@@ -1,23 +1,27 @@
 import { Action, BaseState } from "@rewrking/react-kitchen";
 
-type ResponseType = React.Component | string;
-export type TerminalCommandCallback = (args: string[]) => ResponseType;
+type ResponseType = JSX.Element | string | null;
+export type TerminalCommandCallback = (args: string) => Promise<ResponseType>;
 
 class PseudoTerminalState extends BaseState {
 	history: string[] = [];
 	responses: ResponseType[] = [];
 	currentLine: string = "";
+	fullscreen: boolean = false;
 
 	private lastHistory: number = 0;
 	private savedCurrentLine: string = "";
 
 	@Action
-	commitLine = (callback: TerminalCommandCallback) => {
+	commitLine = async (callback: TerminalCommandCallback) => {
 		this.history.push(this.currentLine);
 		this.lastHistory = this.history.length;
-		this.responses.push(callback(this.currentLine.split(" ")));
-		this.currentLine = "";
-		this.savedCurrentLine = "";
+		const result = await callback(this.currentLine);
+		if (result !== null) {
+			this.responses.push(result);
+			this.currentLine = "";
+			this.savedCurrentLine = "";
+		}
 	};
 
 	@Action
@@ -57,14 +61,23 @@ class PseudoTerminalState extends BaseState {
 		this.currentLine += key;
 	};
 
-	// @Action
+	@Action
+	setFullscreen = (value: boolean) => {
+		this.fullscreen = value;
+	};
+
+	@Action
+	toggleFullscreen = () => {
+		this.fullscreen = !this.fullscreen;
+	};
+
+	@Action
 	clearHistory = () => {
-		this.reset();
-		// this.history = [];
-		// this.responses = [];
-		// this.currentLine = "";
-		// this.savedCurrentLine = "";
-		// this.lastHistory = 0;
+		this.history = [];
+		this.responses = [];
+		this.currentLine = "";
+		this.savedCurrentLine = "";
+		this.lastHistory = 0;
 	};
 }
 

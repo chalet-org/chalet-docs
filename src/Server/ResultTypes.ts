@@ -67,3 +67,16 @@ export type SearchResult = {
 };
 
 export type ResultSearchResults = SearchResult[];
+
+export type ResultLostAndFound = {
+	room: number;
+	message?: string;
+	color?: string;
+	errorMessage?: string;
+	clear?: boolean;
+};
+
+export type LostSearchInput = {
+	room: number;
+	message: string;
+};

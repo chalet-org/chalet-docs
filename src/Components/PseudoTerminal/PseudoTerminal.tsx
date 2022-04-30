@@ -1,24 +1,30 @@
-import React from "react";
+import React, { useCallback, useRef } from "react";
 import styled from "styled-components";
 
 import { globalFonts } from "Components/GlobalStyles/Fonts";
-import { useKeyPress } from "Hooks";
-import { PseudoTerminalStoreProvider, usePseudoTerminalStore } from "Stores";
+import { PseudoTerminalStoreProvider, usePseudoTerminalStore, useUiStore } from "Stores";
 import { TerminalCommandCallback } from "Stores/PseudoTerminalState";
 
 import { TerminalCursor } from "./TerminalCursor";
 import { TerminalPrompt } from "./TerminalPrompt";
 
-type Props = {
+type ColorProps = {
+	textColor: string;
+	backgroundColor: string;
+};
+
+type Props = ColorProps & {
 	prompt: string;
 	onCommand: TerminalCommandCallback;
 	cursorColor: string;
 	promptColor: string;
 };
 
-const PseudoTerminalImpl = ({ prompt, onCommand, cursorColor, promptColor }: Props) => {
+const PseudoTerminalImpl = ({ prompt, onCommand, cursorColor, promptColor, ...colorProps }: Props) => {
+	const ref = useRef<HTMLInputElement>(null);
 	const {
 		history,
+		fullscreen,
 		responses,
 		currentLine,
 		commitLine,
@@ -27,65 +33,37 @@ const PseudoTerminalImpl = ({ prompt, onCommand, cursorColor, promptColor }: Pro
 		registerArrowUp,
 		registerArrowDown,
 		clearHistory,
+		toggleFullscreen,
 	} = usePseudoTerminalStore();
+	const { setNavOpen } = useUiStore();
 
-	useKeyPress(
-		(ev: KeyboardEvent) => {
-			ev.preventDefault();
+	const onKeyDown = useCallback(
+		(ev: React.KeyboardEvent<HTMLInputElement>) => {
 			switch (ev.key) {
-				case "ArrowLeft":
-				case "ArrowRight":
-				case "Shift":
-				case "Insert":
-				case "Home":
-				case "Delete":
-				case "End":
-				case "PageUp":
-				case "PageDown":
-				case "NumLock":
-				case "Clear":
-				case "OS":
-				case "Tab":
-				case "CapsLock":
-				case "ScrollLock":
-				case "Escape":
-				case "Pause":
-				case "F1":
-				case "F2":
-				case "F3":
-				case "F4":
-				case "F5":
-				case "F6":
-				case "F7":
-				case "F8":
-				case "F9":
-				case "F10":
-				case "F11":
-				case "F12":
-				case "F13":
-				case "F14":
-				case "F15":
-				case "F16":
-				case "F17":
-				case "F18":
-				case "F19":
-				case "AudioVolumeMute":
-				case "AudioVolumeUp":
-				case "AudioVolumeDown":
+				case "Tab": {
+					ev.preventDefault();
 					return;
-				case "ArrowUp":
+				}
+				case "ArrowUp": {
+					ev.preventDefault();
 					return registerArrowUp();
-				case "ArrowDown":
+				}
+				case "ArrowDown": {
+					ev.preventDefault();
 					return registerArrowDown();
-				case "Backspace":
-					return registerBackspace();
-				case "Enter":
+				}
+				case "Enter": {
+					ev.preventDefault();
+					if (ev.altKey) {
+						setNavOpen(false);
+						return toggleFullscreen();
+					}
 					return commitLine(onCommand);
+				}
 				default: {
 					if (ev.ctrlKey && (ev.code === "KeyK" || ev.code === "KeyL")) {
+						ev.preventDefault();
 						clearHistory();
-					} else if (!ev.ctrlKey && !ev.altKey) {
-						registerKeyPress(ev.key);
 					}
 				}
 			}
@@ -95,28 +73,53 @@ const PseudoTerminalImpl = ({ prompt, onCommand, cursorColor, promptColor }: Pro
 
 	return (
 		<Styles
-			ref={(ref) => {
-				if (ref) {
-					ref.scrollTop = ref.scrollHeight;
-				}
+			onClick={(ev) => {
+				ev.preventDefault();
+				ref.current?.focus();
 			}}
+			{...colorProps}
 		>
-			{history.map((line, i) => {
-				return (
-					<React.Fragment key={i}>
-						<p>
-							<TerminalPrompt prompt={prompt} color={promptColor} />
-							{line}
-						</p>
-						{line.length > 0 && <p>{responses[i]}</p>}
-					</React.Fragment>
-				);
-			})}
-			<p>
-				<TerminalPrompt prompt={prompt} color={promptColor} />
-				{currentLine}
-				<TerminalCursor color={cursorColor} />
-			</p>
+			<div
+				className={`t-container ${fullscreen ? "fs" : ""}`}
+				ref={(ref) => {
+					if (ref) {
+						ref.scrollTop = ref.scrollHeight;
+					}
+				}}
+			>
+				{history.map((line, i) => {
+					return (
+						<React.Fragment key={i}>
+							<p>
+								<TerminalPrompt prompt={prompt} color={promptColor} />
+								{line}
+							</p>
+							{line.length > 0 && <p>{responses[i]}</p>}
+						</React.Fragment>
+					);
+				})}
+				<p>
+					<TerminalPrompt prompt={prompt} color={promptColor}>
+						<span>{currentLine}</span>
+					</TerminalPrompt>
+					<TerminalCursor color={cursorColor} />
+					<TerminalInput
+						ref={ref}
+						type="text"
+						value={currentLine}
+						onKeyDown={onKeyDown}
+						onChange={(ev: React.ChangeEvent<HTMLInputElement>) => {
+							ev.preventDefault();
+							const value = ev.target.value;
+							if (value.length > currentLine.length) {
+								registerKeyPress(value.slice(-1));
+							} else {
+								return registerBackspace();
+							}
+						}}
+					/>
+				</p>
+			</div>
 		</Styles>
 	);
 };
@@ -131,28 +134,71 @@ const PseudoTerminal = (props: Props) => {
 
 export { PseudoTerminal };
 
-const Styles = styled.div`
+const Styles = styled.div<ColorProps>`
 	display: block;
-	width: 80vw;
-	max-width: 35rem;
+	position: relative;
+	width: calc(80vw - 17px);
+	max-width: calc(35rem - 17px);
 	aspect-ratio: 7 / 5;
-
-	/* font-size: 0.875rem; */
-	font-size: 70%;
-	line-height: 1.625;
-	font-family: ${globalFonts.code};
-	overflow-wrap: anywhere;
 	overflow: hidden;
-	padding: 0.5rem 0.75rem;
-	white-space: pre-wrap;
-	white-space: break-spaces;
+	/* padding: 0.5rem 0.75rem; */
 
-	color: #ffffff;
-	background-color: #000000;
-	user-select: none;
+	> .t-container {
+		display: block;
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: -17px;
+		width: 80vw;
+		max-width: 35rem;
+		overflow-y: scroll;
+		overflow-x: hidden;
+		padding-right: 17px;
 
-	> p {
-		padding-top: 0;
-		padding-bottom: 0;
+		/* font-size: 0.875rem; */
+		font-size: 70%;
+		line-height: 1.625;
+		font-family: ${globalFonts.code};
+
+		overflow-wrap: anywhere;
+		white-space: pre-wrap;
+		white-space: break-spaces;
+
+		color: ${({ textColor }) => textColor};
+		background-color: ${({ backgroundColor }) => backgroundColor};
+		user-select: none;
+
+		> p {
+			padding-top: 0;
+			padding-bottom: 0;
+		}
+
+		&.fs {
+			display: block;
+			position: fixed;
+			width: 100vw;
+			max-width: none;
+			height: 100vh;
+			z-index: 1000;
+			font-size: 100%;
+			padding: 4rem 8rem;
+		}
 	}
+`;
+
+const TerminalInput = styled.input`
+	display: block;
+	position: absolute;
+	background: inherit;
+	border: none;
+	padding: 0;
+	margin: 0;
+	outline: 0 !important;
+	user-select: none;
+	caret-color: transparent;
+	text-decoration: none;
+
+	overflow: hidden;
+	opacity: 0;
 `;

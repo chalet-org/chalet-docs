@@ -2,78 +2,15 @@ import React from "react";
 import styled from "styled-components";
 
 import { OperatingSystem, useOperatingSystem } from "Hooks";
-import { useUiStore } from "Stores";
+import { LostAndFoundApiProvider, useLostAndFoundStore, useUiStore } from "Stores";
 import { getThemeVariable, Theme } from "Theme";
 
 import { hasMinWidth } from "./GlobalStyles";
 import { PseudoTerminal } from "./PseudoTerminal";
 
-const printError = (message: string) => {
-	return (
-		<>
-			<TermColor className="red">ERROR: </TermColor>
-			{message}
-		</>
-	);
-};
-
-const printMessage = (message: string) => {
-	return <TermColor className="blue">{message}</TermColor>;
-};
-
-const printDefaultError = () => <TermColor className="blue">You can't do that here.</TermColor>;
-
-const commands = {
-	help: () => printMessage(`help: left right forward back up`),
-	left: () =>
-		printMessage(
-			"You see a large obelisk to your left. It's covered in strange patterns, but it's too dark to make them out."
-		),
-	right: () =>
-		printMessage(
-			"To your right is an ancient city off in the distance -- its brilliance visible only by moonlight."
-		),
-	forward: () =>
-		printMessage("In front of you is a series of large sandstone columns, but they're maybe an hour's walk away."),
-	back: () =>
-		printMessage("Behind you is endless sand. It appears you came that way, but you don't remember doing so."),
-	up: () => printMessage("The sky is dark and starry, lit only by the glow of a full moon."),
-
-	"4": (args: string[]) => {
-		const raw = args.join(" ");
-		if (raw === "8 15 16 23 42") return <TermColor className="green-center">`EXECUTE?`</TermColor>;
-		return printDefaultError();
-	},
-	chalet: (args: string[]) => {
-		if (
-			args.includes("build") ||
-			args.includes("buildrun") ||
-			args.includes("rebuild") ||
-			args.includes("bundle") ||
-			args.includes("clean") ||
-			args.includes("run") ||
-			args.includes("configure")
-		)
-			return printError(`Build file 'chalet.json' was not found.`);
-
-		if (args.includes("init"))
-			return printError(`Path '/c/p/p/' is not empty. Please choose a different path, or clean this one first.`);
-
-		return printError(`Invalid subcommand requested: ${args.join(" ")}`);
-	},
-};
-
-const onCommand = ([cmd, ...args]: string[]) => {
-	if (cmd) {
-		if (commands[cmd]) {
-			return commands[cmd](args);
-		}
-	}
-	return printDefaultError();
-};
-
-const NotFoundTerminal = () => {
+const NotFoundTerminalImpl = () => {
 	const { theme, themeId } = useUiStore();
+	const { search } = useLostAndFoundStore();
 	const [platform] = useOperatingSystem();
 
 	return (
@@ -82,12 +19,22 @@ const NotFoundTerminal = () => {
 				<PseudoTerminal
 					cursorColor={theme.codeGreen}
 					promptColor={theme.codeGray}
+					textColor="#ffffff"
+					backgroundColor="#000000"
 					prompt={platform === OperatingSystem.Windows ? ">" : "$"}
-					onCommand={onCommand}
+					onCommand={search}
 				/>
 				<TerminalOverlay className={themeId} />
 			</DemoImageFrame>
 		</Styles>
+	);
+};
+
+const NotFoundTerminal = () => {
+	return (
+		<LostAndFoundApiProvider>
+			<NotFoundTerminalImpl />
+		</LostAndFoundApiProvider>
 	);
 };
 
@@ -141,23 +88,5 @@ const TerminalOverlay = styled.div`
 	@media ${hasMinWidth(0)} {
 		border-radius: 1.75rem;
 		padding: 2rem 4rem;
-	}
-`;
-
-const TermColor = styled.span`
-	&.red {
-		color: ${getThemeVariable("codeRed")};
-	}
-
-	&.blue {
-		color: ${getThemeVariable("codeBlue")};
-	}
-
-	&.green-center {
-		color: ${getThemeVariable("codeGreen")};
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		padding: 12.5em 0;
 	}
 `;

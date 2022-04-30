@@ -5,12 +5,18 @@ type StyleProps = {
 	color: string;
 };
 
-type Props = StyleProps & {
-	prompt: string;
-};
+type Props = StyleProps &
+	React.PropsWithChildren<{
+		prompt: string;
+	}>;
 
-const TerminalPrompt = ({ prompt, color }: Props) => {
-	return <Styles color={color}>{prompt} </Styles>;
+const TerminalPrompt = ({ prompt, color, children }: Props) => {
+	return (
+		<>
+			<Styles color={color}>{prompt} </Styles>
+			<span>{children}</span>
+		</>
+	);
 };
 
 const Styles = styled.span<StyleProps>`

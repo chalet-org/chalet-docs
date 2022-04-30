@@ -42,6 +42,7 @@ export { PageFooter };
 const Styles = styled.footer`
 	display: block;
 	position: relative;
+	z-index: 0;
 	flex-shrink: 0;
 	width: 100%;
 `;
