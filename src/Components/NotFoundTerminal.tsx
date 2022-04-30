@@ -1,20 +1,42 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
-import { OperatingSystem, useOperatingSystem } from "Hooks";
+import { OperatingSystem, useKeyPress, useOperatingSystem } from "Hooks";
 import { LostAndFoundApiProvider, useLostAndFoundStore, useUiStore } from "Stores";
 import { getThemeVariable, Theme } from "Theme";
 
 import { hasMinWidth } from "./GlobalStyles";
 import { PseudoTerminal } from "./PseudoTerminal";
 
+const kcode: string = "ArrowUpArrowUpArrowDownArrowDownArrowLeftArrowRightArrowLeftArrowRightbaEnter";
+
 const NotFoundTerminalImpl = () => {
+	const [konami, setKonami] = useState<string>("");
+	const [unlocked, setUnlocked] = useState<boolean>(false);
 	const { theme, themeId } = useUiStore();
 	const { search } = useLostAndFoundStore();
 	const [platform] = useOperatingSystem();
 
+	useKeyPress(
+		(ev) => {
+			if (unlocked) return;
+			if (kcode.startsWith(konami) || konami.length === 0) {
+				const newCode = konami + ev.key;
+				console.log(newCode);
+				if (newCode === kcode) setUnlocked(true);
+				setKonami(newCode);
+			} else {
+				setKonami("");
+			}
+		},
+		[konami]
+	);
+
+	if (!unlocked) return null;
+
 	return (
 		<Styles>
+			<p>All you see before you is a mysterious computer screen...</p>
 			<DemoImageFrame>
 				<PseudoTerminal
 					cursorColor={theme.codeGreen}
@@ -46,6 +68,11 @@ const Styles = styled.div`
 	align-items: center;
 	width: inherit;
 	margin-top: 3rem;
+
+	> p {
+		margin-top: 2rem;
+		margin-bottom: 1rem;
+	}
 `;
 
 const DemoImageFrame = styled.div`

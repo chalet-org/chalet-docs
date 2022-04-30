@@ -12,6 +12,7 @@ export { Container };
 const Styles = styled.div`
 	display: block;
 	position: relative;
+	width: 100%;
 	max-width: 54rem;
 	padding: 1rem;
 	margin: 0 auto;

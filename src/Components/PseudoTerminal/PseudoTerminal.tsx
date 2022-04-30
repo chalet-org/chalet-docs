@@ -33,6 +33,7 @@ const PseudoTerminalImpl = ({ prompt, onCommand, cursorColor, promptColor, ...co
 		registerArrowUp,
 		registerArrowDown,
 		clearHistory,
+		setFullscreen,
 		toggleFullscreen,
 	} = usePseudoTerminalStore();
 	const { setNavOpen } = useUiStore();
@@ -40,6 +41,10 @@ const PseudoTerminalImpl = ({ prompt, onCommand, cursorColor, promptColor, ...co
 	const onKeyDown = useCallback(
 		(ev: React.KeyboardEvent<HTMLInputElement>) => {
 			switch (ev.key) {
+				case "Escape": {
+					ev.preventDefault();
+					return setFullscreen(false);
+				}
 				case "Tab": {
 					ev.preventDefault();
 					return;
@@ -54,7 +59,7 @@ const PseudoTerminalImpl = ({ prompt, onCommand, cursorColor, promptColor, ...co
 				}
 				case "Enter": {
 					ev.preventDefault();
-					if (ev.altKey) {
+					if (ev.altKey || ev.metaKey) {
 						setNavOpen(false);
 						return toggleFullscreen();
 					}
