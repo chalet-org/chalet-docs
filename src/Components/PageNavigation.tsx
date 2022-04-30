@@ -21,7 +21,7 @@ const PageNavigation = ({ left, right }: Props) => {
 	const router = useRouter();
 	return (
 		<>
-			<PageBreak />
+			<PageBreak className="b" />
 			<Styles>
 				{!!left ? (
 					<div className="nav-left">

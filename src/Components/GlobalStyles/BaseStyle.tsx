@@ -234,26 +234,28 @@ const BaseStyle = createGlobalStyle`
 		text-align: center;
 		font-size: 1.125rem;
 
-		&:before {
-			content: " ";
-			display: block;
-			position: relative;
-			top: 0.325rem;
-			height: 0.0625rem;
-			width: 100%;
-			background-color: ${getThemeVariable("primaryColor")};
-		}
+		&:not(.b) {
+			&:before {
+				content: " ";
+				display: block;
+				position: relative;
+				top: 0.325rem;
+				height: 0.0625rem;
+				width: 100%;
+				background-color: ${getThemeVariable("primaryColor")};
+			}
 
-		&:after {
-			content: " ";
-			display: block;
-			position: relative;
-			padding: 0 0;
-			background: ${getThemeVariable("secondaryColor")};
-			width: 0.666rem;
-			height: 0.666rem;
-			margin: 0 auto;
-			transform: translateX(-50%) translateY(-2.5%) scaleX(8) scaleY(0.333) rotate(45deg);
+			&:after {
+				content: " ";
+				display: block;
+				position: relative;
+				padding: 0 0;
+				background: ${getThemeVariable("secondaryColor")};
+				width: 0.666rem;
+				height: 0.666rem;
+				margin: 0 auto;
+				transform: translateX(-50%) translateY(-2.5%) scaleX(8) scaleY(0.333) rotate(45deg);
+			}
 		}
 	}
 
