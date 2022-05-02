@@ -27,7 +27,7 @@ const Styles = styled.div`
 		align-self: center;
 		text-transform: uppercase;
 		letter-spacing: 0.325em;
-		margin-left: 0.325em;
+		margin-left: 0.175em;
 	}
 
 	> img {

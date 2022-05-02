@@ -78,7 +78,7 @@ const Logo = styled.div`
 		align-self: center;
 		text-transform: uppercase;
 		letter-spacing: 0.325em;
-		margin-left: 0.325em;
+		margin-left: 0.175em;
 		text-align: center;
 		text-shadow: 0 0 0 transparent;
 		transition: text-shadow 0.125s linear;
