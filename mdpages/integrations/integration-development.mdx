@@ -7,21 +7,19 @@ title: Integration Development
 
 ---
 
-One of the main design goal of Chalet is to provide an easy to use command line interface that allows for easy integration with IDEs and code editors. There are some handy commands to make this happen.
+One of the main design goal of Chalet is to provide an easy to use command-line interface that allows for easy integration with IDEs and code editors. There are some handy commands to make this happen.
 
 \\
 
 ## [Overview]
 
-In order to receive information about a project, Chalet can be queried to either get a list of something or some JSON back, depending on the query. This is done with the `query` subcommand. 
+In order to receive information about a project, Chalet can be queried to either get a tab-separated list of something or some JSON back, depending on the query. This is accomplished with the aptly named `query` subcommand. 
 
 ```bash
 chalet query <type> [ARG...]
 ```
 
-This command takes in a string of something to query for, and maybe an argument. 
-
-For example, to retrieve the JSON schema for both build and settings files, the following commands would be used:
+This command takes in a string of something to query for, and maybe an argument. For example, to retrieve the JSON schema for both build and settings files, the following commands would be used:
 
 ```bash
 chalet query schema-chalet-json
@@ -38,9 +36,9 @@ At the moment, this command just gets the schemas for the current version of Cha
 
 ## [Reading State]
 
-State can be thought of in this way: Any time there's a change in either the build file, or the settings file, the state should be read back to the editor. Ultimately, how this is done is up to the implementer, but the state queries are designed to pass along those changes, along with anything that the installed version of Chalet supports. 
+State can be thought of in this way: Any time there's a change in either the build file, or the settings file, the state should be read back to the editor. Ultimately, how this is done is up to the implementer, but the state queries are designed to retrieve those changes minimally, along with anything that the installed version of Chalet supports. 
 
-In the case of build file state changes, it could mean build the name of a build target has changed, or a build configuration was changed. Here's an example result from a project called `foo`:
+In the case of build file state changes, it could mean the name of a build target has changed, or a build configuration was added, removed, or renamed. Here's an example result from a project called `foo`:
 
 ```json
 {
@@ -94,6 +92,11 @@ Settings state changes contain a bit more details:
 	"toolchain": "apple-llvm"
 }
 ```
+
+Since toolchains can be a preset, or a user-defined toolchain, they are classified into two different arrays (`toolchainPresets` and `userToolchains`) along with `allToolchains` for convenience. The architectures are contextual to the current toolchain being used, so the ones in the example above only apply to `apple-llvm`.
+
+To get a tab-separated list of the same architectures, the command would be `chalet query architectures apple-llvm`.
+
 
 
 <PageNavigation 

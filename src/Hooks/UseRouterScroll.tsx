@@ -20,7 +20,6 @@ const useRouteChangeScroll = () => {
 			if (split.length > 1) queryText = `concat('${split.join("', \"'\", '")}')`;
 			else queryText = `'${findText}'`;
 			const xpathQuery = `//*[@id='main']//*[contains(text(), ${queryText})]`;
-			// const node = xpath.fromPageSource(mainEl.innerHTML).findElement(xpathQuery);
 			try {
 				const node = document.evaluate(
 					xpathQuery,
@@ -38,7 +37,6 @@ const useRouteChangeScroll = () => {
 			} catch (err: any) {
 				console.warn(err.message);
 			}
-			// resetFindText();
 		} else if (window.location.search.length === 0) {
 			setFocusedId(router.asPath);
 			setTimeout(() => {
