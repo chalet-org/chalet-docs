@@ -5,8 +5,8 @@ import { Dictionary } from "@rewrking/react-kitchen";
 import { isDevelopment } from "./IsDevelopment";
 
 type AnsiColorsForeground = 30 | 31 | 32 | 33 | 34 | 35 | 36 | 37;
-type AnsiColrosForegroundBright = 90 | 91 | 92 | 93 | 94 | 95 | 96 | 97;
-type AnsiColors = AnsiColorsForeground | AnsiColrosForegroundBright;
+type AnsiColorsForegroundBright = 90 | 91 | 92 | 93 | 94 | 95 | 96 | 97;
+type AnsiColors = AnsiColorsForeground | AnsiColorsForegroundBright;
 type AnsiStyle = 1 | 0;
 
 const ansi = (color: AnsiColors, style: AnsiStyle = 1): string => {

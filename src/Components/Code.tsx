@@ -1,6 +1,15 @@
 import copy from "copy-to-clipboard";
 import Prism from "prismjs";
 import "prismjs/components";
+import "prismjs/components/prism-bash";
+import "prismjs/components/prism-c";
+import "prismjs/components/prism-cpp";
+import "prismjs/components/prism-ini";
+import "prismjs/components/prism-javascript";
+import "prismjs/components/prism-json";
+import "prismjs/components/prism-typescript";
+import "prismjs/components/prism-yaml";
+import "prismjs/plugins/line-numbers/prism-line-numbers";
 import React from "react";
 import styled, { css } from "styled-components";
 

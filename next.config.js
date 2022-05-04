@@ -2,7 +2,12 @@
 //   https://webpack.js.org/migrate/5/
 
 module.exports = {
+	swcMinify: true,
 	reactStrictMode: true,
+	compiler: {
+		removeConsole: true,
+		styledComponents: true,
+	},
 	redirects: async () => {
 		return [
 			{
