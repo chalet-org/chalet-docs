@@ -38,7 +38,7 @@ class ServerCache {
 	private cache: Dictionary<CacheEntry<any>> = {};
 
 	constructor() {
-		this.development = isDevelopment;
+		this.development = isDevelopment && process.env.USE_SERVER_CACHE !== "1";
 		// this.development = false;
 
 		const hours = 4;

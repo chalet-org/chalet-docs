@@ -50,7 +50,7 @@ const getPagesCache = (): Promise<PageCache[]> => {
 					.replace(/[\/\\]/g, "_");
 
 				const url = file
-					.replace(path.join(path.sep, mdpages), "")
+					.replace(`/${mdpages}`, "")
 					.replace(/\.(mdx|md)/g, "")
 					.replace(/\/index$/, "");
 

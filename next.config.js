@@ -5,7 +5,6 @@ module.exports = {
 	swcMinify: true,
 	reactStrictMode: true,
 	compiler: {
-		removeConsole: true,
 		styledComponents: true,
 	},
 	redirects: async () => {

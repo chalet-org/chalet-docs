@@ -73,7 +73,7 @@ const Main = styled.main<NavBarProps>`
 	bottom: auto;
 	left: 0;
 	transition: left 0.125s linear;
-	overflow-y: auto;
+	overflow-y: scroll;
 	overflow-x: hidden;
 	scrollbar-width: thin;
 	scrollbar-color: ${getThemeVariable("primaryColor")} transparent;
@@ -96,7 +96,7 @@ const Main = styled.main<NavBarProps>`
 
 	&.nav-open {
 		left: ${(props) => props.navWidth};
-		overflow: hidden;
+		overflow-y: hidden;
 
 		> div {
 			width: 100vw;
@@ -118,7 +118,7 @@ const Main = styled.main<NavBarProps>`
 	}
 	@media ${hasMinWidth(1)} {
 		&.nav-open {
-			overflow: auto;
+			overflow-y: scroll;
 
 			> div {
 				width: 100%;
@@ -127,7 +127,7 @@ const Main = styled.main<NavBarProps>`
 	}
 	@media ${hasMinWidth(2)} {
 		&.nav-open {
-			overflow: auto;
+			overflow-y: scroll;
 
 			> div {
 				width: 100%;

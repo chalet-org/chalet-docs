@@ -170,7 +170,7 @@ const StyledAside = styled.aside<AsideProps>`
 	transition: left 0.125s linear;
 	z-index: 90;
 	overflow-x: hidden;
-	overflow-y: auto;
+	overflow-y: scroll;
 	padding-top: 2rem;
 
 	background-color: ${getThemeVariable("codeBackground")};
