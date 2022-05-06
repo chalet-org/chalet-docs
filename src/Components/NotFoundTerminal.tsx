@@ -22,7 +22,6 @@ const NotFoundTerminalImpl = () => {
 			if (unlocked) return;
 			if (kcode.startsWith(konami) || konami.length === 0) {
 				const newCode = konami + ev.key;
-				console.log(newCode);
 				if (newCode === kcode) setUnlocked(true);
 				setKonami(newCode);
 			} else {
