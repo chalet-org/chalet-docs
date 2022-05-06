@@ -2,8 +2,7 @@ import matter from "gray-matter";
 import { JSONSchema7 } from "json-schema";
 import os from "os";
 
-import { Dictionary } from "@rewrking/react-kitchen";
-
+import { Dictionary } from "Utility";
 import { replaceAsync } from "Utility/ReplaceAsync";
 import { toKebabCase, toPascalCase } from "Utility/TextCaseConversions";
 

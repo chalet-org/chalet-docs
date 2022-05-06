@@ -1,4 +1,4 @@
-import { Dictionary } from "@rewrking/react-kitchen";
+import { Dictionary } from "Utility";
 
 export type CommandResult =
 	| string

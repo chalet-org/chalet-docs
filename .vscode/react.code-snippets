@@ -50,7 +50,7 @@
 		"description": "A Store state",
 		"scope": "",
 		"body": [
-			"import { BaseState, Action } from \"@rewrking/react-kitchen\";",
+			"import { BaseState, Action } from \"react-oocontext\";",
 			"",
 			"class $1State extends BaseState {",
 			"\tvalue: number = 0;",

@@ -1,7 +1,6 @@
 import { JSONSchema7, JSONSchema7Definition } from "json-schema";
 
-import { Dictionary, Optional } from "@rewrking/react-kitchen";
-
+import { Dictionary, Optional } from "Utility";
 import { toPascalCase } from "Utility/TextCaseConversions";
 
 const spacer = `\n\n<Spacer />\n\n`;

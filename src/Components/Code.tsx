@@ -13,10 +13,9 @@ import "prismjs/plugins/line-numbers/prism-line-numbers";
 import React from "react";
 import styled, { css } from "styled-components";
 
-import { Dictionary } from "@rewrking/react-kitchen";
-
 import { globalFonts } from "Components";
 import { getThemeVariable } from "Theme";
+import { Dictionary } from "Utility";
 
 Prism.languages.bash = {
 	sudo: {

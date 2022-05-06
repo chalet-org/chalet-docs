@@ -1,12 +1,11 @@
 import flatten from "lodash/flatten";
 
-import { Optional } from "@rewrking/react-kitchen";
-
 import { getChaletBranches } from "Server/ChaletBranches";
 import { getChaletSchema } from "Server/ChaletSchema";
 import { getChaletTags, getLatestTag } from "Server/ChaletTags";
 import { middleware } from "Server/Middleware";
 import { ResultChaletSchema, SchemaType } from "Server/ResultTypes";
+import { Optional } from "Utility";
 import { ApiReq, ApiRes } from "Utility";
 
 let latestTag: Optional<string> = null;

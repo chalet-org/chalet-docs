@@ -1,4 +1,4 @@
-import { Optional } from "@rewrking/react-kitchen";
+import { Optional } from "Utility";
 
 const fetchFromGithub = async (url: string) => {
 	const token: Optional<string> = process.env.GITHUB_TOKEN ?? null;

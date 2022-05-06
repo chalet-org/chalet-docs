@@ -1,4 +1,4 @@
-import { Dictionary } from "@rewrking/react-kitchen";
+import { Dictionary } from "Utility";
 
 const globalFonts: Dictionary<string> = {
 	header: "Poppins, sans-serif",

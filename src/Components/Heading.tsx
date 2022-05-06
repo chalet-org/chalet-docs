@@ -2,10 +2,9 @@ import { useRouter } from "next/router";
 import React from "react";
 import styled, { StyledComponent } from "styled-components";
 
-import { Dictionary } from "@rewrking/react-kitchen";
-
 import { Link } from "Components";
 import { getThemeVariable } from "Theme";
+import { Dictionary } from "Utility";
 import { toKebabCase } from "Utility/TextCaseConversions";
 
 type HeadingSize = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";

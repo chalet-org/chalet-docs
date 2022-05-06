@@ -1,7 +1,7 @@
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
 
-import { Optional } from "@rewrking/react-kitchen";
+import { Optional } from "Utility";
 
 import { fetchFromGithub } from "./FetchFromGithub";
 import { ResultMDX } from "./ResultTypes";

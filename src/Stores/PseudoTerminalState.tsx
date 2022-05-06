@@ -1,4 +1,4 @@
-import { Action, BaseState } from "@rewrking/react-kitchen";
+import { Action, BaseState } from "react-oocontext";
 
 type ResponseType = JSX.Element | string | null;
 export type TerminalCommandCallback = (args: string) => Promise<ResponseType>;

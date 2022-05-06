@@ -1,5 +1,4 @@
-import { Optional } from "@rewrking/react-kitchen";
-
+import { Optional } from "Utility";
 import { ApiReq, ApiRes } from "Utility";
 
 const validToken: Optional<string> = process.env.NEXT_PUBLIC_API_TOKEN ?? null;

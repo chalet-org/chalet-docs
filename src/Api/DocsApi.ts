@@ -1,6 +1,6 @@
-import { BaseApi } from "@rewrking/react-kitchen";
-
 import { ResultSearchResults } from "Server/ResultTypes";
+
+import { BaseApi } from "./BaseApi";
 
 class DocsApi extends BaseApi {
 	constructor() {

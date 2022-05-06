@@ -1,4 +1,4 @@
-import { Dictionary } from "@rewrking/react-kitchen";
+import { Dictionary } from "Utility";
 
 import { CommandCallback, RoomType } from "./RoomTypes";
 import { shellCommands } from "./ShellCommands";

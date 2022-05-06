@@ -1,6 +1,6 @@
-import { BaseApi } from "@rewrking/react-kitchen";
-
 import { LostSearchInput, ResultLostAndFound } from "Server/ResultTypes";
+
+import { BaseApi } from "./BaseApi";
 
 class LostAndFoundApi extends BaseApi {
 	constructor() {

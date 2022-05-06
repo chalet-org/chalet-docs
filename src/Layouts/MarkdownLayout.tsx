@@ -4,13 +4,12 @@ import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useRef } from "react";
 import styled from "styled-components";
 
-import { Optional } from "@rewrking/react-kitchen";
-
 import { Page, SideNavigation } from "Components";
 import { MDXComponents, mdxComponents } from "Components/MarkdownComponents";
 import { useRouteChangeScroll } from "Hooks";
 import { ResultMDXPage } from "Server/ResultTypes";
 import { useUiStore } from "Stores";
+import { Optional } from "Utility";
 
 export type Props = React.PropsWithChildren<
 	ResultMDXPage & {

@@ -2,13 +2,12 @@ import { useRouter } from "next/router";
 import React, { useCallback, useMemo } from "react";
 import styled from "styled-components";
 
-import { Optional } from "@rewrking/react-kitchen";
-
 import { hasMinWidth, Icon } from "Components";
 import { OperatingSystem, useOperatingSystem } from "Hooks";
 import { GithubAsset, GithubRelease } from "Server/ChaletReleases";
 import { useUiStore } from "Stores";
 import { getThemeVariable } from "Theme";
+import { Optional } from "Utility";
 import { Panelbear } from "Utility";
 
 type DeducedInfo = {

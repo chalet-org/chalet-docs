@@ -5,7 +5,7 @@ import { serialize } from "next-mdx-remote/serialize";
 import os from "os";
 import nodePath from "path";
 
-import { Dictionary, Optional } from "@rewrking/react-kitchen";
+import { Dictionary, Optional } from "Utility";
 
 import { getChaletBranches } from "./ChaletBranches";
 import { getChaletReleases } from "./ChaletReleases";

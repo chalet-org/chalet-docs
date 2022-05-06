@@ -1,7 +1,6 @@
 import { MDXRemoteProps } from "next-mdx-remote";
 
-import { Dictionary } from "@rewrking/react-kitchen";
-
+import { Dictionary } from "Utility";
 import { dynamic } from "Utility";
 
 import { AnchoredHeadingObject, HeadingObject } from "./Heading";

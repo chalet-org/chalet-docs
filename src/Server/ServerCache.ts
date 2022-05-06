@@ -1,6 +1,6 @@
 import { performance } from "perf_hooks";
 
-import { Dictionary } from "@rewrking/react-kitchen";
+import { Dictionary } from "Utility";
 
 import { isDevelopment } from "./IsDevelopment";
 

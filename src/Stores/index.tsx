@@ -1,4 +1,4 @@
-import { createStore, makeRootStoreProvider } from "@rewrking/react-kitchen";
+import { createStore, makeRootStoreProvider } from "react-oocontext";
 
 import { LostAndFoundState } from "./LostAndFoundState";
 import { PseudoTerminalState } from "./PseudoTerminalState";
