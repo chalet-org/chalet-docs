@@ -317,7 +317,7 @@ const BaseStyle = createGlobalStyle`
 //
 // Plain CSS only here
 //
-const rootStyles = css`
+const rootStylesCss = `
 	html.${Theme.Light} {
 		${getRootThemeCss(lightTheme)}
 
@@ -339,5 +339,6 @@ const rootStyles = css`
 		opacity: 1;
 	}
 `;
+const rootStyles = `${rootStylesCss}`.replace(/[\t\n]/g, "");
 
 export { rootStyles, BaseStyle };
