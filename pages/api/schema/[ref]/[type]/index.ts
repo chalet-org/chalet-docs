@@ -36,7 +36,7 @@ const handler = middleware.use([], async (req: ApiReq, res: ApiRes<ResultChaletS
 			ref = latestTag;
 		}
 
-		if (!refs.includes(ref)) {
+		if (!refs!.includes(ref)) {
 			throw new Error(`Invalid ref requested: ${ref}`);
 		}
 
