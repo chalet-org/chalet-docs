@@ -10,7 +10,7 @@ const PANELBEAR_ID: string = process.env.NEXT_PUBLIC_PANELBEAR_ID ?? "";
 const config: PanelbearImpl.PanelbearConfig = {
 	debug: isDevelopment,
 	enabled: !isDevelopment,
-	honorDNT: true,
+	honorDNT: false,
 };
 const canUsePanelbear: boolean = (config.enabled ?? true) && PANELBEAR_ID.length > 0;
 
