@@ -7,19 +7,25 @@ type Props = React.PropsWithChildren<{
 	className?: string;
 	label?: string;
 	title?: string;
+	type?: "button" | "submit" | "reset";
 	onClick?: () => void;
 }>;
 
-const Button = ({ children, className, label, title, onClick }: Props) => {
+const Button = ({ children, className, label, title, type, onClick }: Props) => {
 	return (
 		<Styles
 			className={className}
+			type={type}
 			onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
 			onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
-			onClick={(ev) => {
-				ev.preventDefault();
-				onClick?.();
-			}}
+			onClick={
+				onClick
+					? (ev) => {
+							ev.preventDefault();
+							onClick();
+					  }
+					: undefined
+			}
 			title={title}
 		>
 			{label ?? children}
