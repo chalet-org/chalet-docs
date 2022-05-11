@@ -20,7 +20,6 @@ User-Agent: AdIdxBot
 Disallow: /
 
 User-Agent: *
-Disallow: /schema
 Disallow: /api/
 Allow: /api/sitemap.xml$
 
