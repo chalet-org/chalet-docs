@@ -31,6 +31,8 @@ const mdxComponents: MDXComponents = {
 	Tagline: dynamic.component("Tagline"),
 	ContactForm: dynamic.component("ContactForm"),
 	NotFoundTerminal: dynamic.component("NotFoundTerminal"),
+	ButtonLink: dynamic.component("ButtonLink"),
+	ImportantNote: dynamic.component("ImportantNote"),
 };
 
 const schemaComponents: MDXComponents = {

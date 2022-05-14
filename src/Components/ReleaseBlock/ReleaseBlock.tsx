@@ -139,11 +139,11 @@ const ReleaseDate = styled.div`
 
 const ReleaseType = styled.div`
 	display: block;
-	color: ${getThemeVariable("secondaryColor")};
+	color: ${getThemeVariable("codeGreen")};
 	margin: 0;
 	padding: 0.125rem 0.75rem;
 	padding-top: 0;
-	border: 0.0675rem solid ${getThemeVariable("secondaryColor")};
+	border: 0.0675rem solid ${getThemeVariable("codeGreen")};
 	border-radius: 0.5rem;
 
 	&.pre {

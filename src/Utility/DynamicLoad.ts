@@ -3,11 +3,13 @@ import { default as nextDynamic } from "next/dynamic";
 type Components =
 	| "Accordion"
 	| "BlockQuote"
+	| "ButtonLink"
 	| "Code"
 	| "CodePre"
 	| "CodeHeader"
 	| "CodePreFromMarkdown"
 	| "ContactForm"
+	| "ImportantNote"
 	| "IndentGroup"
 	| "Link"
 	| "NotFoundTerminal"

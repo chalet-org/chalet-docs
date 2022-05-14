@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import React from "react";
 import styled from "styled-components";
 
@@ -26,14 +27,32 @@ const Button = ({ children, className, label, title, type, onClick }: Props) => 
 					  }
 					: undefined
 			}
-			title={title}
+			title={title ?? label}
 		>
 			{label ?? children}
 		</Styles>
 	);
 };
 
-export { Button };
+type ButtonLinkProps = Omit<Props, "onClick"> & {
+	to: string;
+};
+
+const ButtonLink = ({ to, ...props }: ButtonLinkProps) => {
+	const router = useRouter();
+	return (
+		<Button
+			{...props}
+			onClick={() => {
+				router.push(to, undefined, {
+					scroll: false,
+				});
+			}}
+		/>
+	);
+};
+
+export { Button, ButtonLink };
 
 const Styles = styled.button`
 	display: block;

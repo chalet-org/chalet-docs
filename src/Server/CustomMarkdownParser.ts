@@ -58,7 +58,7 @@ const parseExplicitLineBreaks = (text: string): string => {
 };
 
 const parseImportantNotes = (text: string): string => {
-	return text.replace(/!> (.*)/g, `<p className="tip">$1</p>`);
+	return text.replace(/!> (.*)/g, `<ImportantNote>$1</ImportantNote>`);
 };
 
 const parseAnchoredHeaders = (text: string): string => {

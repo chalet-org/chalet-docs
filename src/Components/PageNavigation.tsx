@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 import { getThemeVariable } from "Theme";
 
-import { Button } from "./Button";
+import { ButtonLink } from "./Button";
 import { hasMinWidth } from "./GlobalStyles";
 
 type ButtonRoute = {
@@ -18,37 +18,20 @@ type Props = {
 };
 
 const PageNavigation = ({ left, right }: Props) => {
-	const router = useRouter();
 	return (
 		<>
 			<PageBreak className="b" />
 			<Styles>
 				{!!left ? (
 					<div className="nav-left">
-						<Button
-							onClick={() => {
-								router.push(left.to, undefined, {
-									scroll: false,
-								});
-							}}
-							label={left.label ?? "Previous"}
-							title="Previous Topic"
-						/>
+						<ButtonLink {...left} title="Previous Topic" />
 					</div>
 				) : (
 					<div />
 				)}
 				{!!right ? (
 					<div className="nav-right">
-						<Button
-							onClick={() => {
-								router.push(right.to, undefined, {
-									scroll: false,
-								});
-							}}
-							label={right.label ?? "Next"}
-							title="Next Topic"
-						/>
+						<ButtonLink {...right} title="Next Topic" />
 					</div>
 				) : (
 					<div />
