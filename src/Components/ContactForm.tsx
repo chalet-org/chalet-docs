@@ -62,6 +62,8 @@ const Styles = styled.div`
 
 		> label {
 			margin-bottom: 0.5rem;
+			color: ${getThemeVariable("primaryText")};
+			font-weight: 600;
 		}
 
 		> input,

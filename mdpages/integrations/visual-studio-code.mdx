@@ -13,44 +13,226 @@ title: Visual Studio Code
 
 ## [Official Extension]
 
-[Get it from the Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=chalet-org.vscode-chalet)
+Get the official extension from the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=chalet-org.vscode-chalet)
 
-The main problem the extension seeks to solve is that in order to create numerous builds and build configurations, VS Code requires the creation of several tasks (each with a single command line). This would get tedious to manage, so the extension provides various buttons to make it easier to interact with Chalet's actions, build configurations, toolchains, and architectures. 
+The main problem the extension seeks to solve is that in order to create numerous builds and build configurations, VS Code requires the creation of several tasks (each with a single command line). This would get unmanageable pretty quick, so the extension provides features to make it easier to interact with Chalet, enabling actions, build configurations, toolchains, and architectures to be changed with a few clicks.
 
-The extension itself requires Chalet to be installed and visible from PATH. It does not do this for you, so before installing the extension, make sure Chalet is available from the command line.
+The extension requires Chalet to be installed and visible from PATH. It does not do this for you, so before installing the extension, make sure Chalet is available from the command line.
 
 Since the extension gets everything it needs from Chalet itself, you can theoretically update Chalet in the future without affecting the extension.
 
-
-\\
-
-## [The VS Code Terminal]
-
-TODO
+![Chalet VS Code extension commands](/images/vscode/vsc-ext6.png)
 
 \\
 
 ## [Extension Interface]
 
-TODO
+When a chalet project folder is opened, the extension interface should appear in the status bar:
+
+![Chalet VS Code extension status bar](/images/vscode/vsc-ext1.png)
+
+This should be immediately understandable, because they're the same actions that are available from the command line. In order from left-to-right:
+
+| Chalet Command | The chalet command to run: Build & Run, Run, Build, Rebuild, Clean, Bundle, Configure |
+| Build Configurations | The build configurations as defined by the project |
+| Toolchain or Preset | The toolchain or preset, as defined by either the project's `.chaletrc` file, or in `.chaletconfig` |
+| Build Architecture | If the toolchain is LLVM or a preset, the supported build architectures |
+| Run Target | If there are run targets available, their names |
+| Command | The last button will simply run the Chalet command |
+
+When a command is run, the extension opens a pseudo-terminal and runs Chalet via a background process, so it has its own "Chalet" terminal instance (instead of bash, powershell, VS Code task, etc).
+
+Example build configuration menu:
+
+![Chalet VS Code extension build configuration menu](/images/vscode/vsc-ext3.png)
+
+Example toolchain menu (Mac):
+
+![Chalet VS Code extension toolchain menu](/images/vscode/vsc-ext4.png)
+
+Example architecture menu (Mac):
+
+![Chalet VS Code extension architecture menu](/images/vscode/vsc-ext5.png)
 
 \\
 
 ## [Extension Settings]
 
-TODO
+At the moment, there are only two extension settings:
 
-\\
+```json
+{
+   "chalet.statusBarButtons": true,
+   "chalet.useDebugChalet": false
+}
+```
 
-## [Debugging]
+\
 
-TODO
+| `chalet.statusBarButtons` | Enable or disable the status bar buttons (you can do this per-project, per-workspace or globally) |
+| `chalet.useDebugChalet` | The extension will look for `chalet-debug` instead of `chalet`. Intended for Chalet development use |
 
 \\
 
 ## [Keyboard Shortcuts]
 
-TODO
+Keyboard shortcuts can be assigned to any of the Chalet commands. Start by opening the VS Code command `Preferences: Open Keyboard Shortcuts (JSON)`. Any of the supported commands by the Chalet extension can be entered. These are viewable under `Extension: Chalet > Feature Contributions > Commands`.
+
+```json
+[
+   {
+      "key": "f14",
+      "command": "chalet.chaletCommand"
+   },
+   {
+      "key": "f15",
+      "command": "chalet.runChalet"
+   }
+]
+```
+
+\\
+
+## [The VS Code Terminal]
+
+Chalet takes advantage of some [ANSI terminal capabilities](//en.wikipedia.org/wiki/ANSI_escape_code) (colors & styles), and the VS Code terminal has some quirks that need to be addressed.
+
+**Contrast Ratio**
+
+Firstly, as of version 1.66, VS Code uses a higher default contrast ratio to adjust terminal colors to a more accessible color-range. This may be confusing if the colors you're expecting from your theme or settings.json are not showing up correctly. This may affect the Chalet theme being used. To adjust this, change the `Terminal › Integrated: Minimum Contrast Ratio` setting to `1`. If using the JSON settings, it's under `terminal.integrated.minimumContrastRatio`:
+
+This simply restores the old (< v1.66) default.
+
+**Windows 10**
+
+Another odd terminal problem to address is that on Windows, ANSI terminal styles are controlled by the console host windows process (`conhost.exe`). VS Code uses the OS' one to render styles in the terminal. On Windows 10 specifically (as of version 10.0.19041.x), that process does not render all ANSI styles correctly. It may get addressed on Windows 10 in a future update, but Windows 11 does not have this problem.
+
+\\
+
+## [Debugging]
+
+Debugging VS Code requires the `.vscode/launch.json` file in your workspace. It defines what debugger you want to use, which file is being debugged, the arguments given to it, environment variables to add while hte process runs, and various other features. If this is all new in the context of C++ projects, see the [Debug C++ in Visual Studio Code](//code.visualstudio.com/docs/cpp/cpp-debug) docs, which explains this process while using the [Official C/C++ extension](//marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools)'s debugger.
+
+Another great option (especially on MacOS) is to use the [CodeLLDB](//marketplace.visualstudio.com/items?itemName=vadimcn.vscode-lldb) extension for debugging.
+
+**Examples:**
+
+<!-- tabs:start -->
+|Windows|
+
+MSVC example:
+
+```json
+{
+   "name": "MSVC",
+   "type": "cppvsdbg",
+   "request": "launch",
+   "args": [],
+   "stopAtEntry": true,
+   "cwd": "${workspaceFolder}",
+   "console": "integratedTerminal",
+   "preLaunchTask": "Build: Debug",
+   "program": "${workspaceFolder}/build/x64-pc-windows-msvc17_Debug/my-project.exe",
+   "envFile": "${workspaceFolder}/build/x64-pc-windows-msvc17_Debug/run.env"
+}
+```
+
+MinGW/GCC w/ GDB example:
+
+```json
+{
+   "name": "GDB (MinGW)",
+   "type": "cppdbg",
+   "request": "launch",
+   "args": [],
+   "stopAtEntry": false,
+   "cwd": "${workspaceFolder}",
+   "externalConsole": false,
+   "internalConsoleOptions": "neverOpen",
+   "preLaunchTask": "Build: Debug",
+   "MIMode": "gdb",
+   "miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe",
+   "program": "${workspaceFolder}/build/x86_64-w64-mingw32_Debug/my-project.exe",
+   "envFile": "${workspaceFolder}/build/x86_64-w64-mingw32_Debug/run.env"
+}
+```
+
+|MacOS|
+
+LLVM w/ CodeLLDB example:
+
+```json
+{
+    "name": "LLDB",
+    "type": "lldb",
+    "request": "launch",
+    "args": [],
+    "stopOnEntry": false,
+    "cwd": "${workspaceFolder}",
+    "preLaunchTask": "Build: Debug",
+    "program": "${workspaceFolder}/build/x86_64-apple-darwin_Debug/my-project",
+    "env": {
+        ...
+    }
+}
+```
+
+> Note: `envFile` is not yet supported with CodeLLDB, so they'll have to be added manually from the Chalet generated `run.env`.
+
+|Linux|
+
+GCC w/ GDB example:
+
+```json
+{
+   "name": "GDB",
+   "type": "cppdbg",
+   "request": "launch",
+   "args": [],
+   "stopAtEntry": false,
+   "cwd": "${workspaceFolder}",
+   "externalConsole": false,
+   "internalConsoleOptions": "neverOpen",
+   "preLaunchTask": "Build: Debug",
+   "MIMode": "gdb",
+   "miDebuggerPath": "/usr/bin/gdb",
+   "program": "${workspaceRoot}/build/x86_64-pc-linux-gnu_Debug/my-project",
+   "envFile": "${workspaceFolder}/build/x86_64-pc-linux-gnu_Debug/run.env"
+}
+```
+
+<!-- tabs:end -->
+
+\
+
+<!-- accordion:start 'Build: Debug' task.json reference -->
+
+```json
+{
+   "version": "2.0.0",
+   "tasks": [{
+      "label": "Build: Debug",
+      "type": "process",
+      "command": "chalet",
+      "args": [
+         "-c",
+         "Debug",
+         "build"
+      ],
+      "group": {
+         "kind": "build",
+         "isDefault": true
+      },
+      "problemMatcher": ["$gcc"]
+   }]
+}
+```
+
+<!-- accordion:end -->
+
+\
+
+Additional `launch.json` configurations can be viewed in any of the [example project repositories](//github.com/orgs/chalet-org/repositories?q=chalet-example).
 
 <!-- nav:/integrations/integration-development: -->
 

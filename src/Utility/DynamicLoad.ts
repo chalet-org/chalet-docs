@@ -10,6 +10,7 @@ type Components =
 	| "CodePreFromMarkdown"
 	| "ContactForm"
 	| "ImportantNote"
+	| "InlineImage"
 	| "IndentGroup"
 	| "Link"
 	| "NotFoundTerminal"

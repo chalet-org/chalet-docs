@@ -15,6 +15,7 @@ const mdxComponents: MDXComponents = {
 	pre: dynamic.component("CodePreFromMarkdown"),
 	ul: dynamic.component("UnorderedList"),
 	ol: dynamic.component("OrderedList"),
+	img: dynamic.component("InlineImage"),
 	inlineCode: dynamic.component("Code"),
 	code: dynamic.component("Code"),
 	blockquote: dynamic.component("BlockQuote"),

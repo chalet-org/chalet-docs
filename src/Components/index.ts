@@ -11,6 +11,7 @@ export * from "./Heading";
 export * from "./Icon";
 export * from "./ImportantNote";
 export * from "./IndentGroup";
+export * from "./InlineImage";
 export * from "./Link";
 export * from "./NavigationLinks";
 export * from "./NotFoundTerminal";
