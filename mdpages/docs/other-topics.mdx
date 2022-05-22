@@ -11,6 +11,12 @@ Additional topics will be covered here. These will typically be features that do
 
 \\
 
+## [The Run Environment]
+
+When an application runs through Chalet, some extra paths get added to the environment -- mainly for finding shared libraries -- and it may be desirable to use this environment somewhere, or simply read it. For this purpose, the build will generate a `run.env` file. For example, the [VS Code C/C++ debugger](/integrations/visual-studio-code?id=debugging) can use this file when debugging one of your executables. 
+
+\\
+
 ## [C++20 Modules]
 
 C++20 modules are an exciting, new frontier in the wild world of C++, and it's still gaining support from compilers. At the moment, Chalet only supports modules with MSVC.

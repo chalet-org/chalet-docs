@@ -15,7 +15,7 @@ title: Visual Studio Code
 
 Get the official extension from the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=chalet-org.vscode-chalet)
 
-The main problem the extension seeks to solve is that in order to create numerous builds and build configurations, VS Code requires the creation of several tasks (each with a single command line). This would get unmanageable pretty quick, so the extension provides features to make it easier to interact with Chalet, enabling actions, build configurations, toolchains, and architectures to be changed with a few clicks.
+The main problem the extension seeks to solve is that in order to create numerous builds and build configurations, VS Code requires the creation of several tasks (each with a single command line). This would get unmanageable pretty quick, so the extension provides features to make it easier to interact with Chalet -- enabling actions, build configurations, toolchains, and architectures to be changed with a few clicks.
 
 The extension requires Chalet to be installed and visible from PATH. It does not do this for you, so before installing the extension, make sure Chalet is available from the command line.
 
@@ -38,9 +38,9 @@ This should be immediately understandable, because they're the same actions that
 | Toolchain or Preset | The toolchain or preset, as defined by either the project's `.chaletrc` file, or in `.chaletconfig` |
 | Build Architecture | If the toolchain is LLVM or a preset, the supported build architectures |
 | Run Target | If there are run targets available, their names |
-| Command | The last button will simply run the Chalet command |
+| Command | The last button will simply execute the Chalet command |
 
-When a command is run, the extension opens a pseudo-terminal and runs Chalet via a background process, so it has its own "Chalet" terminal instance (instead of bash, powershell, VS Code task, etc).
+When a command is executed, the extension opens a pseudo-terminal and runs Chalet via a background process, so it has its own "Chalet" terminal instance (instead of bash, powershell, VS Code task, etc).
 
 Example build configuration menu:
 
@@ -99,13 +99,11 @@ Chalet takes advantage of some [ANSI terminal capabilities](//en.wikipedia.org/w
 
 **Contrast Ratio**
 
-Firstly, as of version 1.66, VS Code uses a higher default contrast ratio to adjust terminal colors to a more accessible color-range. This may be confusing if the colors you're expecting from your theme or settings.json are not showing up correctly. This may affect the Chalet theme being used. To adjust this, change the `Terminal › Integrated: Minimum Contrast Ratio` setting to `1`. If using the JSON settings, it's under `terminal.integrated.minimumContrastRatio`:
-
-This simply restores the old (< v1.66) default.
+Firstly, as of version 1.66, VS Code uses a higher default contrast ratio to adjust terminal colors to a more accessible color-range. This may be confusing if the colors you're expecting from your VS Code theme or settings.json `colorCustomizations` are not showing up correctly. This will also affect the Chalet theme being used. To adjust this, change the setting `Terminal › Integrated: Minimum Contrast Ratio` to `1`. If using the JSON settings, it's under `terminal.integrated.minimumContrastRatio`. This simply restores the old (< v1.66) default.
 
 **Windows 10**
 
-Another odd terminal problem to address is that on Windows, ANSI terminal styles are controlled by the console host windows process (`conhost.exe`). VS Code uses the OS' one to render styles in the terminal. On Windows 10 specifically (as of version 10.0.19041.x), that process does not render all ANSI styles correctly. It may get addressed on Windows 10 in a future update, but Windows 11 does not have this problem.
+Another odd terminal problem to address is that on Windows, ANSI terminal styles are controlled by the console host windows process (`conhost.exe`). VS Code uses the one from the OS to essentially render the terminal. On Windows 10 specifically (as of version 10.0.19041.x), that process does not render all ANSI styles correctly. It may get addressed on Windows 10 in a future update, but for now the solution is "update to Windows 11.
 
 \\
 
