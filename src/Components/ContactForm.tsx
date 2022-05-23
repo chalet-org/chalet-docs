@@ -9,11 +9,11 @@ import { Button } from "./Button";
 
 const ContactForm = () => {
 	const [formData, setFormData] = useState<Record<string, string>>({});
-	const [submitted, setSubmitted] = useState<boolean>(true);
+	const [submitted, setSubmitted] = useState<boolean>(false);
 
 	const handleSubmit = (ev: FormEvent<HTMLFormElement>) => {
 		ev.preventDefault();
-		// console.log(formData);
+		console.log(formData);
 		// docsApi.sendContactEmail(formData);
 		setSubmitted(true);
 	};
@@ -44,17 +44,25 @@ const ContactForm = () => {
 		<Styles>
 			<MainParagraph>NEEDS COPY</MainParagraph>
 			<form onSubmit={handleSubmit}>
-				<label htmlFor="name">Name:</label>
-				<input id="name" type="text" onChange={onChange} />
+				<Flexer>
+					<label htmlFor="name">Name:</label>
+					<input id="name" type="text" onChange={onChange} />
+				</Flexer>
 
-				<label htmlFor="email">Email:</label>
-				<input id="email" type="email" onChange={onChange} />
+				<Flexer>
+					<label htmlFor="email">Email:</label>
+					<input id="email" type="email" onChange={onChange} />
+				</Flexer>
 
-				<label htmlFor="subject">Subject:</label>
-				<input id="subject" type="text" onChange={onChange} />
+				<Flexer>
+					<label htmlFor="subject">Subject:</label>
+					<input id="subject" type="text" onChange={onChange} />
+				</Flexer>
 
-				<label htmlFor="message">Message:</label>
-				<TextArea id="message" minRows={4} onChange={onChange} />
+				<Flexer>
+					<label htmlFor="message">Message:</label>
+					<TextArea id="message" minRows={4} onChange={onChange} />
+				</Flexer>
 
 				<div className="controls">
 					<Button type="submit" title="Submit">
@@ -75,14 +83,14 @@ const Styles = styled.div`
 		display: flex;
 		flex-direction: column;
 
-		> label {
+		label {
 			margin-bottom: 0.5rem;
 			color: ${getThemeVariable("primaryText")};
 			font-weight: 600;
 		}
 
-		> input,
-		> textarea {
+		input,
+		textarea {
 			caret-color: ${getThemeVariable("primaryColor")};
 			color: ${getThemeVariable("primaryText")};
 			background-color: ${getThemeVariable("codeBackground")};
@@ -97,7 +105,7 @@ const Styles = styled.div`
 			}
 		}
 
-		> textarea {
+		textarea {
 			resize: none;
 		}
 
@@ -108,10 +116,27 @@ const Styles = styled.div`
 	}
 `;
 
+const Flexer = styled.div`
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+
+	> label {
+		flex: 1;
+	}
+
+	> input,
+	> textarea,
+	> textarea {
+		flex: 4;
+	}
+`;
+
 const Submitted = styled.div`
 	display: block;
 `;
 
 const MainParagraph = styled.p`
 	display: block;
+	padding-bottom: 3rem;
 `;

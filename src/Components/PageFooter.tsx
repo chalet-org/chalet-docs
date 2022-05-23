@@ -18,7 +18,9 @@ const PageFooter = (_props: Props) => {
 			<Background />
 			<Container>
 				<LinkBox>
-					<div className="left">{/* <Link href="/contact">Contact</Link> */}</div>
+					<div className="left">
+						<Link href="/contact">Contact</Link>
+					</div>
 					<div className="right">
 						<Link href="//www.github.com/chalet-org" title="Github" onClick={Panelbear.trackGithubClick}>
 							<Icon
