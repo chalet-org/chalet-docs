@@ -1,3 +1,4 @@
+import { ContactEmailOptions } from "Server/Mailer/SendContactEmail";
 import { ResultSearchResults } from "Server/ResultTypes";
 
 import { BaseApi } from "./BaseApi";
@@ -19,6 +20,14 @@ class DocsApi extends BaseApi {
 			return results;
 		} else {
 			return [];
+		}
+	};
+
+	sendContactEmail = async (options: Partial<ContactEmailOptions>): Promise<void> => {
+		try {
+			await this.POST("/send-contact-email", options);
+		} catch (err) {
+			console.error(err);
 		}
 	};
 }

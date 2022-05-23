@@ -2,16 +2,20 @@ import React, { ChangeEvent, FormEvent, useCallback, useState } from "react";
 import TextArea from "react-textarea-autosize";
 import styled from "styled-components";
 
+import { docsApi } from "Api";
 import { getThemeVariable } from "Theme";
 
 import { Button } from "./Button";
 
 const ContactForm = () => {
 	const [formData, setFormData] = useState<Record<string, string>>({});
+	const [submitted, setSubmitted] = useState<boolean>(true);
 
 	const handleSubmit = (ev: FormEvent<HTMLFormElement>) => {
 		ev.preventDefault();
-		console.log(formData);
+		// console.log(formData);
+		// docsApi.sendContactEmail(formData);
+		setSubmitted(true);
 	};
 
 	const onChange = useCallback((ev: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
@@ -28,14 +32,26 @@ const ContactForm = () => {
 		});
 	}, []);
 
+	if (submitted) {
+		return (
+			<Submitted>
+				<MainParagraph>NEEDS COPY</MainParagraph>
+			</Submitted>
+		);
+	}
+
 	return (
 		<Styles>
+			<MainParagraph>NEEDS COPY</MainParagraph>
 			<form onSubmit={handleSubmit}>
 				<label htmlFor="name">Name:</label>
 				<input id="name" type="text" onChange={onChange} />
 
 				<label htmlFor="email">Email:</label>
 				<input id="email" type="email" onChange={onChange} />
+
+				<label htmlFor="subject">Subject:</label>
+				<input id="subject" type="text" onChange={onChange} />
 
 				<label htmlFor="message">Message:</label>
 				<TextArea id="message" minRows={4} onChange={onChange} />
@@ -54,7 +70,6 @@ export { ContactForm };
 
 const Styles = styled.div`
 	display: block;
-	padding-top: 4rem;
 
 	> form {
 		display: flex;
@@ -91,4 +106,12 @@ const Styles = styled.div`
 			display: block;
 		}
 	}
+`;
+
+const Submitted = styled.div`
+	display: block;
+`;
+
+const MainParagraph = styled.p`
+	display: block;
 `;

@@ -5,7 +5,6 @@ const ThemeIndex: ThemeType = {
 	codeBackground: "bg-code",
 	background: "bg",
 	primaryText: "primary-text",
-	secondaryText: "secondary-text",
 	header: "header",
 	border: "border",
 	primaryColor: "primary-color",

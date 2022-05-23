@@ -1,0 +1,23 @@
+<mjml>
+	<mj-head>
+		<mj-font name="Raleway" href="https://fonts.googleapis.com/css?family=Raleway"></mj-font>
+	</mj-head>
+	<mj-body>
+		<mj-section background-color="#f0f0f0">
+			<mj-column>
+				<mj-image align="center" src="https://www.chalet-work.space/images/chalet-banner.jpg"></mj-image>
+				<mj-text align="center" color="#333" font-size="24px" font-family="Raleway" font-weight="600">
+					{{ name }}
+				</mj-text>
+			</mj-column>
+		</mj-section>
+		<mj-section background-color="white" padding="24px 16px">
+			<mj-column>
+				<mj-text align="center" color="#333" font-size="20px" line-height="30px" font-family="Raleway">
+					{{ message }}
+				</mj-text>
+			</mj-column>
+		</mj-section>
+		<mj-section background-color="#fbfbfb"></mj-section>
+	</mj-body>
+</mjml>

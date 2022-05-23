@@ -10,7 +10,6 @@ export type ThemeType = {
 	codeBackground: string;
 	background: string;
 	primaryText: string;
-	secondaryText: string;
 	header: string;
 	border: string;
 	primaryColor: string;

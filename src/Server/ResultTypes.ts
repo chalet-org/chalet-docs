@@ -68,6 +68,8 @@ export type SearchResult = {
 
 export type ResultSearchResults = SearchResult[];
 
+export type ResultSendContactEmail = {};
+
 export type ResultLostAndFound = {
 	room: number;
 	message?: string;

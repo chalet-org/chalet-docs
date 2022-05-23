@@ -5,7 +5,6 @@ export const darkTheme: ThemeType = {
 	codeBackground: "#0a0a0a",
 	background: "#111111",
 	primaryText: "#d9d9d9",
-	secondaryText: "#a2a2a9",
 	header: "#474351",
 	border: "#272336",
 	primaryColor: "#f49309",
