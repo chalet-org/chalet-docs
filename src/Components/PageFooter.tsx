@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import styled from "styled-components";
 
 import { useUiStore } from "Stores";
@@ -13,15 +13,21 @@ type Props = {};
 
 const PageFooter = (_props: Props) => {
 	const { theme } = useUiStore();
+	const date = useMemo(() => new Date(), []);
 	return (
 		<Styles>
 			<Background />
 			<Container>
 				<LinkBox>
 					<div className="left">
-						<Link href="/contact">Contact</Link>
+						<span>©</span>
+						{date.getFullYear()}. Released under the{" "}
+						<Link href="//www.github.com/chalet-org/chalet/blob/main/LICENSE.txt">
+							BSD 3-Clause license.
+						</Link>
 					</div>
 					<div className="right">
+						<Link href="/contact">Contact</Link>
 						<Link href="//www.github.com/chalet-org" title="Github" onClick={Panelbear.trackGithubClick}>
 							<Icon
 								id="github"
@@ -60,23 +66,37 @@ const Background = styled.div`
 
 const LinkBox = styled.div`
 	display: flex;
-	justify-content: flex-end;
+	justify-content: space-between;
 	align-items: center;
-	line-height: 0;
 	padding: 1rem;
 
 	> .left {
 		display: flex;
 		align-items: center;
+		font-size: 0.825rem;
+		line-height: 1;
+		color: ${getThemeVariable("header")};
+
+		> span {
+			font-size: 1.25rem;
+			margin-right: 0.25rem;
+			line-height: 1.5;
+		}
 
 		a {
-			margin-right: 1rem;
+			margin-left: 0.25rem;
+			color: ${getThemeVariable("codeGray")};
+
+			&:hover {
+				color: ${getThemeVariable("primaryText")};
+			}
 		}
 	}
 
 	> .right {
 		display: flex;
 		align-items: center;
+		line-height: 0;
 
 		a {
 			margin-left: 1rem;

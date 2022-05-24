@@ -1,21 +1,38 @@
-import React, { ChangeEvent, FormEvent, useCallback, useState } from "react";
+import email from "email-validator";
+import React, { ChangeEvent, FormEvent, useCallback, useMemo, useState } from "react";
 import TextArea from "react-textarea-autosize";
 import styled from "styled-components";
 
 import { docsApi } from "Api";
 import { getThemeVariable } from "Theme";
+import { Optional } from "Utility";
 
+import { BlockQuote } from "./BlockQuote";
 import { Button } from "./Button";
+import { hasMinWidth } from "./GlobalStyles";
+import { Link } from "./Link";
 
 const ContactForm = () => {
 	const [formData, setFormData] = useState<Record<string, string>>({});
 	const [submitted, setSubmitted] = useState<boolean>(false);
+	const [error, setError] = useState<Optional<string>>(null);
 
-	const handleSubmit = (ev: FormEvent<HTMLFormElement>) => {
-		ev.preventDefault();
-		console.log(formData);
-		// docsApi.sendContactEmail(formData);
-		setSubmitted(true);
+	const validEmail = useMemo(() => formData.email && email.validate(formData.email), [formData.email]);
+	const invalidForm = !validEmail || !formData.message || !formData.name || !formData.subject;
+
+	const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
+		try {
+			ev.preventDefault();
+			if (invalidForm) return;
+
+			// console.log(formData);
+			await docsApi.sendContactEmail(formData);
+			setSubmitted(true);
+			setError(null);
+		} catch (err: any) {
+			setSubmitted(false);
+			setError("There was an error submitting the form. Try again later.");
+		}
 	};
 
 	const onChange = useCallback((ev: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
@@ -35,40 +52,47 @@ const ContactForm = () => {
 	if (submitted) {
 		return (
 			<Submitted>
-				<MainParagraph>NEEDS COPY</MainParagraph>
+				<MainParagraph>
+					<p>Thank you! We'll be in touch within the next couple of business days.</p>
+				</MainParagraph>
 			</Submitted>
 		);
 	}
 
 	return (
 		<Styles>
-			<MainParagraph>NEEDS COPY</MainParagraph>
+			<BlockQuote>
+				If you have general questions about using Chalet, please refer to the{" "}
+				<Link href="//github.com/chalet-org/chalet/discussions">Discussions</Link> instead.
+			</BlockQuote>
+			<MainParagraph>
+				<p>Want to discuss business and other opportunities? Enquire below!</p>
+			</MainParagraph>
 			<form onSubmit={handleSubmit}>
-				<Flexer>
-					<label htmlFor="name">Name:</label>
-					<input id="name" type="text" onChange={onChange} />
-				</Flexer>
+				<div className="fieldrow">
+					<div className="fieldwrap">
+						<label htmlFor="name" />
+						<input id="name" type="text" title="Name" placeholder="Name" onChange={onChange} />
+					</div>
+					<div className="spacer" />
+					<div className="fieldwrap">
+						<label htmlFor="email" />
+						<input id="email" type="email" title="Email" placeholder="Email" onChange={onChange} />
+					</div>
+				</div>
 
-				<Flexer>
-					<label htmlFor="email">Email:</label>
-					<input id="email" type="email" onChange={onChange} />
-				</Flexer>
+				<label htmlFor="subject" />
+				<input id="subject" type="text" title="Subject" placeholder="Subject" onChange={onChange} />
 
-				<Flexer>
-					<label htmlFor="subject">Subject:</label>
-					<input id="subject" type="text" onChange={onChange} />
-				</Flexer>
-
-				<Flexer>
-					<label htmlFor="message">Message:</label>
-					<TextArea id="message" minRows={4} onChange={onChange} />
-				</Flexer>
+				<label htmlFor="message" />
+				<TextArea id="message" minRows={3} title="Message" placeholder="Message" onChange={onChange} />
 
 				<div className="controls">
-					<Button type="submit" title="Submit">
+					<Button type="submit" title="Submit" disabled={invalidForm}>
 						Submit
 					</Button>
 				</div>
+				{error && <p className="error">{error}</p>}
 			</form>
 		</Styles>
 	);
@@ -77,11 +101,30 @@ const ContactForm = () => {
 export { ContactForm };
 
 const Styles = styled.div`
-	display: block;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 
 	> form {
 		display: flex;
 		flex-direction: column;
+		width: calc(100% - 2rem);
+		padding: 1.125rem 1.5rem;
+		border: 0.0625rem solid ${getThemeVariable("border")};
+		background-color: ${getThemeVariable("background")};
+
+		.fieldrow {
+			display: flex;
+			flex-direction: column;
+		}
+		.fieldwrap {
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+		}
+		.spacer {
+			display: none;
+		}
 
 		label {
 			margin-bottom: 0.5rem;
@@ -93,15 +136,25 @@ const Styles = styled.div`
 		textarea {
 			caret-color: ${getThemeVariable("primaryColor")};
 			color: ${getThemeVariable("primaryText")};
-			background-color: ${getThemeVariable("codeBackground")};
-			border: 0;
+			background-color: ${getThemeVariable("border")};
+			outline: 0;
+			border: 0.125rem solid ${getThemeVariable("background")};
 			padding: 0.5rem 1rem;
 			margin-bottom: 1rem;
 			border-radius: 0.25rem;
-			outline-color: ${getThemeVariable("border")};
+			transition: border-color 0.125s linear;
 
 			&::placeholder {
-				color: ${getThemeVariable("codeGray")};
+				color: ${getThemeVariable("primaryText")};
+			}
+
+			&:hover {
+				border-color: ${getThemeVariable("header")};
+			}
+
+			&:focus,
+			&:active {
+				border-color: ${getThemeVariable("primaryColor")};
 			}
 		}
 
@@ -110,25 +163,46 @@ const Styles = styled.div`
 		}
 
 		.controls {
-			padding-top: 2rem;
-			display: block;
+			padding-top: 1rem;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+
+			> button {
+				width: 50%;
+			}
+		}
+
+		p.error {
+			padding-top: 1.5rem;
+			color: ${getThemeVariable("header")};
 		}
 	}
-`;
 
-const Flexer = styled.div`
-	display: flex;
-	flex-direction: row;
-	width: 100%;
-
-	> label {
-		flex: 1;
+	@media ${hasMinWidth(0)} {
+		> form {
+			width: 80%;
+			.fieldrow {
+				display: flex;
+				flex-direction: row;
+			}
+			.fieldwrap {
+				display: flex;
+				flex-direction: column;
+				width: 100%;
+			}
+			.spacer {
+				display: block;
+				width: 2rem;
+			}
+		}
 	}
-
-	> input,
-	> textarea,
-	> textarea {
-		flex: 4;
+	@media ${hasMinWidth(1)} {
+		> form {
+			width: 65%;
+		}
+	}
+	@media ${hasMinWidth(2)} {
 	}
 `;
 
@@ -136,7 +210,9 @@ const Submitted = styled.div`
 	display: block;
 `;
 
-const MainParagraph = styled.p`
+const MainParagraph = styled.div`
 	display: block;
-	padding-bottom: 3rem;
+	width: 100%;
+	padding: 2rem 0;
+	text-align: center;
 `;

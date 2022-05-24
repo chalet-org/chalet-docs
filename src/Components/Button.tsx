@@ -9,10 +9,14 @@ type Props = React.PropsWithChildren<{
 	label?: string;
 	title?: string;
 	type?: "button" | "submit" | "reset";
+	disabled?: boolean;
 	onClick?: () => void;
 }>;
 
-const Button = ({ children, className, label, title, type, onClick }: Props) => {
+const Button = ({ children, className = "", label, title, type, onClick, disabled }: Props) => {
+	if (!!disabled) {
+		className += " disabled";
+	}
 	return (
 		<Styles
 			className={className}
@@ -23,7 +27,9 @@ const Button = ({ children, className, label, title, type, onClick }: Props) => 
 				onClick
 					? (ev) => {
 							ev.preventDefault();
-							onClick();
+							if (!disabled) {
+								onClick();
+							}
 					  }
 					: undefined
 			}
@@ -71,5 +77,12 @@ const Styles = styled.button`
 	&.touch-hover {
 		color: ${getThemeVariable("background")};
 		background-color: ${getThemeVariable("primaryColor")};
+	}
+
+	&.disabled {
+		color: ${getThemeVariable("codeGray")};
+		background-color: transparent;
+		cursor: default;
+		outline-color: ${getThemeVariable("border")};
 	}
 `;

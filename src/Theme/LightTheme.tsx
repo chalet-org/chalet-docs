@@ -4,9 +4,9 @@ export const lightTheme: ThemeType = {
 	mainBackgroundUrl: "url(/images/flat-mountains-light.svg)",
 	codeBackground: "#f0f1f4", // ebeef0
 	background: "#ffffff",
-	primaryText: "#565678",
-	header: "#a3abba",
-	border: "#d9dadf",
+	primaryText: "#424257",
+	header: "#cacad5",
+	border: "#e5e7ea",
 	primaryColor: "#e48300",
 	secondaryColor: "#f49309",
 	tertiaryColor: "#71072d",

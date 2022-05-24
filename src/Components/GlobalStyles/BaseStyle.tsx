@@ -60,6 +60,10 @@ const cssReset = css`
 		margin: 0;
 	}
 
+	blockquote {
+		width: 100%;
+	}
+
 	ol[role="list"],
 	ul[role="list"] {
 		list-style: none;

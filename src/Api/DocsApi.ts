@@ -26,8 +26,9 @@ class DocsApi extends BaseApi {
 	sendContactEmail = async (options: Partial<ContactEmailOptions>): Promise<void> => {
 		try {
 			await this.POST("/send-contact-email", options);
-		} catch (err) {
-			console.error(err);
+		} catch (err: any) {
+			console.error(err.message);
+			throw new Error("Bad request");
 		}
 	};
 }

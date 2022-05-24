@@ -31,8 +31,8 @@ const handler = middleware.use(["auth"], async (req: ApiReq, res: ApiRes<ResultS
 		res.status(200).json({ message: "Email sent", contents });
 	} catch (err: any) {
 		console.error(err);
-		res.status(200).json({
-			error: err,
+		res.status(400).json({
+			error: "There was an error sending the request.",
 		});
 	}
 });
