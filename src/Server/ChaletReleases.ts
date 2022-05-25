@@ -14,6 +14,7 @@ export type GithubAsset = {
 	content_type: string;
 	state: string;
 	label: string;
+	download_count: number;
 };
 
 export type GithubRelease = {
@@ -41,7 +42,7 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 		const releases: any[] = await response.json();
 		const allowedReleases = releases.filter((release) => !release.draft);
 
-		const withTransformedBody = await Promise.all(
+		const withTransformedBody: ResultGithubReleases = await Promise.all(
 			allowedReleases.map(
 				async ({
 					url,
@@ -77,6 +78,7 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 							parseFrontmatter: false,
 						});
 					}
+
 					return {
 						url,
 						html_url: html_url.replace(/^https:(.+)$/, (result: string, p1: string) => p1),
@@ -95,6 +97,12 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 				}
 			)
 		);
+
+		for (const release of withTransformedBody) {
+			for (const asset of release.assets) {
+				console.log(asset.name, asset.download_count);
+			}
+		}
 
 		return withTransformedBody;
 	});
