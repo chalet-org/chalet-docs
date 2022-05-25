@@ -73,14 +73,14 @@ const LinkBox = styled.div`
 	> .left {
 		display: flex;
 		align-items: center;
-		font-size: 0.825rem;
+		font-size: 0.875rem;
 		line-height: 1;
 		color: ${getThemeVariable("header")};
 
 		> span {
 			font-size: 1.25rem;
 			margin-right: 0.25rem;
-			line-height: 1.5;
+			line-height: 1.25;
 		}
 
 		a {
