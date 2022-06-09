@@ -73,6 +73,13 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 
 							return `([#${issue}](${p1}))`;
 						});
+						text = text.replace(
+							/https:\/\/github\.com\/chalet\-org\/chalet\/compare\/([v\d\.]+)/g,
+							(result: string, p1: string) => {
+								const formatted = p1.replace("...", " ... ");
+								return `[${formatted}](https://github.com/chalet-org/chalet/compare/${p1})`;
+							}
+						);
 						text = text.replace(/## (.+)/g, "##### $1");
 						mdx = await serialize(text, {
 							parseFrontmatter: false,
