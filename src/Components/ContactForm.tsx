@@ -53,7 +53,7 @@ const ContactForm = () => {
 		return (
 			<Submitted>
 				<MainParagraph>
-					<p>Thank you! We'll be in touch within the next couple of business days.</p>
+					<p>Thank you! We&apos;ll be in touch within the next couple of business days.</p>
 				</MainParagraph>
 			</Submitted>
 		);

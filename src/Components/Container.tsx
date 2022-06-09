@@ -4,7 +4,7 @@ import styled from "styled-components";
 type Props = React.PropsWithChildren<{}>;
 
 const Container = ({ children }: Props) => {
-	return <Styles>{children}</Styles>;
+	return <Styles className="container">{children}</Styles>;
 };
 
 export { Container };

@@ -6,6 +6,7 @@ import { getThemeVariable } from "Theme";
 import { Panelbear } from "Utility";
 
 import { Container } from "./Container";
+import { hasMinWidth } from "./GlobalStyles";
 import { Icon } from "./Icon";
 import { Link } from "./Link";
 
@@ -66,6 +67,7 @@ const Background = styled.div`
 
 const LinkBox = styled.div`
 	display: flex;
+	flex-direction: column;
 	justify-content: space-between;
 	align-items: center;
 	padding: 1rem;
@@ -76,6 +78,7 @@ const LinkBox = styled.div`
 		font-size: 0.875rem;
 		line-height: 1;
 		color: ${getThemeVariable("header")};
+		margin-bottom: 1rem;
 
 		> span {
 			font-size: 1.25rem;
@@ -101,5 +104,19 @@ const LinkBox = styled.div`
 		a {
 			margin-left: 1rem;
 		}
+	}
+
+	@media ${hasMinWidth(0)} {
+		flex-direction: row;
+
+		.left {
+			margin-bottom: 0;
+		}
+	}
+	@media ${hasMinWidth(1)} {
+		/**/
+	}
+	@media ${hasMinWidth(2)} {
+		/**/
 	}
 `;

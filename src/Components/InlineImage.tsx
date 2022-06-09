@@ -8,7 +8,7 @@ type Props = Omit<React.HTMLProps<HTMLImageElement>, "ref" | "crossOrigin" | "as
 const InlineImage = (props: Props) => {
 	return (
 		<Styles>
-			<img {...props} />
+			<img alt="" {...props} />
 		</Styles>
 	);
 };

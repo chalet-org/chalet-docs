@@ -98,13 +98,13 @@ const Main = styled.main<NavBarProps>`
 		left: ${(props) => props.navWidth};
 		overflow-y: hidden;
 
-		> div {
+		.container {
 			width: 100vw;
 		}
 	}
 
 	&.animating {
-		> div {
+		.container {
 			width: 100vw;
 		}
 	}
@@ -120,7 +120,7 @@ const Main = styled.main<NavBarProps>`
 		&.nav-open {
 			overflow-y: scroll;
 
-			> div {
+			.container {
 				width: 100%;
 			}
 		}
@@ -129,7 +129,7 @@ const Main = styled.main<NavBarProps>`
 		&.nav-open {
 			overflow-y: scroll;
 
-			> div {
+			.container {
 				width: 100%;
 			}
 		}
