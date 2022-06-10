@@ -602,6 +602,8 @@ The only other property is `recheck` which if true, will check the project for c
 }
 ```
 
+To build a specific CMake target or targets (`-t` build option), simply define them under `targets`.
+
 If using a toolset specification (`-T` option), simply define it under `toolset`.
 
 Chalet will attempt to add appropriate cache entries with `-D` based on its own settings and toolchain, but if one wants to override these, this can be done by adding `defines` manually, without the `-D` option.
@@ -613,6 +615,9 @@ Chalet will attempt to add appropriate cache entries with `-D` based on its own 
    "defines": [
       "CMAKE_C_COMPILER=foo",
       "CMAKE_CXX_COMPILER=foo++"
+   ],
+   "targets": [
+      "foobar"
    ]
 }
 ```
