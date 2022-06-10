@@ -14,7 +14,7 @@ class MyDocument extends Document<Props> {
 		const domain: string = "chalet-work.space";
 		const url: string = `https://www.${domain}/${slug}`;
 		const description: string =
-			"A modern, cross-platform project format and build system for C/C++ focused on readability and interoperability.";
+			"A cross-platform project format & build tool for C/C++ focused on usability and interoperability.";
 		const image: string = `https://www.${domain}/images/chalet-banner.jpg`;
 
 		return (
