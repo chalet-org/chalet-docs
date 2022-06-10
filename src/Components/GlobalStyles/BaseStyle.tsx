@@ -317,9 +317,9 @@ const BaseStyle = createGlobalStyle`
 		/**/
 	}
 	@media ${hasMinWidth(3)} {
-		html {
+		/*html {
 			font-size: 1.05vw;
-		}
+		}*/
 	}
 `;
 

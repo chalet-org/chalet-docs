@@ -49,6 +49,7 @@ const DemoImageFrame = styled.div`
 
 const DemoImage = styled.img`
 	display: block;
+	width: 35rem;
 `;
 
 const TerminalOverlay = styled.div`
