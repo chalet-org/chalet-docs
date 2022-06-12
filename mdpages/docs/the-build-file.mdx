@@ -7,7 +7,9 @@ title: The Build File
 
 ---
 
-The philosophy behind Chalet projects is quite simple: Abstract away only what needs to be abstracted, and unify as much of the build as possible. The build file, `chalet.json` is vehicle for this philosophy. From a high level, it's structured as follows:
+The philosophy behind Chalet projects is quite simple: Abstract away only what needs to be abstracted, and unify as much of the build as possible. The build file, `chalet.json` is the vehicle for this. 
+
+From a high level, it's structured as follows:
 
 ```json
 {
@@ -73,13 +75,13 @@ Example:
 
 Before diving into build target details, one should consider how to import libraries and external code. In general, it's best to figure out a way to separate that code from your project's code. if using git, one can use submodules for this, scripts, or an external package manager in combination with adding appropriate paths to `.gitignore`.
 
-Chalet has a method of streamlining external git dependencies that can then be used in its own build targets. It makes no assumptions when the repositories are cloned, so it's up to the developer to figure out what to do with it afterwards. This may serve as a basis for package management in the future.
+Chalet has a method of streamlining external git dependencies that can then be used in its own build targets. It makes no assumptions when the repositories are cloned, so it's up to the developer to figure out what to do with it afterwards. The advantage of this is that these dependencies can be excluded from your project's repository, without requiring git submodules or another script to pull them down. This may serve as a basis for package management in the future.
 
 \\
 
 ## [Git Dependencies]
 
-External git repositories are added to the project with the `externalDependencies` property at the root of chalet.json. With it, one can add a series of repositories, define what branch, tag or commit to clone the repo from, and then Chalet can lightly manage it from there. The `repository` property takes any valid git repository path.
+External git repositories are added to the project with the `externalDependencies` property at the root of chalet.json. With it, one can add a series of repos, define what branch, tag or commit to clone the repo from, and then Chalet can lightly manage it from there. The `repository` property takes any valid git repository path.
 
 ```json
 "externalDependencies": {
