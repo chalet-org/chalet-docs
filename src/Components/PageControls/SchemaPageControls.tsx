@@ -53,7 +53,7 @@ const SchemaPageControls = ({ schemaLinks, anchors }: Props) => {
 	);
 
 	const rootUrl: string = `/${kind}/${ref}/${jsonFile}`;
-	const isTag: boolean = ref !== "main" && ref != "development";
+	const isTag: boolean = ref !== "main";
 
 	return (
 		<PageControlStyles>

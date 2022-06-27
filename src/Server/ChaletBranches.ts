@@ -9,7 +9,7 @@ const getChaletBranches = async (): Promise<string[]> => {
 	const branches = reverse(result.map((ref: any) => ref?.name ?? ""));
 
 	return branches;*/
-	return ["main", "development"];
+	return ["main"];
 };
 
 export { getChaletBranches };
