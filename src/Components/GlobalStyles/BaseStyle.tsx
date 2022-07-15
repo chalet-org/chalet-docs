@@ -112,7 +112,7 @@ const cssReset = css`
 	}
 `;
 
-const BaseStyle = createGlobalStyle`
+const BaseStyle: any = createGlobalStyle`
 	${cssReset};
 
 	html {

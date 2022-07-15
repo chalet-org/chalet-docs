@@ -3,7 +3,8 @@ import { Action, BaseState } from "react-oocontext";
 type ResponseType = JSX.Element | string | null;
 export type TerminalCommandCallback = (args: string) => Promise<ResponseType>;
 
-class PseudoTerminalState extends BaseState {
+@BaseState()
+class PseudoTerminalState {
 	history: string[] = [];
 	responses: ResponseType[] = [];
 	currentLine: string = "";

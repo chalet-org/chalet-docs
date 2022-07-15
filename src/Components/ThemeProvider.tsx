@@ -4,7 +4,7 @@ import { createGlobalStyle } from "styled-components";
 import { useUiStore } from "Stores";
 import { getRootThemeCss, ThemeType } from "Theme";
 
-const GlobalCssVariables = createGlobalStyle<ThemeType>`
+const GlobalCssVariables: any = createGlobalStyle<ThemeType>`
 	:root {
 		${getRootThemeCss}
 	}

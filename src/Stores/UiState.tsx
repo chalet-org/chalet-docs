@@ -3,7 +3,8 @@ import { BaseState, Action } from "react-oocontext";
 import { Theme, ThemeType, darkTheme, lightTheme } from "Theme";
 import { LocalStorage } from "Utility";
 
-class UiState extends BaseState {
+@BaseState()
+class UiState {
 	initialized: boolean = false;
 
 	themeId: Theme = Theme.Light;

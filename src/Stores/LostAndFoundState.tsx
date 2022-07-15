@@ -17,7 +17,8 @@ const printColor = (message: string, color: string = "blue") => {
 	return <TermColor className={color}>{message}</TermColor>;
 };
 
-class LostAndFoundState extends BaseState {
+@BaseState()
+class LostAndFoundState {
 	private api: LostAndFoundApi = new LostAndFoundApi();
 	private room: number = 1;
 
