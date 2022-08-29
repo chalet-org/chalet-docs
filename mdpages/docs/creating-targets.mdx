@@ -673,7 +673,7 @@ The following examples are all valid:
    "file": "scripts/script.py",
    "arguments": [
       "${buildDir}",
-      "${archTriple}",
+      "${targetTriple}",
       "${meta:workspaceName}"
    ]
 }
@@ -736,8 +736,8 @@ In some areas, variable substitution is supported for environment variables, met
 
 In build target contexts, the following is supported:
 
-| `${arch}` | The current build architecture |
-| `${archTriple}` | The current build architecture triple |
+| `${architecture}` | The current build architecture |
+| `${targetTriple}` | The current build architecture target triple |
 | `${buildDir}` | The main build directory for the current configuration & architecture |
 | `${cwd}` | The current working directory (this shouldn't be needed, but it's here just in case) |
 | `${configuration}` | The current build configuration |
