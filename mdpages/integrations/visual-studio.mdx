@@ -1,0 +1,39 @@
+---
+title: Visual Studio
+---
+
+<PageCategory id="ides" />
+# [${meta.title}]
+
+---
+
+There are a few different ways to integrated Chalet with [Visual Studio](https://visualstudio.microsoft.com/). The obvious shortcoming of building with MSVC at the command-line is how to then open the project inside of Visual Studio. Would it be opened as a Chalet project? Can it be converted to a VS project? As of Chalet version 0.5.0, the following can be done:
+
+\\
+
+## [JSON Project Configuration]
+
+In Visual Studio 2017 and higher, "open folder" is supported, but with a catch - in order to run build commands from another build system, you would need to create a few files at the root of the folder opened in VS:
+
+| **CppProperties.json** | intellisense configuration |
+| **tasks.vs.json**      | build tasks |
+| **launch.vs.json**     | debugger configuration |
+
+Detailed information can be found [here](https://docs.microsoft.com/en-us/cpp/build/open-folder-projects-cpp?view=msvc-170).
+
+While you could certainly create these and manage them yourself, it would be a lot nicer to generate them. The following command can be run:
+
+```bash
+chalet export vs-json
+```
+
+The files are generated to `build/.project/vsjson` as not clash with any existing files that may be checked-in. You would then want to copy the files to the root of your project and open that path in Visual Studio. They are ultimately kind of experimental though, because they attempt to provide a general configuration for the entire project. You'll most likely want to generate a VS Solution anyway for precise intellisense and to take full advantage of all that VS has to offer.
+
+\\
+
+
+## [Solution (.sln)]
+ 
+TODO
+
+<!-- nav:/integrations/visual-studio-code: -->

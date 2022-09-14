@@ -18,6 +18,7 @@ Documentation
 Integration
 [@](/integrations/integration-development)
 [@](/integrations/visual-studio-code)
+[@](/integrations/visual-studio)
 
 
 <!-- Other -->

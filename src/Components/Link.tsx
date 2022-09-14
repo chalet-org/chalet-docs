@@ -44,9 +44,11 @@ const Link = ({ children, dataId, onClick, title, ...props }: Props) => {
 			</Styles>
 		);
 	} else {
+		console.log(focusedId, href, asPath, dataId);
 		const usesDataId =
 			!!dataId &&
-			(focusedId === dataId || (dataId !== "/" && dataId.startsWith("/") && focusedId.startsWith(dataId)));
+			(focusedId === dataId ||
+				(dataId !== "/" && href === focusedId && dataId.startsWith("/") && focusedId.startsWith(dataId)));
 		const startsWith = !!href && !trackHeadings && href !== "/" && asPath.startsWith(href);
 		const active = showActive && (usesDataId || startsWith);
 
