@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { useRouter } from "next/router";
 import React from "react";
 import styled from "styled-components";
@@ -14,12 +15,11 @@ type Props = React.PropsWithChildren<{
 }>;
 
 const Button = ({ children, className = "", label, title, type, onClick, disabled }: Props) => {
-	if (!!disabled) {
-		className += " disabled";
-	}
 	return (
 		<Styles
-			className={className}
+			className={clsx(className, {
+				disabled: !!disabled,
+			})}
 			type={type}
 			onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
 			onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}

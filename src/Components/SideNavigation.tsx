@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import React from "react";
 import styled from "styled-components";
 
@@ -28,7 +29,10 @@ const SideNavigation = ({ children, ...navProps }: Props) => {
 	return (
 		<>
 			<SidebarToggle
-				className={`sidebar ${navOpen ? "open" : ""}`}
+				className={clsx({
+					sidebar: true,
+					open: navOpen,
+				})}
 				onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
 				onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
 				onClick={(ev) => {

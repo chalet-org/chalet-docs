@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { default as NextLink, LinkProps as NextLinkProps } from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
@@ -52,7 +53,9 @@ const Link = ({ children, dataId, onClick, title, ...props }: Props) => {
 		return (
 			<NextLink {...props} passHref scroll={false}>
 				<Styles
-					className={active ? "active" : ""}
+					className={clsx({
+						active: active,
+					})}
 					data-id={dataId}
 					onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
 					onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}

@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
@@ -40,7 +41,10 @@ const Page = ({ title, children }: Props) => {
 			<Main
 				id="main"
 				{...{ navWidth }}
-				className={`${navOpen ? "nav-open" : ""} ${animating ? "animating" : ""}`}
+				className={clsx({
+					"nav-open": navOpen,
+					animating: animating,
+				})}
 				onAnimationEnd={() => setAnimating(false)}
 			>
 				{initialized ? (

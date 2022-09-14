@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
@@ -20,7 +21,9 @@ const Accordion = ({ label, children }: Props) => {
 		setComputedHeight(contentRef.current?.clientHeight ?? 0);
 	}, [accordionNotifier, contentRef.current]);
 
-	const className = open ? "open" : "";
+	const className = clsx({
+		open: open,
+	});
 
 	return (
 		<>

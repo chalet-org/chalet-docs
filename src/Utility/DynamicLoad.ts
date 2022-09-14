@@ -1,4 +1,4 @@
-import { default as nextDynamic } from "next/dynamic";
+import nextDynamic from "next/dynamic";
 
 type Components =
 	| "Accordion"
