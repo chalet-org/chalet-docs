@@ -7,8 +7,8 @@ import { replaceAsync } from "Utility/ReplaceAsync";
 import { toKebabCase, toPascalCase } from "Utility/TextCaseConversions";
 
 import { getChaletFile } from "./ChaletFile";
-import { getChaletReleases } from "./ChaletReleases";
 import { getChaletSchema } from "./ChaletSchema";
+import { getLatestTag } from "./ChaletTags";
 import { getLinkTitleFromPageSlug } from "./MarkdownFiles";
 import { processJsonSchemaToMarkdown } from "./MarkdownPreprocessor";
 import { ResultPageAnchor, SchemaType } from "./ResultTypes";
@@ -198,20 +198,26 @@ const getPageAnchors = async (
 
 const parseReadme = async (inText: string): Promise<string> => {
 	const readme = await serverCache.get(`chalet-readme`, async () => {
-		let { text } = await getChaletFile("README.md");
+		const tag = await getLatestTag();
+		let { text } = await getChaletFile("README.md", tag);
 		if (!!text) {
-			text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+			text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n"); // just in-case, make line breaks consistent
 
-			text = text.replace(/---\n### (.+?)\n/g, "|$1|");
+			const indx = text.indexOf("## Build from Source");
+			if (indx !== -1) {
+				text = text.substring(indx); // start here
 
-			text = text.replace(/## (.+?)\n/g, "");
-			text = text.replace(/\(https:(.+)\)/g, "($1)");
-			text = text.substring(text.indexOf("|"));
+				text = text.replace(/---\n### (.+?)\n/g, "|$1|"); // remove hrs & replace headers with tabs
+
+				text = text.replace(/## (.+?)\n/g, ""); // remove
+				text = text.replace(/\(https:(.+)\)/g, "($1)"); // strip out https: from links
+				text = text.substring(text.indexOf("|")); // go to first tab
+			}
 		}
 		return text ?? "";
 	});
 
-	return inText.replace(`!!ChaletReadme!!`, (match: string) => readme);
+	return inText.replace(`!!ChaletReadme!!`, readme);
 };
 
 const parseSchemaReference = async (type: SchemaType, text: string, slug: string, ref: string): Promise<string> => {
