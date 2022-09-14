@@ -1,3 +1,5 @@
+import fetch from "isomorphic-fetch";
+
 import { Optional } from "Utility";
 
 const fetchFromGithub = async (url: string) => {
