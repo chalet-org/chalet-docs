@@ -216,6 +216,11 @@ chalet configure --toolchain vs-preview
 chalet configure -t vs-2022 -a arm64
 chalet configure -t vs-2019 -a x64
 chalet configure -t vs-2017 -a x86 
+
+# To generate a .sln and build with MSbuild instead of Ninja, use the following
+chalet configure -t vs-2022 -a arm64 -b msbuild
+chalet configure -t vs-2019 -a x64 -b msbuild
+chalet configure -t vs-2017 -a x86 -b msbuild
 ```
 
 These attempt to find the target architecture and create the toolchain: '(arch)-pc-windows-msvc(version)' where 'version' is the detected VS version (or Preview version) - 16, 17, etc.
