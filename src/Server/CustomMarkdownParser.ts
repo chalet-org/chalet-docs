@@ -196,28 +196,23 @@ const getPageAnchors = async (
 	}
 };
 
-const parseReadme = async (inText: string): Promise<string> => {
-	const readme = await serverCache.get(`chalet-readme`, async () => {
-		const tag = await getLatestTag();
-		let { text } = await getChaletFile("README.md", tag);
+const parseCompileMd = async (inText: string): Promise<string> => {
+	const readme = await serverCache.get(`chalet-compile-md`, async () => {
+		// const tag = await getLatestTag();
+		let { text } = await getChaletFile("COMPILE.md" /* tag */);
 		if (!!text) {
 			text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n"); // just in-case, make line breaks consistent
 
-			const indx = text.indexOf("## Build from Source");
-			if (indx !== -1) {
-				text = text.substring(indx); // start here
+			text = text.replace(/---\n### (.+?)\n/g, "|$1|"); // remove hrs & replace headers with tabs
 
-				text = text.replace(/---\n### (.+?)\n/g, "|$1|"); // remove hrs & replace headers with tabs
-
-				text = text.replace(/## (.+?)\n/g, ""); // remove
-				text = text.replace(/\(https:(.+)\)/g, "($1)"); // strip out https: from links
-				text = text.substring(text.indexOf("|")); // go to first tab
-			}
+			text = text.replace(/## (.+?)\n/g, ""); // remove
+			text = text.replace(/\(https:(.+)\)/g, "($1)"); // strip out https: from links
+			text = text.substring(text.indexOf("|")); // go to first tab
 		}
 		return text ?? "";
 	});
 
-	return inText.replace(`!!ChaletReadme!!`, readme);
+	return inText.replace(`!!ChaletCompileMd!!`, readme);
 };
 
 const parseSchemaReference = async (type: SchemaType, text: string, slug: string, ref: string): Promise<string> => {
@@ -300,7 +295,7 @@ const parseCustomMarkdown = async (
 	text = parseReferencedMetaData(text, meta);
 
 	if (slug.endsWith("getting-started")) {
-		text = await parseReadme(text);
+		text = await parseCompileMd(text);
 	}
 
 	// Parse the things
