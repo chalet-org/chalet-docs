@@ -198,8 +198,8 @@ const getPageAnchors = async (
 
 const parseCompileMd = async (inText: string): Promise<string> => {
 	const readme = await serverCache.get(`chalet-compile-md`, async () => {
-		// const tag = await getLatestTag();
-		let { text } = await getChaletFile("COMPILE.md" /* tag */);
+		const tag = await getLatestTag();
+		let { text } = await getChaletFile("COMPILE.md", tag);
 		if (!!text) {
 			text = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n"); // just in-case, make line breaks consistent
 
