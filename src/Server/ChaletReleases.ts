@@ -107,7 +107,7 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 
 		for (const release of withTransformedBody) {
 			for (const asset of release.assets) {
-				console.log(asset.name, asset.download_count);
+				console.log(release.tag_name, asset.name, asset.download_count);
 			}
 		}
 
