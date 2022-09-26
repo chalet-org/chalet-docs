@@ -1,0 +1,68 @@
+---
+title: Visual Studio
+---
+
+<PageCategory id="ides" />
+# [${meta.title}]
+
+---
+
+There are a few different ways to integrated Chalet with [Visual Studio](https://visualstudio.microsoft.com/). The obvious shortcoming of building with MSVC at the command-line is how to then open the project inside of Visual Studio. Would it be opened as a Chalet project? Can it be converted to a VS project? As of Chalet version 0.5.0, the following can be done:
+
+\\
+
+## [JSON Project Configuration]
+
+In Visual Studio 2017 and higher, "open folder" is supported, but with a catch - in order to run build commands from another build system, you would need to create a few files at the root of the folder opened in VS:
+
+| **CppProperties.json** | intellisense configuration |
+| **tasks.vs.json**      | build tasks |
+| **launch.vs.json**     | debugger configuration |
+
+Detailed information can be found [here](https://docs.microsoft.com/en-us/cpp/build/open-folder-projects-cpp?view=msvc-170).
+
+While you could certainly create these and manage them yourself, it would be a lot nicer to generate them. The following command can be run:
+
+```bash
+chalet export vs-json
+```
+
+The files are generated to `build/.project/vsjson` as not clash with any existing files that may be checked-in. You would then want to copy the files to the root of your project and open that path in Visual Studio. They are ultimately kind of experimental though, because they attempt to provide a general configuration for the entire project. You'll most likely want to generate a VS Solution anyway for precise intellisense and to take full advantage of all that VS has to offer.
+
+> Note: If your project has more than one executable, the path to the target to be launched in the debugger will need to edited manually from `launch.vs.json`.
+
+\\
+
+## [Export a Solution]
+ 
+To generate a solution file (`.sln`) and `.vcxproj` files for each build target, there's two options: 
+
+You can run the `export` command to simply generate them: 
+
+```bash
+chalet export vs-solution
+```
+
+This generates a solution to `build/.project/project.sln` and `.vcxproj` files to `build/.project/vcxproj/(name).vcxproj`. It will also include all of the current build configurations setup by the project. However, this doesn't take into account any current builds that have run, so it is recommended to clean your build folder if any builds were run prior to running this command.
+
+> Note: The general idea is that you shouldn't have to check-in your solution files to source control, but you certainly can if you want. Once you have a .sln and .vcxproj files, you can edit it as you please, but you're on your own at that point. If there are any problems with the way the project files generate, please feel free to bring them up in a Github issue.
+
+\\
+
+## [Solution with MSBuild]
+
+The better method is to simply use the `msbuild` strategy (available only in the Windows version of Chalet). For example:
+
+```bash
+chalet build -t vs-2022 -a x64 -b msbuild 
+```
+
+This will generate the same project files as the export method above, and build them via [MSBuild](https://docs.microsoft.com/en-us/visualstudio/msbuild/msbuild?view=vs-2022), using the same build cache that Visual Studio uses, so you use the project within VS and the command line interchangeably. This is similar to CMake's Visual Studio generators.
+
+\\
+
+## [With Modules]
+
+Module projects are completely supported in the above methods. Project files are generated in such a way that any additional module files can be added to the project without additional per-file configuration in VS. However, just like in Chalet itself, a modules target treats all included source files as modules, so just don't mix and match them with regular source files in the same target. Make a static library target and link it to the module target.
+
+<!-- nav:/integrations/visual-studio-code: -->

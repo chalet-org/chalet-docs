@@ -136,7 +136,7 @@ x86_64-w64-mingw32  # Cross compiler for MinGW 64-bit Windows
 
 <!-- tabs:start -->
 
-!!ChaletReadme!!
+!!ChaletCompileMd!!
 
 <!-- tabs:end -->
 
@@ -150,12 +150,25 @@ x86_64-w64-mingw32  # Cross compiler for MinGW 64-bit Windows
 
 <!-- accordion:end -->
 
-<!-- accordion:start Tab Completion for Bash -->
+<!-- accordion:start Shell Tab Completion -->
 
-Each Chalet release should come with a `chalet-completion.sh` file. To use this on your machine, simply source the file from `~/.bash_profile` and restart your terminal instance. You can also run the source command from your terminal beforehand in order to test the tab completion.
+Each Chalet release comes with tab completion files. The shells `zsh`, `bash`, `sh` and `fish` are currently supported. To use them on your machine, simply source the file somewhere during initialization, or copy/symlink the script to the shell's completion folder and restart your terminal instance. You can also run the source command from your terminal beforehand in order to test the tab completion.
 
 ```bash
+# zsh/bash/sh - picked based on the current shell (Linux / MSYS2 only)
+source "(CHALET_PATH)/chalet-completion-source.sh"
+
+# zsh
+source "(CHALET_PATH)/chalet-completion.zsh"
+
+# bash
+source "(CHALET_PATH)/chalet-completion.bash"
+
+# sh (provided for compatibility)
 source "(CHALET_PATH)/chalet-completion.sh"
+
+# fish
+source "(CHALET_PATH)/chalet-completion.fish"
 ```
 
 <!-- accordion:end -->
@@ -216,6 +229,11 @@ chalet configure --toolchain vs-preview
 chalet configure -t vs-2022 -a arm64
 chalet configure -t vs-2019 -a x64
 chalet configure -t vs-2017 -a x86 
+
+# To generate a .sln and build with MSbuild instead of Ninja, use the following
+chalet configure -t vs-2022 -a arm64 -b msbuild
+chalet configure -t vs-2019 -a x64 -b msbuild
+chalet configure -t vs-2017 -a x86 -b msbuild
 ```
 
 These attempt to find the target architecture and create the toolchain: '(arch)-pc-windows-msvc(version)' where 'version' is the detected VS version (or Preview version) - 16, 17, etc.

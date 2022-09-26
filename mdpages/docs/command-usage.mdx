@@ -287,6 +287,7 @@ The build strategy to use for the selected toolchain.
 | ninja                | Uses the Ninja version defined by the `ninja` property. |
 | makefile             | Uses the GNU Make version defined by the `make` property. |
 | native-experimental  | Experimental support to build entirely with Chalet. |
+| msbuild              | Creates a Visual Studio solution & builds with MSBuild. |
 
 </dd>
 
@@ -313,6 +314,7 @@ default: `16`
 </dd>
 
 ``--show-commands``
+``--no-show-commands``
 
 <dd>
 
@@ -321,6 +323,7 @@ Show the commands run during the build.
 </dd>
 
 ``--dump-assembly``
+``--no-dump-assembly``
 
 <dd>
 
@@ -329,6 +332,7 @@ Create an .asm dump of each object file during the build.
 </dd>
 
 ``--benchmark``
+``--no-benchmark``
 
 <dd>
 
@@ -337,6 +341,7 @@ Show all build times (total build time, build targets, other steps).
 </dd>
 
 ``--launch-profiler``
+``--no-launch-profiler``
 
 <dd>
 
@@ -345,6 +350,7 @@ If running profile targets, launch the preferred profiler afterwards.
 </dd>
 
 ``--keep-going``
+``--no-keep-going``
 
 <dd>
 
@@ -353,10 +359,11 @@ If there's a build error, continue as much of the build as possible.
 </dd>
 
 ``--generate-compile-commands``
+``--no-generate-compile-commands``
 
 <dd>
 
-Generate a compile_commands.json file for Clang tooling use.
+Generate a `compile_commands.json` file for Clang tooling use. The one for the current build will be copied to the `build/current` folder path.
 
 </dd>
 
@@ -471,11 +478,16 @@ Export the Chalet project to another project format.
 
 <dd>
 
-The project format kind to export. (experimental)
+The project format kind to export.
 
 Types:
 
-| codeblocks |  CodeBlocks IDE |
+| vscode | Visual Studio Code JSON configuration (.vscode folder) (experimental) |
+| vs-json | Visual Studio JSON format for "Open Folder" (experimental) |
+| vs-solution | Visual Studio Solution |
+| codeblocks | CodeBlocks IDE (experimental) |
+
+> Note: The `vs-solution` export generates the same .sln as the `msbuild` build strategy.
 
 </dd>
 
@@ -521,6 +533,7 @@ The data type to query. It must be one of the following:
 
 Query results in tab-separated lists:
 
+| version | The Chalet version number (only) |
 | user-toolchains | The list of user-specified or cached toolchains for the project |
 | toolchain | The current toolchain selected for the project |
 | theme-names | The list of terminal theme names available |
@@ -532,7 +545,13 @@ Query results in tab-separated lists:
 | commands | The full list of chalet commands |
 | toolchain-presets | The list of toolchain presets available on the platform |
 | architecture | The current build architecture for the project |
+| build-strategy | The current build strategy for the toolchain |
+| build-path-style | The current build path style for the toolchain |
 | all-toolchains | The list of toolchain presets and user toolchains for the project |
+| all-run-targets | Every executable target in the project |
+| build-strategies | The available build strategies on the platform (See `chalet build --help`) |
+| build-path-styles | The available build path styles (See `chalet build --help`) |
+| export-kinds | The available export presets |
 
 Query results in JSON format:
 

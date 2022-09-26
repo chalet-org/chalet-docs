@@ -105,6 +105,12 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url, tag_name }: Props) =>
 								const { platform: dataPlatform, filetype, abi } = data;
 								const { browser_download_url, name } = data.asset;
 								const arch = getNiceArchName(data.arch, OperatingSystem.Windows);
+								const typeLabel = filetype === "installer" ? "installer" : "archive (.zip)";
+								const isRecommended =
+									platform == OperatingSystem.Windows &&
+									filetype === "installer" &&
+									data.arch === "x86_64";
+
 								return (
 									<AssetButton
 										key={i}
@@ -116,10 +122,7 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url, tag_name }: Props) =>
 										color={theme.codeBlue}
 									>
 										<div className="bold">
-											Windows{" "}
-											{platform == OperatingSystem.Windows && filetype === "installer"
-												? "installer (Recommended)"
-												: "archive (.zip)"}
+											Windows {isRecommended ? `${typeLabel} (Recommended)` : typeLabel}
 											<br />
 											<span>{name}</span>
 										</div>

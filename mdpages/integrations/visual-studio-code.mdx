@@ -11,6 +11,26 @@ title: Visual Studio Code
 
 \\
 
+## [JSON Project Configuration]
+
+Visual Studio Code (and the official C/C++ extension) support a few JSON configuration files:
+
+| **c_cpp_properties.json** | intellisense configuration for the C/C++ extension |
+| **tasks.json** | build tasks |
+| **launch.json** | debugger configuration |
+
+While you could certainly create these and manage them yourself, it would be a lot nicer to generate them. The following command can be run to do so:
+
+```bash
+chalet export vscode
+```
+
+The files are generated to `build/.project/.vscode` as not clash with any existing files that may be checked-in. You would then want to copy this folder to the root of your project and open that path in Visual Studio Code.
+
+The `tasks.json` only generates a build task for the Debug configuration, while `launch.json` provides a default debugging experience for use with the C/C++ extension by Microsoft. It is strongly recommended to use the official Chalet extension below to pick from the various build settings and run commands, as it is far more robust than managing them from a `tasks.json` file.
+
+\\
+
 ## [Official Extension]
 
 Get the official extension from the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=chalet-org.vscode-chalet)
@@ -232,5 +252,5 @@ GCC w/ GDB example:
 
 Additional `launch.json` configurations can be viewed in any of the [example project repositories](//github.com/orgs/chalet-org/repositories?q=chalet-example).
 
-<!-- nav:/integrations/integration-development: -->
+<!-- nav:/integrations/integration-development:/integrations/visual-studio -->
 

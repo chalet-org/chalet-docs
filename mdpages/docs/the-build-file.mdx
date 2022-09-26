@@ -152,7 +152,7 @@ If a repository only references the branch or doesn't use a branch, commit, or t
 
 Chalet uses a folder called `chalet_external` to store anything added with `externalDependencies`. It performs shallow clones of the repositories, and keeps track of the given branch or ref separately in a central cache. It's expected that the code cloned down is managed elsewhere. The external directory can be changed via the `--external-dir` or `-e` command line option. Some might want to use `external` or `vendor` for instance. 
 
-The directory can be referenced in chalet.json with the `${externalDir}` variable substitution variable explained at [Variable Substitution](/docs/creating-targets?id=variable-substitution).
+The directory of a dependency can be referenced in chalet.json with the `${externalDir:(Name)}` variable substitution variable explained at [Variable Substitution](/docs/creating-targets?id=variable-substitution).
 
 The subfolder name of the cloned repository will always be the object node's name. For example, the following:
 
@@ -163,6 +163,6 @@ The subfolder name of the cloned repository will always be the object node's nam
 }
 ```
 
-... will be cloned into `${externalDir}/bar-repo` (or `chalet_external/bar-repo` by default).
+... will be cloned into `${externalDir:bar-repo}` (or `chalet_external/bar-repo` by default).
 
 <!-- nav:/docs/getting-started:/docs/creating-targets -->
