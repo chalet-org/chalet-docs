@@ -48,7 +48,7 @@ const getNiceArchName = (arch: string, platform: OperatingSystem) => {
 		case "x86_64":
 			return platform === OperatingSystem.MacOS ? "Intel 64-bit" : "x64";
 		case "arm64":
-			return platform === OperatingSystem.MacOS ? "M1-M2 ARM64" : "ARM64";
+			return platform === OperatingSystem.MacOS ? "M1/M2 ARM64" : "ARM64";
 		case "arm":
 			return "ARM";
 		case "universal":
@@ -162,7 +162,7 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url, tag_name }: Props) =>
 										<div>
 											{arch}
 											<br />
-											<span>{data.arch === "universal" ? "M1 ARM64 / Intel 64-bit" : ""}</span>
+											<span>{data.arch === "universal" ? "M1/M2 ARM64 & Intel 64-bit" : ""}</span>
 										</div>
 									</AssetButton>
 								);
