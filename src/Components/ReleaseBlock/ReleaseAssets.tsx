@@ -46,7 +46,7 @@ const getPlatformArchFromFilename = (asset: GithubAsset): Optional<DeducedInfo> 
 const getNiceArchName = (arch: string, platform: OperatingSystem) => {
 	switch (arch) {
 		case "x86_64":
-			return platform === OperatingSystem.MacOS ? "Intel 64-bit" : "64-bit";
+			return platform === OperatingSystem.MacOS ? "Intel 64-bit" : "x64";
 		case "arm64":
 			return platform === OperatingSystem.MacOS ? "M1 ARM64" : "ARM64";
 		case "arm":
@@ -69,7 +69,7 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url, tag_name }: Props) =>
 			assets.map((asset) => getPlatformArchFromFilename(asset)).filter((data) => data !== null) as DeducedInfo[],
 		[assets]
 	);
-	const windows = info.filter((data) => data.platform === "windows");
+	const windows = info.filter((data) => data.platform === "windows").sort((a, b) => (a.arch !== "arm64" ? -1 : 1));
 	const macos = info
 		.filter((data) => data.platform === "apple")
 		.sort((dataA) => 1)
