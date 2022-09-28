@@ -3,6 +3,7 @@ import React from "react";
 
 import { DownloadPageLayout } from "Layouts";
 import { getChaletBranches } from "Server/ChaletBranches";
+import { getChaletReleases } from "Server/ChaletReleases";
 import { getChaletTags, getLatestTag } from "Server/ChaletTags";
 import { getPageWithData } from "Server/MarkdownFiles";
 import { HyperLink, ResultDownloadPage } from "Server/ResultTypes";
@@ -40,7 +41,12 @@ export const getServerSideProps: GetServerSideProps<Props> = withServerErrorHand
 			};
 		}
 
-		const [tags, branches] = await Promise.all([getChaletTags(), getChaletBranches()]);
+		const [tags, branches, releases] = await Promise.all([
+			getChaletTags(),
+			getChaletBranches(),
+			getChaletReleases(),
+		]);
+
 		if (!tags.includes(ref) && !branches.includes(ref)) {
 			throw new Error(`Download for ref not found: ${ref}`);
 		}
@@ -51,10 +57,11 @@ export const getServerSideProps: GetServerSideProps<Props> = withServerErrorHand
 			};
 		});
 
-		const page = await getPageWithData("download", { getReleases: true });
+		const page = await getPageWithData("download");
 		return {
 			props: {
 				...page,
+				releases,
 				downloadLinks,
 			},
 		};
