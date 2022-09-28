@@ -12,7 +12,7 @@ import { Panelbear } from "Utility";
 
 type DeducedInfo = {
 	asset: GithubAsset;
-	arch: string;
+	arch: "x86_64" | "arm64" | "arm" | "universal";
 	platform: string;
 	abi: string;
 	filetype: "zip" | "installer";
@@ -40,7 +40,7 @@ const getPlatformArchFromFilename = (asset: GithubAsset): Optional<DeducedInfo> 
 		platform,
 		abi,
 		filetype: asset.name.includes("-installer") ? "installer" : "zip",
-	};
+	} as DeducedInfo;
 };
 
 const getNiceArchName = (arch: string, platform: OperatingSystem) => {
@@ -69,17 +69,23 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url, tag_name }: Props) =>
 			assets.map((asset) => getPlatformArchFromFilename(asset)).filter((data) => data !== null) as DeducedInfo[],
 		[assets]
 	);
-	const windows = info.filter((data) => data.platform === "windows").sort((a, b) => (a.arch !== "arm64" ? -1 : 1));
+	const windows = info
+		.filter((data) => data.platform === "windows")
+		.sort((a, b) => (a.arch === "x86_64" || (a.arch === b.arch && a.filetype === "installer") ? -1 : 1));
+
 	const macos = info
 		.filter((data) => data.platform === "apple")
 		.sort((dataA) => 1)
 		.sort((dataA) => (dataA.arch === "universal" ? -1 : 1));
+
 	const linux = info
 		.filter((data) => data.platform === "linux" && data.abi !== "debian")
 		.sort((dataA) => (dataA.arch === "x86_64" ? -1 : 1));
+
 	const debian = info
 		.filter((data) => data.platform === "linux" && data.abi === "debian")
 		.sort((dataA) => (dataA.arch === "x86_64" ? -1 : 1));
+
 	const [platform] = useOperatingSystem();
 
 	const onDownload = useCallback(
