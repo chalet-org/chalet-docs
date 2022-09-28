@@ -17,7 +17,6 @@ const getChaletTags = (): Promise<string[]> => {
 		const releases = await getChaletReleases();
 
 		const taggedReleases = releases.map((rel) => rel.tag_name);
-		console.log(taggedReleases);
 		const allowedTags = tags.filter((tag) => taggedReleases.includes(tag));
 		return allowedTags;
 	});

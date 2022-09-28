@@ -44,7 +44,6 @@ const Link = ({ children, dataId, onClick, title, ...props }: Props) => {
 			</Styles>
 		);
 	} else {
-		console.log(focusedId, href, asPath, dataId);
 		const usesDataId =
 			!!dataId &&
 			(focusedId === dataId ||

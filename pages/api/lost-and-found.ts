@@ -12,7 +12,7 @@ const handler = middleware.use(["auth"], async (req: ApiReq, res: ApiRes<ResultL
 
 		const decoded = decodeURIComponent(data);
 		const jsonData: LostSearchInput = JSON.parse(decoded);
-		console.log(jsonData);
+		// console.log(jsonData);
 
 		const currentRoom = jsonData.room ?? 1;
 		const inputMessage = jsonData.message;
