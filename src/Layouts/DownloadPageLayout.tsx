@@ -19,7 +19,7 @@ type Props = ResultDownloadPage &
 		title?: string;
 	};
 
-const DownloadPageLayout = ({ title, releases, downloadLinks, ...navProps }: Props) => {
+const DownloadPageLayout = ({ title, releases: githubReleases, downloadLinks, ...navProps }: Props) => {
 	const router = useRouter();
 	const { setFocusedId } = useUiStore();
 
@@ -31,8 +31,10 @@ const DownloadPageLayout = ({ title, releases, downloadLinks, ...navProps }: Pro
 
 	const Header = AnchoredHeadingObject["AnchoredH1"];
 	// const latestRelease = !!releases && releases.length > 0 ? releases[0] : null;
-	const release = useMemo(() => releases?.filter((release) => release.tag_name === ref) ?? [], [releases]);
-
+	const releases = useMemo(
+		() => githubReleases?.filter((release) => release.tag_name === ref) ?? [],
+		[githubReleases]
+	);
 	useRouteChangeScroll();
 
 	return (
@@ -47,7 +49,7 @@ const DownloadPageLayout = ({ title, releases, downloadLinks, ...navProps }: Pro
 						code.
 					</PageDescription>
 					<DownloadPageControls downloadLinks={downloadLinks}>
-						{release.map((rel, i) => (
+						{releases.map((rel, i) => (
 							<ReleaseBlock key={i} release={rel} />
 						))}
 					</DownloadPageControls>

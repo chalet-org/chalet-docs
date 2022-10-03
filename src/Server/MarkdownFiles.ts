@@ -188,17 +188,11 @@ const getNotFoundPage = () => getMdxPage("_404", {}, true);
 
 const getInternalServerErrorPage = () => getMdxPage("_500", {}, true);
 
-const getPageWithData = async (slug: string, query: Dictionary<boolean>): Promise<ResultDataPage> => {
-	const { getReleases } = query;
-
+const getPageWithData = async (slug: string, query: Dictionary<boolean> = {}): Promise<ResultDataPage> => {
 	const navData = await getNavBar(slug);
 	const data: ResultDataPage = {
 		...navData,
 	};
-
-	if (!!getReleases) {
-		data.releases = await getChaletReleases();
-	}
 
 	return data;
 };

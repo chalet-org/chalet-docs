@@ -25,7 +25,6 @@ const handler = middleware.use(["auth"], async (req: ApiReq, res: ApiRes<ResultS
 			email,
 			message,
 		};
-		console.log(contents);
 		await sendContactEmail(contents);
 
 		res.status(200).json({ message: "Email sent", contents });

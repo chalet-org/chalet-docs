@@ -1,5 +1,6 @@
 import { reverse } from "lodash";
 
+import { getChaletReleases } from "./ChaletReleases";
 import { fetchFromGithub } from "./FetchFromGithub";
 import { serverCache } from "./ServerCache";
 
@@ -12,9 +13,12 @@ const getChaletTags = (): Promise<string[]> => {
 			return [];
 		}
 
-		const tags = reverse(result.map((ref: any) => (ref?.ref ?? "").split("/").pop()));
+		const tags: string[] = reverse(result.map((ref: any) => (ref?.ref ?? "").split("/").pop()));
+		const releases = await getChaletReleases();
 
-		return tags;
+		const taggedReleases = releases.map((rel) => rel.tag_name);
+		const allowedTags = tags.filter((tag) => taggedReleases.includes(tag));
+		return allowedTags;
 	});
 };
 
