@@ -252,6 +252,7 @@ Unlike with MSVC and GCC, LLVM generates a single toolchain instead of one for e
 
 ```bash
 chalet configure -t llvm -a auto
+chalet configure -t llvm-14 -a auto
 chalet configure -t apple-llvm -a auto
 ```
 
@@ -263,6 +264,9 @@ chalet configure -t llvm -a i866
 chalet configure -t llvm -a arm64
 chalet configure -t llvm -a arm
 chalet configure -t llvm -a arm-linux-gnueabihf
+
+# Generate an llvm toolchain with the "-14" suffix
+chalet configure -t llvm-14 -a arm64
 
 # Mac w/ M1 architecture
 chalet configure -t apple-llvm -a arm64
