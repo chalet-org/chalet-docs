@@ -12,7 +12,7 @@ import { Panelbear } from "Utility";
 
 type DeducedInfo = {
 	asset: GithubAsset;
-	arch: "x86_64" | "arm64" | "arm" | "universal";
+	arch: "x86_64" | "amd64" | "arm64" | "arm" | "universal";
 	platform: string;
 	abi: string;
 	filetype: "zip" | "installer";
@@ -45,6 +45,7 @@ const getPlatformArchFromFilename = (asset: GithubAsset): Optional<DeducedInfo> 
 
 const getNiceArchName = (arch: string, platform: OperatingSystem) => {
 	switch (arch) {
+		case "amd64":
 		case "x86_64":
 			return platform === OperatingSystem.MacOS ? "Intel 64-bit" : "x64";
 		case "arm64":
@@ -84,7 +85,7 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url, tag_name }: Props) =>
 
 	const debian = info
 		.filter((data) => data.platform === "linux" && data.abi === "debian")
-		.sort((dataA) => (dataA.arch === "x86_64" ? -1 : 1));
+		.sort((dataA) => (dataA.arch === "x86_64" || dataA.arch === "amd64" ? -1 : 1));
 
 	const [platform] = useOperatingSystem();
 
