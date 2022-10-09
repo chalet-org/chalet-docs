@@ -375,6 +375,14 @@ Show only build output.
 
 </dd>
 
+``--save-user-toolchain-globally``
+
+<dd>
+
+Save the current or generated toolchain to the global settings file (`~/.chalet/config.json`) and set it as the default toolchain.
+
+</dd>
+
 <!-- dl:end -->
 
 \\
@@ -533,30 +541,31 @@ The data type to query. It must be one of the following:
 
 Query results in tab-separated lists:
 
-| version | The Chalet version number (only) |
-| user-toolchains | The list of user-specified or cached toolchains for the project |
-| toolchain | The current toolchain selected for the project |
-| theme-names | The list of terminal theme names available |
-| configurations | The current build configuration selected for the project |
-| run-target | The current run target for the project |
-| list-names | The list of available data types to query for (this list) |
-| configuration | The current build configuration for the project |
-| architectures | Any architectures used by the current toolchain |
-| commands | The full list of chalet commands |
-| toolchain-presets | The list of toolchain presets available on the platform |
 | architecture | The current build architecture for the project |
-| build-strategy | The current build strategy for the toolchain |
-| build-path-style | The current build path style for the toolchain |
-| all-toolchains | The list of toolchain presets and user toolchains for the project |
+| architectures | Any architectures used by the current toolchain |
+| options | All chalet options starting with `-` |
 | all-run-targets | Every executable target in the project |
-| build-strategies | The available build strategies on the platform (See `chalet build --help`) |
+| all-toolchains | The list of toolchain presets and user toolchains for the project |
+| build-path-style | The current build path style for the toolchain |
 | build-path-styles | The available build path styles (See `chalet build --help`) |
+| build-strategy | The current build strategy for the toolchain |
+| build-strategies | The available build strategies on the platform (See `chalet build --help`) |
+| commands | The full list of chalet commands |
+| configuration | The current build configuration for the project |
+| configurations | The current build configuration selected for the project |
 | export-kinds | The available export presets |
+| list-names | The list of available data types to query for (this list) |
+| run-target | The current run target for the project |
+| theme-names | The list of terminal theme names available |
+| toolchain | The current toolchain selected for the project |
+| toolchain-presets | The list of toolchain presets available on the platform |
+| user-toolchains | The list of user-specified or cached toolchains for the project |
+| version | The Chalet version number (only) |
 
 Query results in JSON format:
 
-| schema-settings-json | The entire `.chaletrc` / `.chalet/config.json` schema in JSON format |
 | schema-chalet-json | The entire chalet.json schema in JSON format |
+| schema-settings-json | The entire `.chaletrc` / `.chalet/config.json` schema in JSON format |
 | state-chalet-json | State applicable to the chalet.json for the current project in JSON format |
 | state-settings-json | State applicable to the `.chaletrc` / `.chalet/config.json` for the current project in JSON format |
 
