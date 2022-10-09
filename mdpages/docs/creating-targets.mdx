@@ -571,7 +571,7 @@ The only other property is `recheck` which if true, will check the project for c
 "my-chalet-target": {
    "kind": "chaletProject",
    "condition": "[:!windows]",
-   "location": "${externalDir:bar}",
+   "location": "${external:bar}",
    "recheck": false
 }
 ```
@@ -599,7 +599,7 @@ The only other property is `recheck` which if true, will check the project for c
 "my-cmake-target": {
    "kind": "cmakeProject",
    "condition": "[:!windows]",
-   "location": "${externalDir:foo}",
+   "location": "${external:foo}",
    "recheck": false
 }
 ```
@@ -615,7 +615,7 @@ Chalet will attempt to add appropriate cache entries with `-D` based on its own 
 ```json
 "my-cmake-target": {
    "kind": "cmakeProject",
-   "location": "${externalDir:foo}",
+   "location": "${external:foo}",
    "defines": [
       "CMAKE_C_COMPILER=foo",
       "CMAKE_CXX_COMPILER=foo++"
@@ -741,8 +741,8 @@ In build target contexts, the following is supported:
 | `${buildDir}` | The main build directory for the current configuration & architecture |
 | `${cwd}` | The current working directory (this shouldn't be needed, but it's here just in case) |
 | `${configuration}` | The current build configuration |
-| `${externalDir:(Name)}` | The path to an external dependency by name. See [externalDependencies](/schema/latest/chalet-json?id=external-dependencies) |
-| `${externalBuildDir:(Name)}` | The build path for an external dependency by name. For instance, if a CMake project is located at `${externalDir:foo}`, it will build to `${buildDir}/${externalDir}/foo`, so it's easier to write `${externalBuildDir:foo}` |
+| `${external:(Name)}` | The path to an external dependency by name. See [externalDependencies](/schema/latest/chalet-json?id=external-dependencies) |
+| `${externalBuild:(Name)}` | The build path for an external dependency by name. For instance, if a CMake project is located at `${external:foo}`, it will build to `${buildDir}/${externalDir}/foo`, so it's easier to write `${externalBuild:foo}` |
 | `${home}`, `~/` | The home directory of the machine. On Windows, this is `C:\Users\(Name)` |
 | `${name}` | The name of the build/distribution target |
 | `${env:(Name)}` | An environment variable by name. For example: `${env:MY_LIBRARY_PATH}` |
@@ -775,7 +775,7 @@ Example:
 
 ```json
 "searchPaths": [
-   "${externalBuildDir:foo}/arbitrary-path"
+   "${externalBuild:foo}/arbitrary-path"
 ],
 "targets": {
    "my-target": {
@@ -790,15 +790,15 @@ Example:
             "~/libs/bar/include"
          ]
       },
-      "files": "${externalDir:foo}/**.cpp",
+      "files": "${external:foo}/**.cpp",
    },
    "other-target": {
       "settings:Cxx": {
          "includeDirs": [
-            "${externalDir:foo}/include"
+            "${external:foo}/include"
          ],
          "libDirs": [
-            "${externalBuildDir:foo}"
+            "${externalBuild:foo}"
          ],
          "links": [
             "foo"

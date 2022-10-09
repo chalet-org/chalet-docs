@@ -30,11 +30,11 @@ In source targets, C/C++ settings may be described in a similar fashion as one w
             "_DEBUG"
          ],
          "includeDirs": [
-            "${externalDir:foo}/include",
-            "${externalDir:bar}/include"
+            "${external:foo}/include",
+            "${external:bar}/include"
          ],
          "libDirs": [
-            "${externalDir:foo}/lib"
+            "${external:foo}/lib"
          ],
          "links": [
             "foo"
@@ -98,20 +98,20 @@ This means the `src` folder is a root of included paths, so folders are required
 
 ```json
 "includeDirs": [
-   "${externalDir:foo}/include",
+   "${external:foo}/include",
 ]
 ```
 
 Typically this means if a library has subdirectories, you have to declare your include directives in code as: 
 
 ```cpp
-#include <subdir/foo.hpp>  // ${externalDir:foo}/include/subdir/foo.hpp
+#include <subdir/foo.hpp>  // ${external:foo}/include/subdir/foo.hpp
 ```
 
 Some might want to do the following:
 
 ```cpp
-#include <foo.hpp>         // ${externalDir:foo}/include/subdir/foo.hpp
+#include <foo.hpp>         // ${external:foo}/include/subdir/foo.hpp
 #include "bar.hpp"         // src/folder/bar.hpp
 ```
 
@@ -119,7 +119,7 @@ Glob patterns are also supported for this reason, so one can include a directory
 
 ```json
 "includeDirs": [
-   "${externalDir:foo}/include/**",
+   "${external:foo}/include/**",
    "src/**"
 ]
 ```
@@ -183,7 +183,7 @@ Example:
 
 ```json
 "libDirs": [
-   "${externalBuildDir:foo}/lib"
+   "${externalBuild:foo}/lib"
 ]
 "libDirs[:windows]": [
    "${env:ProgramFiles}/bar/lib"
