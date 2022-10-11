@@ -1,7 +1,12 @@
+// @ts-check
+
 // Before adding anything, review it with v4 to v5 migration:
 //   https://webpack.js.org/migrate/5/
 
-module.exports = {
+/**
+ * @type {import('next').NextConfig}
+ **/
+const nextConfig = {
 	swcMinify: true,
 	reactStrictMode: true,
 	compiler: {
@@ -32,3 +37,5 @@ module.exports = {
 		return config;
 	},
 };
+
+module.exports = nextConfig;
