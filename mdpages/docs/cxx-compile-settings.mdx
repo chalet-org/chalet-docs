@@ -352,6 +352,22 @@ You might run into a situation where a library is only supported on a certain pl
    }
 ```
 
+If linking to libraries that are built elsewhere and don't follow the above naming convention, they can be linked with their exact paths like so:
+
+```json
+"some-target": {
+   "settings:Cxx": {
+      "libDirs[:macos]": [
+         "${external:bar}/lib"
+      ],
+      "links[:macos]": [
+         "${external:foo}/lib/foo.a", // assuming foo has a shared library as well
+         "bar" // bar might be libbar.dylib in this case, and doesn't have a .a file
+      ]
+   }
+}
+```
+
 \\
 
 ## [Static Linking]
@@ -373,6 +389,18 @@ Static links work the same way as shared, but use the `staticLinks` property ins
 ```
 
 The actual file being linked in that example is either `libfirst-target.a` or `first-target.lib` depending on the compiler, but the target name is what's important to `staticLinks`.
+
+If linking to libraries that are built elsewhere and don't follow the above naming convention, they can be linked with their exact paths like so:
+
+```json
+"some-target": {
+   "settings:Cxx": {
+      "staticLinks": [
+         "${external:foo}/lib/foo.a"
+      ]
+   }
+}
+```
 
 \\
 

@@ -335,7 +335,7 @@ If a single property is defined with multiple conditions, each one will be read 
       "bar"
    ],
    "links[:windows]": [
-      "another"
+      "baz"
    ]
 }
 ```
@@ -389,7 +389,9 @@ Source files can either be added individually or via a glob pattern. In both sce
 | Objective-C      | `m` / `M` |
 | Objective-C++    | `mm` |
 
-C++ header files should not be specified at all, so for instance if you're using `.cpp` and `.h` files, only add 
+C++ header files should not be specified at all, so for instance if you're using `.cpp` and `.h` files, only add the `.cpp` files.
+
+If building Objective-C/C++ projects on MacOS, and mixing with `.cpp` files, you can safely define them and Objective-C++ file types in the same target.
 
 > Note: Lowercase extensions are recommended
 
