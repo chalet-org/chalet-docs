@@ -254,6 +254,7 @@ Unlike with MSVC and GCC, LLVM generates a single toolchain instead of one for e
 chalet configure -t llvm -a auto
 chalet configure -t llvm-14 -a auto
 chalet configure -t apple-llvm -a auto
+chalet configure -t llvm-vs-2022 -a auto
 ```
 
 These detect LLVM (or Apple LLVM) and use the machine's architecture.
@@ -276,6 +277,10 @@ chalet configure -t apple-llvm -a x86_64
 
 # Mac w/ either architecture (Fat binary w/ x86_64 & arm64)
 chalet configure -t apple-llvm -a universal
+
+# Visual Studio bundled version of Clang (supports the same target architectures as VS)
+chalet configure -t llvm-vs-2022 -a x86_64
+chalet configure -t llvm-vs-2019 -a x86_64
 ```
 
 |GCC|
