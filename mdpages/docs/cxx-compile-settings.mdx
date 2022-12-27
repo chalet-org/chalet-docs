@@ -433,6 +433,23 @@ In MSVC, `/MTd` is passed instead of `/MDd` in debug builds, and `/MT` is passed
 
 \\
 
+## [Unity build]
+
+Unity builds are a method to potentially speed up compilation by combining translation units. Although one can do this themselves by creating a source file and include the source files they want in that compilation unit, Chalet offers an experimental flag to automate this.
+
+enable with `"unityBuild": true`. In the below example, all `files` will be included in an intermediate source file either in the order that they're declared, or in the order that they're detected.
+
+```json
+"target": {
+   "settings:Cxx": {
+      "unityBuild": true
+   },
+   "files": "src/foo/**.cpp"
+}
+```
+
+\\
+
 ## [C++ Modules]
 
 To enable modules (requires C++20 - currently only works with MSVC), set `cppModules` to true. This will treat **all** source files in that target location as modules. 

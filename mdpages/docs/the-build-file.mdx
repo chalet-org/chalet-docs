@@ -165,4 +165,35 @@ The subfolder name of the cloned repository will always be the object node's nam
 
 ... will be cloned into `${external:bar-repo}` (or `chalet_external/bar-repo` by default).
 
+\\
+
+## [System Dependencies]
+
+Sometimes it may be desireable to use package manager dependencies if they're available, so Chalet has a means of restricting the build to only run if those dependencies are found. Currently supported are: `ubuntu.system` `debian.system` `archlinux.system` `manjaro.system` `fedora.system` `redhat.system` `windows.msys2` `macos.homebrew` and `macos.macports`.
+
+
+```json
+"platformRequires": {
+   "ubuntu.system": "foo",
+   "debian.system": "foo",
+   "archlinux.system": "foo",
+   "manjaro.system": "foo",
+   "fedora.system": "foo",
+   "redhat.system": "foo",
+   "windows.msys2[architecture:x86_64]": "foo",
+   "windows.msys2[architecture:i686]": "foo bar",
+   "macos.homebrew[architecture:x86_64]": "bar",
+   "macos.macports": [
+      "foo",
+      "baz"
+   ]
+}
+```
+
+> Note: This feature is still experimental, and will eventually include other package managers like [vcpkg](https://vcpkg.io/) and [conan](https://conan.io/).
+
+**See also:**
+
+[Property Conditions](/docs/creating-targets?id=property-conditions)
+
 <!-- nav:/docs/getting-started:/docs/creating-targets -->
