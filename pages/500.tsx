@@ -9,7 +9,7 @@ const ServerErrorPage = (props: Props) => {
 };
 
 export const getStaticProps = async (ctx: GetStaticPropsContext) => {
-	const props = await markdownFiles.getNotFoundPage();
+	const props = await markdownFiles.getInternalServerErrorPage();
 	return {
 		props,
 	};
