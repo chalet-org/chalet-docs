@@ -67,6 +67,9 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 
 							return `([${commit?.substring(0, 7)}](${p1}))`;
 						});
+						text = text.replace(/#(\d+)/g, (result: string, p1: string) => {
+							return `[#${p1}](https://github.com/chalet-org/chalet/issues/${p1})`;
+						});
 						text = text.replace(/\[issue\]\((.+?)\)/g, (result: string, p1: string) => {
 							const issue = p1.split("/").pop();
 							if (!issue) return p1;

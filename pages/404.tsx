@@ -8,11 +8,11 @@ const NotFoundPage = (props: Props) => {
 	return <MarkdownLayout {...props} />;
 };
 
+export default NotFoundPage;
+
 export const getStaticProps = async (ctx: GetStaticPropsContext) => {
 	const props = await markdownFiles.getNotFoundPage();
 	return {
 		props,
 	};
 };
-
-export default NotFoundPage;

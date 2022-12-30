@@ -15,6 +15,8 @@ const DownloadPage = (props: Props) => {
 	return <DownloadPageLayout {...props} title="Download" />;
 };
 
+export default DownloadPage;
+
 export const getServerSideProps: GetServerSideProps<Props> = withServerErrorHandler(
 	async (ctx: GetServerSidePropsContext) => {
 		const { slug } = ctx.query;
@@ -67,5 +69,3 @@ export const getServerSideProps: GetServerSideProps<Props> = withServerErrorHand
 		};
 	}
 );
-
-export default DownloadPage;

@@ -11,6 +11,8 @@ const MarkdownPage = (props: Props) => {
 	return <MarkdownLayout {...props} />;
 };
 
+export default MarkdownPage;
+
 const mdpages = "mdpages";
 
 export const getStaticPaths = async () => {
@@ -62,5 +64,3 @@ export const getStaticProps = withServerErrorHandler(
 		};
 	}
 );
-
-export default MarkdownPage;

@@ -8,11 +8,11 @@ const ServerErrorPage = (props: Props) => {
 	return <MarkdownLayout {...props} />;
 };
 
+export default ServerErrorPage;
+
 export const getStaticProps = async (ctx: GetStaticPropsContext) => {
 	const props = await markdownFiles.getInternalServerErrorPage();
 	return {
 		props,
 	};
 };
-
-export default ServerErrorPage;

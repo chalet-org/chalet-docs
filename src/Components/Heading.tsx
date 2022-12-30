@@ -10,7 +10,7 @@ import { toKebabCase } from "Utility/TextCaseConversions";
 type HeadingSize = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 
 type Props = {
-	children?: string;
+	children?: string | JSX.Element;
 	size: HeadingSize;
 	anchor?: boolean;
 };
@@ -39,7 +39,7 @@ const Heading = ({ size, anchor, children }: Props) => {
 };
 
 type HeadingProps = {
-	children: string;
+	children: string | JSX.Element;
 };
 
 let HeadingObject: Dictionary<(props: HeadingProps) => JSX.Element> = {};

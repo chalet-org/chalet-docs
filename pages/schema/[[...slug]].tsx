@@ -13,6 +13,8 @@ const SchemaExplorePage = (props: Props) => {
 	return <SchemaPageLayout {...props} />;
 };
 
+export default SchemaExplorePage;
+
 export const getServerSideProps: GetServerSideProps<Props> = withServerErrorHandler(
 	async (ctx: GetServerSidePropsContext) => {
 		const { slug } = ctx.query;
@@ -72,5 +74,3 @@ export const getServerSideProps: GetServerSideProps<Props> = withServerErrorHand
 		};
 	}
 );
-
-export default SchemaExplorePage;

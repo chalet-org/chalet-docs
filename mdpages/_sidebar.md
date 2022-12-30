@@ -1,5 +1,6 @@
 
 [Download](/download)
+[Changelog](/changelog)
 [Schema Reference](/schema)
 
 :break
