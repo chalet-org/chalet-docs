@@ -35,6 +35,12 @@ export type GithubRelease = {
 
 export type ResultGithubReleases = GithubRelease[];
 
+type LoggableAsset = {
+	tag: string;
+	name: string;
+	downloads: number;
+};
+
 const getChaletReleases = (): Promise<ResultGithubReleases> => {
 	return serverCache.get(`chalet-releases`, async () => {
 		const url = `https://api.github.com/repos/chalet-org/chalet/releases`;
@@ -83,6 +89,12 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 								return `[${formatted}](https://github.com/chalet-org/chalet/compare/${p1})`;
 							}
 						);
+						text = text.replace(
+							/https:\/\/github\.com\/chalet\-org\/chalet\/commits\/(v\d+\.\d+\.\d+)/g,
+							(result: string, p1: string) => {
+								return `[${p1}](https://github.com/chalet-org/chalet/commits/${p1})`;
+							}
+						);
 						text = text.replace(/## (.+)/g, "##### $1");
 						mdx = await serialize(text, {
 							parseFrontmatter: false,
@@ -108,11 +120,77 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 			)
 		);
 
-		for (const release of withTransformedBody) {
-			for (const asset of release.assets) {
-				console.log(release.tag_name, asset.name, asset.download_count);
-			}
-		}
+		const getTotalName = (name: string) => {
+			let ret: any = {};
+			name.replace(
+				/chalet-(\w+)-(pc-windows|\w+)-(\w+)(-(installer))?/g,
+				(result: string, p1: string, p2: string, p3: string, p4?: string, p5?: string) => {
+					const arch = p1;
+					const platform = p2 === "pc-windows" ? "windows" : p2;
+					const abi = p3;
+					ret = {
+						// arch: `${arch}-${platform}-${abi}`,
+						arch,
+						platform,
+						abi,
+						kind: p5 ?? "zip",
+					};
+					return result;
+				}
+			);
+			return ret;
+		};
+
+		const MAX_RELEASES = 999;
+
+		const downloadsByKind: Record<string, any> = {};
+		const downloadsByTag: Record<string, any> = {};
+
+		const printableArray: ResultGithubReleases = [...withTransformedBody].reverse();
+		printableArray.forEach((release, i) => {
+			downloadsByTag[release.tag_name] = {
+				// tag: release.tag_name,
+				downloads: 0,
+			};
+
+			const assets = release.assets.reduce<LoggableAsset[]>((prev, curr) => {
+				prev.push({
+					downloads: curr.download_count,
+					tag: release.tag_name,
+					name: curr.name,
+				});
+
+				const details = getTotalName(curr.name);
+
+				if (downloadsByKind[curr.name]) {
+					downloadsByKind[curr.name] = {
+						downloads: (downloadsByKind[curr.name].downloads += curr.download_count),
+						...details,
+					};
+				} else {
+					downloadsByKind[curr.name] = {
+						downloads: curr.download_count,
+						...details,
+					};
+				}
+
+				downloadsByTag[release.tag_name] = {
+					...downloadsByTag[release.tag_name],
+					downloads: (downloadsByTag[release.tag_name].downloads += curr.download_count),
+				};
+
+				return prev;
+			}, []);
+
+			console.table(assets);
+		});
+
+		const printable = Object.values(downloadsByKind).sort((a, b) => (a.downloads < b.downloads ? 1 : -1));
+		console.table(printable);
+		console.table(downloadsByTag);
+		console.table({
+			total_downloads: printable.reduce<number>((prev, curr) => (prev += curr.downloads), 0),
+		});
 
 		return withTransformedBody;
 	});
