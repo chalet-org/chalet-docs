@@ -15,6 +15,7 @@ From a high level, it's structured as follows:
 {
    ... (metadata)
    "seachPaths": [ ... ],
+   "variables": [ ... ],
    "defaultConfigurations": [ ... ],
    "configurations": { ... },
    "externalDependencies": { ... },
@@ -26,12 +27,19 @@ From a high level, it's structured as follows:
 
 | metadata | Metadata related to the entire workspace. |
 | seachPaths | Additional relative paths to search for compiled dependencies not otherwise found. |
+| variables | Local variables to shorten build paths without modifying the build environment. |
 | defaultConfigurations | An array fo default build configurations to use. |
 | configurations | Custom build configurations |
 | externalDependencies | External dependencies to fetch before building. (ie. from git) |
 | targets | Build targets. |
 | abstracts | Abstract build targets that build targets can inherit from. |
 | distribution | Distribution targets. |
+
+\
+
+**See also:**
+
+[Local Variables](/docs/creating-targets?id=local-variables)
 
 \\
 

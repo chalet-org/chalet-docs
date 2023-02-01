@@ -728,7 +728,9 @@ A target is considered runnable if the kind is `executable`, `script` or `cmakeP
 }
 ```
 
-An executable target can also take the `defaultRunArguments` and `copyFilesOnRun` properties. The `defaultRunArguments` property is simply an array of the default arguments to run. These values will be cached in settings, where it can be changed on-demand. `copyFilesOnRun` is meant for shared libraries that have to be copied to the build folder at the time of execution. In most cases, it's not needed as long as the shared library is accessible from PATH, but if for example, WinApi's LoadLibrary is called, it might be necessary to have the file in the same path as the executable.
+An executable target can also take the `defaultRunArguments` and `copyFilesOnRun` properties. The `defaultRunArguments` property is simply an array of the default arguments to run. These values will be cached in settings, where it can be changed on-demand. `copyFilesOnRun` is meant for shared libraries that have to be copied to the build folder at the time of execution. In most cases, it's not needed as long as the shared library is accessible from PATH, but if for example, WinApi's LoadLibrary is called, it might be necessary to have the file in the same path as the executable. This should only be used for exceptional cases. Paths aren't technically validated, so you could use this to copy any files and folders to the build directory. Since the working directory when running is typically where the `chalet.json` file is, this might not work as expected. In the case of MacOS, when an app bundle is created, the paths given to `copyFilesOnRun` are copied to the `MacOS` folder since it's the path alongside the executables.
+
+> Note: The above behavior may change in the future since it's meant to handle an edge case - there may be better solutions.
 
 \\
 
@@ -748,6 +750,7 @@ In build target contexts, the following is supported:
 | `${home}`, `~/` | The home directory of the machine. On Windows, this is `C:\Users\(Name)` |
 | `${name}` | The name of the build/distribution target |
 | `${env:(Name)}` | An environment variable by name. For example: `${env:MY_LIBRARY_PATH}` |
+| `${var:(Name)}` | A local variable set within the root `variables` object. For example: `${var:pathToLib}` |
 | `${meta:(Name)}` | Metadata with context of an individual source target's `metadata` properties. `meta:workspaceXXX` always returns workspace metadata, while `meta:XXXX` could return workspace or source target metadata. |
 
 In distribution target contexts, the above is supported, in addition to:
@@ -810,5 +813,37 @@ Example:
 }
 ```
 
+\\
+
+## [Local Variables]
+
+If your project has a number of complex paths, local variables can be utilized in order to shorten them. They're slightly different from environment variables in that they aren't kept around in the build environment itself. They only exist to make paths (or strings in general) easier to read. To create some, add a `variables` object at the root of the build file like the one below:
+
+```json
+{
+   "variables": {
+      "foo": "quite/a/long/path/to/foo",
+      "foolibs": "${var:foo}/libs"
+   },
+   "targets": {
+      "my-target": {
+         "settings:Cxx": {
+            "includeDirs": [
+               "${var:foolibs}/bar/include",
+               "${var:foolibs}/baz/include",
+               "${var:foolibs}/doo/include",
+               "${var:foolibs}/bah/include"
+            ]
+         },
+         "files": "${external:foo}/**.cpp",
+      }
+   }
+
+}
+```
+
+It's recommended to use local variables for paths relative to the project, and environment variables for paths that are specific to the build machine.
+
+> Note: Added in Chalet v0.5.21
 
 <!-- nav:/docs/the-build-file:/docs/cxx-compile-settings -->

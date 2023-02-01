@@ -120,12 +120,18 @@ Example triples:
 ```bash
 x86_64-linux-gnu
 i686-linux-gnu
+arm-linux-gnueabi   # Cross compiler for ARM w/o FPU
 arm-linux-gnueabihf # Cross compiler for ARM w/ FPU
+aarch64-linux-gnu   # Cross compiler for ARM64
+
 x86_64-w64-mingw32  # Cross compiler for MinGW 64-bit Windows
+i686-w64-mingw32    # Cross compiler for MinGW 64-bit Windows
+
+arm-none-eabi       # Cross compiler for bare metal ARM
 ```
 
 **If using LLVM:**
-* Install some version of LLVM from your package manager
+* Install a version of LLVM from your package manager
 * Install any cross compilers you want to use and make note of their target triples like with GCC
 
 <!-- tabs:end -->
@@ -264,7 +270,7 @@ chalet configure -t llvm -a x86_64
 chalet configure -t llvm -a i866
 chalet configure -t llvm -a arm64
 chalet configure -t llvm -a arm
-chalet configure -t llvm -a arm-linux-gnueabihf
+chalet configure -t llvm -a armhf # Linux only
 
 # Generate an llvm toolchain with the "-14" suffix
 chalet configure -t llvm-14 -a arm64
