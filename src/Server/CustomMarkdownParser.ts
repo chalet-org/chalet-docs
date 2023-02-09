@@ -228,7 +228,7 @@ const parseSchemaReference = async (type: SchemaType, text: string, slug: string
 };
 
 const parseMdxSyntax = (text: string) => {
-	return text.replace(/\$\{(\w+)\}/g, "\\$\\{$1\\}");
+	return text.replace(/\$\{([\w:\(\)]+)\}/g, "\\$\\{$1\\}");
 };
 
 const parseSchemaDefinition = async (
