@@ -139,7 +139,7 @@ ${JSON.stringify(defaultValue, undefined, 3)}
 				.map(([key, value], i) => {
 					console.log(key);
 					// let res: string = `##### [pattern${i + 1}]\n\n\`${key}\`\n\n`;
-					let res: string = `\`\`${key.replace(/\\[a-z]/g, (p1: string) => `\\\\${p1}`)}\`\`\n\n`;
+					let res: string = `\`\`${key.replace(/\\[a-z.-_+/]/g, (p1: string) => `\\\\${p1}`)}\`\`\n\n`;
 					res += processJsonSchemaToMarkdown(null, slug, value as JSONSchema7, definitions, indented);
 					return res;
 				})
