@@ -116,6 +116,36 @@ ${JSON.stringify(defaultValue, undefined, 3)}
 	if (!!description && description.length > 0) {
 		result += `\n${description}\n\n`;
 	}
+	if (!!additionalProperties && typeof additionalProperties === "boolean") {
+		result += `additionalProperties: \`${additionalProperties ? "true" : "false"}\`  \n`;
+	}
+	if (!!properties) {
+		result +=
+			`\n<IndentGroup label="properties">\n\n` +
+			Object.entries(properties)
+				.map(([key, value], i) =>
+					processJsonSchemaToMarkdown(key, slug, value as JSONSchema7, definitions, indented)
+				)
+				.join(spacer) +
+			`\n</IndentGroup>\n\n`;
+	}
+	if (!!properties && !!patternProperties) {
+		result += `\n\n<Spacer />\n\n`;
+	}
+	if (!!patternProperties) {
+		result +=
+			`\n<IndentGroup label="pattern properties">\n\n` +
+			Object.entries(patternProperties)
+				.map(([key, value], i) => {
+					console.log(key);
+					// let res: string = `##### [pattern${i + 1}]\n\n\`${key}\`\n\n`;
+					let res: string = `\`\`${key.replace(/\\[a-z]/g, (p1: string) => `\\\\${p1}`)}\`\`\n\n`;
+					res += processJsonSchemaToMarkdown(null, slug, value as JSONSchema7, definitions, indented);
+					return res;
+				})
+				.join(spacer) +
+			`\n</IndentGroup>\n\n`;
+	}
 	if (!!anyOf) {
 		result +=
 			`\n<IndentGroup label="any of">\n\n` +
@@ -178,36 +208,6 @@ ${JSON.stringify(defaultValue, undefined, 3)}
 	/*if (!!cleanName) {
 		result += spacer;
 	}*/
-
-	if (!!additionalProperties && typeof additionalProperties === "boolean") {
-		result += `additionalProperties: \`${additionalProperties ? "true" : "false"}\`  \n`;
-	}
-	if (!!properties) {
-		result +=
-			`\n<IndentGroup label="properties">\n\n` +
-			Object.entries(properties)
-				.map(([key, value], i) =>
-					processJsonSchemaToMarkdown(key, slug, value as JSONSchema7, definitions, indented)
-				)
-				.join(spacer) +
-			`\n</IndentGroup>\n\n`;
-	}
-	if (!!properties && !!patternProperties) {
-		result += `\n\n<Spacer />\n\n`;
-	}
-	if (!!patternProperties) {
-		result +=
-			`\n<IndentGroup label="pattern properties">\n\n` +
-			Object.entries(patternProperties)
-				.map(([key, value], i) => {
-					// let res: string = `##### [pattern${i + 1}]\n\n\`${key}\`\n\n`;
-					let res: string = `\`\`${key.replace(/\\b/g, "\\\\b")}\`\`\n\n`;
-					res += processJsonSchemaToMarkdown(null, slug, value as JSONSchema7, definitions, indented);
-					return res;
-				})
-				.join(spacer) +
-			`\n</IndentGroup>\n\n`;
-	}
 
 	return result;
 };
