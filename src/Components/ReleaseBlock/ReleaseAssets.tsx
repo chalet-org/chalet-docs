@@ -25,8 +25,6 @@ const getPlatformArchFromFilename = (asset: GithubAsset): Optional<DeducedInfo> 
 		.replace(/-installer/g, "")
 		.split("-");
 
-	// console.log(triple);
-
 	if (triple.length !== 3) {
 		console.log("excluded:", asset);
 		return null;

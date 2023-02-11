@@ -25,7 +25,6 @@ const ContactForm = () => {
 			ev.preventDefault();
 			if (invalidForm) return;
 
-			// console.log(formData);
 			await docsApi.sendContactEmail(formData);
 			setSubmitted(true);
 			setError(null);

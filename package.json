@@ -27,7 +27,6 @@
 	"dependencies": {
 		"@badrap/bar-of-progress": "^0.1.2",
 		"@cronitorio/cronitor-rum-js": "^0.1.0",
-		"@panelbear/panelbear-js": "^1.3.3",
 		"axios": "^0.27.2",
 		"clsx": "^1.2.1",
 		"copy-to-clipboard": "^3.3.1",

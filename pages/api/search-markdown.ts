@@ -65,7 +65,6 @@ const handler = middleware.use(["auth"], async (req: ApiReq, res: ApiRes<ResultS
 
 		const pages = await getPagesCache();
 		const results = getSearchResults(search.toLowerCase(), pages);
-		// console.log(results);
 		res.status(200).json(results);
 	} catch (err: any) {
 		console.error(err);
