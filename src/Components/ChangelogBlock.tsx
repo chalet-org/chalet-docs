@@ -7,7 +7,7 @@ import { hasMinWidth, HeadingObject, Icon, Link } from "Components";
 import type { GithubRelease } from "Server/ChaletReleases";
 import { useUiStore } from "Stores";
 import { getThemeVariable } from "Theme";
-import { Panelbear } from "Utility";
+import { SiteAnalytics } from "Utility";
 
 import { mdxComponents } from "./MarkdownComponents";
 
@@ -36,7 +36,7 @@ const ChangelogBlock = ({ release }: Props) => {
 							<ReleaseType>Release</ReleaseType>
 						)}
 						<div className="spacer" />
-						<Link href={html_url} onClick={() => Panelbear.trackGithubReleaseClick(tag_name)}>
+						<Link href={html_url} onClick={() => SiteAnalytics.trackGithubReleaseClick(tag_name)}>
 							<Icon id="github" size="1.5rem" color={theme.primaryText} hoverColor={theme.primaryColor} />
 						</Link>
 					</div>

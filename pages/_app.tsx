@@ -6,7 +6,7 @@ import React from "react";
 // import { Optional } from "Utility";
 import { BaseStyle } from "Components";
 import { Providers } from "Stores";
-import { usePanelbear } from "Utility";
+import { useSiteAnalytics } from "Utility";
 
 /*let progress: Optional<ProgressBar> = null;
 if (progress === null) {
@@ -27,7 +27,7 @@ type Props = AppProps & {
 };
 
 const Main = ({ Component, pageProps }: Props) => {
-	usePanelbear();
+	useSiteAnalytics();
 
 	return (
 		<Providers>

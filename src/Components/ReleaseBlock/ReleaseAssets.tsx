@@ -8,7 +8,7 @@ import { GithubAsset, GithubRelease } from "Server/ChaletReleases";
 import { useUiStore } from "Stores";
 import { getThemeVariable } from "Theme";
 import { Optional } from "Utility";
-import { Panelbear } from "Utility";
+import { SiteAnalytics } from "Utility";
 
 type DeducedInfo = {
 	asset: GithubAsset;
@@ -92,7 +92,7 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url, tag_name }: Props) =>
 	const onDownload = useCallback(
 		async (url: string, ...data: string[]) => {
 			try {
-				Panelbear.trackDownload(`${tag_name}_${data.join("-")}`);
+				SiteAnalytics.trackDownload(`${tag_name}_${data.join("-")}`);
 				await router.push(url);
 			} catch (err) {
 				console.error(err);

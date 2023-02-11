@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { useUiStore } from "Stores";
 import { getThemeVariable } from "Theme";
-import { Panelbear } from "Utility";
+import { SiteAnalytics } from "Utility";
 
 import { Container } from "./Container";
 import { hasMinWidth } from "./GlobalStyles";
@@ -29,7 +29,11 @@ const PageFooter = (_props: Props) => {
 					</div>
 					<div className="right">
 						<Link href="/contact">Contact</Link>
-						<Link href="//www.github.com/chalet-org" title="Github" onClick={Panelbear.trackGithubClick}>
+						<Link
+							href="//www.github.com/chalet-org"
+							title="Github"
+							onClick={SiteAnalytics.trackGithubClick}
+						>
 							<Icon
 								id="github"
 								size="1.125rem"
