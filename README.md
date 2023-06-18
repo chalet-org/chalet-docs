@@ -29,8 +29,8 @@ GITHUB_TOKEN=
 4. run:
 
 ```
-yarn install
-yarn start
+pnpm run install
+pnpm run start
 ```
 
 5. Test GITHUB_TOKEN by going to `localhost:3000/api/schema/latest/settings-json` (this is a public endpoint)
@@ -39,5 +39,5 @@ yarn start
 ## To test for production
 ---
 
-Instead of `yarn start`, run `yarn build && yarn serve`
+Instead of `pnpm run start`, run `pnpm run build && pnpm run serve`
 
