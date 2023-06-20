@@ -74,7 +74,7 @@ const parseCodeHeaders = (text: string): string => {
 };
 
 const parseDescriptionList = (text: string): string => {
-	return text.replace(/\[dl:start\]((.|\n)*?)\[dl:end\]/g, (match: string, p1: string) => {
+	return text.replace(/\[\[dl:start\]\]((.|\n)*?)\[\[dl:end\]\]/g, (match: string, p1: string) => {
 		let retString: string = `<dl>`;
 		retString += p1;
 		retString += `</dl>`;
@@ -85,7 +85,7 @@ const parseDescriptionList = (text: string): string => {
 const parseBottomPageNavigation = (text: string): Promise<string> => {
 	return replaceAsync(
 		text,
-		/\[nav:(\/?[a-z\/-]*?):(\/?[a-z\/-]*?)\]/g,
+		/\[\[nav:(\/?[a-z\/-]*?):(\/?[a-z\/-]*?)\]\]/g,
 		async (match: string, p1: string, p2: string) => {
 			let nav = "<PageNavigation";
 			if (p1.length > 0) {
@@ -103,30 +103,33 @@ const parseBottomPageNavigation = (text: string): Promise<string> => {
 };
 
 const parseTabs = (text: string): string => {
-	return text.replace(/\[tabs:start\]\n{1,3}((.|\n)*?)\[tabs:end\]/g, (match: string, p1: string, p2: string) => {
-		p1 = trimLineBreaksFromEdges(p1);
+	return text.replace(
+		/\[\[tabs:start\]\]\n{1,3}((.|\n)*?)\[\[tabs:end\]\]/g,
+		(match: string, p1: string, p2: string) => {
+			p1 = trimLineBreaksFromEdges(p1);
 
-		if (p1.startsWith("|")) p1 = p1.substring(1);
+			if (p1.startsWith("|")) p1 = p1.substring(1);
 
-		const tabArray = p1.replace(/(\n{1,3}\||\|\n{1,3})/g, "|").split("|");
-		if (tabArray.length % 2 == 1) return "";
+			const tabArray = p1.replace(/(\n{1,3}\||\|\n{1,3})/g, "|").split("|");
+			if (tabArray.length % 2 == 1) return "";
 
-		let retString: string = `<TabbedContent>\n`;
-		for (let i = 0; i < tabArray.length; i += 2) {
-			retString += `<button>${tabArray[i]}</button>\n<div className="tab-content">
+			let retString: string = `<TabbedContent>\n`;
+			for (let i = 0; i < tabArray.length; i += 2) {
+				retString += `<button>${tabArray[i]}</button>\n<div className="tab-content">
 
 ${tabArray[i + 1]}
 
 </div>\n`;
+			}
+			retString += `</TabbedContent>`;
+			return retString;
 		}
-		retString += `</TabbedContent>`;
-		return retString;
-	});
+	);
 };
 
 const parseAccordions = (text: string): string => {
 	return text.replace(
-		/\[accordion:start\s?(.*?)\]((.|\n)*?)\[accordion:end\]/g,
+		/\[\[accordion:start\s?(.*?)\]\]((.|\n)*?)\[\[accordion:end\]\]/g,
 		(match: string, p1: string, p2: string) => {
 			let retString: string = p1.length > 0 ? `<Accordion label="${p1}">` : `<Accordion>`;
 			retString += p2;

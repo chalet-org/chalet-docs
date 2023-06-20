@@ -15,11 +15,11 @@ At the moment, Chalet must be installed manually in non-Windows operating system
 
 ## [Machine Setup]
 
-[accordion:start Adding a C/C++ Compiler]
+[[accordion:start Adding a C/C++ Compiler]]
 
 Before building, you should have a C/C++ compiler chosen for your platform.
 
-[tabs:start]
+[[tabs:start]]
 |Windows|
 **Install one of the following:**
 * [Visual Studio](//visualstudio.microsoft.com/) (Recommended)
@@ -134,29 +134,29 @@ arm-none-eabi       # Cross compiler for bare metal ARM
 * Install a version of LLVM from your package manager
 * Install any cross compilers you want to use and make note of their target triples like with GCC
 
-[tabs:end]
+[[tabs:end]]
 
-[accordion:end]
+[[accordion:end]]
 
-[accordion:start Building Chalet from Source]
+[[accordion:start Building Chalet from Source]]
 
-[tabs:start]
+[[tabs:start]]
 
 !!ChaletCompileMd!!
 
-[tabs:end]
+[[tabs:end]]
 
-[accordion:end]
+[[accordion:end]]
 
-[accordion:start Additional Software]
+[[accordion:start Additional Software]]
 
 * [Git](//git-scm.com/) - Used in Chalet for fetching & managing external dependencies
 * [Ninja](//ninja-build.org/) - Make alternative, that is quicker by design due to how it manages dependencies
 * [CMake](//cmake.org/) - Used to integrate external code into Chalet projects
 
-[accordion:end]
+[[accordion:end]]
 
-[accordion:start Shell Tab Completion]
+[[accordion:start Shell Tab Completion]]
 
 Each Chalet release comes with tab completion files. The shells `zsh`, `bash`, `sh` and `fish` are currently supported. To use them on your machine, simply source the file somewhere during initialization, or copy/symlink the script to the shell's completion folder and restart your terminal instance. You can also run the source command from your terminal beforehand in order to test the tab completion.
 
@@ -177,7 +177,7 @@ source "(CHALET_PATH)/chalet-completion.sh"
 source "(CHALET_PATH)/chalet-completion.fish"
 ```
 
-[accordion:end]
+[[accordion:end]]
 
 \\
 
@@ -223,7 +223,7 @@ The toolchain refers to either a preset (`llvm` `apple-llvm` `gcc` `vs-stable` `
 The toolchain is specified with either `--toolchain (name)` or `-t (name)`
 The architecture is specified with either `--arch (name)` or `-a (name)`.  Architectures will be described in more detail later, but in general, it does not need to be specified if you are compiling for your host architecture. `-a auto` explicity sets the output architecture to the host machine's.
 
-[tabs:start]
+[[tabs:start]]
 |MSVC|
 
 ```bash
@@ -331,7 +331,7 @@ chalet configure -t intel-classic -a auto build
 ```
 
 
-[tabs:end]
+[[tabs:end]]
 
 > Note: In all cases, you can edit the generated toolchain name, and refine paths to executables later, and save them for use globally.
 
@@ -390,4 +390,4 @@ A single string argument will be parsed and passed to the executable as separate
 chalet run my-tests '-w NoTests -s'
 ``` 
 
-[nav:/:/docs/the-build-file]
+[[nav:/:/docs/the-build-file]]
