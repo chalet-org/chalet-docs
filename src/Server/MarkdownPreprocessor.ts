@@ -51,7 +51,7 @@ const processJsonSchemaToMarkdown = (
 
 				let displayName = definitionName.split("-").pop() ?? "";
 				displayName = displayName.charAt(0).toUpperCase() + displayName.substring(1);
-				return `<!-- ${displayName}:definition=${key} -->\n\n`;
+				return `[${displayName}:definition=${key}]\n\n`;
 			})
 			.join("");*/
 	}
