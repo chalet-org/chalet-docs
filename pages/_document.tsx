@@ -7,10 +7,14 @@ import { rootStyles } from "Components";
 type Props = DocumentProps & {};
 
 class MyDocument extends Document<Props> {
+	static path: string = "";
+
 	// Note: this gets rid of the "flicker" during first paint
 	static async getInitialProps(ctx: any) {
 		const sheet = new ServerStyleSheet();
 		const originalRenderPage = ctx.renderPage;
+
+		MyDocument.path = ctx.asPath;
 
 		try {
 			ctx.renderPage = () =>
@@ -34,12 +38,11 @@ class MyDocument extends Document<Props> {
 	}
 
 	render() {
-		const { slug: slugRaw } = this.props.__NEXT_DATA__.query;
-		let slug: string = typeof slugRaw === "string" ? slugRaw : slugRaw?.join("/") ?? "";
-		if (slug.length > 0) slug += "/";
+		let path = MyDocument.path;
+		if (path.length > 0) path += "/";
 
 		const domain: string = "chalet-work.space";
-		const url: string = `https://www.${domain}/${slug}`;
+		const url: string = `https://www.${domain}${path}`;
 		const description: string =
 			"A cross-platform project format & build tool for C/C++ focused on usability and interoperability.";
 		const image: string = `https://www.${domain}/images/chalet-banner.jpg`;
