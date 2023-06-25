@@ -25,9 +25,20 @@ Modules have a complicated build process compared to other C++ code, so they are
 
 Because module source code file extensions can technically be anything in the same way as regular C++ code, it makes the most sense to separate out the two types of source code in the build into separate targets, and define the extensions in [Files](/docs/creating-targets?id=adding-source-files) how you'd like them to be. A traditional C++ file in a module target would get treated as a module otherwise.
 
-Also of note, standard library header imports are supported without any additional settings, so feel free to `import <iostream>`. 
+Also of note, standard library header imports are supported without any additional settings, so feel free to `import <iostream>` or `import std` in C++23 mode.
 
 To get started with modules, initialize a project with `chalet init` and answer **yes** to **Enable C++20 modules?** in the questionnaire.
+
+**C++23**
+
+As of Visual Studio 17.5 and above in C++23 mode, one can use standard library modules:
+
+| std | Module containing the C++ STL |
+| std.compat | Module containing compatible global C functions |
+
+Comprehensive documentation about these features can be found [here](https://learn.microsoft.com/en-us/cpp/cpp/tutorial-import-stl-named-module?view=msvc-170).
+
+> Notes: `import std` and `import std.compat` is a bit like a precompiled header in that they require a longer build up-front and require rebuilding if they are changed between VS versions. Unlike one, they use a lot less space on disk. 
 
 \
 

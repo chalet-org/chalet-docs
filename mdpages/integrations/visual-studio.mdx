@@ -24,7 +24,7 @@ Detailed information can be found [here](https://docs.microsoft.com/en-us/cpp/bu
 While you could certainly create these and manage them yourself, it would be a lot nicer to generate them. The following command can be run:
 
 ```bash
-chalet export vs-json
+chalet export vsjson
 ```
 
 The files are generated to `build/.project/vsjson` as not clash with any existing files that may be checked-in. You would then want to copy the files to the root of your project and open that path in Visual Studio. They are ultimately kind of experimental though, because they attempt to provide a general configuration for the entire project. You'll most likely want to generate a VS Solution anyway for precise intellisense and to take full advantage of all that VS has to offer.
@@ -40,7 +40,7 @@ To generate a solution file (`.sln`) and `.vcxproj` files for each build target,
 You can run the `export` command to simply generate them: 
 
 ```bash
-chalet export vs-solution
+chalet export vssolution
 ```
 
 This generates a solution to `build/.project/project.sln` and `.vcxproj` files to `build/.project/vcxproj/(name).vcxproj`. It will also include all of the current build configurations setup by the project. However, this doesn't take into account any current builds that have run, so it is recommended to clean your build folder if any builds were run prior to running this command.

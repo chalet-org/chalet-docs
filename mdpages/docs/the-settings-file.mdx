@@ -302,6 +302,32 @@ Below is an example toolchain that generates for `apple-llvm` on MacOS.
 
 Paths for `cmake`, `make` and `ninja` are part of the toolchains so that one can define bundled versions (in the case of Visual Studio), or other drop-in replacements.
 
+**Multi-architecture toolchains**
+
+Different toolchains use different paradigms. The above works for LLVM and anything with a single supported architecture, but in an effort to keep the command consistent across toolchains, one can define one toolchain, and point to the different architectures supported. This is handled automatically for the most part in GCC and Visual Studio presets, but you can create one manually too.
+
+```json
+"toolchains": {
+   "vs-2022": {
+      "x64": {
+         ...
+         "compilerCpp": ".../HostX64/X64/..."
+      },
+      "x64_x86": {
+         ...
+         "compilerCpp": ".../HostX64/X86/..."
+      },
+      "x64_arm64": {
+         ...
+         "compilerCpp": ".../HostX64/ARM64/..."
+      }
+   }
+}
+```
+
+In the above example, `-t vs-2022 -a x64` resolves to the paths you would expect.
+
+
 [[dl:start]]
 
 ``version``
