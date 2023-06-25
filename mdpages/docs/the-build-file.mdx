@@ -30,7 +30,7 @@ From a high level, it's structured as follows:
 | variables | Local variables to shorten build paths without modifying the build environment. |
 | defaultConfigurations | An array fo default build configurations to use. |
 | configurations | Custom build configurations |
-| externalDependencies | External dependencies to fetch before building. (ie. from git) |
+| externalDependencies | External dependencies to resolve before building. (ie. from git, or a local path) |
 | targets | Build targets. |
 | abstracts | Abstract build targets that build targets can inherit from. |
 | distribution | Distribution targets. |
@@ -87,19 +87,24 @@ Chalet has a method of streamlining external git dependencies that can then be u
 
 \\
 
-## [Git Dependencies]
+## [External Dependencies]
+
+External dependencies describe any code that exists outside of the local project. This typically means pulling down a git repo, or referencing a local folder that's expected to exist on the machine. One can calso run a script at the time of calling `chalet configure`, outside the normal build 
 
 External git repositories are added to the project with the `externalDependencies` property at the root of chalet.json. With it, one can add a series of repos, define what branch, tag or commit to clone the repo from, and then Chalet can lightly manage it from there. The `repository` property takes any valid git repository path.
 
 ```json
 "externalDependencies": {
    "foo-repo": {
+      "kind": "git",
       "repository": "https://github.com/foo/foo.git"
    },
    "foo2-repo": {
+      "kind": "git",
       "repository": "git@github.com:foo/foo2.git"
    },
    "bar-repo": {
+      "kind": "git",
       "repository": "https://my-website.io/bar/bar.git",
       "commit": "2b74ae96d9649d26be9a3deea0862ac1ad29c19b"
    }
@@ -110,6 +115,7 @@ Chalet also supports repositories with submodules, via the `submodules` property
 
 ```json
 "foo-repo": {
+   "kind": "git",
    "repository": "https://github.com/foo/foo.git",
    "submodules": true
 }
@@ -119,6 +125,7 @@ To define a commit id, use the `commit` property, with must contain between 7 an
 
 ```json
 "bar-repo": {
+   "kind": "git",
    "repository": "https://my-website.io/bar/bar.git",
    "commit": "2b74ae9"
 }
@@ -128,6 +135,7 @@ To define a tag, use the `tag` property with a valid tag:
 
 ```json
 "bar-repo": {
+   "kind": "git",
    "repository": "https://my-website.io/bar/bar.git",
    "tag": "v4.2"
 }
@@ -137,6 +145,7 @@ To define a branch, use the `branch` property with a valid branch:
 
 ```json
 "bar-repo": {
+   "kind": "git",
    "repository": "https://my-website.io/bar/bar.git",
    "branch": "experimental"
 }
@@ -146,6 +155,7 @@ The `branch` & `commit` properties can also be combined:
 
 ```json
 "bar-repo": {
+   "kind": "git",
    "repository": "https://my-website.io/bar/bar.git",
    "branch": "experimental",
    "commit": "2b74ae9"
@@ -166,6 +176,7 @@ The subfolder name of the cloned repository will always be the object node's nam
 
 ```json
 "bar-repo": {
+   "kind": "git",
    "repository": "https://my-website.io/bar/bar.git",
    "tag": "v4.2"
 }
