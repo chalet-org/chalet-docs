@@ -495,6 +495,17 @@ Example:
 }
 ```
 
+Project metadata can be copied from the workspace metadata with the convenience property `"metadata": "inherit"`:
+
+```json
+"my-target": {
+   "kind": "executable",
+   "metadata": "inherit",
+   ...
+}
+```
+
+
 \\
 
 ## [Configure Files]
@@ -746,7 +757,7 @@ In build target contexts, the following is supported:
 | `${cwd}` | The current working directory (this shouldn't be needed, but it's here just in case) |
 | `${configuration}` | The current build configuration |
 | `${external:(Name)}` | The path to an external dependency by name. See [externalDependencies](/schema/latest/chalet-json?id=external-dependencies) |
-| `${externalBuild:(Name)}` | The build path for an external dependency by name. For instance, if a CMake project is located at `${external:foo}`, it will build to `${buildDir}/${externalDir}/foo`, so it's easier to write `${externalBuild:foo}` |
+| `${externalBuild:(Name)}` | The build path for an external dependency by name. For instance, if a CMake project is located at `${external:foo}`, it will build to `${buildDir}/chalet_external/foo`, so it's more convenient to write `${externalBuild:foo}` |
 | `${home}`, `~/` | The home directory of the machine. On Windows, this is `C:\Users\(Name)` |
 | `${name}` | The name of the build/distribution target |
 | `${env:(Name)}` | An environment variable by name. For example: `${env:MY_LIBRARY_PATH}` |
