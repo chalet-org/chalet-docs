@@ -9,7 +9,7 @@ import { toKebabCase } from "Utility/TextCaseConversions";
 
 type HeadingSize = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 
-// Not sure how to type this in styled-components v5
+// Not sure how to type this in styled-components v6
 // type StyledHeaders = (typeof styled.h1 | typeof styled.h2 | typeof styled.h3 | typeof styled.h4 | typeof styled.h5 | typeof styled.h6);
 
 type Props = {
