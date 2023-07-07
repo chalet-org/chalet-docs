@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import React from "react";
-import styled, { StyledComponent } from "styled-components";
+import styled from "styled-components";
 
 import { Link } from "Components";
 import { getThemeVariable } from "Theme";
@@ -9,13 +9,16 @@ import { toKebabCase } from "Utility/TextCaseConversions";
 
 type HeadingSize = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 
+// Not sure how to type this in styled-components v5
+// type StyledHeaders = (typeof styled.h1 | typeof styled.h2 | typeof styled.h3 | typeof styled.h4 | typeof styled.h5 | typeof styled.h6);
+
 type Props = {
 	children?: string | JSX.Element;
 	size: HeadingSize;
 	anchor?: boolean;
 };
 
-let Styles: Dictionary<StyledComponent<"h1" | "h2" | "h3" | "h4" | "h5" | "h6", any, {}, never>> = {};
+let Styles: Dictionary<any> = {};
 
 const Heading = ({ size, anchor, children }: Props) => {
 	const router = useRouter();
