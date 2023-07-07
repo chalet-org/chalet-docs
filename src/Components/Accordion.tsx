@@ -37,7 +37,7 @@ const Accordion = ({ label, children }: Props) => {
 			>
 				{!!label ? label : open ? "Collapse" : "Expand"}
 			</AccordionHandle>
-			<AccordionContent className={className} height={computedHeight} onAnimationEnd={notifyHeightChange}>
+			<AccordionContent className={className} onAnimationEnd={notifyHeightChange} $height={computedHeight}>
 				<div className="inner" ref={contentRef}>
 					{children}
 				</div>
@@ -94,7 +94,7 @@ const AccordionHandle = styled.button`
 `;
 
 type ContentProps = {
-	height: number;
+	$height: number;
 };
 
 const AccordionContent = styled.div<ContentProps>`
@@ -105,7 +105,7 @@ const AccordionContent = styled.div<ContentProps>`
 	transition: max-height 0.25s linear, opacity 0.25s linear;
 
 	&.open {
-		max-height: calc(${({ height }) => height}px + 1rem);
+		max-height: calc(${(p) => p.$height}px + 1rem);
 		opacity: 1;
 	}
 

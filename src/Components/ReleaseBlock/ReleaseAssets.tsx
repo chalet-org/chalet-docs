@@ -124,7 +124,7 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url, tag_name }: Props) =>
 										onClick={(ev) =>
 											onDownload(browser_download_url, data.arch, dataPlatform, abi, filetype)
 										}
-										color={theme.codeBlue}
+										$color={theme.codeBlue}
 									>
 										<div className="bold">
 											Windows {isRecommended ? `${typeLabel} (Recommended)` : typeLabel}
@@ -154,7 +154,7 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url, tag_name }: Props) =>
 										onClick={(ev) =>
 											onDownload(browser_download_url, data.arch, dataPlatform, abi, filetype)
 										}
-										color={theme.codeGray}
+										$color={theme.codeGray}
 									>
 										<div className="bold">
 											MacOS{" "}
@@ -193,7 +193,7 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url, tag_name }: Props) =>
 										onClick={(ev) =>
 											onDownload(browser_download_url, data.arch, dataPlatform, abi, filetype)
 										}
-										color={theme.codeRed}
+										$color={theme.codeRed}
 									>
 										<div className="bold">
 											{dataArch === "arm" ? "Debian" : "Debian / Ubuntu"} package (.deb / .zip)
@@ -223,7 +223,7 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url, tag_name }: Props) =>
 										onClick={(ev) =>
 											onDownload(browser_download_url, data.arch, dataPlatform, abi, filetype)
 										}
-										color={theme.codeGreen}
+										$color={theme.codeGreen}
 									>
 										<div className="bold">
 											Linux archive (.zip)
@@ -245,7 +245,7 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url, tag_name }: Props) =>
 							onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
 							onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
 							onClick={(ev) => onDownload(zipball_url, "source", "zip")}
-							color={theme.primaryColor}
+							$color={theme.primaryColor}
 						>
 							<div className="bold">Source code (.zip)</div>
 							<div></div>
@@ -255,7 +255,7 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url, tag_name }: Props) =>
 							onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
 							onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
 							onClick={(ev) => onDownload(tarball_url, "source", "tar")}
-							color={theme.primaryColor}
+							$color={theme.primaryColor}
 						>
 							<div className="bold">Source code (.tar.gz)</div>
 							<div></div>
@@ -327,7 +327,7 @@ const DownloadSection = styled.div`
 `;
 
 type AssetButtonProps = {
-	color: string;
+	$color: string;
 };
 
 const AssetButton = styled.button<AssetButtonProps>`
@@ -381,8 +381,8 @@ const AssetButton = styled.button<AssetButtonProps>`
 	&:hover,
 	&.touch-hover {
 		color: ${getThemeVariable("background")};
-		background-color: ${({ color }) => color};
-		border-color: ${({ color }) => color};
+		background-color: ${(p) => p.$color};
+		border-color: ${(p) => p.$color};
 		z-index: 11;
 	}
 `;

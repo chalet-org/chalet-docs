@@ -1,17 +1,19 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
 
-type StyleProps = {
+type Props = {
 	color: string;
 };
 
-type Props = StyleProps & {};
-
 const TerminalCursor = ({ color }: Props) => {
-	return <Styles color={color} />;
+	return <Styles $color={color} />;
 };
 
 export { TerminalCursor };
+
+type StyleProps = {
+	$color: string;
+};
 
 const rotate = keyframes`
 	0% { opacity: 1; }
@@ -28,7 +30,7 @@ const Styles = styled.span<StyleProps>`
 	width: 0.45em;
 	height: 1.125em;
 	top: -0.0625em;
-	background-color: ${({ color }) => color};
+	background-color: ${(p) => p.$color};
 	opacity: 1;
 	animation: ${rotate} 1s linear infinite;
 	margin-left: 0.0625em;

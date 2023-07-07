@@ -1,26 +1,26 @@
 import React from "react";
 import styled from "styled-components";
 
-type StyleProps = {
+type Props = React.PropsWithChildren<{
+	prompt: string;
 	color: string;
-};
-
-type Props = StyleProps &
-	React.PropsWithChildren<{
-		prompt: string;
-	}>;
+}>;
 
 const TerminalPrompt = ({ prompt, color, children }: Props) => {
 	return (
 		<>
-			<Styles color={color}>{prompt} </Styles>
+			<Styles $color={color}>{prompt} </Styles>
 			<span>{children}</span>
 		</>
 	);
 };
 
+type StyleProps = {
+	$color: string;
+};
+
 const Styles = styled.span<StyleProps>`
-	color: ${({ color }) => color};
+	color: ${(p) => p.$color};
 `;
 
 export { TerminalPrompt };

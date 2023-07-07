@@ -41,6 +41,8 @@ type LoggableAsset = {
 	downloads: number;
 };
 
+const printTable: boolean = false;
+
 const getChaletReleases = (): Promise<ResultGithubReleases> => {
 	return serverCache.get(`chalet-releases`, async () => {
 		const url = `https://api.github.com/repos/chalet-org/chalet/releases`;
@@ -141,56 +143,58 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 			return ret;
 		};
 
-		const MAX_RELEASES = 999;
+		if (printTable) {
+			const MAX_RELEASES = 999;
 
-		const downloadsByKind: Record<string, any> = {};
-		const downloadsByTag: Record<string, any> = {};
+			const downloadsByKind: Record<string, any> = {};
+			const downloadsByTag: Record<string, any> = {};
 
-		const printableArray: ResultGithubReleases = [...withTransformedBody].reverse();
-		printableArray.forEach((release, i) => {
-			downloadsByTag[release.tag_name] = {
-				// tag: release.tag_name,
-				downloads: 0,
-			};
-
-			const assets = release.assets.reduce<LoggableAsset[]>((prev, curr) => {
-				prev.push({
-					downloads: curr.download_count,
-					tag: release.tag_name,
-					name: curr.name,
-				});
-
-				const details = getTotalName(curr.name);
-
-				if (downloadsByKind[curr.name]) {
-					downloadsByKind[curr.name] = {
-						downloads: (downloadsByKind[curr.name].downloads += curr.download_count),
-						...details,
-					};
-				} else {
-					downloadsByKind[curr.name] = {
-						downloads: curr.download_count,
-						...details,
-					};
-				}
-
+			const printableArray: ResultGithubReleases = [...withTransformedBody].reverse();
+			printableArray.forEach((release, i) => {
 				downloadsByTag[release.tag_name] = {
-					...downloadsByTag[release.tag_name],
-					downloads: (downloadsByTag[release.tag_name].downloads += curr.download_count),
+					// tag: release.tag_name,
+					downloads: 0,
 				};
 
-				return prev;
-			}, []);
+				const assets = release.assets.reduce<LoggableAsset[]>((prev, curr) => {
+					prev.push({
+						downloads: curr.download_count,
+						tag: release.tag_name,
+						name: curr.name,
+					});
 
-			console.table(assets);
-		});
+					const details = getTotalName(curr.name);
 
-		const printable = Object.values(downloadsByKind).sort((a, b) => (a.downloads < b.downloads ? 1 : -1));
-		console.table(printable);
-		console.table(downloadsByTag);
-		console.table({
-			total_downloads: printable.reduce<number>((prev, curr) => (prev += curr.downloads), 0),
-		});
+					if (downloadsByKind[curr.name]) {
+						downloadsByKind[curr.name] = {
+							downloads: (downloadsByKind[curr.name].downloads += curr.download_count),
+							...details,
+						};
+					} else {
+						downloadsByKind[curr.name] = {
+							downloads: curr.download_count,
+							...details,
+						};
+					}
+
+					downloadsByTag[release.tag_name] = {
+						...downloadsByTag[release.tag_name],
+						downloads: (downloadsByTag[release.tag_name].downloads += curr.download_count),
+					};
+
+					return prev;
+				}, []);
+
+				console.table(assets);
+			});
+
+			const printable = Object.values(downloadsByKind).sort((a, b) => (a.downloads < b.downloads ? 1 : -1));
+			console.table(printable);
+			console.table(downloadsByTag);
+			console.table({
+				total_downloads: printable.reduce<number>((prev, curr) => (prev += curr.downloads), 0),
+			});
+		}
 
 		return withTransformedBody;
 	});

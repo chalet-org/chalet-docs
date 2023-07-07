@@ -40,12 +40,12 @@ const Page = ({ title, children }: Props) => {
 			</Head>
 			<Main
 				id="main"
-				{...{ navWidth }}
 				className={clsx({
 					"nav-open": navOpen,
 					animating: animating,
 				})}
 				onAnimationEnd={() => setAnimating(false)}
+				$navWidth={navWidth}
 			>
 				{initialized ? (
 					<>
@@ -64,7 +64,7 @@ const Page = ({ title, children }: Props) => {
 export { Page };
 
 type NavBarProps = {
-	navWidth: string;
+	$navWidth: string;
 };
 
 const Main = styled.main<NavBarProps>`
@@ -99,7 +99,7 @@ const Main = styled.main<NavBarProps>`
 	}
 
 	&.nav-open {
-		left: ${(props) => props.navWidth};
+		left: ${(props) => props.$navWidth};
 		overflow-y: hidden;
 
 		.container {

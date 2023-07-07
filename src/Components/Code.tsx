@@ -100,7 +100,7 @@ type CodeProps = Props & {
 
 const CodePre = ({ children, lang }: CodeProps) => {
 	return (
-		<PreStyles fonts={globalFonts} data-lang={lang}>
+		<PreStyles data-lang={lang} $fonts={globalFonts}>
 			<pre>
 				<code
 					className={`language-${lang}`}
@@ -117,7 +117,7 @@ const CodePre = ({ children, lang }: CodeProps) => {
 
 const CodeHeader = ({ children }: Pick<CodeProps, "children">) => {
 	return (
-		<HeaderStyles fonts={globalFonts}>
+		<HeaderStyles $fonts={globalFonts}>
 			<code>{children}</code>
 		</HeaderStyles>
 	);
@@ -136,7 +136,7 @@ const CodePreFromMarkdown = ({ children, ...props }: Props) => {
 				const lang = props.lang ?? childProps?.className?.replace?.(/( |language-)/g, "") ?? "";
 
 				return (
-					<PreStyles fonts={globalFonts} data-lang={lang}>
+					<PreStyles data-lang={lang} $fonts={globalFonts}>
 						<pre>
 							<code
 								className={`language-${lang}`}
@@ -163,7 +163,7 @@ export { Code, CodePre, CodeHeader, CodePreFromMarkdown };
 const boldWeight: number = 800;
 
 type StyleProps = {
-	fonts?: Dictionary<string>;
+	$fonts?: Dictionary<string>;
 };
 
 const codeCss = css<StyleProps>`
@@ -428,7 +428,7 @@ const PreStyles = styled.div<StyleProps>`
 		position: absolute;
 		top: 0.875rem;
 		right: 1.25rem;
-		font-family: ${(props) => props.fonts?.paragraph ?? "inherit"};
+		font-family: ${(p) => p.$fonts?.paragraph ?? "inherit"};
 		font-size: 0.875rem;
 		z-index: 10;
 	}

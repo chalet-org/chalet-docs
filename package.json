@@ -50,7 +50,7 @@
 		"react-is": "18.2.0",
 		"react-oocontext": "1.0.5",
 		"react-textarea-autosize": "^8.3.3",
-		"styled-components": "5.3.5"
+		"styled-components": "6.0.2"
 	},
 	"devDependencies": {
 		"@trivago/prettier-plugin-sort-imports": "^2.0.2",
@@ -62,7 +62,6 @@
 		"@types/prismjs": "^1.16.6",
 		"@types/react": "18.0.15",
 		"@types/react-dom": "18.0.6",
-		"@types/styled-components": "5.1.25",
 		"eslint": "8.19.0",
 		"eslint-config-next": "12.2.2",
 		"prettier": "2.7.1",
