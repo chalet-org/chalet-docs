@@ -41,7 +41,7 @@ type LoggableAsset = {
 	downloads: number;
 };
 
-const printTable: boolean = false;
+const printTable: boolean = true;
 
 const getChaletReleases = (): Promise<ResultGithubReleases> => {
 	return serverCache.get(`chalet-releases`, async () => {
