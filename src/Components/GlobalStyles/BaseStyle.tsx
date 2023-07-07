@@ -340,9 +340,8 @@ const rootStylesCss = /* css */ `
 	}
 
 	body {
-		opacity: 1;
-		/* opacity: 0; */
-		/* transition: opacity 0.125s linear 0.125s; */
+		opacity: 0;
+		transition: opacity 0.125s linear 0.125s;
 	}
 
 	body.ready {
