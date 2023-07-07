@@ -326,7 +326,7 @@ const BaseStyle: any = createGlobalStyle`
 //
 // Plain CSS only here
 //
-const rootStylesCss = `
+const rootStylesCss = /* css */ `
 	html.${Theme.Light} {
 		${getRootThemeCss(lightTheme)}
 
@@ -340,8 +340,9 @@ const rootStylesCss = `
 	}
 
 	body {
-		opacity: 0;
-		transition: opacity 0.125s linear 0.125s;
+		opacity: 1;
+		/* opacity: 0; */
+		/* transition: opacity 0.125s linear 0.125s; */
 	}
 
 	body.ready {
