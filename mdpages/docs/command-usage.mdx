@@ -101,13 +101,13 @@ chalet run [<run-target>] [<args>...]
 Run the first valid executable build target, or a chosen executable.
 
 ```bash
-chalet build 
+chalet build [<target>]
 ```
 
 Build the project. If a configuration doesn't exist, it will be created.
 
 ```bash
-chalet rebuild  
+chalet rebuild [<target>]
 ```
 
 Rebuild the project. If a configuration doesn't exist, it will be created.
@@ -134,7 +134,7 @@ Bundle the project for distribution.
 
 <dd>
 
-An executable or script target to run 
+An executable or script target to run. Defaults to the first runnable build target.
 
 </dd>
 
@@ -143,6 +143,14 @@ An executable or script target to run
 <dd>
 
 The arguments to pass to the run target.
+
+</dd>
+
+``<target>``
+
+<dd>
+
+Any build target. If use without `--only-required`, only builds what's required for that target. If this is a script/process target, any scripts before it will still be executed. Defaults to `all`, an implicit target.
 
 </dd>
 
@@ -242,6 +250,8 @@ Presets:
 * `vs-2017`
 * `llvm`
 * `gcc`
+* `llvm-vs-stable`
+* `llvm-vs-latest`
 * `llvm-vs-2022`
 * `llvm-vs-2019`
 * `intel-llvm-vs-2019`
@@ -370,11 +380,57 @@ Generate a `compile_commands.json` file for Clang tooling use. The one for the c
 
 </dd>
 
+``--only-required``
+``--no-only-required``
+
+<dd>
+
+If defining a build target other than `all`, this builds only the previous targets required for that target.
+
+</dd>
+
+``--signing-identity``
+
+<dd>
+
+**macOS only:** Set a code-signing identity from the command line to use during the build.
+
+</dd>
+
+``--os-target-name``
+
+<dd>
+
+**macOS only:** Set the operating system name to target for the build.
+
+Supported values:
+* `macosx`
+* `iphoneos`
+* `iphonesimulator`
+* `watchos`
+* `watchsimulator`
+* `appletvos`
+* `appletvsimulator`
+* `xros`
+* `xrsimulator`
+
+Anything other than `macosx` is considered experimental.
+
+</dd>
+
+``--os-target-version``
+
+<dd>
+
+**macOS only:** Set the operating system version to target for the build. These versions are not managed by Chalet at all, and simply get passed to the compiler. Use to target a version earlier than the one used by build machine and apple clang verison. If this and `--os-target-name` are not defined, a default will get detected.
+
+</dd>
+
 ``--quieter``
 
 <dd>
 
-Show only build output.
+Show only the build output.
 
 </dd>
 
@@ -498,7 +554,7 @@ Types:
 | vssolution | Visual Studio Solution |
 | codeblocks | CodeBlocks IDE (experimental) |
 
-> Note: The `vs-solution` export generates the same .sln as the `msbuild` build strategy.
+> Note: The `vssolution` export generates the same .sln as the `msbuild` build strategy.
 
 </dd>
 

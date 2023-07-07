@@ -71,11 +71,11 @@ The first block is the options, and most of them will be familiar, because with 
 
 [[dl:start]]
 
-``runTarget``
+``lastTarget``
 
 <dd>
 
-The executable or script target to run .
+Any build target. If use without `--only-required`, only builds what's required for that target. If this is a script/process target, any scripts before it will still be executed. Defaults to `all`, an implicit target.
 
 </dd>
 
@@ -84,6 +84,14 @@ The executable or script target to run .
 <dd>
 
 An object of key/values where the key is the run target name, and the value is the run arguments that were used last.
+
+</dd>
+
+``onlyRequired``
+
+<dd>
+
+If defining a build target other than `all`, this builds only the previous targets required for that target.
 
 </dd>
 
@@ -269,6 +277,43 @@ Generate a `compile_commands.json` file for Clang tooling use. The one for the c
 
 </dd>
 
+``signingIdentity``
+
+<dd>
+
+**macOS only:** Set a code-signing identity from the command line to use during the build.
+
+</dd>
+
+``osTargetName``
+
+<dd>
+
+**macOS only:** Set the operating system name to target for the build.
+
+Supported values:
+* `macosx`
+* `iphoneos`
+* `iphonesimulator`
+* `watchos`
+* `watchsimulator`
+* `appletvos`
+* `appletvsimulator`
+* `xros`
+* `xrsimulator`
+
+Anything other than `macosx` is considered experimental.
+
+</dd>
+
+``osTargetVersion``
+
+<dd>
+
+**macOS only:** Set the operating system version to target for the build. These versions are not managed by Chalet at all, and simply get passed to the compiler. Use to target a version earlier than the one used by build machine and apple clang verison. If this and `--os-target-name` are not defined, a default will get detected.
+
+</dd>
+
 [[dl:end]]
 
 
@@ -301,6 +346,32 @@ Below is an example toolchain that generates for `apple-llvm` on MacOS.
 ```
 
 Paths for `cmake`, `make` and `ninja` are part of the toolchains so that one can define bundled versions (in the case of Visual Studio), or other drop-in replacements.
+
+**Multi-architecture toolchains**
+
+Different toolchains use different paradigms. The above works for LLVM and anything with a single supported architecture, but in an effort to keep the command consistent across toolchains, one can define one toolchain, and point to the different architectures supported. This is handled automatically for the most part in GCC and Visual Studio presets, but you can create one manually too.
+
+```json
+"toolchains": {
+   "vs-2022": {
+      "x64": {
+         ...
+         "compilerCpp": ".../HostX64/X64/..."
+      },
+      "x64_x86": {
+         ...
+         "compilerCpp": ".../HostX64/X86/..."
+      },
+      "x64_arm64": {
+         ...
+         "compilerCpp": ".../HostX64/ARM64/..."
+      }
+   }
+}
+```
+
+In the above example, `-t vs-2022 -a x64` resolves to the paths you would expect.
+
 
 [[dl:start]]
 

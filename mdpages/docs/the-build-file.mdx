@@ -79,19 +79,68 @@ Example:
 
 \\
 
-## [Managing Dependencies]
+## [External Dependencies]
 
-Before diving into build target details, one should consider how to import libraries and external code. In general, it's best to figure out a way to separate that code from your project's code. if using git, one can use submodules for this, scripts, or an external package manager in combination with adding appropriate paths to `.gitignore`.
+Before diving into build target details, one should consider how to import libraries and external code. In general, it's best to separate that code from your project's code. if using git, one can use submodules for this, scripts, or an external package manager in combination with adding appropriate paths to `.gitignore`.
 
-Chalet has a method of streamlining external git dependencies that can then be used in its own build targets. It makes no assumptions when the repositories are cloned, so it's up to the developer to figure out what to do with it afterwards. The advantage of this is that these dependencies can be excluded from your project's repository, without requiring git submodules or another script to pull them down. This may serve as a basis for package management in the future.
+Chalet has a method of streamlining dependencies from a variety of sources. It makes no assumptions about the paths themselves, so it's up to the developer to figure out what to do with it afterwards. The advantage of this is that these dependencies can be excluded from your project's repository, without requiring git submodules or another script to pull them down. This will serve as a basis for package management in the future.
+
+External dependencies require the `externalDependencies` property at the root of your build file. Other kinds of dependencies are named properties inside of that.
+
+```json
+"externalDependencies": {
+   ...
+}
+```
+
+`chalet configure` is the main mechanism used to pull or refresh external dependencies, however `chalet build` will also pull in dependencies if `configure` hasn't been run.
+
+**The External Directory**
+
+Chalet uses a folder called `chalet_external` to store dependencies (just git for now). This path can be changed via the `--external-dir` or `-e` command line option. Some might want to use `external` or `vendor` for instance, however, the default `chalet_external` was chosen to differentiate between dependencies managed by Chalet, and otherwise.
+
+The directory of a dependency can be referenced in the build file with the `${external:(Name)}` variable substitution variable explained at [Variable Substitution](/docs/creating-targets?id=variable-substitution).
+
+The subfolder of the dependency will always be the object node's name. For example, the following:
+
+```json
+"externalDependencies": {
+   "bar-repo": {
+      ...
+   }
+}
+```
+
+... will use `${external:bar-repo}` (or `chalet_external/bar-repo` by default).
+
+**Conditions**
+
+Discussed in more detail on the next page, certain external dependencies can be excluded based on conditions, for instance if one is only needed on a particular platform.
+
+```json
+"externalDependencies": {
+   "bar-repo": {
+      "condition": "[:windows]"
+      ...
+   }
+}
+```
+
+**See also:**
+
+[Excluding Targets](/docs/creating-targets?id=excluding-targets) 
+[Property Conditions](/docs/creating-targets?id=property-conditions)
+
 
 \\
 
-## [External Dependencies]
+## [Git Dependencies]
 
-External dependencies describe any code that exists outside of the local project. This typically means pulling down a git repo, or referencing a local folder that's expected to exist on the machine. One can calso run a script at the time of calling `chalet configure`, outside the normal build 
+Git dependencies are the most straightforward way of bringing code into your project. The repository is shallow-cloned and placed inside of a `chalet_external` folder local to the workspace.
 
-External git repositories are added to the project with the `externalDependencies` property at the root of chalet.json. With it, one can add a series of repos, define what branch, tag or commit to clone the repo from, and then Chalet can lightly manage it from there. The `repository` property takes any valid git repository path.
+With it, one can add a series of repos, define what branch, tag or commit to clone the repo from, and then Chalet can lightly manage it from there - for instance, if a branch changed since the last time `chalet configure` was ran, the dependency's local path will be refreshed. For this reason, the more specific - the better.
+
+To define a git dependency, set `"kind": "git"` along with the `repository` property. It should take any valid git repository path.
 
 ```json
 "externalDependencies": {
@@ -101,7 +150,8 @@ External git repositories are added to the project with the `externalDependencie
    },
    "foo2-repo": {
       "kind": "git",
-      "repository": "git@github.com:foo/foo2.git"
+      "repository": "git@github.com:foo/foo2.git",
+      "branch": "develop"
    },
    "bar-repo": {
       "kind": "git",
@@ -121,7 +171,7 @@ Chalet also supports repositories with submodules, via the `submodules` property
 }
 ```
 
-To define a commit id, use the `commit` property, with must contain between 7 and 40 characters, pointing to a correct commit.
+To define a commit id, use the `commit` property, which must contain between 7 and 40 characters, pointing to a correct commit hash.
 
 ```json
 "bar-repo": {
@@ -141,7 +191,7 @@ To define a tag, use the `tag` property with a valid tag:
 }
 ```
 
-To define a branch, use the `branch` property with a valid branch:
+To define a branch, use the `branch` property with a valid branch name:
 
 ```json
 "bar-repo": {
@@ -166,50 +216,88 @@ If a repository only references the branch or doesn't use a branch, commit, or t
 
 \\
 
-## [The External Directory]
+## [Local Dependencies]
 
-Chalet uses a folder called `chalet_external` to store anything added with `externalDependencies`. It performs shallow clones of the repositories, and keeps track of the given branch or ref separately in a central cache. It's expected that the code cloned down is managed elsewhere. The external directory can be changed via the `--external-dir` or `-e` command line option. Some might want to use `external` or `vendor` for instance. 
-
-The directory of a dependency can be referenced in chalet.json with the `${external:(Name)}` variable substitution variable explained at [Variable Substitution](/docs/creating-targets?id=variable-substitution).
-
-The subfolder name of the cloned repository will always be the object node's name. For example, the following:
+Sometimes, you just want to do something yourself. That's where local dependencies come in. It simply tells Chalet to refer to a local path on the machine for a given dependency, and validates whether the path exists. Simple use `"kind": "local"` to declare a local dependency.
 
 ```json
 "bar-repo": {
-   "kind": "git",
-   "repository": "https://my-website.io/bar/bar.git",
-   "tag": "v4.2"
+   "kind": "local",
+   "path": "D:/Development/bar-repo"
 }
 ```
 
-... will be cloned into `${external:bar-repo}` (or `chalet_external/bar-repo` by default).
+This is obviously not very portable, since `path` is a Windows path. The recommended approach in this case is to reference an environment variable:
+
+```json
+"bar-repo": {
+   "kind": "local",
+   "path": "${env:BAR_REPO_PATH}"
+}
+```
+
+However, you can also use a [Property Condition](/docs/creating-targets?id=property-conditions) inside of `path` to refer to paths that differ between platforms.
+
+With local paths, `${external:bar-repo}` will simply resolve to the given path for that platform.
+
+\\
+
+## [Script Dependencies]
+
+Scripts are discussed in detail on the next page [here](/docs/creating-targets?id=script-targets), so they are typically run during builds, but in the case of dependencies, you can run a script only during the `configure` step, to for instance, run a script that was pulled down by a previous git dependency. It's not an ideal scenario, but it can be done.
+
+```json
+"externalDependencies": {
+   "bar-repo": {
+      "kind": "git",
+      "repository": "https://my-website.io/bar/bar.git",
+      "tag": "v4.2"
+   },
+   "bar-repo-script": {
+      "kind": "script",
+      "file": "${external:bar-repo}/scripts/do-more.sh",
+      "arguments": [
+         "--foo"
+      ]
+   }
+}
+```
+
+**See also:**
+
+[Script Targets](/docs/creating-targets?id=script-targets) 
 
 \\
 
 ## [System Dependencies]
 
-Sometimes it may be desireable to use package manager dependencies if they're available, so Chalet has a means of restricting the build to only run if those dependencies are found. Currently supported are: `ubuntu.system` `debian.system` `archlinux.system` `manjaro.system` `fedora.system` `redhat.system` `windows.msys2` `macos.homebrew` and `macos.macports`.
+Sometimes it may be desireable to use package manager dependencies if they're available, so Chalet has a means of restricting the build to only run if those dependencies are found. The following are supported: 
+
+| ubuntu.system |
+| debian.system |
+| archlinux.system |
+| manjaro.system |
+| fedora.system |
+| redhat.system |
+| windows.msys2 |
+| macos.homebrew |
+| macos.macports |
 
 
 ```json
 "platformRequires": {
    "ubuntu.system": "foo",
-   "debian.system": "foo",
-   "archlinux.system": "foo",
-   "manjaro.system": "foo",
-   "fedora.system": "foo",
-   "redhat.system": "foo",
+   "archlinux.system": "foo-develop",
    "windows.msys2[architecture:x86_64]": "foo",
-   "windows.msys2[architecture:i686]": "foo bar",
    "macos.homebrew[architecture:x86_64]": "bar",
    "macos.macports": [
-      "foo",
+      "devfoo",
       "baz"
    ]
 }
 ```
 
-> Note: This feature is still experimental, and will eventually include other package managers like [vcpkg](https://vcpkg.io/) and [conan](https://conan.io/).
+> Note: This feature is still experimental, and will likely change in the future.
 
 **See also:**
 
