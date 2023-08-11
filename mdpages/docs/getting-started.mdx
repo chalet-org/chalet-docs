@@ -269,6 +269,7 @@ chalet configure -t llvm-vs-preview -a auto
 These detect LLVM (or Apple LLVM) and use the machine's architecture.
 
 ```bash
+# Standalone LLVM installed via package manager (Linux) or installer (Windows)
 chalet configure -t llvm -a x86_64
 chalet configure -t llvm -a i866
 chalet configure -t llvm -a arm64
@@ -293,7 +294,7 @@ chalet configure -t llvm-vs-2019 -a x86_64
 chalet configure -t llvm-vs-preview -a x86_64
 ```
 
-|GCC|
+|GCC/MinGW|
 
 GCC works a little differently from the others. In situations where there is no cross compiler installed, the following will suffice:
 
