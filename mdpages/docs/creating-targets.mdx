@@ -694,6 +694,23 @@ The following examples are all valid:
 
 The `arguments` property can take any arguments that are required by the script, and support [variable substitutions](/docs/creating-targets?id=variable-substitution) to pass along information about the build.
 
+If the script target depends on a previous build target, the `dependsOn` property can be used to ease validation when resolving the `file`. This takes a single name of the target to depend on.
+
+```json
+"validator": {
+   "kind": "executable",
+}
+"validate-content": {
+   "kind": "script",
+   "file": "scripts/script.py",
+   "dependsOn": "validator",
+   "arguments": [
+      "--file",
+      "my-file"
+   ]
+}
+```
+
 \\
 
 ## [Process Targets]
@@ -713,6 +730,23 @@ Process targets are a means to call another executable directly using Chalet's s
 ```
 
 The `path` property can either be the full path to an executable (not recommended), or a searchable executable name that can be found from a terminal (in PATH). The `arguments` property can take any arguments that are required by the process, and support [variable substitutions](/docs/creating-targets?id=variable-substitution) to pass along information about the build.
+
+If the process target depends on a previous build target, the `dependsOn` property can be used to ease validation when resolving `path`. This simply takes the name of the target to depend on.
+
+```json
+"validator": {
+   "kind": "executable",
+}
+"validate-content": {
+   "kind": "process",
+   "path": "${buildDir}/validator",
+   "dependsOn": "validator",
+   "arguments": [
+      "--file",
+      "my-file"
+   ]
+}
+```
 
 \\
 

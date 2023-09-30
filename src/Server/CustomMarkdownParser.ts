@@ -23,24 +23,24 @@ const trimLineBreaksFromEdges = (text: string) => {
 
 const parseTables = (text: string) => {
 	const ret = text.replace(
-		/(((\| ([\w\d` -:,~\=\(\)\[\]\{\}\$\?\/\\]+))+ \|\n)+)\n/g,
+		/(((\| ([\w\d` -:,~®\=\(\)\[\]\{\}\$\?\/\\]+))+ \|\n)+)\n/g,
 		(_match: string, p1: string) => {
 			let thead: string = "";
 			let rows: string[] = [];
 			const rest = p1.replace(
-				/((\| ([\w\d` -:,~\=\(\)\[\]\{\}\$\?\/\\]+))+ \|\n)((\| ([- ]+))+ \|\n)/,
+				/((\| ([\w\d` -:,~®\=\(\)\[\]\{\}\$\?\/\\]+))+ \|\n)((\| ([- ]+))+ \|\n)/,
 				(tmatch: string, tp1: string) => {
 					const labels: string[] =
-						tp1.match(/ ([\w\d` -:,~\=\(\)\[\]\{\}\$\?\/\\]+) /g)?.map((th: string) => `<th>${th}</th>`) ??
+						tp1.match(/ ([\w\d` -:,~®\=\(\)\[\]\{\}\$\?\/\\]+) /g)?.map((th: string) => `<th>${th}</th>`) ??
 						[];
 					thead = `<thead><tr>${labels.join("")}</tr></thead>`;
 					return "";
 				}
 			);
 
-			rest.replace(/((\| ([\w\d` -:,~\=\(\)\[\]\{\}\$\?\/\\]+))+ +\|\n)/g, (tmatch: string, tp1: string) => {
+			rest.replace(/((\| ([\w\d` -:,~®\=\(\)\[\]\{\}\$\?\/\\]+))+ +\|\n)/g, (tmatch: string, tp1: string) => {
 				let labels: string[] =
-					tp1.match(/ ([\w\d` -:,~\=\(\)\[\]\{\}\$\?\/\\]*) /g)?.map((th: string) => `<td>${th}</td>`) ?? [];
+					tp1.match(/ ([\w\d` -:,~®\=\(\)\[\]\{\}\$\?\/\\]*) /g)?.map((th: string) => `<td>${th}</td>`) ?? [];
 				rows.push(`<tr>${labels.join("")}</tr>`);
 				return "";
 			});
@@ -111,7 +111,10 @@ const parseTabs = (text: string): string => {
 			if (p1.startsWith("|")) p1 = p1.substring(1);
 
 			const tabArray = p1.replace(/(\n{1,3}\||\|\n{1,3})/g, "|").split("|");
-			if (tabArray.length % 2 == 1) return "";
+			if (tabArray.length % 2 == 1) {
+				console.log("Something went wrong parsing a [[tabs]] block");
+				return "";
+			}
 
 			let retString: string = `<TabbedContent>\n`;
 			for (let i = 0; i < tabArray.length; i += 2) {

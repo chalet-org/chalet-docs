@@ -165,35 +165,39 @@ A toolchain preset to use, or a user-made toolchain.
 default: `vs-stable`
 
 Presets:
-* `vs-stable`
-* `vs-latest`
-* `vs-2022`
-* `vs-2019`
-* `vs-2017`
-* `llvm`
-* `gcc`
-* `llvm-vs-2022`
-* `llvm-vs-2019`
-* `intel-llvm-vs-2019`
-* `intel-llvm-vs-2017`
+
+| vs-stable | Microsoft® Visual Studio (latest installed stable release) [default] |
+| vs-preview | Microsoft® Visual Studio (latest installed preview release) |
+| vs-2022 | Microsoft® Visual Studio 2022 |
+| vs-2019 | Microsoft® Visual Studio 2019 |
+| vs-2017 | Microsoft® Visual Studio 2017 |
+| llvm-vs-stable | LLVM/Clang in Microsoft® Visual Studio (latest stable) |
+| llvm-vs-preview | LLVM/CLang in Microsoft® Visual Studio (latest preview) |
+| llvm-vs-2022 | LLVM/Clang in Microsoft® Visual Studio 2022 |
+| llvm-vs-2019 | LLVM/Clang in Microsoft® Visual Studio 2019 |
+| llvm | The LLVM Compiler Infrastructure Project |
+| gcc | MinGW: Minimalist GNU Compiler Collection for Windows |
+| intel-llvm-vs-2022 | Intel® oneAPI DPC++/C++ Compiler with Visual Studio 2022 environment |
+| intel-llvm-vs-2019 | Intel® oneAPI DPC++/C++ Compiler with Visual Studio 2019 environment |
 
 |MacOS|
 
 default: `apple-llvm`
 
 Presets:
-* `apple-llvm`
-* `llvm`
-* `gcc`
-* `intel-classic`
+| apple-llvm | Apple® LLVM (Requires Xcode or "Command Line Tools for Xcode") |
+| llvm | The LLVM Compiler Infrastructure Project |
+| gcc | GNU Compiler Collection |
+| intel-classic | Intel® C++ Compiler Classic (for x86_64 processors) |
 
 |Linux|
 
 default: `gcc`
 
 Presets:
-* `llvm`
-* `gcc`
+| llvm | The LLVM Compiler Infrastructure Project |
+| gcc | GNU Compiler Collection |
+
 
 [[tabs:end]]
 
@@ -292,15 +296,15 @@ Generate a `compile_commands.json` file for Clang tooling use. The one for the c
 **macOS only:** Set the operating system name to target for the build.
 
 Supported values:
-* `macosx`
-* `iphoneos`
-* `iphonesimulator`
-* `watchos`
-* `watchsimulator`
-* `appletvos`
-* `appletvsimulator`
-* `xros`
-* `xrsimulator`
+| macosx | macOS |
+| iphoneos | iOS |
+| iphonesimulator | iOS Simulator |
+| watchos | watchOS |
+| watchsimulator | watchOS Simulator |
+| appletvos | tvOS |
+| appletvsimulator | tvOS Simulator |
+| xros | visionOS (requies Xcode 15 beta 8) |
+| xrsimulator | visionOS (requies Xcode 15 beta 8) |
 
 Anything other than `macosx` is considered experimental.
 

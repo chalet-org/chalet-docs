@@ -57,8 +57,8 @@ Intel compilers are currently supported on Windows and MacOS.
 
 Their latest compiler suite, Intel oneAPI (based on LLVM) is supported. It can be selected with the following toolchain presets:
 
-* `intel-llvm-vs-2019`
-* `intel-llvm-vs-2017`
+| intel-llvm-vs-2022 | Intel® oneAPI DPC++/C++ Compiler with Visual Studio 2022 environment |
+| intel-llvm-vs-2019 | Intel® oneAPI DPC++/C++ Compiler with Visual Studio 2019 environment |
 
 Additionally Chalet requires that the `ONEAPI_ROOT` be set. This should be automatically set in the installer, but if it isn't, this is the root oneAPI directory (ie. something like `C:\Intel\oneAPI\`). This variable is used to find the `setvars.bat` script, responsible for creating the build environment used by the compiler (which also inherits a Visual Studio environment).
 
@@ -68,12 +68,14 @@ If this file is not found, the build will fail.
 
 On MacOS, "Intel Compiler Classic" must be installed, and obviously requires a mac with an intel processor.
 
-* `intel-classic`
+| intel-classic | Intel® C++ Compiler Classic (for x86_64 processors) |
 
 This may change, but at the moment, Chalet looks for a file called `setvars.sh`, which is responsible for creating the build environment used by the compiler. This script is checked in the following directories:
 
-* `$HOME/intel/oneapi/setvars.sh`
-* `/opt/intel/oneapi/setvars.sh`
+```
+$HOME/intel/oneapi/setvars.sh
+/opt/intel/oneapi/setvars.sh
+```
 
 If it's not found in either location, the build will fail.
 

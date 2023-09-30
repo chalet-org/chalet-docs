@@ -128,7 +128,7 @@ This would place the binaries for shared-lib and my-executable in `(distDir)/bin
 \\
 
 ## [Dependant Shared Libraries]
-
+7
 By default, executables and shared libraries will be read for dependant shared libraries. If any are found in Path at the time of bundling, they will also be included (except for system libraries). This behavior can be controlled with the `includeDependentSharedLibraries` property. 
 
 ```json
@@ -155,6 +155,21 @@ In MacOS application bundles, these includes will be placed in the `Resources` d
       "Thumbs.db",
       ".DS_Store"
    ]
+}
+```
+
+\\
+
+## [Windows Settings]
+
+At the moment, Windows bundles will just copy the required files into an output folder. The only setting at the moment controls whether the Windows runtime dlls get copied - these are specifically the `api-ms-win-*.dll` files. See [Universal CRT Deployment](https://learn.microsoft.com/en-us/cpp/windows/universal-crt-deployment?view=msvc-170) for details. To define whether or not these get copied (for debugging, generally), add the `windows` object followed by the `includeRuntimeDlls` boolean property.
+
+```json
+"MyApp": {
+   "kind": "bundle",
+   "windows": {
+      "includeRuntimeDlls": false
+   }
 }
 ```
 

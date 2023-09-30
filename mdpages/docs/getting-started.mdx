@@ -294,6 +294,8 @@ chalet configure -t llvm-vs-2019 -a x86_64
 chalet configure -t llvm-vs-preview -a x86_64
 ```
 
+On Windows, if the plain `llvm` toolchain is selected and clang is not found in `Path`, it will attempt to be resolved from `%ProgramFiles%\LLVM`.
+
 |GCC/MinGW|
 
 GCC works a little differently from the others. In situations where there is no cross compiler installed, the following will suffice:
@@ -319,6 +321,20 @@ chalet configure -t gcc -a x86_64-linux-gnu
 chalet configure -t gcc -a x86_64-x64-mingw32
 ```
 
+On Windows, if the plain `gcc` toolchain is selected and gcc is not found in `Path`, it will attempt to be resolved from the following paths in this order:
+
+If the architecture is x86_64 / x64:
+```
+%HOMEDRIVE%\msys64\ucrt64
+%HOMEDRIVE%\msys64\mingw64
+%HOMEDRIVE%\mingw64
+```
+
+If the architecture is i686 / x86:
+```
+%HOMEDRIVE%\msys64\mingw32
+%HOMEDRIVE%\mingw32
+```
 
 |Intel|
 
@@ -328,6 +344,8 @@ Intel support is experimental, but this is the way to get started:
 ```bash
 chalet configure -t intel-llvm-vs-2022
 ```
+
+If the `intel-llvm-vs-*` toolchain is selected and clang is not found in `Path`, it will attempt to be resolved from `%ONEAPI_ROOT%\compiler\latest\windows\bin-llvm`. `ONEAPI_ROOT` should be defisned by the installer, but if it wasn't for whatever reason, the default is `%ProgramFiles(x86)%\Intel\oneAPI\`
 
 **Intel Classic (MacOS):**
 
