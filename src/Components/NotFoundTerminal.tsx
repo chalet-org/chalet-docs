@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import { OperatingSystem, useKeyPress, useOperatingSystem } from "Hooks";
-import { LostAndFoundApiProvider, useLostAndFoundStore, useUiStore } from "Stores";
+import { useLostAndFoundStore, useUiStore } from "Stores";
 import { getThemeVariable, Theme } from "Theme";
 
 import { hasMinWidth } from "./GlobalStyles";
@@ -52,11 +52,7 @@ const NotFoundTerminalImpl = () => {
 };
 
 const NotFoundTerminal = () => {
-	return (
-		<LostAndFoundApiProvider>
-			<NotFoundTerminalImpl />
-		</LostAndFoundApiProvider>
-	);
+	return <NotFoundTerminalImpl />;
 };
 
 export { NotFoundTerminal };

@@ -1,52 +1,49 @@
-import { BaseState, Action } from "react-oocontext";
+import { useSnapshot } from "valtio/react";
 
 import { Theme, ThemeType, darkTheme, lightTheme } from "Theme";
 import { LocalStorage } from "Utility";
+import { shallowProxy } from "./shallowProxy";
 
-@BaseState()
-class UiState {
-	initialized: boolean = false;
+const self = shallowProxy("ui-store", {
+	initialized: false,
 
-	themeId: Theme = Theme.Light;
-	theme: ThemeType = lightTheme;
+	themeId: Theme.Light,
+	theme: lightTheme,
 
-	navOpen: boolean = true;
-	animating: boolean = false;
-	navWidth: string = "18rem";
+	navOpen: true,
+	animating: false,
+	navWidth: "18rem",
 
-	focusedId: string = "";
-	findText: string = "";
+	focusedId: "",
+	findText: "",
 
-	accordionNotifier: boolean = false;
-	heightNotifier: boolean = false;
+	accordionNotifier: false,
+	heightNotifier: false,
 
-	showAllPlatforms: boolean = false;
+	showAllPlatforms: false,
 
-	@Action
-	initialize = () => {
-		this.setTheme(LocalStorage.get<Theme>("themeId", this.getPreferredTheme()));
+	initialize: () => {
+		self.setTheme(LocalStorage.get<Theme>("themeId", self._getPreferredTheme()));
 
-		this.navOpen = LocalStorage.get("navOpen", "true") == "true";
+		self.navOpen = LocalStorage.get("navOpen", "true") == "true";
 
 		const tooLarge = window.matchMedia?.("(min-width: 960px)").matches ?? true;
-		if (!tooLarge) this.setNavOpen(false);
+		if (!tooLarge) self.setNavOpen(false);
 
 		setTimeout(() => {
 			document.body.classList.add("ready");
 		}, 50);
 
-		this.initialized = true;
-	};
-
-	private getPreferredTheme = (): Theme => {
+		self.initialized = true;
+	},
+	_getPreferredTheme: () => {
 		if (window.matchMedia?.("(prefers-color-scheme: dark)").matches ?? false) {
 			return Theme.Dark;
 		} else {
 			return Theme.Light;
 		}
-	};
-
-	private setThemeInBody = (inValue: Theme) => {
+	},
+	_setThemeInBody: (inValue: Theme) => {
 		if (typeof document !== "undefined") {
 			const classes = document.documentElement.className.split(" ");
 			for (const cname of classes) {
@@ -55,88 +52,67 @@ class UiState {
 			}
 			document.documentElement.classList.add(inValue);
 		}
-	};
-
-	private setThemeInternal = (inValue: ThemeType) => {
-		this.theme = inValue;
-	};
-
-	@Action
-	setTheme = (theme: Theme) => {
+	},
+	_setThemeInternal: (inValue: ThemeType) => {
+		self.theme = inValue;
+	},
+	setTheme: (theme: Theme) => {
 		try {
-			this.themeId = theme;
-			this.setThemeInBody(theme);
-			LocalStorage.set("themeId", this.themeId);
+			self.themeId = theme;
+			self._setThemeInBody(theme);
+			LocalStorage.set("themeId", self.themeId);
 			switch (theme) {
 				case Theme.Dark:
-					return this.setThemeInternal(darkTheme);
+					return self._setThemeInternal(darkTheme);
 				case Theme.Light:
-					return this.setThemeInternal(lightTheme);
+					return self._setThemeInternal(lightTheme);
 				default:
 					throw new Error("Code theme not implemented");
 			}
 		} catch (err: any) {
 			console.warn(err.message);
-			this.setTheme(this.getPreferredTheme());
+			self.setTheme(self._getPreferredTheme());
 		}
-	};
-
-	@Action
-	toggleTheme = () => {
-		this.setTheme(this.themeId === Theme.Dark ? Theme.Light : Theme.Dark);
-	};
-
-	@Action
-	setNavOpen = (inValue: boolean) => {
-		this.navOpen = inValue;
-		LocalStorage.set("navOpen", this.navOpen ? "true" : "false");
-		this.animating = true;
-	};
-
-	@Action
-	setAnimating = (inValue: boolean) => {
-		this.animating = inValue;
-	};
-
-	@Action
-	private setFocusedIdInternal = (inValue: string) => {
-		this.focusedId = inValue;
-		// console.log(this.focusedId);
-	};
-
-	setFocusedId = (inValue: string) => {
-		if (this.focusedId !== inValue) {
-			this.setFocusedIdInternal(inValue);
+	},
+	toggleTheme: () => {
+		self.setTheme(self.themeId === Theme.Dark ? Theme.Light : Theme.Dark);
+	},
+	setNavOpen: (inValue: boolean) => {
+		self.navOpen = inValue;
+		LocalStorage.set("navOpen", self.navOpen ? "true" : "false");
+		self.animating = true;
+	},
+	setAnimating: (inValue: boolean) => {
+		self.animating = inValue;
+	},
+	_setFocusedIdInternal: (inValue: string) => {
+		self.focusedId = inValue;
+		// console.log(self.focusedId);
+	},
+	setFocusedId: (inValue: string) => {
+		if (self.focusedId !== inValue) {
+			self._setFocusedIdInternal(inValue);
 		}
-	};
+	},
+	toggleNavigation: () => self.setNavOpen(!self.navOpen),
+	notifyAccordions: () => {
+		self.accordionNotifier = !self.accordionNotifier;
+	},
+	notifyHeightChange: () => {
+		self.heightNotifier = !self.heightNotifier;
+	},
+	setShowAllPlatforms: (inValue: boolean) => {
+		self.showAllPlatforms = inValue;
+	},
+	toggleShowAllPlatforms: () => self.setShowAllPlatforms(!self.showAllPlatforms),
+	findTextOnPage: (inValue: string) => {
+		self.findText = inValue;
+	},
+	resetFindText: () => {
+		self.findText = "";
+	},
+});
 
-	toggleNavigation = () => this.setNavOpen(!this.navOpen);
+const useUiStore = () => useSnapshot(self);
 
-	@Action
-	notifyAccordions = () => {
-		this.accordionNotifier = !this.accordionNotifier;
-	};
-
-	@Action
-	notifyHeightChange = () => {
-		this.heightNotifier = !this.heightNotifier;
-	};
-
-	@Action
-	setShowAllPlatforms = (inValue: boolean) => {
-		this.showAllPlatforms = inValue;
-	};
-
-	toggleShowAllPlatforms = () => this.setShowAllPlatforms(!this.showAllPlatforms);
-
-	@Action
-	findTextOnPage = (inValue: string) => {
-		this.findText = inValue;
-	};
-
-	resetFindText = () => {
-		this.findText = "";
-	};
-}
-
-export { UiState };
+export { useUiStore };

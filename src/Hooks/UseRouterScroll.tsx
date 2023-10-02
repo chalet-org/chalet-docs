@@ -1,18 +1,17 @@
 import { useRouter } from "next/router";
 import { useEffect, useCallback } from "react";
 
-import { getUiStore, useUiStore } from "Stores";
+import { useUiStore } from "Stores";
 import { Optional } from "Utility";
 import { getQueryVariable } from "Utility/GetQueryVariable";
 
 const useRouteChangeScroll = () => {
 	const router = useRouter();
 
-	const { setFocusedId } = useUiStore();
+	const { setFocusedId, findText } = useUiStore();
 
 	const handler = useCallback(() => {
 		const mainEl = document.getElementById("main");
-		const { findText } = getUiStore();
 		if (!!mainEl && findText.length > 0) {
 			const split = findText.split("'");
 			let queryText: string;

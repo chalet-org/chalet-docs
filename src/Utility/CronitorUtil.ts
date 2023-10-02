@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
-import * as CronitorImpl from "@cronitorio/cronitor-rum-js";
+import * as CronitorImpl from "@cronitorio/cronitor-rum";
 
 import { isDevelopment } from "Server/IsDevelopment";
 

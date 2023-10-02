@@ -14,19 +14,9 @@
 		"serve": "next start",
 		"lint": "next lint"
 	},
-	"alias": {
-		"Api": "./src/Api",
-		"Components": "./src/Components",
-		"Hooks": "./src/Hooks",
-		"Layouts": "./src/Layouts",
-		"Server": "./src/Server",
-		"Stores": "./src/Stores",
-		"Theme": "./src/Theme",
-		"Utility": "./src/Utility"
-	},
 	"dependencies": {
 		"@badrap/bar-of-progress": "^0.1.2",
-		"@cronitorio/cronitor-rum-js": "^0.1.0",
+		"@cronitorio/cronitor-rum": "0.4.0",
 		"axios": "^0.27.2",
 		"clsx": "^1.2.1",
 		"copy-to-clipboard": "^3.3.1",
@@ -37,9 +27,9 @@
 		"isomorphic-fetch": "^3.0.0",
 		"json-schema": "^0.4.0",
 		"lodash": "^4.17.21",
-		"next": "12.2.2",
-		"next-mdx-remote": "4.0.3",
-		"next-remote-watch": "^1.0.0",
+		"next": "13.5.3",
+		"next-mdx-remote": "4.4.1",
+		"next-remote-watch": "2.0.0",
 		"nodemailer-mjml-sender": "^1.0.1",
 		"perf_hooks": "^0.0.1",
 		"platform": "^1.3.6",
@@ -48,24 +38,24 @@
 		"react-dom": "18.2.0",
 		"react-icons": "4.3.1",
 		"react-is": "18.2.0",
-		"react-oocontext": "1.0.5",
 		"react-textarea-autosize": "8.5.2",
-		"styled-components": "6.0.2"
+		"styled-components": "6.0.2",
+		"valtio": "1.11.2"
 	},
 	"devDependencies": {
-		"@trivago/prettier-plugin-sort-imports": "^2.0.2",
+		"@trivago/prettier-plugin-sort-imports": "4.2.0",
 		"@types/cors": "^2.8.12",
 		"@types/isomorphic-fetch": "^0.0.36",
 		"@types/json-schema": "^7.0.8",
 		"@types/lodash": "^4.14.197",
-		"@types/node": "18.0.4",
+		"@types/node": "20.8.0",
 		"@types/platform": "^1.3.4",
 		"@types/prismjs": "^1.16.6",
-		"@types/react": "18.0.15",
-		"@types/react-dom": "18.0.6",
+		"@types/react": "18.2.24",
+		"@types/react-dom": "18.2.8",
 		"eslint": "8.19.0",
 		"eslint-config-next": "12.2.2",
 		"prettier": "2.7.1",
-		"typescript": "4.7.4"
+		"typescript": "5.2.2"
 	}
 }

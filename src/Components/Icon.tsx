@@ -21,13 +21,19 @@ export type IconID =
 	| "source"
 	| "github";
 
-type IconStyleProps = {
+type IconProps = {
 	size?: string;
 	color?: string;
 	hoverColor?: string;
 };
 
-type Props = IconStyleProps & {
+type IconStyleProps = {
+	$size?: string;
+	color?: string;
+	$hoverColor?: string;
+};
+
+type Props = IconProps & {
 	id: IconID;
 	onClick?: React.MouseEventHandler;
 };
@@ -62,9 +68,9 @@ const getIcon = (id: IconID) => {
 	return null;
 };
 
-const Icon = ({ id, ...iconProps }: Props) => {
+const Icon = ({ id, size, hoverColor, ...iconProps }: Props) => {
 	return (
-		<Styles {...iconProps} className={`icon-${id}`}>
+		<Styles $size={size} $hoverColor={hoverColor} {...iconProps} className={`icon-${id}`}>
 			{getIcon(id)}
 		</Styles>
 	);
@@ -76,8 +82,8 @@ const Styles = styled.i<IconStyleProps>`
 	display: block;
 
 	> svg {
-		width: ${({ size }) => size ?? "1rem"};
-		height: ${({ size }) => size ?? "1rem"};
+		width: ${({ $size }) => $size ?? "1rem"};
+		height: ${({ $size }) => $size ?? "1rem"};
 		color: ${({ color }) => color ?? "inherit"};
 
 		> path,
@@ -91,8 +97,8 @@ const Styles = styled.i<IconStyleProps>`
 		> svg {
 			> path,
 			> circle {
-				color: ${({ hoverColor }) => hoverColor ?? "inherit"};
-				fill: ${({ hoverColor }) => hoverColor ?? "inherit"};
+				color: ${({ $hoverColor }) => $hoverColor ?? "inherit"};
+				fill: ${({ $hoverColor }) => $hoverColor ?? "inherit"};
 			}
 		}
 	}

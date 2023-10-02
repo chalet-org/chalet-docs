@@ -1,85 +1,75 @@
 import { Action, BaseState } from "react-oocontext";
+import { shallowProxy } from "./shallowProxy";
+import { useSnapshot } from "valtio/react";
 
 type ResponseType = JSX.Element | string | null;
 export type TerminalCommandCallback = (args: string) => Promise<ResponseType>;
 
-@BaseState()
-class PseudoTerminalState {
-	history: string[] = [];
-	responses: ResponseType[] = [];
-	currentLine: string = "";
-	fullscreen: boolean = false;
+const self = shallowProxy("pseudo-terminal-store", {
+	history: [] as string[],
+	responses: [] as ResponseType[],
+	currentLine: "",
+	fullscreen: false,
 
-	private lastHistory: number = 0;
-	private savedCurrentLine: string = "";
+	_: {
+		lastHistory: 0,
+		savedCurrentLine: "",
+	},
 
-	@Action
-	commitLine = async (callback: TerminalCommandCallback) => {
-		this.history.push(this.currentLine);
-		this.lastHistory = this.history.length;
-		const result = await callback(this.currentLine);
+	commitLine: async (callback: TerminalCommandCallback) => {
+		self.history.push(self.currentLine);
+		self._.lastHistory = self.history.length;
+		const result = await callback(self.currentLine);
 		if (result !== null) {
-			this.responses.push(result);
-			this.currentLine = "";
-			this.savedCurrentLine = "";
+			self.responses.push(result);
+			self.currentLine = "";
+			self._.savedCurrentLine = "";
 		}
-	};
-
-	@Action
-	registerBackspace = () => {
-		if (this.currentLine.length > 0) {
-			this.currentLine = this.currentLine.slice(0, -1);
+	},
+	registerBackspace: () => {
+		if (self.currentLine.length > 0) {
+			self.currentLine = self.currentLine.slice(0, -1);
 		}
-	};
-
-	@Action
-	registerArrowUp = () => {
-		if (this.lastHistory > 0) {
-			if (this.savedCurrentLine === "") {
-				this.savedCurrentLine = this.currentLine;
+	},
+	registerArrowUp: () => {
+		if (self._.lastHistory > 0) {
+			if (self._.savedCurrentLine === "") {
+				self._.savedCurrentLine = self.currentLine;
 			}
-			this.lastHistory--;
-			if (this.lastHistory < this.history.length) {
-				this.currentLine = this.history[this.lastHistory];
+			self._.lastHistory--;
+			if (self._.lastHistory < self.history.length) {
+				self.currentLine = self.history[self._.lastHistory];
 			}
 		}
-	};
-
-	@Action
-	registerArrowDown = () => {
-		if (this.lastHistory < this.history.length - 1) {
-			this.lastHistory++;
-			this.currentLine = this.history[this.lastHistory];
+	},
+	registerArrowDown: () => {
+		if (self._.lastHistory < self.history.length - 1) {
+			self._.lastHistory++;
+			self.currentLine = self.history[self._.lastHistory];
 		} else {
-			this.lastHistory = this.history.length;
-			this.currentLine = this.savedCurrentLine;
-			this.savedCurrentLine = "";
+			self._.lastHistory = self.history.length;
+			self.currentLine = self._.savedCurrentLine;
+			self._.savedCurrentLine = "";
 		}
-	};
+	},
+	registerKeyPress: (key: string) => {
+		self.currentLine += key;
+	},
+	setFullscreen: (value: boolean) => {
+		self.fullscreen = value;
+	},
+	toggleFullscreen: () => {
+		self.fullscreen = !self.fullscreen;
+	},
+	clearHistory: () => {
+		self.history = [];
+		self.responses = [];
+		self.currentLine = "";
+		self._.savedCurrentLine = "";
+		self._.lastHistory = 0;
+	},
+});
 
-	@Action
-	registerKeyPress = (key: string) => {
-		this.currentLine += key;
-	};
+const usePseudoTerminalStore = () => useSnapshot(self);
 
-	@Action
-	setFullscreen = (value: boolean) => {
-		this.fullscreen = value;
-	};
-
-	@Action
-	toggleFullscreen = () => {
-		this.fullscreen = !this.fullscreen;
-	};
-
-	@Action
-	clearHistory = () => {
-		this.history = [];
-		this.responses = [];
-		this.currentLine = "";
-		this.savedCurrentLine = "";
-		this.lastHistory = 0;
-	};
-}
-
-export { PseudoTerminalState };
+export { usePseudoTerminalStore };

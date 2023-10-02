@@ -1,8 +1,8 @@
-import { Action, BaseState } from "react-oocontext";
-
 import { LostAndFoundApi } from "Api/LostAndFoundApi";
 import { TermColor } from "Components/PseudoTerminal";
-import { getPseudoTerminalStore } from "Stores";
+import { usePseudoTerminalStore } from "Stores";
+import { shallowProxy } from "./shallowProxy";
+import { useSnapshot } from "valtio/react";
 
 const printError = (message: string) => {
 	return (
@@ -17,20 +17,18 @@ const printColor = (message: string, color: string = "blue") => {
 	return <TermColor className={color}>{message}</TermColor>;
 };
 
-@BaseState()
-class LostAndFoundState {
-	private api: LostAndFoundApi = new LostAndFoundApi();
-	private room: number = 1;
+const lostAndFoundApi = new LostAndFoundApi();
 
-	@Action
-	search = async (message: string) => {
-		const result = await this.api.search({
-			room: this.room,
+const self = shallowProxy("lost-and-found-store", {
+	room: 1,
+	search: async (message: string) => {
+		const result = await lostAndFoundApi.search({
+			room: self.room,
 			message,
 		});
-		if (result.room) this.room = result.room;
+		if (result.room) self.room = result.room;
 		if (!!result.clear) {
-			getPseudoTerminalStore().clearHistory();
+			usePseudoTerminalStore().clearHistory();
 			return null;
 		}
 		if (result.errorMessage) {
@@ -44,7 +42,9 @@ class LostAndFoundState {
 		}
 
 		return printColor("Invalid command.", result.color);
-	};
-}
+	},
+});
 
-export { LostAndFoundState };
+const useLostAndFoundStore = () => useSnapshot(self);
+
+export { useLostAndFoundStore };

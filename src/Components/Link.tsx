@@ -52,27 +52,28 @@ const Link = ({ children, dataId, onClick, title, ...props }: Props) => {
 		const active = showActive && (usesDataId || startsWith);
 
 		return (
-			<NextLink {...props} passHref scroll={false}>
-				<Styles
-					className={clsx({
-						active: active,
-					})}
-					data-id={dataId}
-					onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
-					onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
-					title={title}
-					onClick={onClick}
-				>
-					{children}
-				</Styles>
-			</NextLink>
+			<Styles
+				{...props}
+				passHref
+				scroll={false}
+				className={clsx({
+					active: active,
+				})}
+				data-id={dataId}
+				onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
+				onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
+				title={title}
+				onClick={onClick}
+			>
+				{children}
+			</Styles>
 		);
 	}
 };
 
 export { Link };
 
-const Styles = styled.a`
+const Styles = styled(NextLink)`
 	display: inline-block;
 	font-weight: 400;
 `;

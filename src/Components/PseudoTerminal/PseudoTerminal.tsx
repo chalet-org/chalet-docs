@@ -2,7 +2,7 @@ import React, { useCallback, useRef } from "react";
 import styled from "styled-components";
 
 import { globalFonts } from "Components/GlobalStyles/Fonts";
-import { PseudoTerminalStoreProvider, usePseudoTerminalStore, useUiStore } from "Stores";
+import { usePseudoTerminalStore, useUiStore } from "Stores";
 import { TerminalCommandCallback } from "Stores/PseudoTerminalState";
 
 import { TerminalCursor } from "./TerminalCursor";
@@ -130,11 +130,7 @@ const PseudoTerminalImpl = ({ prompt, onCommand, cursorColor, promptColor, ...co
 };
 
 const PseudoTerminal = (props: Props) => {
-	return (
-		<PseudoTerminalStoreProvider>
-			<PseudoTerminalImpl {...props} />
-		</PseudoTerminalStoreProvider>
-	);
+	return <PseudoTerminalImpl {...props} />;
 };
 
 export { PseudoTerminal };
