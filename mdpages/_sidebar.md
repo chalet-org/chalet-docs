@@ -20,6 +20,9 @@ Integration
 [@](/integrations/integration-development)
 [@](/integrations/visual-studio-code)
 [@](/integrations/visual-studio)
+[@](/integrations/xcode)
+[@](/integrations/clion)
+[@](/integrations/code-blocks)
 
 
 <!-- Other -->
