@@ -5,7 +5,7 @@ import React from "react";
 // import ProgressBar from "@badrap/bar-of-progress";
 // import { Optional } from "Utility";
 
-import { BaseStyle } from "Components";
+import { BaseStyle, ThemeProvider } from "Components";
 import { useSiteAnalytics } from "Utility";
 
 /*let progress: Optional<ProgressBar> = null;
@@ -32,6 +32,7 @@ const Main = ({ Component, pageProps }: Props) => {
 	return (
 		<>
 			<BaseStyle />
+			<ThemeProvider />
 			<Component {...pageProps} />
 			{/* Modal */}
 		</>
