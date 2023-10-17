@@ -26,14 +26,15 @@ chalet -t apple-llvm export xcode
 Like with Visual Studio, Xcode has been integrated with Chalet as a build strategy, so you can simultaneously export and build the Xcode project inside of Chalet using `xcodebuild`. The command for this is as follows.
 
 ```bash
-chalet -t apple-llvm -b `xcodebuild`
+chalet -t apple-llvm -b `xcodebuild` build
 ```
 
 To open it, this requies an Xcode install. You cannot use Command Line Tools with this.
 
 Once in Xcode, each build target will be selectable in the [top bar](https://developer.apple.com/documentation/xcode/configuring-a-new-target-in-your-project). Build configurations can only be changed in the [Build Scheme](https://developer.apple.com/documentation/xcode/customizing-the-build-schemes-for-a-project) as far as I know. 
 
-//
+\\
+
 
 ## [App Bundles]
 
