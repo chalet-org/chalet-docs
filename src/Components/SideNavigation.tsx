@@ -121,7 +121,7 @@ const Logo = styled.div`
 const SidebarToggle = styled.button`
 	display: block;
 	position: fixed;
-	bottom: 0;
+	top: 0;
 	left: 0;
 	z-index: 99;
 	padding: 0.25rem;
@@ -175,7 +175,7 @@ const StyledAside = styled.aside<AsideProps>`
 	z-index: 90;
 	overflow-x: hidden;
 	overflow-y: scroll;
-	padding-top: 2rem;
+	padding-top: 5rem;
 
 	background-color: ${getThemeVariable("codeBackground")};
 	color: ${getThemeVariable("primaryText")};
@@ -246,8 +246,8 @@ const StyledAside = styled.aside<AsideProps>`
 			position: fixed;
 			width: 2rem;
 			height: 2rem;
-			top: auto;
-			bottom: 1.75rem;
+			top: 1.75rem;
+			bottom: auto;
 			left: -4.125rem;
 			right: auto;
 			transition: left 0.125s linear;
