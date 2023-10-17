@@ -16,7 +16,7 @@ Full Support was just added in [Version 0.6.4](/download/v0.6.4). Documentation 
 [Code::Blocks](https://www.codeblocks.org/) support was added simply because I (the Chalet author) learned C++ on it many years ago. It's hard to recommend these days, but it gets the job done. The following will generate a Code::Blocks project into `build/.codeblocks`. It's designed to open and build to the same directories that Chalet normally uses.
 
 ```bash
-chalet -t gcc export codeblocks
+chalet export -t gcc codeblocks
 ```
 
 It will be limited to the one selected toolchain (GCC or MinGW) and use whatever build configurations that the project defines (or limits) at the time of export. The "all" build target uses `--no-only-selected` at the command line, while the other targets use `--only-selected`.
