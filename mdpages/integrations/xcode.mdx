@@ -7,7 +7,37 @@ title: Xcode
 
 ---
 
-Support was just added in [Version 0.6.4](/download/v0.6.4). Documentation will be added here shortly.
+Support was just added in [Version 0.6.4](/download/v0.6.4). Documentation is still a work in progress.
+
+\\
+
+## [Overview]
+
+The following will generate an [Xcode](https://developer.apple.com/xcode) project (.xcodeproj) into `build/.xcode`. It's designed to open and build to the same directories that Chalet normally uses, although this is still somewhat a work in-progress since Xcode generates some extra directories.
+
+```bash
+chalet -t apple-llvm export xcode
+```
+
+\\
+
+## [Using Xcodebuild]
+
+Like with Visual Studio, Xcode has been integrated with Chalet as a build strategy, so you can simultaneously export and build the Xcode project inside of Chalet using `xcodebuild`. The command for this is as follows.
+
+```bash
+chalet -t apple-llvm -b `xcodebuild`
+```
+
+To open it, this requies an Xcode install. You cannot use Command Line Tools with this.
+
+Once in Xcode, each build target will be selectable in the [top bar](https://developer.apple.com/documentation/xcode/configuring-a-new-target-in-your-project). Build configurations can only be changed in the [Build Scheme](https://developer.apple.com/documentation/xcode/customizing-the-build-schemes-for-a-project) as far as I know. 
+
+//
+
+## [App Bundles]
+
+If you already have an app bundle setup as a [distribution target](/docs/describing-the-distribution?id=mac-os-bundles), it will be generated with the rest of the Xcode project. If using the xcodebuild strategy, it will be skipped in `chalet build`, but not in `chalet bundle` (same behavior as before). If you open the project in Xcode, you can build the app bundle inside the editor.
 
 
 [[nav:/integrations/visual-studio:/integrations/clion]]

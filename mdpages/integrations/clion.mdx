@@ -7,7 +7,33 @@ title: CLion
 
 ---
 
-Support was just added in [Version 0.6.4](/download/v0.6.4). Documentation will be added here shortly.
+Support was just added in [Version 0.6.4](/download/v0.6.4). Documentation is still a work in progress.
+
+\\
+
+## [Overview]
+
+The following will generate a [CLion](https://www.jetbrains.com/clion) project into `.idea` if there is not one already there, and `build/.idea` otherwise.
+
+```bash
+chalet export clion
+```
+
+When you open the directory on CLion, everything will be setup. The build configurations that become generated will be based on what project defines (or limits), and the toolchain that was selected at the time of export. If you decide to switch toolchains on the same machine, you'll need to re-export. Out of the box, you will have built-in schema validation for `chalet.json` but in order to get `.chaletrc` to work, you just have to associate it with JSON. To do that:
+
+1. Inside CLion, right click the `.chaletrc` in your project and click on "Associate with File Type..."
+2. From the list, select "JSON"
+
+If this can be done automatically in the future, it will be, but this is only saved to user settings as far as I know. You'll only need to do this once per-machine.
+
+From there, pick from one of the predefined configurations. Feel free to remove ones you don't use. This can be done very quickly in "Edit Configurations...". The "all" configuration uses `--no-only-selected` at the command line, while the other targets use `--only-selected`.
+
+
+\\
+
+## [Extension]
+
+There is an [extension](//github.com/chalet-org/clion-chalet) in development, but it's hard at this time if it's necessary or how useful it will be. At the very least, it will automatically associate `.chaletrc` with JSON files and supply it and `chalet.json` with their schemas.
 
 
 [[nav:/integrations/xcode:/integrations/code-blocks]]
