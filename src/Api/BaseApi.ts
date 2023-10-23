@@ -1,10 +1,11 @@
-import axios, { AxiosInstance, AxiosRequestConfig, CancelTokenSource } from "axios";
+import { Dictionary } from "Utility";
+import fetch from "isomorphic-fetch";
 
 // TODO: Use fetch, move to npm package
 
-const logError = (err: any, source: CancelTokenSource) => {
-	if (axios.isCancel(err)) {
-		source.cancel("Request canceled");
+const logError = (err: any, abortController: AbortController) => {
+	if (abortController.signal.aborted) {
+		// source.cancel("Request canceled");
 	} else {
 		// console.error(err);
 	}
@@ -25,101 +26,133 @@ type ApiResponseWithBody<T> = ApiResponse & {
 	data: T;
 };
 
+export enum FetchMethod {
+	POST = "POST",
+	GET = "GET",
+	PUT = "PUT",
+	PATCH = "PATCH",
+	DELETE = "DELETE",
+	OPTIONS = "OPTIONS",
+	HEAD = "HEAD",
+}
+
+export type FetchConfig = {
+	headers?: Dictionary<string>;
+};
+
+type PrivateFetchConfig = FetchConfig & {
+	method: FetchMethod;
+	mode: "cors" | "no-cors" | "same-origin";
+	cache: "default" | "no-cache" | "reload" | "force-cache" | "only-if-cached";
+	credentials: "same-origin" | "include" | "omit";
+	referrerPolicy:
+		| "no-referrer"
+		| "no-referrer-when-downgrade"
+		| "origin"
+		| "origin-when-cross-origin"
+		| "same-origin"
+		| "strict-origin"
+		| "strict-origin-when-cross-origin"
+		| "unsafe-url";
+	signal: AbortSignal;
+	body?: string;
+};
+
+function makeFetchCall(route: string, config: PrivateFetchConfig): Promise<Response> {
+	return fetch(route, config);
+}
+
 export abstract class BaseApi {
-	private axios: AxiosInstance;
 	private contentType = "application/json";
-	private config: AxiosRequestConfig = {};
+	private abortController: AbortController = new AbortController();
 
-	constructor(private baseUrl: string, config?: AxiosRequestConfig) {
-		if (config) {
-			this.axios = axios.create(config);
-		} else {
-			this.axios = axios;
-		}
-	}
+	constructor(private baseUrl: string, private config: FetchConfig = {}) {}
 
-	private getRequestConfig = (source: CancelTokenSource): AxiosRequestConfig => {
+	private getRequestConfig = (method: FetchMethod, data?: Record<string, any>): PrivateFetchConfig => {
 		// TODO: Potential for header customization
 		// TODO: Also, general authentication
 		return {
+			method,
+			mode: "cors",
+			cache: "default",
+			credentials: "same-origin",
+			referrerPolicy: "no-referrer",
 			headers: {
 				"Access-Control-Allow-Origin": "*",
 				"Access-Control-Allow-Methods": "*",
 				"Content-Type": this.contentType,
 				...this.config?.headers,
 			},
-			cancelToken: source.token,
+			body: !!data ? JSON.stringify(data) : undefined,
+			signal: this.abortController.signal,
 			...this.config,
 		};
 	};
 
-	protected setConfig = (config: AxiosRequestConfig): void => {
-		this.config = config;
-	};
-
-	protected OPTIONS = async <T extends object>(route: string): Promise<ApiResponseWithBody<T>> => {
-		const source = axios.CancelToken.source();
+	protected OPTIONS = async (route: string): Promise<Response> => {
 		try {
 			validateForwardSlash(route);
 
-			const requestConfig = this.getRequestConfig(source);
-			const result: ApiResponseWithBody<T> = await this.axios.options(this.baseUrl + route, requestConfig);
+			const requestConfig = this.getRequestConfig(FetchMethod.OPTIONS);
+			const result = await makeFetchCall(this.baseUrl + route, requestConfig);
 			return result;
 		} catch (err) {
-			logError(err, source);
+			logError(err, this.abortController);
 			throw err;
 		}
 	};
 
 	protected GET = async <T extends object>(route: string): Promise<T> => {
-		const source = axios.CancelToken.source();
 		try {
 			validateForwardSlash(route);
 
-			const requestConfig = this.getRequestConfig(source);
-			const result: ApiResponseWithBody<T> = await this.axios.get(this.baseUrl + route, requestConfig);
-			return result.data;
+			const requestConfig = this.getRequestConfig(FetchMethod.GET);
+			const result = await makeFetchCall(this.baseUrl + route, requestConfig);
+			if (!result.ok) {
+				throw new Error(result.statusText);
+			}
+			return result.json() as T;
 		} catch (err) {
-			logError(err, source);
+			logError(err, this.abortController);
 			throw err;
 		}
 	};
 
 	protected HEAD = async (route: string): Promise<any> => {
-		const source = axios.CancelToken.source();
 		try {
 			validateForwardSlash(route);
 
-			const requestConfig = this.getRequestConfig(source);
-			const result = await this.axios.head(this.baseUrl + route, requestConfig);
+			const requestConfig = this.getRequestConfig(FetchMethod.HEAD);
+			const result = await makeFetchCall(this.baseUrl + route, requestConfig);
 			return result.headers;
 		} catch (err) {
-			logError(err, source);
+			logError(err, this.abortController);
 			throw err;
 		}
 	};
 
 	protected POST = async <T extends object, Data extends object>(route: string, data: Data): Promise<T> => {
-		const source = axios.CancelToken.source();
 		try {
 			validateForwardSlash(route);
 
-			const requestConfig = this.getRequestConfig(source);
-			const result: ApiResponseWithBody<T> = await this.axios.post(this.baseUrl + route, data, requestConfig);
-			return result.data;
+			const requestConfig = this.getRequestConfig(FetchMethod.POST, data);
+			const result = await makeFetchCall(this.baseUrl + route, requestConfig);
+			if (!result.ok) {
+				throw new Error(result.statusText);
+			}
+			return result.json() as T;
 		} catch (err) {
-			logError(err, source);
+			logError(err, this.abortController);
 			throw err;
 		}
 	};
 
 	protected PUT = async <Data extends object>(route: string, data: Data): Promise<ApiResponse> => {
-		const source = axios.CancelToken.source();
 		try {
 			validateForwardSlash(route);
 
-			const requestConfig = this.getRequestConfig(source);
-			const result: ApiResponse = await this.axios.put(this.baseUrl + route, data, requestConfig);
+			const requestConfig = this.getRequestConfig(FetchMethod.PUT, data);
+			const result: ApiResponse = await makeFetchCall(this.baseUrl + route, requestConfig);
 
 			const created = result.status === 201;
 			const modified = result.status === 200 || result.status === 204;
@@ -132,18 +165,17 @@ export abstract class BaseApi {
 
 			return result;
 		} catch (err) {
-			logError(err, source);
+			logError(err, this.abortController);
 			throw err;
 		}
 	};
 
 	protected PATCH = async <T extends object, Data extends object>(route: string, data: Data): Promise<T> => {
-		const source = axios.CancelToken.source();
 		try {
 			validateForwardSlash(route);
 
-			const requestConfig = this.getRequestConfig(source);
-			const result: ApiResponseWithBody<T> = await this.axios.patch(this.baseUrl + route, data, requestConfig);
+			const requestConfig = this.getRequestConfig(FetchMethod.PATCH, data);
+			const result = await makeFetchCall(this.baseUrl + route, requestConfig);
 
 			const validStatusCode = result.status >= 200 && result.status < 300;
 			if (!validStatusCode) {
@@ -152,20 +184,19 @@ export abstract class BaseApi {
 				);
 			}
 
-			return result.data;
+			return result.json();
 		} catch (err) {
-			logError(err, source);
+			logError(err, this.abortController);
 			throw err;
 		}
 	};
 
 	protected DELETE = async (route: string): Promise<boolean> => {
-		const source = axios.CancelToken.source();
 		try {
 			validateForwardSlash(route);
 
-			const requestConfig = this.getRequestConfig(source);
-			const result: ApiResponse = await this.axios.delete(this.baseUrl + route, requestConfig);
+			const requestConfig = this.getRequestConfig(FetchMethod.DELETE);
+			const result: ApiResponse = await fetch(this.baseUrl + route, requestConfig);
 
 			const noContent = result.status === 204;
 			const validStatusCode = result.status === 200 || result.status === 202;
@@ -178,7 +209,7 @@ export abstract class BaseApi {
 
 			return !noContent && validStatusCode;
 		} catch (err) {
-			logError(err, source);
+			logError(err, this.abortController);
 			throw err;
 		}
 	};

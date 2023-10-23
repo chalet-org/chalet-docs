@@ -149,6 +149,8 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 			const downloadsByKind: Record<string, any> = {};
 			const downloadsByTag: Record<string, any> = {};
 
+			const SHOW_LAST_COUNT = 2;
+
 			const printableArray: ResultGithubReleases = [...withTransformedBody].reverse();
 			printableArray.forEach((release, i) => {
 				downloadsByTag[release.tag_name] = {
@@ -185,7 +187,9 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 					return prev;
 				}, []);
 
-				console.table(assets);
+				if (i >= printableArray.length - SHOW_LAST_COUNT) {
+					console.table(assets);
+				}
 			});
 
 			const printable = Object.values(downloadsByKind).sort((a, b) => (a.downloads < b.downloads ? 1 : -1));

@@ -35,8 +35,8 @@ const SearchInput = (_props: Props) => {
 					onChange={(ev) => {
 						ev.preventDefault();
 						setResultsFetched(false);
-						doApiCall(ev.target.value);
 						setValue(ev.target.value);
+						doApiCall(ev.target.value);
 					}}
 				/>
 				{value === "" ? (
