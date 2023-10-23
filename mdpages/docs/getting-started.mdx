@@ -9,11 +9,61 @@ title: Getting Started
 
 At the moment, Chalet must be installed manually in non-Windows operating systems, but in the future will be available through Homebrew/package managers. Before working with Chalet, it should be [accessible from PATH](//en.wikipedia.org/wiki/PATH_(variable)).
 
-* [Download](/download)
+\
 
-\\
+[[accordion:start Installation]]
 
-## [Machine Setup]
+[[tabs:start]]
+|Windows|
+
+**Installer**
+
+1. [Download](/download) the latest installer (x64 version in most cases)
+2. Extract the zip and run the installer itself
+3. If using bash or zsh in any form on windows, completion scripts are available in: `C:\Program Files\Chalet\bin`
+
+**Manual installation**
+
+1. [Download](/download) the latest archive
+2. Extract to your location of choice
+3. Add it to `Path` in the system's environment variables
+4. If using bash or zsh in any form on windows, completion scripts are available
+
+|MacOS|
+**To install via [Homebrew](https://brew.sh/)**
+
+1. Use the following. The `latest` part of the url can be replaced with the version (ie. `v0.6.6`)
+
+```bash
+brew install --cask https://www.chalet-work.space/api/brew/latest/chalet.rb
+```
+
+2. The shell completion scripts will be in `/opt/homebrew/Caskroom/chalet/(version)`
+
+**Manual installation**
+
+1. [Download](/download) the latest version
+2. Extract to `/opt/chalet` and add it to `PATH`
+
+> Note: optionally, you can define `CHALET_PATH` and add that to `PATH`
+
+|Linux|
+
+**Ubuntu / Debian**
+
+1. [Download](/download) the latest Debian / Ubuntu package and extract it from the zip
+2. Install with `dpkg -i chalet_(version)_amd64.deb`
+
+**Manual installation**
+
+1. [Download](/download) the latest version
+2. Extract to `/opt/chalet` and add it to `PATH` 
+
+> Note: optionally, you can define `CHALET_PATH` and add that to `PATH`
+
+[[tabs:end]]
+
+[[accordion:end]]
 
 [[accordion:start Adding a C/C++ Compiler]]
 

@@ -168,9 +168,13 @@ const BaseStyle: any = createGlobalStyle`
 		&:not(:first-of-type) {
 			min-width: 8rem;
 		}
+	}
 
-		> strong {
-			font-weight: 600;
+	strong {
+		font-weight: 600;
+
+		> a {
+			font-weight: 600 !important;
 		}
 	}
 
