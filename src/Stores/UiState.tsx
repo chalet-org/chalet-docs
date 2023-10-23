@@ -114,5 +114,6 @@ const self = shallowProxy("ui-store", {
 });
 
 const useUiStore = () => useSnapshot(self);
+const getUiStore = () => self;
 
-export { useUiStore };
+export { useUiStore, getUiStore };

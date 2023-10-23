@@ -15,7 +15,7 @@ const InlineImage = (props: Props) => {
 
 export { InlineImage };
 
-const Styles = styled.div`
+const Styles = styled.span`
 	display: block;
 	padding: 0 1rem;
 	padding-bottom: 1rem;

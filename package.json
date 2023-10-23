@@ -39,7 +39,7 @@
 		"react-icons": "4.3.1",
 		"react-is": "18.2.0",
 		"react-textarea-autosize": "8.5.2",
-		"styled-components": "6.0.2",
+		"styled-components": "6.1.0",
 		"valtio": "1.11.2"
 	},
 	"devDependencies": {
@@ -53,8 +53,8 @@
 		"@types/prismjs": "^1.16.6",
 		"@types/react": "18.2.24",
 		"@types/react-dom": "18.2.8",
-		"eslint": "8.19.0",
-		"eslint-config-next": "12.2.2",
+		"eslint": "8.52.0",
+		"eslint-config-next": "13.5.6",
 		"prettier": "2.7.1",
 		"typescript": "5.2.2"
 	}

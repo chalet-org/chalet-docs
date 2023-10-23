@@ -1,4 +1,3 @@
-import { Action, BaseState } from "react-oocontext";
 import { shallowProxy } from "./shallowProxy";
 import { useSnapshot } from "valtio/react";
 
@@ -71,5 +70,6 @@ const self = shallowProxy("pseudo-terminal-store", {
 });
 
 const usePseudoTerminalStore = () => useSnapshot(self);
+const getPseudoTerminalStore = () => self;
 
-export { usePseudoTerminalStore };
+export { usePseudoTerminalStore, getPseudoTerminalStore };

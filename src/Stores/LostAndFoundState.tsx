@@ -1,6 +1,6 @@
 import { LostAndFoundApi } from "Api/LostAndFoundApi";
 import { TermColor } from "Components/PseudoTerminal";
-import { usePseudoTerminalStore } from "Stores";
+import { getPseudoTerminalStore } from "Stores";
 import { shallowProxy } from "./shallowProxy";
 import { useSnapshot } from "valtio/react";
 
@@ -28,7 +28,7 @@ const self = shallowProxy("lost-and-found-store", {
 		});
 		if (result.room) self.room = result.room;
 		if (!!result.clear) {
-			usePseudoTerminalStore().clearHistory();
+			getPseudoTerminalStore().clearHistory();
 			return null;
 		}
 		if (result.errorMessage) {
@@ -46,5 +46,6 @@ const self = shallowProxy("lost-and-found-store", {
 });
 
 const useLostAndFoundStore = () => useSnapshot(self);
+const getLostAndFoundStore = () => self;
 
-export { useLostAndFoundStore };
+export { useLostAndFoundStore, getLostAndFoundStore };

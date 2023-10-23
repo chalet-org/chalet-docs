@@ -25,15 +25,20 @@ const Link = ({ children, dataId, onClick, title, ...props }: Props) => {
 	}*/
 	const showActive = props.showActive ?? true;
 	const trackHeadings = props.trackHeadings ?? false;
-	const targetBlank =
-		typeof props.href === "string" && (props.href.startsWith("//") || props.href.startsWith("/api"));
+	const startsWithDoubleSlash = typeof props.href === "string" && props.href.startsWith("//");
+	const targetBlank = startsWithDoubleSlash || (typeof props.href === "string" && props.href.startsWith("/api"));
 	const href = typeof props.href === "string" ? props.href.split("?")[0] : null;
 	const asPath = router.asPath.split("?")[0];
+
+	let outHref: string | undefined;
+	if (startsWithDoubleSlash) {
+		outHref = `https:${props.href}`;
+	}
 
 	if (targetBlank && typeof props.href === "string") {
 		return (
 			<Styles
-				href={props.href}
+				href={outHref ?? props.href}
 				data-id={dataId}
 				title={title}
 				onClick={onClick}
@@ -52,28 +57,27 @@ const Link = ({ children, dataId, onClick, title, ...props }: Props) => {
 		const active = showActive && (usesDataId || startsWith);
 
 		return (
-			<Styles
-				{...props}
-				passHref
-				scroll={false}
-				className={clsx({
-					active: active,
-				})}
-				data-id={dataId}
-				onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
-				onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
-				title={title}
-				onClick={onClick}
-			>
-				{children}
-			</Styles>
+			<NextLink {...props} href={outHref ?? props.href} passHref scroll={false} legacyBehavior>
+				<Styles
+					className={clsx({
+						active: active,
+					})}
+					data-id={dataId}
+					onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
+					onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
+					title={title}
+					onClick={onClick}
+				>
+					{children}
+				</Styles>
+			</NextLink>
 		);
 	}
 };
 
 export { Link };
 
-const Styles = styled(NextLink)`
+const Styles = styled.a`
 	display: inline-block;
 	font-weight: 400;
 `;
