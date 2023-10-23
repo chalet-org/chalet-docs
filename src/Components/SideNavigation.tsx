@@ -1,19 +1,20 @@
 import clsx from "clsx";
-import React from "react";
+import React, { useCallback } from "react";
 import styled from "styled-components";
 
-import { Link, SearchInput, ThemeToggle } from "Components";
+import { Link, SearchInput, ThemeToggle, hasMaxWidth } from "Components";
 import { useKeyPress } from "Hooks";
 import { ResultNavigation } from "Server/ResultTypes";
 import { useUiStore } from "Stores";
 import { getThemeVariable } from "Theme";
 
 import { NavigationLinks } from "./NavigationLinks";
+import { makeLinearGradient } from "Utility/CssGradient";
 
 type Props = React.PropsWithChildren<ResultNavigation & {}>;
 
 const SideNavigation = ({ children, ...navProps }: Props) => {
-	const { toggleNavigation, navOpen, navWidth, initialized } = useUiStore();
+	const { toggleNavigation, navOpen, setNavOpen, navWidth, initialized } = useUiStore();
 	useKeyPress(
 		(ev) => {
 			if (ev.key === "Escape") {
@@ -23,6 +24,11 @@ const SideNavigation = ({ children, ...navProps }: Props) => {
 		},
 		[toggleNavigation]
 	);
+	const onClick = useCallback(() => {
+		const tooLarge = window.matchMedia?.("(min-width: 960px)").matches ?? true;
+		if (!tooLarge) setNavOpen(false);
+	}, []);
+
 	if (!initialized) {
 		return null;
 	}
@@ -33,8 +39,8 @@ const SideNavigation = ({ children, ...navProps }: Props) => {
 					sidebar: true,
 					open: navOpen,
 				})}
-				onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
-				onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
+				onTouchStart={(ev) => (ev.target as HTMLButtonElement).classList.add("touch-hover")}
+				onTouchEnd={(ev) => (ev.target as HTMLButtonElement).classList.remove("touch-hover")}
 				onClick={(ev) => {
 					ev.preventDefault();
 					toggleNavigation();
@@ -47,11 +53,11 @@ const SideNavigation = ({ children, ...navProps }: Props) => {
 			</SidebarToggle>
 			<StyledAside className={`sidebar ${navOpen ? "open" : ""}`} width={navWidth}>
 				<Logo>
-					<Link href="/" showActive={false}>
+					<Link href="/" showActive={false} onClick={onClick}>
 						<img src="/images/chalet-logo.svg" alt="chalet-logo" />
 					</Link>
 					<h4>
-						<Link href="/" showActive={false}>
+						<Link href="/" showActive={false} onClick={onClick}>
 							Chalet
 						</Link>
 					</h4>
@@ -143,10 +149,6 @@ const SidebarToggle = styled.button`
 		}
 	}
 
-	&.open {
-		background-color: ${getThemeVariable("codeBackground")};
-	}
-
 	&:hover,
 	&.touch-hover {
 		> span {
@@ -175,7 +177,7 @@ const StyledAside = styled.aside<AsideProps>`
 	z-index: 90;
 	overflow-x: hidden;
 	overflow-y: scroll;
-	padding-top: 5rem;
+	padding-top: 5.5rem;
 
 	background-color: ${getThemeVariable("codeBackground")};
 	color: ${getThemeVariable("primaryText")};
@@ -241,6 +243,21 @@ const StyledAside = styled.aside<AsideProps>`
 	}
 
 	> div.nav-fade {
+		display: block;
+		position: fixed;
+		width: ${(props) => props.width};
+		height: 5.5rem;
+		top: 0;
+		bottom: auto;
+
+		${makeLinearGradient("transparent", getThemeVariable("codeBackground"), 180)}
+		background: ${getThemeVariable("codeBackground")};
+		background: linear-gradient(
+			180deg,
+			${getThemeVariable("fadeBackgroundB")} 40%,
+			${getThemeVariable("fadeBackgroundA")} 100%
+		);
+
 		> .theme-toggle {
 			display: block;
 			position: fixed;
@@ -320,5 +337,37 @@ const NavGroup = styled.div`
 
 	a:not(.active):hover {
 		color: ${getThemeVariable("primaryText")};
+	}
+
+	@media ${hasMaxWidth(0)} {
+		a {
+			font-size: 1.33rem;
+			line-height: 2;
+		}
+		> ul > li > a {
+			padding-left: 1.75rem;
+		}
+		> ul > li > strong {
+			padding-left: 2rem;
+		}
+
+		> ul > li > ul > li > a {
+			padding-left: 2.75rem;
+
+			&:before {
+				content: " ";
+				display: block;
+				position: absolute;
+				left: 1.875rem;
+				top: 50%;
+				transform: translateY(-50%);
+				width: 0.25rem;
+				height: 1.5rem;
+			}
+		}
+
+		> ul > li > ul > li > ul > li > a {
+			padding-left: 3.5rem;
+		}
 	}
 `;

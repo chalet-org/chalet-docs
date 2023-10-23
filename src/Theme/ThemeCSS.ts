@@ -11,6 +11,9 @@ const ThemeIndex: ThemeType = {
 	secondaryColor: "secondary-color",
 	tertiaryColor: "tertiary-color",
 	//
+	fadeBackgroundA: "fade-background-a",
+	fadeBackgroundB: "fade-background-b",
+	//
 	codeBlack: "code-black",
 	codeWhite: "code-white",
 	codeGray: "code-gray",
