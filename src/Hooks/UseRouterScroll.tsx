@@ -60,7 +60,6 @@ const useRouteChangeScroll = () => {
 		} else {
 			const id = getQueryVariable("id");
 			if (id.length > 0) {
-				setLastEl(null);
 				setTimeout(() => {
 					const el: Optional<HTMLElement> = document.getElementById(id);
 					const top: Optional<number> = el?.offsetTop ?? null;
@@ -68,6 +67,7 @@ const useRouteChangeScroll = () => {
 					if (!!top && !!mainEl) {
 						mainEl.scrollTo({ behavior: "smooth", top });
 					}
+					setLastEl(null);
 				}, 50);
 			}
 		}
