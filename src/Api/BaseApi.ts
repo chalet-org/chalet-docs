@@ -1,4 +1,4 @@
-import { Dictionary } from "Utility";
+import { Dictionary, Optional } from "Utility";
 import fetch from "isomorphic-fetch";
 
 // TODO: Use fetch, move to npm package
@@ -20,10 +20,6 @@ type ApiResponse = {
 	request?: any;
 	status: number;
 	statusText: string;
-};
-
-type ApiResponseWithBody<T> = ApiResponse & {
-	data: T;
 };
 
 export enum FetchMethod {
@@ -89,7 +85,7 @@ export abstract class BaseApi {
 		};
 	};
 
-	protected OPTIONS = async (route: string): Promise<Response> => {
+	protected OPTIONS = async (route: string): Promise<Optional<Response>> => {
 		try {
 			validateForwardSlash(route);
 
@@ -98,11 +94,11 @@ export abstract class BaseApi {
 			return result;
 		} catch (err) {
 			logError(err, this.abortController);
-			throw err;
+			return null;
 		}
 	};
 
-	protected GET = async <T extends object>(route: string): Promise<T> => {
+	protected GET = async <T extends object>(route: string): Promise<Optional<T>> => {
 		try {
 			validateForwardSlash(route);
 
@@ -114,7 +110,7 @@ export abstract class BaseApi {
 			return result.json() as T;
 		} catch (err) {
 			logError(err, this.abortController);
-			throw err;
+			return null;
 		}
 	};
 
@@ -127,11 +123,11 @@ export abstract class BaseApi {
 			return result.headers;
 		} catch (err) {
 			logError(err, this.abortController);
-			throw err;
+			return null;
 		}
 	};
 
-	protected POST = async <T extends object, Data extends object>(route: string, data: Data): Promise<T> => {
+	protected POST = async <T extends object, Data extends object>(route: string, data: Data): Promise<Optional<T>> => {
 		try {
 			validateForwardSlash(route);
 
@@ -143,11 +139,11 @@ export abstract class BaseApi {
 			return result.json() as T;
 		} catch (err) {
 			logError(err, this.abortController);
-			throw err;
+			return null;
 		}
 	};
 
-	protected PUT = async <Data extends object>(route: string, data: Data): Promise<ApiResponse> => {
+	protected PUT = async <Data extends object>(route: string, data: Data): Promise<Optional<ApiResponse>> => {
 		try {
 			validateForwardSlash(route);
 
@@ -166,11 +162,14 @@ export abstract class BaseApi {
 			return result;
 		} catch (err) {
 			logError(err, this.abortController);
-			throw err;
+			return null;
 		}
 	};
 
-	protected PATCH = async <T extends object, Data extends object>(route: string, data: Data): Promise<T> => {
+	protected PATCH = async <T extends object, Data extends object>(
+		route: string,
+		data: Data
+	): Promise<Optional<T>> => {
 		try {
 			validateForwardSlash(route);
 
@@ -187,7 +186,7 @@ export abstract class BaseApi {
 			return result.json();
 		} catch (err) {
 			logError(err, this.abortController);
-			throw err;
+			return null;
 		}
 	};
 
@@ -210,7 +209,7 @@ export abstract class BaseApi {
 			return !noContent && validStatusCode;
 		} catch (err) {
 			logError(err, this.abortController);
-			throw err;
+			return false;
 		}
 	};
 }

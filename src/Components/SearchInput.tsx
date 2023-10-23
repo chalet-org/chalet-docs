@@ -18,14 +18,6 @@ const SearchInput = (_props: Props) => {
 	const [resultsFetched, setResultsFetched] = useState<boolean>(false);
 	const [results, setResults] = useState<ResultSearchResults>([]);
 
-	const doApiCall = useCallback(
-		debounce(async (value: string) => {
-			const res = await docsApi.searchMarkdown(value);
-			setResults(res);
-			setResultsFetched(true);
-		}, 500),
-		[]
-	);
 	return (
 		<Styles>
 			<SearchBar>
@@ -36,7 +28,12 @@ const SearchInput = (_props: Props) => {
 						ev.preventDefault();
 						setResultsFetched(false);
 						setValue(ev.target.value);
-						doApiCall(ev.target.value);
+						debounce(() => {
+							docsApi.searchMarkdown(ev.target.value).then((res) => {
+								setResults(res);
+								setResultsFetched(true);
+							});
+						}, 500)();
 					}}
 				/>
 				{value === "" ? (

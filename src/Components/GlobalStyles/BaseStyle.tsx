@@ -304,6 +304,11 @@ const BaseStyle: any = createGlobalStyle`
 		border: none;
 	}
 
+	.focused-element {
+		border: 0.25rem solid ${getThemeVariable("primaryColor")} !important;
+		padding: 0.5rem !important;
+	}
+
 	.router-progress-bar {
 		z-index: 50;
 		color: ${getThemeVariable("secondaryColor")} !important;

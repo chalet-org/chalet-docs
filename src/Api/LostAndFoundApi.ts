@@ -15,7 +15,14 @@ class LostAndFoundApi extends BaseApi {
 		if (inputs.message.length > 0) {
 			const data = encodeURIComponent(JSON.stringify(inputs));
 			const result = await this.GET<ResultLostAndFound>(`/lost-and-found?data=${encodeURIComponent(data)}`);
-			return result;
+			if (result) {
+				return result;
+			} else {
+				return {
+					room: inputs.room,
+					message: "",
+				};
+			}
 		} else {
 			return {
 				room: inputs.room,

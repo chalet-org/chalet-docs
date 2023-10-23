@@ -13,7 +13,7 @@ const nextConfig = {
 		styledComponents: true,
 	},
 	experimental: {
-		largePageDataBytes: 512 * 1000, // default: 128k
+		largePageDataBytes: 1024 * 1000, // default: 128k
 	},
 	redirects: async () => {
 		return [

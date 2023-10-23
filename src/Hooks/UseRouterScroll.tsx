@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
 
 import { useUiStore } from "Stores";
 import { Optional } from "Utility";
@@ -7,6 +7,7 @@ import { getQueryVariable } from "Utility/GetQueryVariable";
 
 const useRouteChangeScroll = () => {
 	const router = useRouter();
+	const [lastEl, setLastEl] = useState<Optional<HTMLElement>>(null);
 
 	const { setFocusedId, findText } = useUiStore();
 
@@ -17,7 +18,7 @@ const useRouteChangeScroll = () => {
 			let queryText: string;
 			if (split.length > 1) queryText = `concat('${split.join("', \"'\", '")}')`;
 			else queryText = `'${findText}'`;
-			const xpathQuery = `//*[@id='main']//*[contains(text(), ${queryText})]`;
+			const xpathQuery = `//*[@id='main']//*[text()[contains(normalize-space(.), ${queryText})]]`;
 			try {
 				const node = document.evaluate(
 					xpathQuery,
@@ -26,17 +27,32 @@ const useRouteChangeScroll = () => {
 					XPathResult.FIRST_ORDERED_NODE_TYPE,
 					null
 				).singleNodeValue;
+				// console.log(node, xpathQuery);
 				if (node) {
-					const top: number = (node as HTMLElement)?.offsetTop ?? null;
+					const element = node as HTMLElement;
+					const top: number = element?.offsetTop ?? null;
 					if (!!top) {
 						mainEl.scrollTo({ behavior: "smooth", top });
+						element!.classList.add("focused-element");
+						setLastEl(element);
+					} else {
+						setLastEl((prev) => {
+							prev?.classList.remove("focused-element");
+							return null;
+						});
 					}
+				} else {
+					setLastEl((prev) => {
+						prev?.classList.remove("focused-element");
+						return null;
+					});
 				}
 			} catch (err: any) {
 				console.warn(err.message);
 			}
 		} else if (window.location.search.length === 0) {
 			setFocusedId(router.asPath);
+			setLastEl(null);
 			setTimeout(() => {
 				const mainEl = document.getElementById("main");
 				mainEl?.scrollTo(0, 0);
@@ -44,6 +60,7 @@ const useRouteChangeScroll = () => {
 		} else {
 			const id = getQueryVariable("id");
 			if (id.length > 0) {
+				setLastEl(null);
 				setTimeout(() => {
 					const el: Optional<HTMLElement> = document.getElementById(id);
 					const top: Optional<number> = el?.offsetTop ?? null;
@@ -54,7 +71,7 @@ const useRouteChangeScroll = () => {
 				}, 50);
 			}
 		}
-	}, [router.asPath]);
+	}, [router.asPath, findText]);
 
 	useEffect(() => {
 		router.events.on("routeChangeComplete", handler);
