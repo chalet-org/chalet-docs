@@ -16,6 +16,7 @@ From a high level, it's structured as follows:
    ... (metadata)
    "seachPaths": [ ... ],
    "variables": [ ... ],
+   "allowedArchitectures": [ ... ],
    "defaultConfigurations": [ ... ],
    "configurations": { ... },
    "externalDependencies": { ... },
@@ -28,7 +29,8 @@ From a high level, it's structured as follows:
 | metadata | Metadata related to the entire workspace. |
 | seachPaths | Additional relative paths to search for compiled dependencies not otherwise found. |
 | variables | Local variables to shorten build paths without modifying the build environment. |
-| defaultConfigurations | An array fo default build configurations to use. |
+| allowedArchitectures | An array of allowed target architecture triples supported by the project. |
+| defaultConfigurations | An array of default build configurations supported by the project. |
 | configurations | Custom build configurations |
 | externalDependencies | External dependencies to resolve before building. (ie. from git, or a local path) |
 | targets | Build targets. |
@@ -302,5 +304,22 @@ Sometimes it may be desireable to use package manager dependencies if they're av
 **See also:**
 
 [Property Conditions](/docs/creating-targets?id=property-conditions)
+
+\\
+
+## [Allowed Architectures]
+
+In order to communicate which target architectures are supported by the build, one can add the `allowedArchitectures` array in the root of the build file. If this list is not empty (default), the target triple will be matched against this list at the start of the build. If it's not in the list, the build will be stopped.
+
+```json
+"allowedArchitectures": [
+   "x86_64-pc-windows-msvc",
+   "arm64-apple-darwin",
+   "x86_64-apple-darwin",
+   "universal-apple-darwin",
+   "x86_64-w64-mingw32"
+]
+```
+
 
 [[nav:/docs/getting-started:/docs/creating-targets]]
