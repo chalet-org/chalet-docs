@@ -34,26 +34,31 @@ const lineWidth = 122;
 
 class ServerCache {
 	private development: boolean;
+	private printLog: boolean;
 	private cacheSeconds: number;
 	private cache: Dictionary<CacheEntry<any>> = {};
 
 	constructor() {
 		this.development = isDevelopment && process.env.USE_SERVER_CACHE !== "1";
-		// this.development = false;
+		this.printLog = process.env.PRINT_SERVER_CACHE_LOG === "1";
 
 		const hours = 4;
 		this.cacheSeconds = 60 * 60 * hours;
 		// this.cacheSeconds = 15;
+
+		console.log(process.env);
 	}
 
 	private print = (action: string, key: string, cached: string, time: number) => {
-		const outTime: string = ` ${green}${time.toFixed(3)} ms${reset}`;
-		let text = `${action}${gray}:${reset} ${key}${gray} `;
-		while (text.length < lineWidth - outTime.length) {
-			text += ".";
+		if (this.printLog) {
+			const outTime: string = ` ${green}${time.toFixed(3)} ms${reset}`;
+			let text = `${action}${gray}:${reset} ${key}${gray} `;
+			while (text.length < lineWidth - outTime.length) {
+				text += ".";
+			}
+			text += `${outTime} ${cyan}${cached}${reset}`;
+			console.log(text);
 		}
-		text += `${outTime} ${cyan}${cached}${reset}`;
-		console.log(text);
 	};
 
 	get = async <T>(key: string, onCache: () => Promise<T>, cacheLength?: number): Promise<T> => {

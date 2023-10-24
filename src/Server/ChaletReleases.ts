@@ -188,16 +188,16 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 				}, []);
 
 				if (i >= printableArray.length - SHOW_LAST_COUNT) {
-					console.table(assets);
+					// console.table(assets);
 				}
 			});
 
-			const printable = Object.values(downloadsByKind).sort((a, b) => (a.downloads < b.downloads ? 1 : -1));
-			console.table(printable);
-			console.table(downloadsByTag);
-			console.table({
-				total_downloads: printable.reduce<number>((prev, curr) => (prev += curr.downloads), 0),
-			});
+			// const printable = Object.values(downloadsByKind).sort((a, b) => (a.downloads < b.downloads ? 1 : -1));
+			// console.table(printable);
+			// console.table(downloadsByTag);
+			// console.table({
+			// 	total_downloads: printable.reduce<number>((prev, curr) => (prev += curr.downloads), 0),
+			// });
 		}
 
 		return withTransformedBody;
