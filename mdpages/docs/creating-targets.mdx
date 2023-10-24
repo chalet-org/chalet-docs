@@ -293,7 +293,7 @@ Also of note is that values are still always **OR**, so consider that in the bel
 ```json
 "links[platform:{linux,macos}+configuration:debugSymbols]": [
    "bar"
-]
+],
 "links[platform:{linux,macos}+:debug]": [
    "bar"
 ]
@@ -306,7 +306,7 @@ Next, consider the following example:
 ```json
 "links[:{!linux,!macos}]": [ // bad!
    "bar"
-]
+],
 "links[platform:{!linux,!macos}]": [ // bad!
    "bar"
 ]
@@ -368,7 +368,7 @@ Targets can be excluded with the `condition` property, and work the exact same w
 ```json
 "first-target": {
    "condition": "[:debug+:!windows]"
-}
+},
 "second-target": {
    "condition": "[:linux]"
 }
@@ -437,10 +437,10 @@ Property conditions are also supported:
 ```json
 "files": [
    "src/Foo/**.cpp"
-]
+],
 "files[:windows]": [
    "src/Windows/**.cpp"
-]
+],
 "files[:macos]": [
    "src/MacOS/**.cpp"
 ]
@@ -519,7 +519,7 @@ To use configure files, simply set `configureFiles` to a string or an array of s
 "first-project": {
    "files": "foo/**.{cpp,rc}",
    "configureFiles": "foo/config.h.in"
-}
+},
 "second-project": {
    "files": "bar/**.{cpp,rc}",
    "configureFiles": [
@@ -670,18 +670,18 @@ The following examples are all valid:
       "foo",
       "bar"
    ]
-}
+},
 "my-second-script": {
    "kind": "script",
    "condition": "[:windows]",
    "file[:debug]": "scripts/script_Debug.bat",
    "file[:!debug]": "scripts/script_Release.bat"
-}
+},
 "my-second-script": {
    "kind": "script",
    "condition": "[:windows]",
    "file": "scripts/script.ps1"
-}
+},
 "my-third-script": {
    "kind": "script",
    "file": "scripts/script.py",
@@ -700,7 +700,7 @@ If the script target depends on a previous build target, the `dependsOn` propert
 ```json
 "validator": {
    "kind": "executable",
-}
+},
 "validate-content": {
    "kind": "script",
    "file": "scripts/script.py",
@@ -737,7 +737,7 @@ If the process target depends on a previous build target, the `dependsOn` proper
 ```json
 "validator": {
    "kind": "executable",
-}
+},
 "validate-content": {
    "kind": "process",
    "path": "${buildDir}/validator",
@@ -745,6 +745,33 @@ If the process target depends on a previous build target, the `dependsOn` proper
    "arguments": [
       "--file",
       "my-file"
+   ]
+}
+```
+
+\\
+
+## [Validation Targets]
+
+Validation targets are an easy way to validate a JSON file or group of JSON files against a (local) JSON schema of your choice. This uses the same mechanism that Chalet uses under the hook to validate `chalet.json` and `.chaletrc` against their respective schemas at build time. To create a validation target, set `kind` to `validation`, define the `schema` to use (only [Draft-07](//json-schema.org/draft-07/json-schema-release-notes) is supported), and add any files you wish to validate. Files can take a relative path of files, or a glob pattern.
+
+```json
+"my-process": {
+   "kind": "validation",
+   "schema": "schema/content.schema.json",
+   "files": "content/**.json"
+}
+```
+
+Files can also be expressed as an array:
+
+```json
+"my-process": {
+   "kind": "validation",
+   "schema": "schema/content.schema.json",
+   "files": [
+      "content/path1/*.json",
+      "content/path2/some-file.json"
    ]
 }
 ```

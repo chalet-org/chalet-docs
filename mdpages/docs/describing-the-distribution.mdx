@@ -279,9 +279,13 @@ Notarization is not done at all. You will need to do that through a script.
 
 \\
 
-## [Scripts]
+## [Scripts, Processes, Validations]
 
-Scripts work the same way as their target counterparts, so that one can do more with their distribution than what Chalet can offer. Refining the structure of the distribution folder, running additional programs, and generating generating additional files can be easily accomplished this way. To get started, set kind to `script`, followed by path to the script added in the `script` property. For further details, refer back to [here](/docs/creating-targets?id=script-targets).
+Script, process, and validation targets all work the same way as their build target counterparts, so that one can do more with their distribution than what Chalet can offer. Refining the structure of the distribution folder, running additional programs, and generating additional files can be easily accomplished this way. As their distribution target counterparts work the same way, refer back to:
+
+* [Script Targets](/docs/creating-targets?id=script-targets)
+* [Process Targets](/docs/creating-targets?id=process-targets)
+* [Validation Targets](/docs/creating-targets?id=validation-targets)
 
 ```json
 "post-bundle": {
@@ -291,6 +295,25 @@ Scripts work the same way as their target counterparts, so that one can do more 
       "${distributionDir}/foo",
       "${meta:version}"
    ]
+}
+```
+
+```json
+"post-bundle": {
+   "kind": "process",
+   "path": "some-app",
+   "arguments": [
+      "--arg1",
+      "--arg2"
+   ]
+}
+```
+
+```json
+"pre-bundle": {
+   "kind": "validation",
+   "schema": "schema/content.schema.json",
+   "files": "content/**.json"
 }
 ```
 

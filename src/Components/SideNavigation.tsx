@@ -62,6 +62,7 @@ const SideNavigation = ({ children, ...navProps }: Props) => {
 						</Link>
 					</h4>
 				</Logo>
+				<LogoContainer />
 				<SearchInput />
 				<NavGroup>
 					<NavigationLinks {...navProps} />
@@ -77,10 +78,21 @@ const SideNavigation = ({ children, ...navProps }: Props) => {
 
 export { SideNavigation };
 
+const LogoContainer = styled.div`
+	display: block;
+	position: relative;
+	width: 100%;
+	min-height: 5.8rem;
+`;
+
 const Logo = styled.div`
 	display: flex;
+	position: absolute;
 	flex-direction: column;
 	justify-content: center;
+	z-index: 99;
+	left: 50%;
+	transform: translateX(-50%);
 
 	> h4 {
 		line-height: 1;

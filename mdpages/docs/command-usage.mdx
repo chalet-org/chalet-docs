@@ -566,16 +566,6 @@ Types:
 
 \\
 
-## [Terminal Capabilities]
-
-```bash
-chalet termtest
-```
-
-Display all color themes and terminal capabilities.
-
-\\
-
 ## [Query]
 
 ```bash
@@ -643,6 +633,26 @@ Data to provide to the query. This is only used by `architecture`, where a singl
 </dd>
 
 [[dl:end]]
+
+\\
+
+## [JSON Validator]
+
+```bash
+chalet validate <schema> [<files>...]
+```
+
+This is a standalone method for validating JSON files against a schema (only [Draft-07](//json-schema.org/draft-07/json-schema-release-notes) is supported). This does the same thing that a [validation target](/docs/creating-targets?id=validation-targets) would, except it's not tied to a particular build. Simply pass the schema, along with a list of files, or a glob pattern.
+
+\\
+
+## [Terminal Capabilities]
+
+```bash
+chalet termtest
+```
+
+Display all color themes and terminal capabilities.
 
 
 [[nav:/docs/describing-the-distribution:/docs/the-settings-file]]
