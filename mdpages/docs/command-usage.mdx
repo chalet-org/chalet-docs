@@ -551,14 +551,40 @@ Export the Chalet project to another project format.
 
 The project format kind to export.
 
-Types:
+[[tabs:start]]
 
-| vscode | Visual Studio Code JSON configuration (.vscode folder) (experimental) |
-| vsjson | Visual Studio JSON format for "Open Folder" (experimental) |
-| vssolution | Visual Studio Solution |
-| codeblocks | CodeBlocks IDE (experimental) |
+|Windows|
+
+Kinds:
+
+| vscode | Visual Studio Code JSON format (launch.json, tasks.json, c_cpp_properties.json) |
+| vssolution | Visual Studio Solution format (\*.sln, \*.vcxproj) |
+| vsjson | Visual Studio JSON format (launch.vs.json, tasks.vs.json, CppProperties.json) |
+| clion | Jetbrains CLion (.idea) |
+| codeblocks | Code::Blocks IDE (MinGW-only) |
 
 > Note: The `vssolution` export generates the same .sln as the `msbuild` build strategy.
+
+|MacOS|
+
+Kinds:
+
+| vscode | Visual Studio Code JSON format (launch.json, tasks.json, c_cpp_properties.json) |
+| xcode | Apple Xcode project format (\*.xcodeproj) |
+| clion | Jetbrains CLion (.idea) |
+| codeblocks | Code::Blocks IDE (GCC-only) |
+
+> Note: The `xcode` export generates the same .xcodeproj as the `xcodebuild` build strategy.
+
+|Linux|
+
+Kinds:
+
+| vscode | Visual Studio Code JSON format (launch.json, tasks.json, c_cpp_properties.json) |
+| clion | Jetbrains CLion (.idea) |
+| codeblocks | Code::Blocks IDE (GCC-only) |
+
+[[tabs:end]]
 
 </dd>
 
