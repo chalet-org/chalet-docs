@@ -45,8 +45,6 @@ class ServerCache {
 		const hours = 4;
 		this.cacheSeconds = 60 * 60 * hours;
 		// this.cacheSeconds = 15;
-
-		console.log(process.env);
 	}
 
 	private print = (action: string, key: string, cached: string, time: number) => {
