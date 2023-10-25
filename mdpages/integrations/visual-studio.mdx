@@ -18,12 +18,24 @@ To generate a solution file (`.sln`) and `.vcxproj` files for each build target,
 You can run the `export` command to simply generate them: 
 
 ```bash
-chalet export vssolution
+chalet export -t vs-2022 vssolution
 ```
 
 This adds the solution `build/.vssolution/project.sln` and the `.vcxproj` files to `build/.vssolution/vcxproj/(name).vcxproj`. It will include all of the current build configurations setup by the project. However, this doesn't take into account any current builds that have run, so it is recommended to clean your build folder if any builds were run prior to running this command.
 
-> Note: The general idea is that you shouldn't have to check-in your solution files to source control, but you certainly can if you want. Once you have a .sln and .vcxproj files, you can edit it as you please, but you're on your own at that point. If there are any problems with the way the project files generate, please feel free to bring them up in a Github issue.
+Any edits done in the `chalet.json` file will require the .sln to be re-exported.
+
+Once the `.sln` file has been opened inside Visual Studio, you should see all of the build configurations that were set at the time of export:
+
+![Choosing a build configuration in Visual Studio](/images/visualstudio/vs-shot1.png)
+
+Before starting the build (or the debugger), set the startup project to the executable you want to run (if applicable). 
+
+![Setting the startup project in Visual Studio](/images/visualstudio/vs-shot2.png)
+
+If using the "Local Windows Debugger', or "Build Solution", you should see the expected build output in the Output window.
+
+![Visual Studio build output](/images/visualstudio/vs-shot3.png)
 
 \\
 
@@ -32,10 +44,10 @@ This adds the solution `build/.vssolution/project.sln` and the `.vcxproj` files 
 The better method is to simply use the `msbuild` strategy (available only in the Windows version of Chalet). For example:
 
 ```bash
-chalet build -t vs-2022 -a x64 -b msbuild 
+chalet build -t vs-2022 -a auto -b msbuild 
 ```
 
-This will generate the same project files as the export method above, and build them via [MSBuild](https://docs.microsoft.com/en-us/visualstudio/msbuild/msbuild?view=vs-2022), using the same build cache that Visual Studio uses, so you use the project within VS and the command line interchangeably. This is similar to CMake's Visual Studio generators.
+This will generate the same project files as the export method above, and build them via [MSBuild](https://docs.microsoft.com/en-us/visualstudio/msbuild/msbuild?view=vs-2022), using the same build cache that Visual Studio uses, so you use the project within VS and the command line interchangeably.
 
 \\
 
@@ -52,10 +64,24 @@ Detailed information can be found [here](https://docs.microsoft.com/en-us/cpp/bu
 While you could certainly create these and manage them yourself, it would be a lot nicer to generate them. The following command can be run:
 
 ```bash
-chalet export vsjson
+chalet export -t vs-2022 vsjson
 ```
 
-The files are generated to `build/.vsjson` as not clash with any existing files that may be checked-in. You would then want to copy the files to the root of your project and open that path in Visual Studio. They are ultimately kind of experimental though, because they attempt to provide a general configuration for the entire project. You'll most likely want to generate a VS Solution anyway for precise intellisense and to take full advantage of all that VS has to offer.
+The files are generated to `build/.vsjson` as not clash with any existing files that may be checked-in. You would then copy those files to `(project root)/.vs`.
+
+Open the root path in Visual Studio, and you should see a list of available build configurations:
+
+![Visual Studio JSON with build configurations](/images/visualstudio/vs-shot4.png)
+
+The executable projects should be selectable in this dropdown:
+
+![Visual Studio JSON run/debug target selection](/images/visualstudio/vs-shot5.png)
+
+To build your project, the standard `Build`, `Rebuild` and `Clean` should work, with the additional "Run Chalet: ..." commands available in the Folder View's context menu:
+
+![Visual Studio JSON build commands](/images/visualstudio/vs-shot6.png)
+
+This attempts to provide a general configuration for the entire project. You'll most likely want to generate a VS Solution anyway for precise intellisense and to take full advantage of all that VS has to offer, but this is an option if you want to build using Chalet inside of Visual Studio.
 
 > Note: If your project has more than one executable, the path to the target to be launched in the debugger will need to edited manually from `launch.vs.json`.
 

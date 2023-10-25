@@ -7,18 +7,38 @@ title: Code::Blocks
 
 ---
 
-Full Support was just added in [Version 0.6.4](/download/v0.6.4). Documentation is still a work in progress.
+[Code::Blocks](https://www.codeblocks.org/) is an open-source IDE that supports multiple compilers, but most commonly, you would use it with MinGW on Windows.
 
 \\
 
-## [Overview]
+## [Export the project]
 
-[Code::Blocks](https://www.codeblocks.org/) support was added simply because I (the Chalet author) learned C++ on it many years ago. It's hard to recommend these days, but it gets the job done. The following will generate a Code::Blocks project into `build/.codeblocks`. It's designed to open and build to the same directories that Chalet normally uses.
+Code::Blocks support was added simply because I (the Chalet author) learned C++ on it many years ago. It's hard to recommend these days, but it gets the job done. The following will generate a Code::Blocks project into `build/.codeblocks`. It's designed to open and build to the same directories that Chalet normally uses.
 
 ```bash
 chalet export -t gcc codeblocks
 ```
 
-It will be limited to the one selected toolchain (GCC or MinGW) and use whatever build configurations that the project defines (or limits) at the time of export. The "all" build target uses `--no-only-selected` at the command line, while the other targets use `--only-selected`.
+It will be limited to the one selected toolchain (GCC or MinGW), its architecture, and uses whatever build configurations that the project defines (or limits) at the time of export. The "all" build target builds the others regardless of who depends on what, while the other build targets will build only whats required for them.
+
+Once exported, open `build/.codeblocks/(name).workspace` and you should see everything from your project in the editor. Like with other IDEs, you can select the build configurationh like so:
+
+![Code::Blocks build configurations](/images/codeblocks/codeblocks-shot1.png)
+
+With the way the Code::Blocks export is setup, build targets are each considered a "project", while their structure is presented in a similar manner to Visual Studio solutions. The build/run target is selected via the "Activate project" context menu option, or by double-clicking the target you want:
+
+![Selecting a build target in Code::Blocks](/images/codeblocks/codeblocks-shot2.png)
+
+\\
+
+## [Configuring the compiler]
+
+Before building and debugging the project, make sure your compiler is configured to match the same compiler that was detected with `chalet -t gcc`. If you've preconfigured a version of GCC for Chalet at the time of exporting, you'll want to use that one here.
+
+Open "Settings" > "Compiler..." and in most cases, select "GNU GCC Compiler". Go to the "Toolchain executables" tab as shown below, and set your compiler's installation directory. In the below screenshot, MSYS2's version of mingw64 was used. In most cases, the tool paths can be set as they are below:
+
+![Code::Blocks compiler settings](/images/codeblocks/codeblocks-shot3.png)
+
+Once done, hit OK, and you should be able to build & run the project.
 
 [[nav:/integrations/clion:]]
