@@ -11,6 +11,7 @@ import { SiteAnalytics } from "Utility";
 
 import { mdxComponents } from "../MarkdownComponents";
 import { ReleaseAssets } from "./ReleaseAssets";
+import { ReleaseType } from "./ReleaseType";
 
 type Props = {
 	release: GithubRelease;
@@ -18,7 +19,18 @@ type Props = {
 
 const ReleaseBlock = ({ release }: Props) => {
 	const { theme } = useUiStore();
-	const { body, prerelease, published_at, tag_name, assets, tarball_url, zipball_url, name, html_url } = release;
+	const {
+		body,
+		prerelease,
+		latest_release,
+		published_at,
+		tag_name,
+		assets,
+		tarball_url,
+		zipball_url,
+		name,
+		html_url,
+	} = release;
 	const date = useMemo(() => dateFormat(new Date(published_at), "LLL d, yyyy"), [published_at]);
 	const Header = HeadingObject["h2"];
 
@@ -29,11 +41,7 @@ const ReleaseBlock = ({ release }: Props) => {
 				<div className="group">
 					<Header>{name}</Header>
 					<div className="sub-group">
-						{!!prerelease ? (
-							<ReleaseType className="pre">Pre-Release</ReleaseType>
-						) : (
-							<ReleaseType>Release</ReleaseType>
-						)}
+						<ReleaseType prerelease={prerelease} latest={latest_release} />
 						<div className="spacer" />
 						<Link href={html_url} onClick={() => SiteAnalytics.trackGithubReleaseClick(tag_name)}>
 							<Icon id="github" size="1.5rem" color={theme.primaryText} hoverColor={theme.primaryColor} />
@@ -135,19 +143,4 @@ const BodyBlock = styled.div`
 const ReleaseDate = styled.div`
 	display: block;
 	color: ${getThemeVariable("codeGray")};
-`;
-
-const ReleaseType = styled.div`
-	display: block;
-	color: ${getThemeVariable("codeGreen")};
-	margin: 0;
-	padding: 0.125rem 0.75rem;
-	padding-top: 0;
-	border: 0.0675rem solid ${getThemeVariable("codeGreen")};
-	border-radius: 0.5rem;
-
-	&.pre {
-		color: ${getThemeVariable("codeRed")};
-		border-color: ${getThemeVariable("codeRed")};
-	}
 `;

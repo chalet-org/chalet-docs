@@ -26,6 +26,7 @@ export type GithubRelease = {
 	body: Optional<ResultMDX>;
 	draft: boolean;
 	prerelease: boolean;
+	latest_release: boolean;
 	created_at: string;
 	published_at: string;
 	tarball_url: string;
@@ -52,19 +53,10 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 
 		const withTransformedBody: ResultGithubReleases = await Promise.all(
 			allowedReleases.map(
-				async ({
-					url,
-					html_url,
-					id,
-					tag_name,
-					name,
-					body,
-					draft,
-					prerelease,
-					created_at,
-					published_at,
-					assets,
-				}) => {
+				async (
+					{ url, html_url, id, tag_name, name, body, draft, prerelease, created_at, published_at, assets },
+					index
+				) => {
 					let text = body;
 					let mdx: Optional<ResultMDX> = null;
 					if (!!text) {
@@ -112,6 +104,7 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 						body: mdx,
 						draft,
 						prerelease,
+						latest_release: index === 0,
 						created_at,
 						published_at,
 						tarball_url: `https://github.com/chalet-org/chalet/archive/refs/tags/${tag_name}.tar.gz`,

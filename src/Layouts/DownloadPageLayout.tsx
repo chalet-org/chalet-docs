@@ -13,6 +13,7 @@ import {
 import { useRouteChangeScroll } from "Hooks";
 import { ResultDownloadPage, ResultReleases } from "Server/ResultTypes";
 import { useUiStore } from "Stores";
+import { indexOf } from "lodash";
 
 type Props = ResultDownloadPage &
 	ResultReleases & {
