@@ -7,13 +7,13 @@ title: CLion
 
 ---
 
-Support was just added in [Version 0.6.4](/download/v0.6.4). Documentation is still a work in progress.
+[CLion](https://www.jetbrains.com/clion) by Jetbrains is a full-featured cross-platform IDE for editing C & C++. A nice advantage to using CLion is that it just needs to be told certain things about the project, and can build using Chalet inside the editor.
 
 \\
 
-## [Overview]
+## [Exporting project files]
 
-The following will generate a [CLion](https://www.jetbrains.com/clion) project into `.idea` if there is not one already there, and `build/.idea` otherwise.
+The following will generate CLion project files into the `.idea` if there is not one already there, and `build/.idea` otherwise.
 
 ```bash
 chalet export clion
@@ -22,18 +22,33 @@ chalet export clion
 When you open the directory on CLion, everything will be setup. The build configurations that become generated will be based on what project defines (or limits), and the toolchain that was selected at the time of export. If you decide to switch toolchains on the same machine, you'll need to re-export. Out of the box, you will have built-in schema validation for `chalet.json` but in order to get `.chaletrc` to work, you just have to associate it with JSON. To do that:
 
 1. Inside CLion, right click the `.chaletrc` in your project and click on "Associate with File Type..."
+
+![Associating .chaletrc with JSON 1](/images/clion/clion-shot1.png)
+
 2. From the list, select "JSON"
+
+![Associating .chaletrc with JSON 2](/images/clion/clion-shot2.png)
+
+From there, you will see the .chaletrc file colorize as a JSON file, and the schema for properties will be available as you mouse over and edit them.
+
+![Seeing the .chaletrc schema definitions](/images/clion/clion-shot3.png)
+
+The `chalet.json` files will already have this behavior, since its extension is `.json`:
+
+![Seeing the chalet.json schema definitions](/images/clion/clion-shot4.png)
 
 If this can be done automatically in the future, it will be, but this is only saved to user settings as far as I know. You'll only need to do this once per-machine.
 
 From there, pick from one of the predefined configurations. Feel free to remove ones you don't use. This can be done very quickly in "Edit Configurations...". The "all" configuration uses `--no-only-selected` at the command line, while the other targets use `--only-selected`.
+
+![Build configurations inside CLion](/images/clion/clion-shot5.png)
 
 
 \\
 
 ## [Extension]
 
-There is an [extension](//github.com/chalet-org/clion-chalet) in development, but it's hard at this time if it's necessary or how useful it will be. At the very least, it will automatically associate `.chaletrc` with JSON files and supply it and `chalet.json` with their schemas.
+There is an [extension](//github.com/chalet-org/clion-chalet) in development, but it's hard to say whether it's necessary or how useful it will be. At the very least, it will automatically associate `.chaletrc` with JSON files and supply it and `chalet.json` with their schemas.
 
 
 [[nav:/integrations/xcode:/integrations/code-blocks]]
