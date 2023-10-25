@@ -21,7 +21,7 @@ You can run the `export` command to simply generate them:
 chalet export vssolution
 ```
 
-This generates a solution to `build/.project/project.sln` and `.vcxproj` files to `build/.project/vcxproj/(name).vcxproj`. It will also include all of the current build configurations setup by the project. However, this doesn't take into account any current builds that have run, so it is recommended to clean your build folder if any builds were run prior to running this command.
+This adds the solution `build/.vssolution/project.sln` and the `.vcxproj` files to `build/.vssolution/vcxproj/(name).vcxproj`. It will include all of the current build configurations setup by the project. However, this doesn't take into account any current builds that have run, so it is recommended to clean your build folder if any builds were run prior to running this command.
 
 > Note: The general idea is that you shouldn't have to check-in your solution files to source control, but you certainly can if you want. Once you have a .sln and .vcxproj files, you can edit it as you please, but you're on your own at that point. If there are any problems with the way the project files generate, please feel free to bring them up in a Github issue.
 
@@ -55,7 +55,7 @@ While you could certainly create these and manage them yourself, it would be a l
 chalet export vsjson
 ```
 
-The files are generated to `build/.project/vsjson` as not clash with any existing files that may be checked-in. You would then want to copy the files to the root of your project and open that path in Visual Studio. They are ultimately kind of experimental though, because they attempt to provide a general configuration for the entire project. You'll most likely want to generate a VS Solution anyway for precise intellisense and to take full advantage of all that VS has to offer.
+The files are generated to `build/.vsjson` as not clash with any existing files that may be checked-in. You would then want to copy the files to the root of your project and open that path in Visual Studio. They are ultimately kind of experimental though, because they attempt to provide a general configuration for the entire project. You'll most likely want to generate a VS Solution anyway for precise intellisense and to take full advantage of all that VS has to offer.
 
 > Note: If your project has more than one executable, the path to the target to be launched in the debugger will need to edited manually from `launch.vs.json`.
 
