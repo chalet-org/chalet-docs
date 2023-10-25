@@ -9,6 +9,7 @@ export * from "./GlobalStyles";
 export * from "./PageControls";
 export * from "./Heading";
 export * from "./Icon";
+export * from "./Image";
 export * from "./ImportantNote";
 export * from "./IndentGroup";
 export * from "./InlineImage";

@@ -11,28 +11,6 @@ There are a few different ways to integrated Chalet with [Visual Studio](https:/
 
 \\
 
-## [JSON Project Configuration]
-
-In Visual Studio 2017 and higher, "open folder" is supported, but with a catch - in order to run build commands from another build system, you would need to create a few files at the root of the folder opened in VS:
-
-| **CppProperties.json** | intellisense configuration |
-| **tasks.vs.json**      | build tasks |
-| **launch.vs.json**     | debugger configuration |
-
-Detailed information can be found [here](https://docs.microsoft.com/en-us/cpp/build/open-folder-projects-cpp?view=msvc-170).
-
-While you could certainly create these and manage them yourself, it would be a lot nicer to generate them. The following command can be run:
-
-```bash
-chalet export vsjson
-```
-
-The files are generated to `build/.project/vsjson` as not clash with any existing files that may be checked-in. You would then want to copy the files to the root of your project and open that path in Visual Studio. They are ultimately kind of experimental though, because they attempt to provide a general configuration for the entire project. You'll most likely want to generate a VS Solution anyway for precise intellisense and to take full advantage of all that VS has to offer.
-
-> Note: If your project has more than one executable, the path to the target to be launched in the debugger will need to edited manually from `launch.vs.json`.
-
-\\
-
 ## [Export a Solution]
  
 To generate a solution file (`.sln`) and `.vcxproj` files for each build target, there's two options: 
@@ -58,6 +36,28 @@ chalet build -t vs-2022 -a x64 -b msbuild
 ```
 
 This will generate the same project files as the export method above, and build them via [MSBuild](https://docs.microsoft.com/en-us/visualstudio/msbuild/msbuild?view=vs-2022), using the same build cache that Visual Studio uses, so you use the project within VS and the command line interchangeably. This is similar to CMake's Visual Studio generators.
+
+\\
+
+## [JSON Project Configuration]
+
+In Visual Studio 2017 and higher, "open folder" is supported, but with a catch - in order to run build commands from another build system, you would need to create a few files at the root of the folder opened in VS:
+
+| **CppProperties.json** | intellisense configuration |
+| **tasks.vs.json**      | build tasks |
+| **launch.vs.json**     | debugger configuration |
+
+Detailed information can be found [here](https://docs.microsoft.com/en-us/cpp/build/open-folder-projects-cpp?view=msvc-170).
+
+While you could certainly create these and manage them yourself, it would be a lot nicer to generate them. The following command can be run:
+
+```bash
+chalet export vsjson
+```
+
+The files are generated to `build/.project/vsjson` as not clash with any existing files that may be checked-in. You would then want to copy the files to the root of your project and open that path in Visual Studio. They are ultimately kind of experimental though, because they attempt to provide a general configuration for the entire project. You'll most likely want to generate a VS Solution anyway for precise intellisense and to take full advantage of all that VS has to offer.
+
+> Note: If your project has more than one executable, the path to the target to be launched in the debugger will need to edited manually from `launch.vs.json`.
 
 \\
 

@@ -6,7 +6,7 @@ import { getThemeVariable } from "Theme";
 const PageHeading = () => {
 	return (
 		<Styles>
-			<img src="/images/chalet-logo.svg" alt="chalet-logo" />
+			<img src="/images/chalet-logo.svg" alt="Chalet logo" />
 			<h1>Chalet</h1>
 		</Styles>
 	);

@@ -16,7 +16,7 @@ Documentation
 [@](/docs/other-topics)
 
 :break
-Integration
+Integrations
 [@](/integrations/integration-development)
 [@](/integrations/visual-studio-code)
 [@](/integrations/visual-studio)

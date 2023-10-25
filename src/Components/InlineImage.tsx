@@ -2,13 +2,14 @@ import React from "react";
 import styled from "styled-components";
 
 import { getThemeVariable } from "Theme";
+import { Image } from "Components";
 
 type Props = Omit<React.HTMLProps<HTMLImageElement>, "ref" | "crossOrigin" | "as"> & {};
 
 const InlineImage = (props: Props) => {
 	return (
 		<Styles>
-			<img alt="" {...props} />
+			<Image {...props} />
 		</Styles>
 	);
 };

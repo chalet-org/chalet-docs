@@ -54,7 +54,7 @@ const SideNavigation = ({ children, ...navProps }: Props) => {
 			<StyledAside className={`sidebar ${navOpen ? "open" : ""}`} width={navWidth}>
 				<Logo>
 					<Link href="/" showActive={false} onClick={onClick}>
-						<img src="/images/chalet-logo.svg" alt="chalet-logo" />
+						<img src="/images/chalet-logo.svg" alt="Chalet logo" />
 					</Link>
 					<h4>
 						<Link href="/" showActive={false} onClick={onClick}>
@@ -258,7 +258,7 @@ const StyledAside = styled.aside<AsideProps>`
 		display: block;
 		position: fixed;
 		width: ${(props) => props.width};
-		height: 5.5rem;
+		height: 7.5rem;
 		top: 0;
 		bottom: auto;
 
@@ -266,7 +266,7 @@ const StyledAside = styled.aside<AsideProps>`
 		background: ${getThemeVariable("codeBackground")};
 		background: linear-gradient(
 			180deg,
-			${getThemeVariable("fadeBackgroundB")} 40%,
+			${getThemeVariable("fadeBackgroundB")} 45%,
 			${getThemeVariable("fadeBackgroundA")} 100%
 		);
 
