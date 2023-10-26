@@ -67,7 +67,7 @@ While you could certainly create these and manage them yourself, it would be a l
 chalet export -t vs-2022 vsjson
 ```
 
-The files are generated to `build/.vsjson` as not clash with any existing files that may be checked-in. You would then copy those files to `(project root)/.vs`.
+The files are generated to `build/.vs` as not clash with any existing files that may be checked-in. If `(workspace)/.vs` doesn't exit, it will get copied there.
 
 Open the root path in Visual Studio, and you should see a list of available build configurations:
 
