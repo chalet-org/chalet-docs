@@ -556,7 +556,7 @@ At the moment, these are used based on the given target architecture of the buil
 
 ## [Themes]
 
-The `theme` property can either be a preset string or an object of key/value pairs that describe the theme.
+The `theme` property can either be a preset string, an 8-digit hex value or an object of key/value pairs that describe the theme.
 
 Details of each can be viewed in the latest schema [here](/schema/latest/settings-json?id=theme).
 
@@ -581,5 +581,39 @@ Details of each can be viewed in the latest schema [here](/schema/latest/setting
 ```
 
 To disable the theme, set `theme` to `none`.
+
+As of version 0.6.9, the theme can be described as an 8-digit hex value, such as `1397d53b`. If the above method is the kitchen sink, this is a convenient way to set a custom theme with a one liner: `chalet set theme 00000000`. Each digit represents a color in the recommended style. To break down a digit's colors:
+
+| 0 | reset |
+| 1 | black |
+| 2 | yellow |
+| 3 | brightYellow |
+| 4 | red |
+| 5 | brightRed |
+| 6 | magenta |
+| 7 | brightMagenta |
+| 8 | blue |
+| 9 | brightBlue |
+| A | cyan |
+| B | brightCyan |
+| C | green |
+| D | brightGreen |
+| E | white |
+| F | brightWhite |
+
+Each digit has an underlying style, outlined below:
+
+| Digit | Use | Style |
+| ----- | --- | ----- |
+| 1 | flair | dim |
+| 2 | header | bold |
+| 3 | build | normal |
+| 4 | assembly | normal |
+| 5 | success | bold |
+| 6 | error | bold |
+| 7 | warning | bold |
+| 8 | note | bold |
+
+Each built-in theme has a shorthand version that can be viewed in `chalet termtest`
 
 [[nav:/docs/command-usage:/docs/other-topics]]

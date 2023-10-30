@@ -347,12 +347,21 @@ The following table is the full list of accepted values:
 
 | Key | Values | Short-hand |
 | ---- | ---- | ---- |
-| platform | `:windows` | `:windows` |
+| platform | true if the platform matches | - |
+|  | `:windows` | `:windows` |
 |  | `:macos` | `:macos` |
 |  | `:linux` | `:linux` |
-| condition | `:debugSymbols` | `:debug` |
+| configuration | true if the build configuration has the specified property | - |
+|  | `:debugSymbols` | `:debug` |
 |  | `:enableProfiling` | No |
 |  | `:interproceduralOptimization` | No |
+| sanitize | true if the build configuration uses the specified sanitizer | - |
+|  | `:address` | No |
+|  | `:hwaddress` | No |
+|  | `:memory` | No |
+|  | `:thread` | No |
+|  | `:leak` | No |
+|  | `:undefined` | No |
 | toolchain | toolchain name, target triple, or partial of either | No |
 | architecture | The cpu architecture to match (ex. `x86_64` `i686` `arm64`) | No |
 | options | `:runTarget` (build targets only) | `:runTarget` |

@@ -31,7 +31,8 @@ In chalet.json, one can use the `defaultConfigurations` to narrow down which of 
    "DebugSanitizeLeak",
    "DebugSanitizeUndefined",
    "DebugSanitizeHW",
-   "DebugSanitizeHWAddress"
+   "DebugSanitizeHWAddress",
+   "ReleaseSanitizeUndefined"
 ]
 ```
 
@@ -236,6 +237,10 @@ The entire list is described below:
       // Same as 'Debug'
       "sanitize": "hwaddress"
    },
+   "ReleaseSanitizeUndefined": {
+      // Same as 'Release'
+      "sanitize": "undefined"
+   }
 }
 ```
 
