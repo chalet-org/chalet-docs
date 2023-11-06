@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 
 import { useUiStore } from "Stores";
@@ -16,10 +16,12 @@ const Accordion = ({ label, children }: Props) => {
 	const contentRef = useRef<HTMLDivElement>(null);
 	const [computedHeight, setComputedHeight] = useState<number>(0);
 
+	const clientHeight = useMemo(() => contentRef.current?.clientHeight ?? 0, [accordionNotifier, contentRef.current]);
+
 	// We can just use this noop to trigger re-renders
 	useEffect(() => {
-		setComputedHeight(contentRef.current?.clientHeight ?? 0);
-	}, [accordionNotifier, contentRef.current, children]);
+		setComputedHeight(clientHeight);
+	}, [clientHeight]);
 
 	const className = clsx({
 		open: open,
