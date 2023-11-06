@@ -42,7 +42,7 @@ const handler = middleware.use([], async (req: ApiReq, res: ApiRes<any>) => {
 			version = latestTag.substring(1);
 		}
 
-		const url = `https://raw.githubusercontent.com/chalet-org/chalet/main/scripts/homebrew-cask/${version}.csv`;
+		const url = `https://raw.githubusercontent.com/chalet-org/chalet-homebrew-casks/main/releases/${version}.csv`;
 		const response = await fetchFromGithub(url);
 		const blob = await response.blob();
 		const text = await blob.text();
