@@ -407,6 +407,28 @@ If linking to libraries that are built elsewhere and don't follow the above nami
 
 \\
 
+## [Additional Options]
+
+Additional options can be passed to the compiler and linker with `compileOptions` and `linkerOptions` respectively. Property conditions can be added here to pass these options to the correct toolchain.
+
+```json
+"some-target": {
+   "settings:Cxx": {
+      "compileOptions{toolchain:!vs-2022]": [
+         "-fsome-option"
+      ],
+      "compileOptions[toolchain:vs-2022]": [
+         "/someoption"
+      ],
+      "linkerOptions[toolchain!vs-2022]": [
+         "-fsome-other-option"
+      ]
+   }
+}
+```
+
+\\
+
 ## [Static Runtime Libraries]
 
 For the unfamiliar: when an application or shared library is linked, one can choose whether the runtime is linked dynamically (default) or statically. This means additional shared library dependencies. In Chalet, there's an extra property for this: `staticRuntimeLibrary`, and has slightly different behavior on each toolchain.

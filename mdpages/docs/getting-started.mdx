@@ -400,8 +400,44 @@ If the `intel-llvm-vs-*` toolchain is selected and clang is not found in `Path`,
 **Intel Classic (MacOS):**
 
 ```bash
-chalet configure -t intel-classic -a auto build
+chalet configure -t intel-classic -a auto
 ```
+
+|Other|
+
+Version 0.6.10 added experimental support for custom toolchains. This was somewhat possible in earlier versions, but required the paths to be edited by hand after calling configure. It's now possible to do this before configuring by setting some environment variables.
+
+> Note that only LLVM or GCC-based compilers are supported (ie. forked from some version of either).
+
+To get this to work, add the compiler's path to `Path` and assign the `CHALET_TOOLCHAIN_NAME` variable with the name of the toolchain that will be generated. Supply only the exectuable names (no extension) in the other tool variables. If a variable is blank, Chalet will try to guess the tool based on which has support.
+
+Example `.env`:
+
+```env
+Path=%HOME%\compilers\mycc\bin;%Path%
+CHALET_TOOLCHAIN_NAME=mycc
+CHALET_TOOLCHAIN_COMPILER_CPP=myc++
+CHALET_TOOLCHAIN_COMPILER_C=mycc
+CHALET_TOOLCHAIN_COMPILER_RC=
+CHALET_TOOLCHAIN_LINKER=
+CHALET_TOOLCHAIN_ARCHIVER=
+CHALET_TOOLCHAIN_PROFILER=
+CHALET_TOOLCHAIN_DISASSEMBLER=
+```
+
+Next, set the toolchain with `-t` or `--toolchain`:
+
+```bash
+chalet configure -t mycc -a auto
+```
+
+It will be generated at this point. If you want to see it, you can edit `.chaletrc` or type:
+
+```bash
+chalet get toolchains.mycc
+```
+
+At this point, make any corrections you may need to, before calling `chalet build`. Use [Additional Options](/docs/cxx-compile-settings?id=additional-options) to pass your own options to the compiler and linker.
 
 
 [[tabs:end]]

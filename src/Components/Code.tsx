@@ -75,6 +75,27 @@ Prism.languages.ini = {
 	...(Prism.languages.ini as any),
 };
 
+Prism.languages.env = {
+	"key-value": {
+		pattern: /([A-Za-z_]+)(\=)(.*)/,
+		greedy: true,
+		inside: {
+			key: {
+				pattern: /^([A-Za-z_]+)\b/,
+				greedy: true,
+			},
+			equals: {
+				pattern: /=/,
+				greedy: true,
+			},
+			value: {
+				pattern: /(?!=)(.+)$/,
+				greedy: true,
+			},
+		},
+	},
+};
+
 type Props = React.PropsWithChildren<{
 	lang?: string;
 }>;
@@ -358,6 +379,18 @@ const codeCss = css<StyleProps>`
 	}
 	.style .token.string {
 		color: ${getThemeVariable("codeWhite")};
+	}
+
+	.language-env .token {
+		&.key {
+			color: ${getThemeVariable("codeBlue")};
+		}
+		&.equals {
+			color: ${getThemeVariable("codeGray")};
+		}
+		&.value {
+			color: ${getThemeVariable("codeGreen")};
+		}
 	}
 `;
 
