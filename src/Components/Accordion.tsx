@@ -10,7 +10,7 @@ type Props = React.PropsWithChildren<{
 }>;
 
 const Accordion = ({ label, children }: Props) => {
-	const { accordionNotifier, notifyHeightChange } = useUiStore();
+	const { accordionNotifier } = useUiStore();
 
 	const [open, setOpen] = useState<boolean>(false);
 	const contentRef = useRef<HTMLDivElement>(null);
@@ -19,7 +19,7 @@ const Accordion = ({ label, children }: Props) => {
 	// We can just use this noop to trigger re-renders
 	useEffect(() => {
 		setComputedHeight(contentRef.current?.clientHeight ?? 0);
-	}, [accordionNotifier, contentRef.current]);
+	}, [accordionNotifier, contentRef.current, children]);
 
 	const className = clsx({
 		open: open,
@@ -37,7 +37,7 @@ const Accordion = ({ label, children }: Props) => {
 			>
 				{!!label ? label : open ? "Collapse" : "Expand"}
 			</AccordionHandle>
-			<AccordionContent className={className} onAnimationEnd={notifyHeightChange} $height={computedHeight}>
+			<AccordionContent className={className} $height={computedHeight}>
 				<div className="inner" ref={contentRef}>
 					{children}
 				</div>

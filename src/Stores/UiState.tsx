@@ -18,7 +18,6 @@ const self = shallowProxy("ui-store", {
 	findText: "",
 
 	accordionNotifier: false,
-	heightNotifier: false,
 
 	showAllPlatforms: false,
 
@@ -97,9 +96,6 @@ const self = shallowProxy("ui-store", {
 	toggleNavigation: () => self.setNavOpen(!self.navOpen),
 	notifyAccordions: () => {
 		self.accordionNotifier = !self.accordionNotifier;
-	},
-	notifyHeightChange: () => {
-		self.heightNotifier = !self.heightNotifier;
 	},
 	setShowAllPlatforms: (inValue: boolean) => {
 		self.showAllPlatforms = inValue;
