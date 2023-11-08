@@ -472,13 +472,15 @@ const PreStyles = styled.div<StyleProps>`
 			display: block;
 			position: absolute;
 			top: 0.5rem;
-			right: 0.75rem;
-			padding: 0.375rem 1rem;
+			right: 0.5rem;
+			padding: 0.375rem 0.75rem;
+			font-family: ${(p) => p.$fonts?.paragraph ?? "inherit"};
+			font-size: 1rem;
 			z-index: 20;
 			background-color: ${getThemeVariable("codeBackground")};
 			color: ${getThemeVariable("primaryColor")};
 			border: 0.0675rem solid ${getThemeVariable("primaryColor")};
-			border-radius: 0.5rem;
+			border-radius: 0.25rem;
 			cursor: pointer;
 			transition: color 0.125s linear, border-color 0.125s linear, background-color 0.125s linear;
 
