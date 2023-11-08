@@ -5,7 +5,6 @@ type Components =
 	| "BlockQuote"
 	| "ButtonLink"
 	| "Code"
-	| "CodePre"
 	| "CodeHeader"
 	| "CodePreFromMarkdown"
 	| "ContactForm"

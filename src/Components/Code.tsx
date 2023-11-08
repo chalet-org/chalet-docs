@@ -10,7 +10,7 @@ import "prismjs/components/prism-json";
 import "prismjs/components/prism-typescript";
 import "prismjs/components/prism-yaml";
 import "prismjs/plugins/line-numbers/prism-line-numbers";
-import React from "react";
+import React, { useState } from "react";
 import styled, { css } from "styled-components";
 
 import { globalFonts } from "Components";
@@ -98,49 +98,75 @@ Prism.languages.env = {
 
 type Props = React.PropsWithChildren<{
 	lang?: string;
+	copyButton?: boolean;
 }>;
 
 const Code = ({ children, ...props }: Props) => {
 	return (
 		<CodeStyles
-			onClick={() => {
-				if (children) {
-					copy(`${children}`);
-				}
-			}}
+		// onClick={() => {
+		// 	if (children) {
+		// 		copy(`${children}`);
+		// 	}
+		// }}
 		>
 			{children}
 		</CodeStyles>
 	);
 };
 
-type CodeProps = Props & {
-	lang: string;
-	children: string;
+const CodeHeader = ({ children }: React.PropsWithChildren<{}>) => {
+	return (
+		<HeaderStyles $fonts={globalFonts}>
+			<code>{children}</code>
+		</HeaderStyles>
+	);
 };
 
-const CodePre = ({ children, lang }: CodeProps) => {
+type CodeProps = Props & {
+	lang: string;
+	textContent: string;
+	copyButton: boolean;
+};
+
+const CodePre = ({ textContent, lang, copyButton }: CodeProps) => {
+	const [showCopyButton, setShowCopyButton] = useState<boolean>(false);
+	const [copied, setCopied] = useState<boolean>(false);
+
 	return (
-		<PreStyles data-lang={lang} $fonts={globalFonts}>
+		<PreStyles
+			data-lang={lang === "bash" ? "sh" : lang}
+			$fonts={globalFonts}
+			onMouseEnter={() => copyButton && setShowCopyButton(true)}
+			onMouseLeave={() => {
+				if (copyButton) {
+					setShowCopyButton(false);
+					setCopied(false);
+				}
+			}}
+		>
 			<pre>
 				<code
 					className={`language-${lang}`}
 					dangerouslySetInnerHTML={{
 						__html: !!Prism.languages[lang]
-							? Prism.highlight(children ?? "", Prism.languages[lang], lang)
-							: children,
+							? Prism.highlight(textContent, Prism.languages[lang], lang)
+							: textContent,
 					}}
 				/>
+				{showCopyButton && (
+					<button
+						onClick={(ev) => {
+							ev.preventDefault();
+							copy(textContent);
+							setCopied(true);
+						}}
+					>
+						{copied ? "Copied!" : "Copy"}
+					</button>
+				)}
 			</pre>
 		</PreStyles>
-	);
-};
-
-const CodeHeader = ({ children }: Pick<CodeProps, "children">) => {
-	return (
-		<HeaderStyles $fonts={globalFonts}>
-			<code>{children}</code>
-		</HeaderStyles>
 	);
 };
 
@@ -156,30 +182,17 @@ const CodePreFromMarkdown = ({ children, ...props }: Props) => {
 				// This is weird, but next-mdx-remote does some funky stuff with the component
 				const lang = props.lang ?? childProps?.className?.replace?.(/( |language-)/g, "") ?? "";
 
+				const copyButton = props.copyButton ?? false;
+
 				return (
-					<PreStyles data-lang={lang} $fonts={globalFonts}>
-						<pre>
-							<code
-								className={`language-${lang}`}
-								dangerouslySetInnerHTML={{
-									__html: !!Prism.languages[lang]
-										? Prism.highlight(
-												(childProps?.children as string) ?? "",
-												Prism.languages[lang],
-												lang
-										  )
-										: childProps?.children,
-								}}
-							/>
-						</pre>
-					</PreStyles>
+					<CodePre lang={lang} textContent={(childProps?.children as string) ?? ""} copyButton={copyButton} />
 				);
 			})}
 		</>
 	);
 };
 
-export { Code, CodePre, CodeHeader, CodePreFromMarkdown };
+export { CodePre, Code, CodeHeader, CodePreFromMarkdown };
 
 const boldWeight: number = 800;
 
@@ -437,10 +450,12 @@ const HeaderStyles = styled.dt<StyleProps>`
 const PreStyles = styled.div<StyleProps>`
 	display: block;
 	position: relative;
+	width: 100%;
 
 	> pre {
 		display: block;
 		position: relative;
+		width: 100%;
 		/* max-height: 24rem; */
 		margin: 0.75rem 0;
 		padding: 1rem 1.25rem;
@@ -452,6 +467,32 @@ const PreStyles = styled.div<StyleProps>`
 		background-color: ${getThemeVariable("codeBackground")};
 
 		${codeCss}
+
+		> button {
+			display: block;
+			position: absolute;
+			top: 0.5rem;
+			right: 0.75rem;
+			padding: 0.375rem 1rem;
+			z-index: 20;
+			background-color: ${getThemeVariable("codeBackground")};
+			color: ${getThemeVariable("primaryColor")};
+			border: 0.0675rem solid ${getThemeVariable("primaryColor")};
+			border-radius: 0.5rem;
+			cursor: pointer;
+			transition: color 0.125s linear, border-color 0.125s linear, background-color 0.125s linear;
+
+			&:hover {
+				background-color: ${getThemeVariable("primaryColor")};
+				color: ${getThemeVariable("codeBackground")};
+				border-color: ${getThemeVariable("primaryColor")};
+			}
+
+			&:active {
+				background-color: ${getThemeVariable("secondaryColor")};
+				border-color: ${getThemeVariable("secondaryColor")};
+			}
+		}
 	}
 
 	&:after {

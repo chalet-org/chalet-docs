@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import React, { useCallback, useMemo } from "react";
 import styled from "styled-components";
 
-import { hasMinWidth, Icon } from "Components";
+import { CodePre, hasMinWidth, Heading, Icon, Link } from "Components";
 import { OperatingSystem, useOperatingSystem } from "Hooks";
 import { GithubAsset, GithubRelease } from "Server/ChaletReleases";
 import { useUiStore } from "Stores";
@@ -73,7 +73,7 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url, tag_name }: Props) =>
 		.sort((a, b) => (a.arch === "x86_64" || (a.arch === b.arch && a.filetype === "installer") ? -1 : 1));
 
 	const macos = info
-		.filter((data) => data.platform === "apple")
+		.filter((data) => data.platform === "apple" && data.arch !== "universal")
 		.sort((dataA) => 1)
 		.sort((dataA) => (dataA.arch === "universal" ? -1 : 1));
 
@@ -99,9 +99,25 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url, tag_name }: Props) =>
 		[router, tag_name]
 	);
 
+	const version = tag_name.startsWith("v") ? tag_name.substring(1) : tag_name;
+
 	return (
 		<Styles>
 			<DownloadContainer>
+				{platform == OperatingSystem.MacOS && (
+					<InstallScript>
+						<p>
+							<strong>
+								Install via <Link href="https://brew.sh/">Homebrew</Link>
+							</strong>
+						</p>
+						<CodePre
+							lang="bash"
+							textContent={`brew install --cask https://www.chalet-work.space/api/brew/${version}/chalet.rb`}
+							copyButton
+						/>
+					</InstallScript>
+				)}
 				{(platform == OperatingSystem.Windows || showAllPlatforms) && windows.length > 0 && (
 					<DownloadRow>
 						<Icon id="windows" size={iconSize} color={theme.codeBlue} hoverColor={theme.codeBlue} />
@@ -157,10 +173,7 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url, tag_name }: Props) =>
 										$color={theme.codeGray}
 									>
 										<div className="bold">
-											MacOS{" "}
-											{platform == OperatingSystem.MacOS && data.arch === "universal"
-												? "archive (Recommended)"
-												: "archive (.zip)"}
+											MacOS archive (.zip)
 											<br />
 											<span>{name}</span>
 										</div>
@@ -309,6 +322,16 @@ const DownloadRow = styled.div`
 
 	@media ${hasMinWidth(0)} {
 		flex-direction: row;
+	}
+`;
+
+const InstallScript = styled.div`
+	display: block;
+	padding-bottom: 1rem;
+	width: 100%;
+
+	> p {
+		padding-bottom: 0.25rem;
 	}
 `;
 

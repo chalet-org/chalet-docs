@@ -34,6 +34,7 @@ const mdxComponents: MDXComponents = {
 	NotFoundTerminal: dynamic.component("NotFoundTerminal"),
 	ButtonLink: dynamic.component("ButtonLink"),
 	ImportantNote: dynamic.component("ImportantNote"),
+	Code: dynamic.component("CodePreFromMarkdown"),
 };
 
 const schemaComponents: MDXComponents = {

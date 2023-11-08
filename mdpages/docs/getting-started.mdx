@@ -34,9 +34,9 @@ At the moment, Chalet must be installed manually in non-Windows operating system
 
 1. Use the following. The `latest` part of the url can be replaced with the version (ie. `v0.6.6`)
 
-```bash
+<Code lang="bash" copyButton>
 brew install --cask https://www.chalet-work.space/api/brew/latest/chalet.rb
-```
+</Code>
 
 2. The shell completion scripts will be in `/opt/homebrew/Caskroom/chalet/(version)`
 
@@ -99,9 +99,9 @@ Before building, you should have a C/C++ compiler chosen for your platform.
 * Update the package database with `pacman -Syu` (Note: some packages may be less stable though)
 * Add MinGW (32 & 64 bit versions respectively) via:
 
-```bash
+<Code lang="bash" copyButton>
 pacman -S mingw-w64-x86_64-toolchain mingw-w64-i686-toolchain
-```
+</Code>
 
 * Check for GCC with `gcc --version`
 * Add `C:\msys64\mingw64\bin` to Path directly in Windows Environment Variables (not recommended) or create a `.env` file in your project to modify Path
@@ -130,9 +130,9 @@ pacman -S mingw-w64-x86_64-toolchain mingw-w64-i686-toolchain
 * Ensure Xcode.app is placed in Applications
 * Run the following from Terminal:
 
-```bash
+<Code lang="bash" copyButton>
 sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
-```
+</Code>
 
 \
 
@@ -140,9 +140,9 @@ sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
 * Run the installer from the dmg image & restart Terminal if necessary
 * Run the following:
 
-```bash
+<Code lang="bash" copyButton>
 sudo xcode-select -s /Library/Developer/CommandLineTools
-```
+</Code>
 
 In both, running `which clang` should show `/usr/bin/clang` (although it actually resolves to the xcode-select path).
 
