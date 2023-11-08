@@ -16,7 +16,10 @@ const Accordion = ({ label, children }: Props) => {
 	const contentRef = useRef<HTMLDivElement>(null);
 	const [computedHeight, setComputedHeight] = useState<number>(0);
 
-	const clientHeight = useMemo(() => contentRef.current?.clientHeight ?? 0, [accordionNotifier, contentRef.current]);
+	const clientHeight = useMemo(
+		() => contentRef.current?.clientHeight ?? 0,
+		[accordionNotifier, contentRef.current?.clientHeight]
+	);
 
 	// We can just use this noop to trigger re-renders
 	useEffect(() => {
@@ -39,7 +42,10 @@ const Accordion = ({ label, children }: Props) => {
 			>
 				{!!label ? label : open ? "Collapse" : "Expand"}
 			</AccordionHandle>
-			<AccordionContent className={className} $height={computedHeight}>
+			<AccordionContent
+				className={className}
+				style={{ maxHeight: open ? `calc(${computedHeight}px + 2rem)` : "0rem" }}
+			>
 				<div className="inner" ref={contentRef}>
 					{children}
 				</div>
@@ -95,11 +101,7 @@ const AccordionHandle = styled.button`
 	}
 `;
 
-type ContentProps = {
-	$height: number;
-};
-
-const AccordionContent = styled.div<ContentProps>`
+const AccordionContent = styled.div`
 	display: block;
 	overflow: hidden;
 	max-height: 0rem;
@@ -107,7 +109,6 @@ const AccordionContent = styled.div<ContentProps>`
 	transition: max-height 0.25s linear, opacity 0.25s linear;
 
 	&.open {
-		max-height: calc(${(p) => p.$height}px + 1rem);
 		opacity: 1;
 	}
 
