@@ -162,7 +162,7 @@ In MacOS application bundles, these includes will be placed in the `Resources` d
 
 ## [Windows Settings]
 
-At the moment, Windows bundles will just copy the required files into an output folder. The only setting at the moment controls whether the Windows runtime dlls get copied - these are specifically the `api-ms-win-*.dll` files. See [Universal CRT Deployment](https://learn.microsoft.com/en-us/cpp/windows/universal-crt-deployment?view=msvc-170) for details. To define whether or not these get copied (for debugging, generally), add the `windows` object followed by the `includeRuntimeDlls` boolean property.
+At the moment, Windows bundles will just copy the required files into an output folder. The only setting at the moment controls whether the Windows runtime dlls get copied - these are specifically the `api-ms-win-*.dll` files. See [Universal CRT Deployment](//learn.microsoft.com/en-us/cpp/windows/universal-crt-deployment?view=msvc-170) for details. To define whether or not these get copied (for debugging, generally), add the `windows` object followed by the `includeRuntimeDlls` boolean property.
 
 ```json
 "MyApp": {
@@ -235,14 +235,14 @@ The `icon` property defines an icon for the app. If a `.png` is defined, it will
 }
 ```
 
-The `infoPropertyList` defines an [Information Property List](https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Introduction/Introduction.html) for the bundle. It can accept mulitple file extensions, such as a static `.plist` binary file, a `.json` file containing the data normally in a `.plist`, containing an object with key/value pairs. The json contents can be inlined directly into the chalet.json file. If using either json route, one can use special variables that get resolved at the time of bundling (like with linux desktop entries). They are as follows:
+The `infoPropertyList` defines an [Information Property List](//developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Introduction/Introduction.html) for the bundle. It can accept mulitple file extensions, such as a static `.plist` binary file, a `.json` file containing the data normally in a `.plist`, containing an object with key/value pairs. The json contents can be inlined directly into the chalet.json file. If using either json route, one can use special variables that get resolved at the time of bundling (like with linux desktop entries). They are as follows:
 
 | `${name}`           | The bundle's name, so in the examples above, this would be "MyApp" |
 | `${bundleName}`     | The first 15 characters of ${name}, specifically used for [CFBundleName](//developer.apple.com/documentation/bundleresources/information_property_list/cfbundlename) |
 | `${mainExecutable}` | The main executable, explained [here](/docs/describing-the-distribution?id=the-main-executable) |
 | `${icon}`           | The path to the icon. This ends up being the .icns created/copied in the distribution target's folder |
 
-The `entitlementsPropertyList` defines an [Entitlements](https://developer.apple.com/documentation/bundleresources/entitlements) Property List for the bundle that defines special OS permissions required by the application during code signing. This is typical when linking against one of the various system frameworks. Like with the information property list, this property can accept multiple file extensions, such as a `.plist` or `.xml` file as long as the format is xml, or a `.json` file containing just an object with the entitlements and their values. The json data can also be inlined directly into the chalet.json file.
+The `entitlementsPropertyList` defines an [Entitlements](//developer.apple.com/documentation/bundleresources/entitlements) Property List for the bundle that defines special OS permissions required by the application during code signing. This is typical when linking against one of the various system frameworks. Like with the information property list, this property can accept multiple file extensions, such as a `.plist` or `.xml` file as long as the format is xml, or a `.json` file containing just an object with the entitlements and their values. The json data can also be inlined directly into the chalet.json file.
 
 > Note: If no entitlements are defined, and the application actually requires an entitlement, the application could silently fail when the .app has been opened. When this happens, you need to run the app through `/Applications/Utilities/Console.app` to find out which entitlements are required. For instance, to see them use the "Start streaming" option, and filter the message by your application's process name (not the bundle name).
 

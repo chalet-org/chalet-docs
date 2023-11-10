@@ -7,7 +7,7 @@ title: Xcode
 
 ---
 
-[Xcode](https://developer.apple.com/xcode) is Apple's IDE, designed to develop software for its platforms. You can get it from the [Apple Developer downloads](https://developer.apple.com/download/all/) page or through the app store. Generating an Xcode project from Chalet is pretty straightforward.
+[Xcode](//developer.apple.com/xcode) is Apple's IDE, designed to develop software for its platforms. You can get it from the [Apple Developer downloads](//developer.apple.com/download/all/) page or through the app store. Generating an Xcode project from Chalet is pretty straightforward.
 
 \\
 
@@ -21,7 +21,7 @@ chalet export -t apple-llvm xcode
 
 To open it, this requires an Xcode install. You cannot use Command Line Tools with this. Any edits done in the `chalet.json` file will require the Xcode project to be re-exported.
 
-Once in Xcode, each build target will be selectable in the [project's toolbar](https://developer.apple.com/documentation/xcode/customizing-the-build-schemes-for-a-project).
+Once in Xcode, each build target will be selectable in the [project's toolbar](//developer.apple.com/documentation/xcode/customizing-the-build-schemes-for-a-project).
 
 ![Selecting targets inside Xcode](/images/xcode/xcode-shot1.png)
 
@@ -29,7 +29,7 @@ To change the build configuration, click on "Edit Scheme..." above, and under th
 
 ![Selecting build configurations inside Xcode](/images/xcode/xcode-shot2.png)
 
-More information can be found here: [Customizing the build schemes for a project](https://developer.apple.com/documentation/xcode/customizing-the-build-schemes-for-a-project)
+More information can be found here: [Customizing the build schemes for a project](//developer.apple.com/documentation/xcode/customizing-the-build-schemes-for-a-project)
 
 If needed, the build output can be viewed in the report navigator. Every target type except source targets are considered scripts in Xcode. Because of this, you could be building 100 source files from a CMake target, but Xcode would tally it as "1" object in the total build.
 

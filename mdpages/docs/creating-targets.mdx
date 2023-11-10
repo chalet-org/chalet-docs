@@ -351,6 +351,7 @@ The following table is the full list of accepted values:
 |  | `:windows` | `:windows` |
 |  | `:macos` | `:macos` |
 |  | `:linux` | `:linux` |
+|  | `:web` | `:web` |
 | configuration | true if the build configuration has the specified property | - |
 |  | `:debugSymbols` | `:debug` |
 |  | `:enableProfiling` | No |
@@ -367,6 +368,7 @@ The following table is the full list of accepted values:
 | options | `:runTarget` (build targets only) | `:runTarget` |
 | env | Environment variable by name, checks if defined | No |
 
+> Note: `:web` only applies to wasm targets (via the emscripten toolchains)
 
 \\
 

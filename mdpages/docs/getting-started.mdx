@@ -30,7 +30,7 @@ At the moment, Chalet must be installed manually in non-Windows operating system
 4. If using bash or zsh in any form on windows, completion scripts are available
 
 |MacOS|
-**To install via [Homebrew](https://brew.sh/)**
+**To install via [Homebrew](//brew.sh/)**
 
 1. Use the following. The `latest` part of the url can be replaced with the version (ie. `v0.6.6`)
 
@@ -70,7 +70,9 @@ brew install --cask https://www.chalet-work.space/api/brew/latest/chalet.rb
 Before building, you should have a C/C++ compiler chosen for your platform.
 
 [[tabs:start]]
+
 |Windows|
+
 **Install one of the following:**
 * [Visual Studio](//visualstudio.microsoft.com/) (Recommended)
 * [LLVM](//llvm.org/)
@@ -120,6 +122,7 @@ pacman -S mingw-w64-x86_64-toolchain mingw-w64-i686-toolchain
 > Note: If both 32 and 64 version are installed, split those installations into `mingw32` and `mingw64`. Chalet only needs one of the bin folders in PATH. It will reinterpret the path based on the requested architecture of the build in order to find the correct compiler.
 
 |MacOS|
+
 **Install one of the following:**
 * [Xcode](//developer.apple.com/xcode/) (Recommended)
 * [Command Line Tools for Xcode](//developer.apple.com/download/all/?q=%22command%20line%20tools%22)
@@ -153,6 +156,7 @@ In both, running `which clang` should show `/usr/bin/clang` (although it actuall
 > Note: LLVM and GCC can also be used on Mac (both can be grabbed from Homebrew), but they are not recommended for any serious projects.
 
 |Linux|
+
 **Install one of the following**
 * Your distribution's compiler (typically GCC)
 * Any GCC cross compiler (ie. arm-linux-gnueabihf)
@@ -185,6 +189,29 @@ arm-none-eabi       # Cross compiler for bare metal ARM
 **If using LLVM:**
 * Install a version of LLVM from your package manager
 * Install any cross compilers you want to use and make note of their target triples like with GCC
+
+|WebAssembly|
+
+For compiling to WebAssembly, only [Emscripten](//emscripten.org) is currently supported. Follow its own [Getting Started](//emscripten.org/docs/getting_started/downloads.html) page for details, but the short version is:
+
+```bash
+# Clone to the path of your choice
+git clone https://github.com/emscripten-core/emsdk.git
+cd emsdk
+./emsdk install latest
+```
+
+This process is the same on all platforms - just make sure Git is installed.
+
+Next, create an environment variable called `EMSDK` and supply it with the root path for where emsdk was cloned. Make sure the environment variable can be read from the terminal, and you should be good to go.
+
+```env
+EMSDK=/path/to/emsdk
+```
+
+> Note: You can also create a local `.env` file in your project directory with `EMSDK` defined.
+
+To create WebAssembly text format files (`.wat`), install [WABT](//github.com/WebAssembly/wabt) from your package manager - usually under `wabt`. On Windows, you may need to download a release archive and add it to Path.
 
 [[tabs:end]]
 
@@ -402,6 +429,20 @@ If the `intel-llvm-vs-*` toolchain is selected and clang is not found in `Path`,
 ```bash
 chalet configure -t intel-classic -a auto
 ```
+
+|Emscripten|
+
+Emscripten support is fairly complete. Simply follow the WebAssembly instructions in "Adding a C/C++ Compiler" at the top of this page. Once `EMSDK` is added to path, the following command can be used:
+
+```bash
+chalet configure -t emscripten -a auto
+```
+
+Emscripten only has 1 supported architecture, so we can use `auto` as a shortcut for `wasm32`. If you would also like to generate the WebAssembly text format (`.wat`), you can pass `--dump-assembly` to the command above.
+
+If there's any issues with this toolchain in Chalet, feel free to open up an [issue](//github.com/chalet-org/chalet/issues) or [discussion](//github.com/chalet-org/chalet/discussions)
+
+Emscripten targets always use the triple `wasm32-unknown-emscripten` and regardless of the platform its built on, Chalet considers the output the "web" platform. This mostly affects the distribution, but you can customize your build options based on this as well.
 
 |Other|
 

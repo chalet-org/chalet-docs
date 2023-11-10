@@ -7,7 +7,7 @@ title: Visual Studio
 
 ---
 
-There are a few different ways to integrated Chalet with [Visual Studio](https://visualstudio.microsoft.com/). The obvious shortcoming of building with MSVC at the command-line is how to then open the project inside of Visual Studio. Would it be opened as a Chalet project? Can it be converted to a VS project? As of Chalet v0.5.0, the following can be done:
+There are a few different ways to integrated Chalet with [Visual Studio](//visualstudio.microsoft.com/). The obvious shortcoming of building with MSVC at the command-line is how to then open the project inside of Visual Studio. Would it be opened as a Chalet project? Can it be converted to a VS project? As of Chalet v0.5.0, the following can be done:
 
 \\
 
@@ -47,7 +47,7 @@ The better method is to simply use the `msbuild` strategy (available only in the
 chalet build -t vs-2022 -a auto -b msbuild 
 ```
 
-This will generate the same project files as the export method above, and build them via [MSBuild](https://docs.microsoft.com/en-us/visualstudio/msbuild/msbuild?view=vs-2022), using the same build cache that Visual Studio uses, so you use the project within VS and the command line interchangeably.
+This will generate the same project files as the export method above, and build them via [MSBuild](//docs.microsoft.com/en-us/visualstudio/msbuild/msbuild?view=vs-2022), using the same build cache that Visual Studio uses, so you use the project within VS and the command line interchangeably.
 
 \\
 
@@ -59,7 +59,7 @@ In Visual Studio 2017 and higher, "open folder" is supported, but with a catch -
 | **tasks.vs.json**      | build tasks |
 | **launch.vs.json**     | debugger configuration |
 
-Detailed information can be found [here](https://docs.microsoft.com/en-us/cpp/build/open-folder-projects-cpp?view=msvc-170).
+Detailed information can be found [here](//docs.microsoft.com/en-us/cpp/build/open-folder-projects-cpp?view=msvc-170).
 
 While you could certainly create these and manage them yourself, it would be a lot nicer to generate them. The following command can be run:
 

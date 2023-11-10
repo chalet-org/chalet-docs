@@ -36,7 +36,7 @@ As of Visual Studio 17.5 and above in C++23 mode, one can use standard library m
 | std | Module containing the C++ STL |
 | std.compat | Module containing compatible global C functions |
 
-Comprehensive documentation about these features can be found [here](https://learn.microsoft.com/en-us/cpp/cpp/tutorial-import-stl-named-module?view=msvc-170).
+Comprehensive documentation about these features can be found [here](//learn.microsoft.com/en-us/cpp/cpp/tutorial-import-stl-named-module?view=msvc-170).
 
 > Notes: `import std` and `import std.compat` is a bit like a precompiled header in that they require a longer build up-front and require rebuilding if they are changed between VS versions. Unlike one, they use a lot less space on disk. 
 
@@ -80,6 +80,35 @@ $HOME/intel/oneapi/setvars.sh
 If it's not found in either location, the build will fail.
 
 [[tabs:end]]
+
+\\
+
+## [Emscripten]
+
+In addition to following the steps on the [Getting Started](/docs/getting-started?id=settings-overview) page, there's a few more details to discuss regarding [Emscripten](//emscripten.org).
+
+Firstly, executable targets produce a `.wasm`, `.js` and `.html` file of the target so that the build can be tested easily as a server. By simply running `chalet buildrun`, a local server will startup through [emrun](//emscripten.org/docs/compiling/Running-html-files-with-emrun.html). If you would like to change the port the server runs on, add a `.env` file with the following:
+
+```env
+EMRUN_PORT=8080
+```
+
+The server will run continuously until it's canceled with `CTRL+C`. It's expected that Chalet will honor this and exit the server and itself gracefully afterwards.
+
+Emscripten considers the html template used to launch a wasm file the "shell", and what you might want to setup is a [custom shell](//emscripten.org/docs/compiling/Deploying-Pages.html#build-files-and-custom-shell) with your own design and css. In order to do this, simply add it to the `linkerOptions`:
+
+```json
+"linkerOptions[toolchain:emscripten]": [
+   "--shell-file",
+   "path/custom-shell.html"
+]
+```
+
+Alternatively, you might want to keep the wasm compilation completely seperate from the rest of the website you're using it with, so the shell would be less important in that case.
+
+Debugging an emscripten application is a little more complicated. When using `-c Debug` at the command-line, this will generate a debug build as expected, along with a source map file that will map the WebAssembly text format you would see in the browser's debugger to the C/C++ source file. What this means is that the entire project directory will launch as a server, so that those source files can be resolved by the source map during debugging. Upon running, Chalet will output the directory path that will go right to the run target that was selected.
+
+> Note: this behavior may change as support for this toolchain improves
 
 \\
 
