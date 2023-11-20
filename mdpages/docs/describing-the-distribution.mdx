@@ -346,6 +346,30 @@ Chalet can also generate zip archives as a distribution step with kind set to `a
 
 This is equivalent to running `zip` in the command line on Linux/Mac, and Powershell's `Compress-Archive` on Windows. The `format` can be changed to `tar` to create a tarball (with .tar.gz extension).
 
+On macOS, a `zip` archive can be notarized with Apple so it can be distributed. Please note that this also requires the app to be codesigned. Additionally, a keychain profile needs to be setup using:
+
+```bash
+# Change 'MyProfile' to the profile name for your app
+xcrun notarytool store-credentials "MyProfile" --apple-id "$APPLE_ID" --password "$APP_PWD" --team-id "$TEAM_ID"
+```
+
+If unfamiliar with this process, see [this page](https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/customizing_the_notarization_workflow) for an intro. To notarize using a keychain profile, simply add `macosNotarizationProfile` with the name of the profile:
+
+```json
+"MyApp-archive": {
+   "kind": "archive",
+   "format": "zip",
+   "include": "*",
+   "macosNotarizationProfile": "MyProfile"
+}
+```
+
+alternatively, a substitution variable can be used. The below will only notarize if `NOTARIZATION_PROFILE` is defined:
+
+```json
+"macosNotarizationProfile": "${env:NOTARIZATION_PROFILE}"
+```
+
 \\
 
 ## [MacOS Disk Images]
