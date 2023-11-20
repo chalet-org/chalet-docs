@@ -298,12 +298,12 @@ default: `auto`
 
 <dd>
 
-The build strategy to use for the selected toolchain.
+The build strategy to use for the selected toolchain. When the toolchain is generated, it defaults to `native`, but can be easily set to `ninja` or `makefile` depending on your preference. The project will always build with the same underlying compiler commands.
 
-| ninja                | Uses the Ninja version defined by the `ninja` property. |
-| makefile             | Uses the GNU Make version defined by the `make` property. |
-| native-experimental  | Experimental support to build entirely with Chalet. |
-| msbuild              | Creates a Visual Studio solution & builds with MSBuild. |
+| native    | Use Chalet to build the project. CMakes targets will still use ninja or make. (default) |
+| ninja     | Uses the Ninja version defined by the `ninja` property. |
+| makefile  | Uses the GNU Make version defined by the `make` property. |
+| msbuild   | Creates a Visual Studio solution & builds with MSBuild. |
 
 </dd>
 

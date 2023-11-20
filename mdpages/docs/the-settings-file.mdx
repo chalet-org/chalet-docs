@@ -394,11 +394,11 @@ A version string to identify the toolchain. If MSVC, this must be the full versi
 
 <dd>
 
-The strategy to use during the build. When the toolchain is generated, it defaults to `ninja` (if detected), but falls back to `makefile` otherwise. If building on a CI server, it will default to `native-experimental` but expects no existing builds present. 
+The build strategy to use for the selected toolchain. When the toolchain is generated, it defaults to `native`, but can be easily set to `ninja` or `makefile` depending on your preference. The project will always build with the same underlying compiler commands.
 
-| ninja                | Uses the Ninja version defined by the `ninja` property. |
-| makefile             | Uses the GNU Make version defined by the `make` property. |
-| native-experimental  | Experimental support to build entirely with Chalet. |
+| native    | Use Chalet to build the project. CMakes targets will still use ninja or make. (default) |
+| ninja     | Uses the Ninja version defined by the `ninja` property. |
+| makefile  | Uses the GNU Make version defined by the `make` property. |
 
 </dd>
 
