@@ -20,9 +20,7 @@ export type ResultChaletTags = string[];
 export type ResultChaletBranches = string[];
 export type ResultBranchDefinitions = ResultPageAnchor[];
 
-export type ResultChaletSchema = {
-	schema?: JSONSchema7;
-};
+export type ResultChaletSchema = JSONSchema7;
 
 export type ResultChaletFile = {
 	text?: string;

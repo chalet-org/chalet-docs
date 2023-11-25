@@ -15,10 +15,7 @@ const getChaletSchema = (type: SchemaType, ref: string = "main"): Promise<Result
 		// const blob = await response.blob();
 		// const schema = await blob.text();
 		const schema: JSONSchema7 = await response.json();
-
-		return {
-			schema,
-		};
+		return schema;
 	});
 };
 

@@ -41,7 +41,6 @@ const handler = middleware.use([], async (req: ApiReq, res: ApiRes<ResultChaletS
 		}
 
 		const schema = await getChaletSchema(type, ref as string);
-
 		res.status(200).json(schema);
 	} catch (err: any) {
 		console.log(err.message);
