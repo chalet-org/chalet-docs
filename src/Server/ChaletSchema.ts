@@ -1,10 +1,10 @@
 import { JSONSchema7 } from "json-schema";
 
 import { fetchFromGithub } from "./FetchFromGithub";
-import { ResultChaletSchema, SchemaType } from "./ResultTypes";
+import { SchemaType } from "./ResultTypes";
 import { serverCache } from "./ServerCache";
 
-const getChaletSchema = (type: SchemaType, ref: string = "main"): Promise<ResultChaletSchema> => {
+const getChaletSchema = (type: SchemaType, ref: string = "main"): Promise<{ schema?: JSONSchema7 }> => {
 	return serverCache.get(`chalet-schema-file/${type}/${ref}`, async () => {
 		// TODO: validate if tag is "main" or "v*.*.*"
 
@@ -15,7 +15,7 @@ const getChaletSchema = (type: SchemaType, ref: string = "main"): Promise<Result
 		// const blob = await response.blob();
 		// const schema = await blob.text();
 		const schema: JSONSchema7 = await response.json();
-		return schema;
+		return { schema };
 	});
 };
 
