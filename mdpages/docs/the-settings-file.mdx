@@ -74,89 +74,70 @@ The first block is the options, and most of them will be familiar, because with 
 ``lastTarget``
 
 <dd>
-
 Any build target. If use without `--only-required`, only builds what's required for that target. If this is a script/process target, any scripts before it will still be executed. Defaults to `all`, an implicit target.
-
 </dd>
 
 ``runArguments``
 
 <dd>
-
 An object of key/values where the key is the run target name, and the value is the run arguments that were used last.
-
 </dd>
 
 ``onlyRequired``
 
 <dd>
-
 If defining a build target other than `all`, this builds only the previous targets required for that target.
-
 </dd>
 
 ``inputFile``
 
 <dd>
-
 The input file location to use, relative to the working directory, unless defined otherwise.
 
 default: `chalet.json`
-
 </dd>
 
 ``rootDir``
 
 <dd>
-
 The root directory to run the build from. If blank, means the same directory as the settings file.
-
 </dd>
 
 ``externalDir``
 
 <dd>
-
 The directory to install external dependencies into.
 
 default: `chalet_external`
-
 </dd>
 
 ``outputDir``
 
 <dd>
-
 The output directory of the build.
 
 default: `build`
-
 </dd>
 
 ``distributionDir``
 
 <dd>
-
 The root directory for all distribution bundles.
 
 default: `dist`
-
 </dd>
 
 ``configuration``
 
 <dd>
-
 The build configuration to use.
 
 default: `Release`
-
 </dd>
 
 ``toolchain``
 
 <dd>
-
 A toolchain preset to use, or a user-made toolchain.
 
 [[tabs:start]]
@@ -208,93 +189,72 @@ Presets:
 ``arch``
 
 <dd>
-
 Target architecture.
 
 default: `auto`
-
 </dd>
 
 ``envFile``
 
 <dd>
-
 A file to load environment variables from.
 
 default: `.env`
-
 </dd>
 
 ``maxJobs``
 
 <dd>
-
 The number of jobs to run during compilation.
 
 default: `16`
-
 </dd>
 
 ``showCommands``
 
 <dd>
-
 Show the commands run during the build.
-
 </dd>
 
 ``dumpAssembly``
 
 <dd>
-
 Create an .asm dump of each object file during the build.
-
 </dd>
 
 ``benchmark``
 
 <dd>
-
 Show all build times (total build time, build targets, other steps).
-
 </dd>
 
 ``launchProfiler``
 
 <dd>
-
 If running profile targets, launch the preferred profiler afterwards.
-
 </dd>
 
 ``keepGoing``
 
 <dd>
-
 If there's a build error, continue as much of the build as possible.
-
 </dd>
 
 ``generateCompileCommands``
 
 <dd>
-
 Generate a `compile_commands.json` file for Clang tooling use. The one for the current build will be copied to the `build/current` folder path.
-
 </dd>
 
 ``signingIdentity``
 
 <dd>
-
 **macOS only:** Set a code-signing identity from the command line to use during the build.
-
 </dd>
 
 ``osTargetName``
 
 <dd>
-
 **macOS only:** Set the operating system name to target for the build.
 
 Supported values:
@@ -310,15 +270,12 @@ Supported values:
 | xrsimulator | visionOS (requies Xcode 15 beta 8) |
 
 Anything other than `macosx` is considered experimental.
-
 </dd>
 
 ``osTargetVersion``
 
 <dd>
-
 **macOS only:** Set the operating system version to target for the build. These versions are not managed by Chalet at all, and simply get passed to the compiler. Use to target a version earlier than the one used by build machine and apple clang verison. If this and `--os-target-name` are not defined, a default will get detected.
-
 </dd>
 
 [[dl:end]]
@@ -385,15 +342,12 @@ In the above example, `-t vs-2022 -a x64` resolves to the paths you would expect
 ``version``
 
 <dd>
-
 A version string to identify the toolchain. If MSVC, this must be the full version string of the Visual Studio Installation. (vswhere's installationVersion string)
-
 </dd>
 
 ``strategy``
 
 <dd>
-
 The build strategy to use for the selected toolchain. When the toolchain is generated, it defaults to `native`, but can be easily set to `ninja` or `makefile` depending on your preference. The project will always build with the same underlying compiler commands.
 
 | native    | Use Chalet to build the project. CMakes targets will still use ninja or make. (default) |
@@ -405,7 +359,6 @@ The build strategy to use for the selected toolchain. When the toolchain is gene
 ``buildPathStyle``
 
 <dd>
-
 The build path style, with the configuration appended following an underscore. Examples:
 
 | configuration  | ex: `build/Debug` |
@@ -418,81 +371,61 @@ The build path style, with the configuration appended following an underscore. E
 ``compilerCpp``
 
 <dd>
-
 The executable path to the toolchain's C++ compiler.
-
 </dd>
 
 ``compilerC``
 
 <dd>
-
 The executable path to the toolchain's C compiler.
-
 </dd>
 
 ``compilerWindowsResource``
 
 <dd>
-
 The executable path to the resource compiler. This can be either rc.exe, llvm-rc.exe, or windres.exe. Cross-compiling via MinGW on Linux is supported.
-
 </dd>
 
 ``linker``
 
 <dd>
-
 The executable path to the toolchain's linker - typically ld with GCC, lld with LLVM, or link.exe with Visual Studio.
-
 </dd>
 
 ``archiver``
 
 <dd>
-
 The executable path to the toolchain's static library archive utility - typically ar with GCC, libtool on MacOS, or lib.exe with Visual Studio.
-
 </dd>
 
 ``profiler``
 
 <dd>
-
 The executable path to the toolchain's command-line profiler (if applicable) - for instance, gprof with GCC.
-
 </dd>
 
 ``disassembler``
 
 <dd>
-
 The executable path to the toolchain's disassembler (if applicable) - for instance, objdump with GCC, dumpbin with MSVC, and otool with Apple LLVM.
-
 </dd>
 
 ``cmake``
 
 <dd>
-
 The executable path to CMake.
-
 </dd>
 
 ``make``
 
 <dd>
-
 The executable path to GNU make, or NMAKE/Qt Jom with Visual Studio.
-
 </dd>
 
 ``ninja``
 
 <dd>
-
 The executable path to Ninja.
-
 </dd>
 
 [[dl:end]]

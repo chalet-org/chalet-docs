@@ -277,7 +277,7 @@ cd my-project
 chalet init
 ```
 
-You'll be shown a wizard that will guide you the rest of the way, creating a simple "Hello World" project, a chalet.json, and optionally a git repository. In the last step, you'll be asked to configure the project.
+You'll be shown a wizard that will guide you the rest of the way, creating a simple "Hello World" project, a [build file](/docs/the-build-file), and optionally a git repository. In the last step, you'll be asked to configure the project.
 
 Additionally, you can initialize a Chalet+CMake project with the following command:
 
@@ -497,7 +497,7 @@ During the configure step the `Release` build configuration will be chosen and c
 chalet configure -c Debug -t llvm -a auto
 ```
 
-> Note: Build configurations can be customized by defining a `configurations` structure in `chalet.json` with either a list of new configuration objects, or `defaultConfigurations`, a string list that limits the default ones (for example, to just `Release` and `Debug`)
+> Note: Build configurations can be customized by defining a `configurations` structure in the [build file](/docs/the-build-file) with either a list of new configuration objects, or `defaultConfigurations`, a string list that limits the default ones (for example, to just `Release` and `Debug`)
 
 \\
 

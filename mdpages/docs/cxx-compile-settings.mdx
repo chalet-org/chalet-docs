@@ -297,7 +297,7 @@ For the unfamiliar, this is a convention used to speed up the build process by c
 
 This will automatically include that header in every source file of that target. Although there's nothing stopping one from doing so, it's not necessary to include it again at the top of source files via `#include`. Every compiler handles precompiled headers a little differently under the hood, so Chalet abstracts that away for you.
 
-The only Chalet-specific caveat is that a PCH can't be placed at the root directory (for instance, where the `chalet.json` file is). It must be placed inside of a subdirectory like `src`. This is to keep build behavior consistent across platforms.
+The only Chalet-specific caveat is that a PCH can't be placed at the root directory (for instance, where the [build file](/docs/the-build-file) is). It must be placed inside of a subdirectory like `src`. This is to keep build behavior consistent across platforms.
 
 > Note: In `universal` architecture builds on MacOS, a separate precompiled header is created for each architecture.
 

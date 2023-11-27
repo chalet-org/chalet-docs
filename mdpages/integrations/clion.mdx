@@ -19,7 +19,7 @@ The following will generate CLion project files into the `.idea` if there is not
 chalet export clion
 ```
 
-When you open the directory on CLion, everything will be setup. The build configurations that become generated will be based on what project defines (or limits), and the toolchain that was selected at the time of export. If you decide to switch toolchains on the same machine, you'll need to re-export. Out of the box, you will have built-in schema validation for `chalet.json` but in order to get `.chaletrc` to work, you just have to associate it with JSON. To do that:
+When you open the directory on CLion, everything will be setup. The build configurations that become generated will be based on what project defines (or limits), and the toolchain that was selected at the time of export. If you decide to switch toolchains on the same machine, you'll need to re-export. Out of the box, you will have built-in schema validation for `chalet.json` and `chalet.yaml` but in order to get `.chaletrc` to work, you just have to associate it with JSON. To do that:
 
 1. Inside CLion, right click the `.chaletrc` in your project and click on "Associate with File Type..."
 
@@ -48,7 +48,7 @@ From there, pick from one of the predefined configurations. Feel free to remove 
 
 ## [Extension]
 
-There is an [extension](//github.com/chalet-org/clion-chalet) in development, but it's hard to say whether it's necessary or how useful it will be. At the very least, it will automatically associate `.chaletrc` with JSON files and supply it and `chalet.json` with their schemas.
+There is an [extension](//github.com/chalet-org/clion-chalet) in development, but it's hard to say whether it's necessary or how useful it will be. At the very least, it will automatically associate `.chaletrc` with JSON files and supply it and `chalet.json` / `chalet.yaml` with their schemas.
 
 
 [[nav:/integrations/xcode:/integrations/code-blocks]]

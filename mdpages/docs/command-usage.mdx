@@ -7,7 +7,7 @@ title: Command Usage
 
 ---
 
-Some of Chalet's commands have largely been mentioned in passing up to this point, since they require a `chalet.json` to run. Now it's time to dive deeper into what they do, and what kind of options are available, so it'll be assumed that a working `chalet.json` exists up to this point.
+Some of Chalet's commands have largely been mentioned in passing up to this point, since they require a [build file](/docs/the-build-file) to run. Now it's time to dive deeper into what they do, and what kind of options are available, so it'll be assumed that a build file exists up to this point.
 
 \\
 
@@ -25,18 +25,14 @@ Chalet uses sub-commands along with arguments specific to their context. To see 
 ``--help``
 
 <dd>
-
 Shows help message and exits. If a Chalet command is included, the help message for that command will be shown instead.
-
 </dd>
 
 ``-v``
 ``--version``
 
 <dd>
-
-prints version information and exits
-
+prints version information and exits.
 </dd>
 
 [[dl:end]]
@@ -46,7 +42,7 @@ prints version information and exits
 ## [Init]
 
 ```bash
-chalet init [<path>] 
+chalet init [options] [<path>] 
 ```
 
 Initialize a project in either the current directory or a subdirectory.
@@ -60,20 +56,16 @@ Initialize a project in either the current directory or a subdirectory.
 ``<path>``
 
 <dd>
-
 The path of the project to initialize.
 
 default: `.`
-
 </dd>
 
 ``-t``
 ``--template``
 
 <dd>
-
 The project template to use during initialization (ex: cmake)
-
 </dd>
 
 [[dl:end]]
@@ -83,43 +75,43 @@ The project template to use during initialization (ex: cmake)
 ## [Build Actions]
 
 ```bash
-chalet configure
+chalet configure [options]
 ```
 
 Create a project configuration and grab any external dependencies defined by the project.
 
 ```bash
-chalet buildrun [<run-target>] [<args>...]
+chalet buildrun [options] [<run-target>] [<args>...]
 ```
 
 Build the project. If a configuration doesn't exist, it will be created. Then, run the first valid executable build target, or a chosen executable.
 
 ```bash
-chalet run [<run-target>] [<args>...]
+chalet run [options] [<run-target>] [<args>...]
 ```
 
 Run the first valid executable build target, or a chosen executable.
 
 ```bash
-chalet build [<target>]
+chalet build [options] [<target>]
 ```
 
 Build the project. If a configuration doesn't exist, it will be created.
 
 ```bash
-chalet rebuild [<target>]
+chalet rebuild [options] [<target>]
 ```
 
 Rebuild the project. If a configuration doesn't exist, it will be created.
 
 ```bash
-chalet clean 
+chalet clean [options]
 ```
 
 Unceremoniously clean the build folder.
 
 ```bash
-chalet bundle
+chalet bundle [options]
 ```
 
 Bundle the project for distribution.
@@ -133,107 +125,86 @@ Bundle the project for distribution.
 ``<run-target>``
 
 <dd>
-
 An executable or script target to run. Defaults to the first runnable build target.
-
 </dd>
 
 ``<args>...``
 
 <dd>
-
 The arguments to pass to the run target.
-
 </dd>
 
 ``<target>``
 
 <dd>
-
 Any build target. If use without `--only-required`, only builds what's required for that target. If this is a script/process target, any scripts before it will still be executed. Defaults to `all`, an implicit target.
-
 </dd>
 
 ``-i``
 ``--input-file``
 
 <dd>
-
 An input build file to use.
 
 default: `chalet.json`
-
 </dd>
 
 ``-s``
 ``--settings-file``
 
 <dd>
-
 The path to a settings file to use.
 
 default: `.chaletrc`
-
 </dd>
 
 ``-r``
 ``--root-dir``
 
 <dd>
-
 The root directory to run the build from
-
 </dd>
 
 ``-x``
 ``--external-dir``
 
 <dd>
-
 The directory to install external dependencies into.
 
 default: `chalet_external`
-
 </dd>
 
 ``-o``
 ``--output-dir``
 
 <dd>
-
 The output directory of the build.
 
 default: `build`
-
 </dd>
 
 ``-d``
 ``--distribution-dir``
 
 <dd>
-
 The root directory for all distribution bundles.
 
 default: `dist`
-
 </dd>
 
 ``-c``
 ``--configuration``
 
 <dd>
-
 The build configuration to use.
 
 default: `Release`
-
 </dd>
 
 ``-t``
 ``--toolchain``
 
 <dd>
-
 A toolchain preset to use, or a user-made toolchain.
 
 [[tabs:start]]
@@ -286,18 +257,15 @@ Presets:
 ``--arch``
 
 <dd>
-
 Target architecture.
 
 default: `auto`
-
 </dd>
 
 ``-b``
 ``--build-strategy``
 
 <dd>
-
 The build strategy to use for the selected toolchain. When the toolchain is generated, it defaults to `native`, but can be easily set to `ninja` or `makefile` depending on your preference. The project will always build with the same underlying compiler commands.
 
 | native    | Use Chalet to build the project. CMakes targets will still use ninja or make. (default) |
@@ -311,99 +279,78 @@ The build strategy to use for the selected toolchain. When the toolchain is gene
 ``--env-file``
 
 <dd>
-
 A file to load environment variables from.
 
 default: `.env`
-
 </dd>
 
 ``-j``
 ``--max-jobs``
 
 <dd>
-
 The number of jobs to run during compilation.
 
 default: `16`
-
 </dd>
 
 ``--show-commands``
 ``--no-show-commands``
 
 <dd>
-
 Show the commands run during the build.
-
 </dd>
 
 ``--dump-assembly``
 ``--no-dump-assembly``
 
 <dd>
-
 Create an .asm dump of each object file during the build.
-
 </dd>
 
 ``--benchmark``
 ``--no-benchmark``
 
 <dd>
-
 Show all build times (total build time, build targets, other steps).
-
 </dd>
 
 ``--launch-profiler``
 ``--no-launch-profiler``
 
 <dd>
-
 If running profile targets, launch the preferred profiler afterwards.
-
 </dd>
 
 ``--keep-going``
 ``--no-keep-going``
 
 <dd>
-
 If there's a build error, continue as much of the build as possible.
-
 </dd>
 
 ``--generate-compile-commands``
 ``--no-generate-compile-commands``
 
 <dd>
-
 Generate a `compile_commands.json` file for Clang tooling use. The one for the current build will be copied to the `build/current` folder path.
-
 </dd>
 
 ``--only-required``
 ``--no-only-required``
 
 <dd>
-
 If defining a build target other than `all`, this builds only the previous targets required for that target.
-
 </dd>
 
 ``--signing-identity``
 
 <dd>
-
 **macOS only:** Set a code-signing identity from the command line to use during the build.
-
 </dd>
 
 ``--os-target-name``
 
 <dd>
-
 **macOS only:** Set the operating system name to target for the build.
 
 Supported values:
@@ -419,31 +366,24 @@ Supported values:
 | xrsimulator | visionOS (requies Xcode 15 beta 8) |
 
 Anything other than `macosx` is considered experimental.
-
 </dd>
 
 ``--os-target-version``
 
 <dd>
-
 **macOS only:** Set the operating system version to target for the build. These versions are not managed by Chalet at all, and simply get passed to the compiler. Use to target a version earlier than the one used by build machine and apple clang verison. If this and `--os-target-name` are not defined, a default will get detected.
-
 </dd>
 
 ``--quieter``
 
 <dd>
-
 Show only the build output.
-
 </dd>
 
 ``--save-user-toolchain-globally``
 
 <dd>
-
 Save the current or generated toolchain to the global settings file (`~/.chalet/config.json`) and set it as the default toolchain.
-
 </dd>
 
 [[dl:end]]
@@ -453,25 +393,25 @@ Save the current or generated toolchain to the global settings file (`~/.chalet/
 ## [Configuration Actions]
 
 ```bash
-chalet get <key>
+chalet get [options] <key>
 ```
 
 If the specified property key is valid, display the value of a JSON node at the specified key.
 
 ```bash
-chalet getkeys <key>
+chalet getkeys [options] <key>
 ```
 
 If the specified property key is a valid object, display any available property keys within that object.
 
 ```bash
-chalet set <key> <value>
+chalet set [options] <key> <value>
 ```
 
 Set the specified key to the specified value. If the value is an object, this can accept a stringified JSON object.
 
 ```bash
-chalet unset <key>
+chalet unset [options] <key>
 ```
 
 Remove the key/value pair given a valid key.
@@ -485,44 +425,34 @@ Remove the key/value pair given a valid key.
 ``<key>``
 
 <dd>
-
-The config key to change [required]
-
+The config key to change. [required]
 </dd>
 
 ``<value>``
 
 <dd>
-
-The config value to change to
-
+The config value to change to.
 </dd>
 
 ``-f``
 ``--file``
 
 <dd>
-
 The path to a JSON file to examine, if not the local/global settings.
-
 </dd>
 
 ``-l``
 ``--local``
 
 <dd>
-
 Use the local settings: `.chaletrc`
-
 </dd>
 
 ``-g``
 ``--global``
 
 <dd>
-
 Use the global settings: `~/.chalet/config.json`
-
 </dd>
 
 [[dl:end]]
@@ -532,7 +462,7 @@ Use the global settings: `~/.chalet/config.json`
 ## [Project Export]
 
 ```bash
-chalet export <kind>
+chalet export [options] <kind>
 ```
 
 Export the Chalet project to another project format.
@@ -548,7 +478,6 @@ Export the Chalet project to another project format.
 ``<kind>``
 
 <dd>
-
 The project format kind to export.
 
 [[tabs:start]]
@@ -615,7 +544,6 @@ Query Chalet for any project-specific or global information. Intended to be used
 ``<type>``
 
 <dd>
-
 The data type to query. It must be one of the following:
 
 Query results in tab-separated lists:
@@ -643,19 +571,17 @@ Query results in tab-separated lists:
 
 Query results in JSON format:
 
-| schema-chalet-json | The entire chalet.json schema in JSON format |
+| schema-chalet-json | The entire [build file](/docs/the-build-file) schema in JSON format |
 | schema-settings-json | The entire `.chaletrc` / `.chalet/config.json` schema in JSON format |
-| state-chalet-json | State applicable to the chalet.json for the current project in JSON format |
-| state-settings-json | State applicable to the `.chaletrc` / `.chalet/config.json` for the current project in JSON format |
+| state-chalet-json | State applicable to the [build file](/docs/the-build-file) for the current project in JSON format |
+| state-settings-json | State applicable to the [settings file](/docs/the-settings-file) for the current project in JSON format |
 
 </dd>
 
 ``<args>...``
 
 <dd>
-
 Data to provide to the query. This is only used by `architecture`, where a single argument is the toolchain name.
-
 </dd>
 
 [[dl:end]]
@@ -669,6 +595,65 @@ chalet validate <schema> [<files>...]
 ```
 
 This is a standalone method for validating JSON files against a schema (only [Draft-07](//json-schema.org/draft-07/json-schema-release-notes) is supported). This does the same thing that a [validation target](/docs/creating-targets?id=validation-targets) would, except it's not tied to a particular build. Simply pass the schema, along with a list of files, or a glob pattern.
+
+\
+
+**Options**
+
+[[dl:start]]
+
+``<schema>``
+
+<dd>
+A JSON schema (Draft 7) to validate files against. File requires '$schema'.
+</dd>
+
+``<files>...``
+
+<dd>
+File(s) to be validated using the selected schema.
+</dd>
+
+[[dl:end]]
+
+\\
+
+## [Convert]
+
+```bash
+chalet convert [options] <format>
+```
+
+Convert the build file from one supported format to another.
+
+\
+
+**Options**
+
+[[dl:start]]
+
+``-i``
+``--input-file``
+
+<dd>
+An input build file to use.
+
+default: `chalet.json`
+</dd>
+
+``<format>``
+
+<dd>
+The format to convert the build file to.
+
+Formats:
+
+| json | [JSON: JavaScript Object Notation](//www.json.org) |
+| yaml | [YAML Ain't Markup Language](//yaml.org/) |
+
+</dd>
+
+[[dl:end]]
 
 \\
 

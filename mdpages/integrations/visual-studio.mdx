@@ -23,7 +23,7 @@ chalet export -t vs-2022 vssolution
 
 This adds the solution `build/.vssolution/project.sln` and the `.vcxproj` files to `build/.vssolution/vcxproj/(name).vcxproj`. It will include all of the current build configurations setup by the project. However, this doesn't take into account any current builds that have run, so it is recommended to clean your build folder if any builds were run prior to running this command.
 
-Any edits done in the `chalet.json` file will require the .sln to be re-exported.
+Any edits done in the [build file](/docs/the-build-file) will require the .sln to be re-exported.
 
 Once the `.sln` file has been opened inside Visual Studio, you should see all of the build configurations that were set at the time of export:
 
