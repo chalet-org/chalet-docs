@@ -118,6 +118,9 @@ One can specify a subdirectory to contain the distribution inside of with the `s
       "subdirectory": "lib",
        "buildTargets": [
           "static-lib"
+      ],
+      "include": [
+         "${lib:shared-lib}"
       ]
    }
 }
@@ -332,6 +335,16 @@ Chalet can also generate zip archives as a distribution step with kind set to `a
       "my-installer.exe",
       "LICENSE.txt"
       "README.md"
+   ]
+}
+```
+
+```json
+"MyApp-archive": {
+   "kind": "archive",
+   "format": "zip",
+   "include": [
+      "${exce:my-app}"
    ]
 }
 ```

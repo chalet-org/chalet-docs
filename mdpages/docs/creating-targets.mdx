@@ -831,6 +831,9 @@ In build target contexts, the following is supported:
 | `${configuration}` | The current build configuration |
 | `${external:(Name)}` | The path to an external dependency by name. See [externalDependencies](/schema/latest/chalet-json?id=external-dependencies) |
 | `${externalBuild:(Name)}` | The build path for an external dependency by name. For instance, if a CMake project is located at `${external:foo}`, it will build to `${buildDir}/chalet_external/foo`, so it's more convenient to write `${externalBuild:foo}` |
+| `${link:(Name)}` | Outputs a shared library filename appropriate to the platform, toolchain & architecture with `name` as the basename |
+| `${lib:(Name)}` | Outputs an lib/archive (static library) filename appropriate to the platform, toolchain & architecture with `name` as the basename |
+| `${exec:(Name)}` | Outputs an executable filename appropriate to the platform with `name` as the basename |
 | `${home}`, `~/` | The home directory of the machine. On Windows, this is `C:\Users\(Name)` |
 | `${name}` | The name of the build/distribution target |
 | `${env:(Name)}` | An environment variable by name. For example: `${env:MY_LIBRARY_PATH}` |
@@ -896,6 +899,22 @@ Example:
    }
 }
 ```
+
+**link, lib & exec**
+
+It may not be obvious right away as to why these are needed, they are simply to make some file declarations much simpler. Below is what they output on each platform:
+
+| Variable | `${link:math}` | `${lib:math}` | `${exec:prog}`  |
+| Windows - MSVC | math.dll | glm.lib | game.prog |
+| Windows/Linux - MinGW | libmath.dll | libglm.a | prog.exe |
+| macOS | libmath.dylib | libmath.a | prog |
+| Linux | libmath.so | libmath.a | prog |
+| Web - Emscripten | libmath.wasm | libmath.a | prog.html |
+
+`lib` is not `staticLink` because it can either be a static library or an archive built alongside a .dll (as is with MinGW)
+
+> Note: Any other use case should be handled manually - ie. a 'nix style library without the `lib` prefix should be written out without a variable.
+
 
 \\
 
