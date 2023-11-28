@@ -831,7 +831,7 @@ In build target contexts, the following is supported:
 | `${configuration}` | The current build configuration |
 | `${external:(Name)}` | The path to an external dependency by name. See [externalDependencies](/schema/latest/chalet-json?id=external-dependencies) |
 | `${externalBuild:(Name)}` | The build path for an external dependency by name. For instance, if a CMake project is located at `${external:foo}`, it will build to `${buildDir}/chalet_external/foo`, so it's more convenient to write `${externalBuild:foo}` |
-| `${so:(Name)}` | Outputs a shared library filename appropriate to the platform, toolchain & architecture with `name` as the basename |
+| `${so:(Name)}` | Outputs a shared object filename (dll / dylib / so) appropriate to the platform, toolchain & architecture with `name` as the basename |
 | `${ar:(Name)}` | Outputs an archive filename (static library) appropriate to the platform, toolchain & architecture with `name` as the basename |
 | `${exe:(Name)}` | Outputs an executable filename appropriate to the platform with `name` as the basename |
 | `${home}`, `~/` | The home directory of the machine. On Windows, this is `C:\Users\(Name)` |
