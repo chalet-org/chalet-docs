@@ -7,9 +7,10 @@
 Documentation
 [@](/docs/getting-started)
 [@](/docs/the-build-file)
+[@](/docs/build-configurations)
 [@](/docs/creating-targets)
 [@](/docs/cxx-compile-settings)
-[@](/docs/build-configurations)
+[@](/docs/adding-packages)
 [@](/docs/describing-the-distribution)
 [@](/docs/command-usage)
 [@](/docs/the-settings-file)
