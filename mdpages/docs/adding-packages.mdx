@@ -54,7 +54,7 @@ Keep in mind all of the properties defined in your package will be exposed by an
 - `appleFrameworkPaths`
 - `appleFrameworks`
 
-In the package structure, `searchPaths` and `copyFilesOnRun` can be defined to import additional search paths to be added (for shared libraries compiled outside of the project). They work the same way as their original counterparts.
+In the package structure, `searchPaths` and `copyFilesOnRun` can be defined to add additional search paths (for shared libraries compiled outside of the project). They work the same way as their original counterparts.
 
 ```json
 "package": {
@@ -108,6 +108,32 @@ Header-only libraries haven't really been mentioned yet, because they're not a b
 
 \\
 
+## [Transitive Dependencies]
+
+Packages can also be imported into other packages and transitively added to a build target that depends on it.
+
+```json
+"package": {
+   "fmt": {
+      "settings:Cxx": {
+         "includeDirs": "${external:fmt}/include",
+      }
+   },
+   "my-library": {
+      "settings:Cxx": {
+         "includeDirs": "include",
+      },
+      "importPackages": [
+         "fmt"
+      ]
+   }
+}
+```
+
+The above means that when `my-library` is imported into a target, the settings in `fmt` will be imported first.
+
+\\
+
 ## [Package Paths]
 
 Packages in other directories can be imported easily by setting addition paths. Let's say you've built a library somewhere outside of your project and want to use that version. In that build file, `package` is declared with the information needed to import it somewhere else, and in your other build file, `packagePaths` can be defined to point to that other location. You can either point to the directory containing the build file, or the exact build file path.
@@ -119,9 +145,8 @@ Packages in other directories can be imported easily by setting addition paths. 
 ]
 ```
 
-During Chalet's package resolution step, the local `package` declaration will be read first, followed by the `packagePaths` directories in the order they're declared. If there is a duplicate package name, the build will fail.
+During Chalet's package resolution step, the local `package` declaration will be read first, followed by the `packagePaths` directories in the order they're declared. If there is a duplicate package name, the first one that gets resolved will take priority. This means you can override a package by declaring one with the same name locally if you wanted to. If one package has an include for a version of a header-only library, and another package has another version of the same library under the same name, the first one will be imported. 
 
-> Note: Transitive dependencies aren't handled yet, so if one package has an include for a version of a header-only library, and another package has another version of the same library, both will be imported. In the future, `package` itself may have its own `importedPackages` to solve for this situation.
-
+In the future, versioned packages along with repositories will solve for this issue.
 
 [[nav:/docs/cxx-compile-settings:/docs/describing-the-distribution]]
