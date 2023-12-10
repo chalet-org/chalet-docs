@@ -121,7 +121,7 @@ Packages in other directories can be imported easily by setting addition paths. 
 
 During Chalet's package resolution step, the local `package` declaration will be read first, followed by the `packagePaths` directories in the order they're declared. If there is a duplicate package name, the build will fail.
 
-> Note: Transitive dependencies aren't handled yet, so if one package has an include for a version of a header-only library, and another package has another version of the same library, both will be imported. In the future, `package` itself may have its own `importedPackages`
+> Note: Transitive dependencies aren't handled yet, so if one package has an include for a version of a header-only library, and another package has another version of the same library, both will be imported. In the future, `package` itself may have its own `importedPackages` to solve for this situation.
 
 
 [[nav:/docs/cxx-compile-settings:/docs/describing-the-distribution]]
