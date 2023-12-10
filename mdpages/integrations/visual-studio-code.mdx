@@ -29,6 +29,12 @@ The files are generated to `build/.vscode` as not clash with any existing files 
 
 The `tasks.json` only generates a build task for the Debug configuration, while `launch.json` provides a default debugging experience for use with the C/C++ extension by Microsoft. It is strongly recommended to use the official Chalet extension below to pick from the various build settings and run commands, as it is far more robust than managing them from a `tasks.json` file.
 
+To see the available build configurations, use CTRL+SHIFT+B or CMD+SHIFT+B for the list:
+
+![Build configurations inside VS Code](/images/vscode/vsc-shot1.png)
+
+This list is based on the selected toolchain at the time of exporting, and can be edited at any time in the `tasks.json` file. Note, that `launch.json` does rely on the `all [(host_arch) Debug]` build task, but that restriction can be removed if wanted.
+
 \\
 
 ## [Official Extension]
@@ -101,12 +107,12 @@ Keyboard shortcuts can be assigned to any of the Chalet commands. Start by openi
 ```json
 [
    {
-      "key": "f14",
-      "command": "chalet.chaletCommand"
+      "key": "f9",
+      "command": "chalet.runChalet"
    },
    {
-      "key": "f15",
-      "command": "chalet.runChalet"
+      "key": "f14",
+      "command": "chalet.chaletCommand"
    }
 ]
 ```

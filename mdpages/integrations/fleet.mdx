@@ -1,0 +1,31 @@
+---
+title: Fleet
+---
+
+<PageCategory id="ides" />
+# [${meta.title}]
+
+---
+
+Jetbrains [Fleet](//www.jetbrains.com/fleet) is a lightweight IDE currently in preview. As more features become available that are relevant to Chalet projects, information about them will be added here.
+
+\\
+
+## [Exporting project files]
+
+The following will generate Fleet project files into the `.fleet` path if there is not one already there, and `build/.fleet` otherwise.
+
+```bash
+chalet export fleet
+```
+
+At the moment, this only generates a `run.json` file and the JSON schemas for the build and settings files. For C++, Fleet relies on using `compile_commands.json`, so the important thing to note is that the project should always be generating one from its build.
+
+To build using the generated configurations, use CTRL+R or CMD+R to open the list:
+
+![Build configurations inside Fleet](/images/fleet/fleet-shot1.png)
+
+This is the same list that generates in the CLion export command, so it's based on the selected toolchain at the time of exporting. It can be edited at any time in the `run.json` file.
+
+
+[[nav:/integrations/clion:/integrations/code-blocks]]
