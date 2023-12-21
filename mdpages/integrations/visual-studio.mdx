@@ -67,13 +67,13 @@ While you could certainly create these and manage them yourself, it would be a l
 chalet export -t vs-2022 vsjson
 ```
 
-The files are generated to `build/.vs` as not clash with any existing files that may be checked-in. If `(workspace)/.vs` doesn't exit, it will get copied there.
+The files are generated to `build/.vs` as not clash with any existing files that may be checked-in. If `(workspace)/.vs` doesn't exist, it will get copied there.
 
 Open the root path in Visual Studio, and you should see a list of available build configurations:
 
 ![Visual Studio JSON with build configurations](/images/visualstudio/vs-shot4.png)
 
-The executable projects should be selectable in this dropdown:
+The executable projects should be selectable in the dropdown below. It will only show the configurations that have been built.
 
 ![Visual Studio JSON run/debug target selection](/images/visualstudio/vs-shot5.png)
 
