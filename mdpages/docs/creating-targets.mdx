@@ -905,7 +905,7 @@ Example:
 It may not be obvious right away as to why these are needed, they are simply to make some file declarations much simpler. Below is what they output on each platform:
 
 | Variable | `${so:math}` | `${ar:math}` | `${exe:prog}`  |
-| Windows - MSVC | math.dll | glm.lib | prog.exe |
+| Windows - MSVC | math.dll | math.lib | prog.exe |
 | Windows/Linux - MinGW | libmath.dll | libglm.a | prog.exe |
 | macOS | libmath.dylib | libmath.a | prog |
 | Linux | libmath.so | libmath.a | prog |
