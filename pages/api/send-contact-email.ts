@@ -5,7 +5,8 @@ import { ApiReq, ApiRes } from "Utility";
 
 const handler = middleware.use(["auth"], async (req: ApiReq, res: ApiRes<ResultSendContactEmail>): Promise<void> => {
 	try {
-		let { subject, name, email, message } = req.body as Partial<ContactEmailOptions>;
+		const body = JSON.parse(req.body) as Partial<ContactEmailOptions>;
+		let { subject, name, email, message } = body;
 		if (!email || email.length === 0) {
 			throw new Error("Invalid query sent in request: missing 'email'");
 		}
