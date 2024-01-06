@@ -132,9 +132,13 @@ const getNavBar = async (
 		getPageAnchors(content, slug, ref, schemaType),
 	]);
 	const schemaLinks: HyperLink[] = [...branches, ...tags].map((value) => {
+		let href = `/schema/${value}`;
+		if (schemaType) {
+			href += `/${schemaType}`;
+		}
 		return {
 			label: value,
-			href: `/schema/${value}/${schemaType}`,
+			href,
 		};
 	});
 	return {
