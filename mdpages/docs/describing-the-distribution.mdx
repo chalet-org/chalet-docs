@@ -187,12 +187,15 @@ For Linux, Chalet can create a `.desktop` file for desktop environments that sup
    "kind": "bundle",
    "linuxDesktopEntry": {
       "template": "platform/linux/app.desktop",
-      "icon": "platform/linux/app-logo.png"
+      "icon": "platform/linux/app-logo.png",
+      "copyToApplications": true
    }
 }
 ```
 
 The `icon` property points to a `.png` or `.svg` image of your choosing. For size: 256x256 is a safe bet. This icon gets copied to the distribution target's directory.
+
+`copyToApplications` will copy the desktop entry to `~/.local/share/applications` (if it exists in the distro) so it can be found locally. This is mainly for locally testing the distribution bundle.
 
 `template` points to the location of an input .desktop file. If one doesn't exist, it will be created. Since it's considered a template, the contents of this file have a few special variables that get replaced during the bundle step. If the contents are as follows:
 
@@ -224,8 +227,6 @@ By defining the `macosBundle` property with a `type`, the distribution target wi
 
 Application bundles are created with `"type": "app"`. Included files will be treated as Resources, with the exception of `.dylib` files, which will get copied into the bundle's `Frameworks` directory. Dependant frameworks themselves will be detected by the build targets that use them, and copied into the Frameworks directory separately, so that they don't have to be included manually.
 
-The `icon` property defines an icon for the app. If a `.png` is defined, it will be converted to an `.icns` behind the scenes before being bundled. It can also be defined as an `.icns` to begin with and will simply be copied.
-
 ```json
 "MyApp": {
    "kind": "bundle",
@@ -233,10 +234,17 @@ The `icon` property defines an icon for the app. If a `.png` is defined, it will
       "type": "app",
       "infoPropertyList": "platform/macos/Info.plist.json",
       "entitlementsPropertyList": "platform/macos/Entitlements.plist.json",
-      "icon": "platform/macos/app-logo.png"
+      "icon": "platform/macos/app-logo.png",
+      "iconMethod": "actool",
+      "copyToApplications": true
    }
 }
 ```
+
+The `icon` property defines an icon for the app. If a `.png` is defined, it will be converted to an `.icns` behind the scenes before being bundled. It can also be defined as an `.icns` to begin with and will simply be copied. 
+`iconMethod` defines the tool used generate the icon. It defaults to using `actool` if its available, with `sips` as a fallback. Otherwise, you can set it explicitly to `sips`.
+
+`copyToApplications` will copy the application bundle to `~/Applications` so it can be found locally by Launchpad. This is mainly for locally testing the distribution bundle.
 
 The `infoPropertyList` defines an [Information Property List](//developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Introduction/Introduction.html) for the bundle. It can accept mulitple file extensions, such as a static `.plist` binary file, a `.json` file containing the data normally in a `.plist`, containing an object with key/value pairs. The json contents can be inlined directly into the [build file](/docs/the-build-file). If using either json route, one can use special variables that get resolved at the time of bundling (like with linux desktop entries). They are as follows:
 
