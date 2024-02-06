@@ -46,7 +46,7 @@ const printTable: boolean = process.env.PRINT_SERVER_CACHE_LOG === "1";
 
 const getChaletReleases = (): Promise<ResultGithubReleases> => {
 	return serverCache.get(`chalet-releases`, async () => {
-		const url = `https://api.github.com/repos/chalet-org/chalet/releases`;
+		const url = `https://api.github.com/repos/chalet-org/chalet/releases?per_page=100`;
 		const response = await fetchFromGithub(url);
 		const releases: any[] = await response.json();
 		const allowedReleases = releases.filter((release) => !release.draft);
