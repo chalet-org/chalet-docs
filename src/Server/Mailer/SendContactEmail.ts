@@ -2,14 +2,9 @@ import email from "email-validator";
 import { EmailSender } from "nodemailer-mjml-sender";
 import path from "path";
 
-import { mailerEnvironment as env } from "./MailerEnvironment";
+import { ContactEmailOptions } from "Server/InputTypes";
 
-export type ContactEmailOptions = {
-	subject: string;
-	email: string;
-	name: string;
-	message: string;
-};
+import { mailerEnvironment as env } from "./MailerEnvironment";
 
 async function sendContactEmail(options: ContactEmailOptions) {
 	try {
@@ -38,7 +33,7 @@ async function sendContactEmail(options: ContactEmailOptions) {
 			.from(env.sender)
 			.to(env.recipients)
 			.replyTo(options.email)
-			.subject(`New message from ${options.name}`)
+			.subject(`New message from ${options.firstName} ${options.lastName}`)
 			.template(path.join(templatePath, "contact.mjml"), {
 				...options
 			});

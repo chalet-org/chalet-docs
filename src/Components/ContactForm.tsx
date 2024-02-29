@@ -11,14 +11,25 @@ import { BlockQuote } from "./BlockQuote";
 import { Button } from "./Button";
 import { hasMinWidth } from "./GlobalStyles";
 import { Link } from "./Link";
+import { ContactEmailOptions } from "Server/InputTypes";
 
 const ContactForm = () => {
-	const [formData, setFormData] = useState<Record<string, string>>({});
+	const [formData, setFormData] = useState<Partial<ContactEmailOptions>>({});
+	const [formValidators, setFormValidators] = useState<Partial<Record<keyof ContactEmailOptions, boolean>>>({});
 	const [submitted, setSubmitted] = useState<boolean>(false);
 	const [error, setError] = useState<Optional<string>>(null);
 
-	const validEmail = useMemo(() => formData.email && email.validate(formData.email), [formData.email]);
-	const invalidForm = !validEmail || !formData.message || !formData.name || !formData.subject;
+	const validEmail = useMemo(() => (formData.email && email.validate(formData.email)) || false, [formData.email]);
+	const invalidForm =
+		!validEmail || !formData.message || !formData.firstName || !formData.lastName || !formData.subject;
+
+	const getInputClassList = useCallback(
+		(key: keyof ContactEmailOptions) => {
+			const isValid = formValidators[key] ?? true;
+			return !isValid ? "invalid" : "";
+		},
+		[formValidators]
+	);
 
 	const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
 		try {
@@ -34,19 +45,47 @@ const ContactForm = () => {
 		}
 	};
 
-	const onChange = useCallback((ev: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
-		ev.preventDefault();
-		if (!ev.target.id) return;
-
-		setFormData((data) => {
-			if (ev.target.value.length === 0) {
-				delete data[ev.target.id];
+	const isValid = useCallback(
+		(key: keyof ContactEmailOptions, value: string): boolean => {
+			if (key == "email") {
+				return email.validate(value);
 			} else {
-				data[ev.target.id] = ev.target.value;
+				return value.length > 0;
 			}
-			return { ...data };
-		});
-	}, []);
+		},
+		[validEmail]
+	);
+
+	const onFocus = useCallback(
+		(ev: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
+			ev.preventDefault();
+			if (!ev.target.id) return;
+
+			setFormValidators((data) => {
+				data[ev.target.id] = isValid(ev.target.id as keyof ContactEmailOptions, ev.target.value);
+				return { ...data };
+			});
+		},
+		[isValid]
+	);
+	const onChange = useCallback(
+		(ev: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
+			ev.preventDefault();
+			if (!ev.target.id) return;
+
+			onFocus(ev);
+
+			setFormData((data) => {
+				if (!isValid(ev.target.id as keyof ContactEmailOptions, ev.target.value)) {
+					delete data[ev.target.id];
+				} else {
+					data[ev.target.id] = ev.target.value;
+				}
+				return { ...data };
+			});
+		},
+		[isValid]
+	);
 
 	if (submitted) {
 		return (
@@ -70,21 +109,64 @@ const ContactForm = () => {
 			<form onSubmit={handleSubmit}>
 				<div className="fieldrow">
 					<div className="fieldwrap">
-						<label htmlFor="name" />
-						<input id="name" type="text" title="Name" placeholder="Name" onChange={onChange} />
+						<label htmlFor="firstName" />
+						<input
+							id="firstName"
+							className={getInputClassList("firstName")}
+							type="text"
+							title="First Name"
+							placeholder="First Name"
+							onChange={onChange}
+							onFocus={onFocus}
+						/>
 					</div>
 					<div className="spacer" />
 					<div className="fieldwrap">
-						<label htmlFor="email" />
-						<input id="email" type="email" title="Email" placeholder="Email" onChange={onChange} />
+						<label htmlFor="lastName" />
+						<input
+							id="lastName"
+							className={getInputClassList("lastName")}
+							type="text"
+							title="Last Name"
+							placeholder="Last Name"
+							onChange={onChange}
+							onFocus={onFocus}
+						/>
 					</div>
 				</div>
 
+				<label htmlFor="email" />
+				<input
+					id="email"
+					className={getInputClassList("email")}
+					type="email"
+					title="Email"
+					placeholder="Email"
+					onChange={onChange}
+					onFocus={onFocus}
+				/>
+
 				<label htmlFor="subject" />
-				<input id="subject" type="text" title="Subject" placeholder="Subject" onChange={onChange} />
+				<input
+					id="subject"
+					className={getInputClassList("subject")}
+					type="text"
+					title="Subject"
+					placeholder="Subject"
+					onChange={onChange}
+					onFocus={onFocus}
+				/>
 
 				<label htmlFor="message" />
-				<TextArea id="message" minRows={3} title="Message" placeholder="Message" onChange={onChange} />
+				<TextArea
+					id="message"
+					className={getInputClassList("message")}
+					minRows={3}
+					title="Message"
+					placeholder="Message"
+					onChange={onChange}
+					onFocus={onFocus}
+				/>
 
 				<div className="controls">
 					<Button type="submit" title="Submit" disabled={invalidForm}>
@@ -142,6 +224,10 @@ const Styles = styled.div`
 			margin-bottom: 1rem;
 			border-radius: 0.25rem;
 			transition: border-color 0.125s linear;
+
+			&.invalid {
+				border-color: ${getThemeVariable("codeRed")};
+			}
 
 			&::placeholder {
 				color: ${getThemeVariable("primaryText")};
