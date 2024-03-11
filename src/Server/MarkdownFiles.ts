@@ -5,10 +5,9 @@ import { serialize } from "next-mdx-remote/serialize";
 import os from "os";
 import nodePath from "path";
 
-import { Dictionary, Optional } from "Utility";
+import { Dictionary } from "Utility";
 
 import { getChaletBranches } from "./ChaletBranches";
-import { getChaletReleases } from "./ChaletReleases";
 import { getChaletTags } from "./ChaletTags";
 import { getPageAnchors, parseCustomMarkdown } from "./CustomMarkdownParser";
 import { ResultMDXPage, ResultNavigation, HyperLink, SchemaType, ResultDataPage } from "./ResultTypes";
@@ -197,7 +196,7 @@ const getNotFoundPage = () => getMdxPage("_404", {}, true);
 
 const getInternalServerErrorPage = () => getMdxPage("_500", {}, true);
 
-const getPageWithData = async (slug: string, query: Dictionary<boolean> = {}): Promise<ResultDataPage> => {
+const getPageWithData = async (slug: string): Promise<ResultDataPage> => {
 	const navData = await getNavBar(slug);
 	const data: ResultDataPage = {
 		...navData,
