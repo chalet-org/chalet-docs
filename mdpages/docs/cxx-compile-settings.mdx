@@ -455,6 +455,21 @@ On linux, statically linking the runtime libraries may not be wise, but in the c
 
 In MSVC, `/MTd` is passed instead of `/MDd` in debug builds, and `/MT` is passed instead of `/MD` in non-debug builds. statically linking the runtime libraries in MSVC means not requiring `api-ms-win-crt-*.dll` files when it comes time to distribute
 
+\\
+
+## [Just My Code debugging]
+
+"Just My Code" debugging excludes standard library and system headers during debugging. Before version 0.7.18, this was turned on in by default in build configurations with debugging symbols in MSVC. In version 0.7.18 and later this can be turned off with the `justMyCodeDebugging` flag.
+
+GCC with GDB has a way to have this behavior as well with `.gdbinit`, but Chalet does not automate this yet. 
+
+```json
+"some-target": {
+   "settings:Cxx": {
+      "justMyCodeDebugging": false
+   }
+}
+```
 
 \\
 

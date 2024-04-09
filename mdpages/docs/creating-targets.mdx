@@ -824,6 +824,8 @@ In some areas, variable substitution is supported for environment variables, met
 
 In build target contexts, the following is supported:
 
+| `${maxJobs}` | The max jobs value from settings (defaults to the number of CPU cores on the machine) |
+| `${outputDir}` | The output build directory (ie. `build`) |
 | `${architecture}` | The current build architecture |
 | `${targetTriple}` | The current build architecture target triple |
 | `${buildDir}` | The main build directory for the current configuration & architecture |
@@ -860,7 +862,7 @@ The metadata variables are as follows:
 
 **See also:**
 
-[Workspace Metadata](/docs/the-build-file?id=workspace-metadata)
+[Workspace Metadata](/docs/the-build-file?id=workspace-metadata)  
 [Project Metadata](/docs/creating-targets?id=project-metadata)
 
 Example:
