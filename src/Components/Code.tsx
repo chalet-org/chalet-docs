@@ -15,7 +15,6 @@ import styled, { css } from "styled-components";
 
 import { globalFonts } from "Components";
 import { getThemeVariable } from "Theme";
-import { Dictionary } from "Utility";
 
 Prism.languages.bash = {
 	sudo: {
@@ -197,7 +196,7 @@ export { CodePre, Code, CodeHeader, CodePreFromMarkdown };
 const boldWeight: number = 800;
 
 type StyleProps = {
-	$fonts?: Dictionary<string>;
+	$fonts?: typeof globalFonts;
 };
 
 const codeCss = css<StyleProps>`

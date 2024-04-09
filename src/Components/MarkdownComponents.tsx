@@ -1,13 +1,8 @@
-import { MDXRemoteProps } from "next-mdx-remote";
-
-import { Dictionary } from "Utility";
 import { dynamic } from "Utility";
 
 import { AnchoredHeadingObject, HeadingObject } from "./Heading";
 
-export type MDXComponents = Dictionary<React.ComponentType<any>>;
-
-const mdxComponents: MDXComponents = {
+const mdxComponents = {
 	...AnchoredHeadingObject,
 	...HeadingObject,
 	a: dynamic.component("Link"),
@@ -36,6 +31,8 @@ const mdxComponents: MDXComponents = {
 	ImportantNote: dynamic.component("ImportantNote"),
 	Code: dynamic.component("CodePreFromMarkdown"),
 };
+
+export type MDXComponents = typeof mdxComponents;
 
 const schemaComponents: MDXComponents = {
 	...mdxComponents,

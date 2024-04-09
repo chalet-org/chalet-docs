@@ -23,7 +23,7 @@
 		<mj-section background-color="#eef5f5">
 			<mj-column>
 				<mj-text align="left" color="#333" font-size="14px" line-height="12px" font-family="Arial">
-					Name: {{ name }}
+					Name: {{ firstName }} {{ lastName }}
 				</mj-text>
 				<mj-text align="left" color="#333" font-size="14px" line-height="12px" font-family="Arial">
 					Email: {{ email }}

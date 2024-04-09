@@ -1,5 +1,5 @@
-import { ContactEmailOptions } from "Server/Mailer/SendContactEmail";
 import { ResultSearchResults } from "Server/ResultTypes";
+import { ContactEmailOptions } from "Server/InputTypes";
 
 import { BaseApi } from "./BaseApi";
 
