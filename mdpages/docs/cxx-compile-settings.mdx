@@ -85,27 +85,17 @@ These are directories (preferably relative) to be included during compilation, a
 
 ```json
 "includeDirs": [
-   "src"
+   "src",
+   "${external:foo}/include"
 ]
 ```
 
 This means the `src` folder is a root of included paths, so folders are required in `#include` directives.
 
 ```cpp
-#include "foo.hpp"         // src/foo.hpp
-#include "bar/bar.hpp"     // src/folder/bar.hpp
-```
-
-```json
-"includeDirs": [
-   "${external:foo}/include",
-]
-```
-
-Typically this means if a library has subdirectories, you have to declare your include directives in code as: 
-
-```cpp
-#include <subdir/foo.hpp>  // ${external:foo}/include/subdir/foo.hpp
+#include "foo.hpp"            // src/foo.hpp
+#include "folder/bar.hpp"     // src/folder/bar.hpp
+#include <subdir/foo.hpp>     // ${external:foo}/include/subdir/foo.hpp
 ```
 
 Some might want to do the following:
@@ -115,7 +105,7 @@ Some might want to do the following:
 #include "bar.hpp"         // src/folder/bar.hpp
 ```
 
-Glob patterns are also supported for this reason, so one can include a directory recursively:
+Glob patterns are supported for this reason, so one can include a directory recursively:
 
 ```json
 "includeDirs": [
@@ -124,7 +114,7 @@ Glob patterns are also supported for this reason, so one can include a directory
 ]
 ```
 
-However, the problem with this approach is that simply adding a folder will add another include path to the build command, forcing a recompile of that target, so it would be more desirable to either place all sources in a single folder, or use the previous subfolder approach. This would ultimately come down to personal preference.
+However, the problem with this approach is that simply adding a folder will add another include path to the build command, forcing a recompile of that target, so it would be more desirable to either place all sources in a single folder, or use the previous subfolder approach. This would boil down to personal preference.
 
 > Note: compiler include paths are automatically added.
 
