@@ -46,6 +46,7 @@ const getNiceArchName = (arch: string, platform: OperatingSystem) => {
 		case "amd64":
 		case "x86_64":
 			return platform === OperatingSystem.MacOS ? "Intel 64-bit" : "x64";
+		case "aarch64":
 		case "arm64":
 			return platform === OperatingSystem.MacOS ? "Apple Silicon" : "ARM64";
 		case "arm":

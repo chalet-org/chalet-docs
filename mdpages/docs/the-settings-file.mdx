@@ -49,7 +49,9 @@ The first block is the options, and most of them will be familiar, because with 
    "benchmark": true,
    "launchProfiler": true,
    "keepGoing": true,
+   "compilerCache": false,
    "generateCompileCommands": false,
+   "onlyRequired": false,
    "maxJobs": 16,
    "toolchain": "apple-llvm",
    "configuration": "Release",
@@ -60,8 +62,10 @@ The first block is the options, and most of them will be familiar, because with 
    "outputDir": "build",
    "externalDir": "chalet_external",
    "distributionDir": "dist",
+   "osTargetName": "macosx",
+   "osTargetVersion": "14.2",
    "signingIdentity": "${env:MACOS_SIGNING_IDENTITY}",
-   "runTarget": "executable-target",
+   "lastTarget": "executable-target",
    "runArguments": {
       "executable-target": "-foo"
    }
@@ -186,10 +190,10 @@ Presets:
 
 </dd>
 
-``arch``
+``architecture``
 
 <dd>
-Target architecture.
+The architecture to target for the build.
 
 default: `auto`
 </dd>
@@ -266,8 +270,8 @@ Supported values:
 | watchsimulator | watchOS Simulator |
 | appletvos | tvOS |
 | appletvsimulator | tvOS Simulator |
-| xros | visionOS (requies Xcode 15 beta 8) |
-| xrsimulator | visionOS (requies Xcode 15 beta 8) |
+| xros | visionOS (requies Xcode 15) |
+| xrsimulator | visionOS (requies Xcode 15) |
 
 Anything other than `macosx` is considered experimental.
 </dd>
@@ -293,7 +297,7 @@ Below is an example toolchain that generates for `apple-llvm` on MacOS.
 "toolchains": {
    "apple-llvm": {
       "version": "13.1.6",
-      "strategy": "ninja",
+      "strategy": "native",
       "buildPathStyle": "target-triple",
       "compilerCpp": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
       "compilerC": "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",

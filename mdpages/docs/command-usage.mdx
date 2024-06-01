@@ -226,6 +226,7 @@ Presets:
 | llvm-vs-2019 | LLVM/Clang in Microsoft® Visual Studio 2019 |
 | llvm | The LLVM Compiler Infrastructure Project |
 | gcc | MinGW: Minimalist GNU Compiler Collection for Windows |
+| emscripten | Emscripten compiler toolchain for WebAssembly |
 | intel-llvm-vs-2022 | Intel® oneAPI DPC++/C++ Compiler with Visual Studio 2022 environment |
 | intel-llvm-vs-2019 | Intel® oneAPI DPC++/C++ Compiler with Visual Studio 2019 environment |
 
@@ -238,6 +239,7 @@ Presets:
 | apple-llvm | Apple® LLVM (Requires Xcode or "Command Line Tools for Xcode") |
 | llvm | The LLVM Compiler Infrastructure Project |
 | gcc | GNU Compiler Collection |
+| emscripten | Emscripten compiler toolchain for WebAssembly |
 | intel-classic | Intel® C++ Compiler Classic (for x86_64 processors) |
 
 |Linux|
@@ -248,6 +250,7 @@ Presets:
 
 | llvm | The LLVM Compiler Infrastructure Project |
 | gcc | GNU Compiler Collection |
+| emscripten | Emscripten compiler toolchain for WebAssembly |
 
 [[tabs:end]]
 
@@ -257,7 +260,7 @@ Presets:
 ``--arch``
 
 <dd>
-Target architecture.
+The architecture to target for the build.
 
 default: `auto`
 </dd>
@@ -272,6 +275,19 @@ The build strategy to use for the selected toolchain. When the toolchain is gene
 | ninja     | Uses the Ninja version defined by the `ninja` property. |
 | makefile  | Uses the GNU Make version defined by the `make` property. |
 | msbuild   | Creates a Visual Studio solution & builds with MSBuild. |
+
+</dd>
+
+``-p``
+``--build-path-style``
+
+<dd>
+The build path style, with the configuration appended by an underscore.
+
+| target-triple   | The target architecture's triple - ex: `build/x64-linux-gnu_Debug` |
+| toolchain-name  | The toolchain's name - ex: `build/my-cool-toolchain_name_Debug` |
+| configuration   | Just the build configuration - ex: `build/Debug` |
+| architecture    | The architecture's identifier - ex: `build/x86_64_Debug` |
 
 </dd>
 
@@ -518,6 +534,125 @@ Kinds:
 
 [[tabs:end]]
 
+</dd>
+
+``-i``
+``--input-file``
+
+<dd>
+An input build file to use.
+
+default: `chalet.json`
+</dd>
+
+``-s``
+``--settings-file``
+
+<dd>
+The path to a settings file to use.
+
+default: `.chaletrc`
+</dd>
+
+``-r``
+``--root-dir``
+
+<dd>
+The root directory to run the build from
+</dd>
+
+``-x``
+``--external-dir``
+
+<dd>
+The directory to install external dependencies into.
+
+default: `chalet_external`
+</dd>
+
+``-o``
+``--output-dir``
+
+<dd>
+The output directory of the build.
+
+default: `build`
+</dd>
+
+``-d``
+``--distribution-dir``
+
+<dd>
+The root directory for all distribution bundles.
+
+default: `dist`
+</dd>
+
+``-c``
+``--configurations``
+
+<dd>
+The build configurations to export, separated by comma.
+
+example: `Debug,Release`
+</dd>
+
+``-t``
+``--toolchain``
+
+<dd>
+A toolchain or toolchain preset to use.
+</dd>
+
+``-a``
+``--arch``
+
+<dd>
+The architecture to target for the build.
+
+default: `auto`
+</dd>
+
+``-p``
+``--build-path-style``
+
+<dd>
+The build path style, with the configuration appended by an underscore.
+
+| target-triple   | The target architecture's triple - ex: `build/x64-linux-gnu_Debug` |
+| toolchain-name  | The toolchain's name - ex: `build/my-cool-toolchain_name_Debug` |
+| configuration   | Just the build configuration - ex: `build/Debug` |
+| architecture    | The architecture's identifier - ex: `build/x86_64_Debug` |
+
+</dd>
+
+``-e``
+``--env-file``
+
+<dd>
+A file to load environment variables from.
+
+default: `.env`
+</dd>
+
+``--show-commands``
+``--no-show-commands``
+
+<dd>
+Show the commands run during the build.
+</dd>
+
+``--benchmark``
+``--no-benchmark``
+
+<dd>
+Show all build times (total build time, build targets, other steps).
+</dd>
+
+``-open``
+
+<dd>
+Open the project in its associated editor after exporting.
 </dd>
 
 [[dl:end]]
