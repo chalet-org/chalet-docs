@@ -29,6 +29,10 @@ Disallow: /schema/v0.3.*
 Disallow: /schema/v0.4.*
 Disallow: /schema/v0.5.*
 Disallow: /schema/v0.6.*
+Disallow: /download/v0.3.*
+Disallow: /download/v0.4.*
+Disallow: /download/v0.5.*
+Disallow: /download/v0.6.*
 Allow: /api/sitemap.xml$
 
 Sitemap: https://www.chalet-work.space/api/sitemap.xml
