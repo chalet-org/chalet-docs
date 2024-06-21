@@ -1,5 +1,5 @@
 import debounce from "lodash/debounce";
-import { MDXRemote, MDXRemoteProps } from "next-mdx-remote";
+import { MDXRemote } from "next-mdx-remote";
 import { useRouter } from "next/router";
 import React, { useCallback, useEffect, useRef } from "react";
 import styled from "styled-components";
@@ -26,7 +26,7 @@ type AnchorData = {
 const goToFocusedLink = (
 	pageLayout: Optional<HTMLDivElement>,
 	path: string,
-	setFocusedId: (inValue: string) => void
+	setFocusedId: (inValue: string) => void,
 ) => {
 	if (pageLayout === null) return;
 
@@ -98,7 +98,7 @@ const MarkdownLayout = ({ meta, mdx, children, components, trackScrolling = true
 				goToFocusedLink(pageLayout.current, path, setFocusedId);
 			}
 		}, 10),
-		[navOpen, trackScrolling, pageLayout.current, router.asPath]
+		[navOpen, trackScrolling, pageLayout.current, router.asPath],
 	);
 
 	return (

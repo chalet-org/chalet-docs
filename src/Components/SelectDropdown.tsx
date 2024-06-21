@@ -84,7 +84,9 @@ const Styles = styled.div`
 		border-radius: 0.25rem;
 		background-color: ${getThemeVariable("background")};
 
-		transition: background-color 0.125s linear, color 0.125s linear;
+		transition:
+			background-color 0.125s linear,
+			color 0.125s linear;
 
 		&:hover,
 		&:active {
@@ -100,7 +102,7 @@ const Styles = styled.div`
 	}
 
 	&:after {
-		content: "\u25BE";
+		content: "\25BE";
 		display: block;
 		position: absolute;
 		font-size: 1.25rem;

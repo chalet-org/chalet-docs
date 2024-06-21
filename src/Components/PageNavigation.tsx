@@ -81,7 +81,7 @@ const Styles = styled.div`
 			text-align: left;
 
 			&:before {
-				content: "\u276E";
+				content: "\276E";
 				top: 50%;
 				left: 1rem;
 			}
@@ -92,7 +92,7 @@ const Styles = styled.div`
 			text-align: right;
 
 			&:after {
-				content: "\u276F";
+				content: "\276F";
 				top: 50%;
 				right: 1rem;
 			}

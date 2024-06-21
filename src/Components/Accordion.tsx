@@ -18,7 +18,7 @@ const Accordion = ({ label, children }: Props) => {
 
 	const clientHeight = useMemo(
 		() => contentRef.current?.clientHeight ?? 0,
-		[accordionNotifier, contentRef.current?.clientHeight]
+		[accordionNotifier, contentRef.current?.clientHeight],
 	);
 
 	// We can just use this noop to trigger re-renders
@@ -73,13 +73,15 @@ const AccordionHandle = styled.button`
 	background-color: transparent;
 	border-top: 0.0675rem dashed transparent;
 	border-bottom: 0.0625rem dashed transparent;
-	transition: border-top-color 0.125s linear, border-bottom-color 0.125s linear;
+	transition:
+		border-top-color 0.125s linear,
+		border-bottom-color 0.125s linear;
 
 	&:before {
 		display: block;
 		position: absolute;
 		left: 0.25rem;
-		content: "\u276F\u276F";
+		content: "\276F\276F";
 		font-size: 0.825rem;
 		font-weight: 400;
 		letter-spacing: -0.125rem;
@@ -106,7 +108,9 @@ const AccordionContent = styled.div`
 	overflow: hidden;
 	max-height: 0rem;
 	opacity: 0;
-	transition: max-height 0.25s linear, opacity 0.25s linear;
+	transition:
+		max-height 0.25s linear,
+		opacity 0.25s linear;
 
 	&.open {
 		opacity: 1;

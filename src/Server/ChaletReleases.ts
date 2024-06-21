@@ -1,4 +1,3 @@
-import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
 
 import { Optional } from "Utility";
@@ -55,7 +54,7 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 			allowedReleases.map(
 				async (
 					{ url, html_url, id, tag_name, name, body, draft, prerelease, created_at, published_at, assets },
-					index
+					index,
 				) => {
 					let text = body;
 					let mdx: Optional<ResultMDX> = null;
@@ -81,13 +80,13 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 							(result: string, p1: string) => {
 								const formatted = p1.replace("...", " ... ");
 								return `[${formatted}](https://github.com/chalet-org/chalet/compare/${p1})`;
-							}
+							},
 						);
 						text = text.replace(
 							/https:\/\/github\.com\/chalet\-org\/chalet\/commits\/(v\d+\.\d+\.\d+)/g,
 							(result: string, p1: string) => {
 								return `[${p1}](https://github.com/chalet-org/chalet/commits/${p1})`;
-							}
+							},
 						);
 						text = text.replace(/## (.+)/g, "##### $1");
 						mdx = await serialize(text, {
@@ -111,8 +110,8 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 						zipball_url: `https://github.com/chalet-org/chalet/archive/refs/tags/${tag_name}.zip`,
 						assets,
 					};
-				}
-			)
+				},
+			),
 		);
 
 		const getTotalName = (name: string) => {
@@ -131,7 +130,7 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 						kind: p5 ?? "zip",
 					};
 					return result;
-				}
+				},
 			);
 			return ret;
 		};
