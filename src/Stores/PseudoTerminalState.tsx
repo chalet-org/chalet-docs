@@ -16,13 +16,14 @@ const self = shallowProxy("pseudo-terminal-store", {
 	},
 
 	commitLine: async (callback: TerminalCommandCallback) => {
-		self.history.push(self.currentLine);
+		const currentLine = self.currentLine;
+		self.currentLine = "";
+		self._.savedCurrentLine = "";
+		self.history.push(currentLine);
 		self._.lastHistory = self.history.length;
-		const result = await callback(self.currentLine);
+		const result = await callback(currentLine);
 		if (result !== null) {
 			self.responses.push(result);
-			self.currentLine = "";
-			self._.savedCurrentLine = "";
 		}
 	},
 	registerBackspace: () => {
