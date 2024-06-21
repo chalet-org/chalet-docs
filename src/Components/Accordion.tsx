@@ -14,17 +14,9 @@ const Accordion = ({ label, children }: Props) => {
 
 	const [open, setOpen] = useState<boolean>(false);
 	const contentRef = useRef<HTMLDivElement>(null);
-	const [computedHeight, setComputedHeight] = useState<number>(0);
 
-	const clientHeight = useMemo(
-		() => contentRef.current?.clientHeight ?? 0,
-		[accordionNotifier, contentRef.current?.clientHeight],
-	);
-
-	// We can just use this noop to trigger re-renders
-	useEffect(() => {
-		setComputedHeight(clientHeight);
-	}, [clientHeight]);
+	const currentContentRef = useMemo(() => contentRef.current, [accordionNotifier, contentRef.current]);
+	const clientHeight = useMemo(() => currentContentRef?.clientHeight, [currentContentRef?.clientHeight]);
 
 	const className = clsx({
 		open: open,
@@ -44,7 +36,7 @@ const Accordion = ({ label, children }: Props) => {
 			</AccordionHandle>
 			<AccordionContent
 				className={className}
-				style={{ maxHeight: open ? `calc(${computedHeight}px + 2rem)` : "0rem" }}
+				style={{ maxHeight: open ? `calc(${clientHeight}px + 2rem)` : "0rem" }}
 			>
 				<div className="inner" ref={contentRef}>
 					{children}
