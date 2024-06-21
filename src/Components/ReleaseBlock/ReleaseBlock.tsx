@@ -1,4 +1,4 @@
-import dateFormat from "date-fns/format";
+import { format as dateFormat } from "date-fns/format";
 import { MDXRemote } from "next-mdx-remote";
 import React, { useMemo } from "react";
 import styled from "styled-components";
@@ -112,7 +112,9 @@ const InfoBlock = styled.div`
 
 				> i > svg > path,
 				> i > svg > circle {
-					transition: color 0.125s linear, fill 0.125s linear;
+					transition:
+						color 0.125s linear,
+						fill 0.125s linear;
 				}
 			}
 
