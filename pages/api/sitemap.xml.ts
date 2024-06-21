@@ -9,7 +9,7 @@ const handler = middleware.use([], async (req: ApiReq, res: ApiRes<any>) => {
 		const sitemap = await serverCache.get(
 			"sitemap.xml",
 			async () => {
-				const pages = await getPagesCache();
+				const pages = await getPagesCache(true);
 				const pageData = pages.map(({ url }) => url);
 
 				const host: string = `https://${req.headers.host}`;
@@ -31,7 +31,7 @@ const handler = middleware.use([], async (req: ApiReq, res: ApiRes<any>) => {
 
 				return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${data}</urlset>`;
 			},
-			cacheLength
+			cacheLength,
 		);
 		res.setHeader("Content-Type", "application/xml");
 		res.status(200).send(sitemap);

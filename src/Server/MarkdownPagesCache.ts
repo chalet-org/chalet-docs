@@ -36,7 +36,7 @@ export type PageCache = {
 	content: string;
 };
 
-const getPagesCache = (): Promise<PageCache[]> => {
+const getPagesCache = (allRoutes: boolean = false): Promise<PageCache[]> => {
 	return serverCache.get(`pages`, async () => {
 		const pages = await recursiveDirectorySearch(mdpages, ["mdx", "md"]);
 		const internalPage = path.join(path.sep, mdpages, "_");
@@ -66,20 +66,33 @@ const getPagesCache = (): Promise<PageCache[]> => {
 			});
 
 		const tags = await getChaletTags();
-		const tagPaths: string[] = flatten(
-			await Promise.all([
-				...tags.map((b) => getSchemaReferencePaths(SchemaType.ChaletJson, b)),
-				...tags.map((b) => getSchemaReferencePaths(SchemaType.SettingsJson, b)),
-			])
-		);
+		let tagPaths: string[] = [];
+		if (allRoutes) {
+			tagPaths = flatten(
+				await Promise.all([
+					...tags.map((b) => getSchemaReferencePaths(SchemaType.ChaletJson, b)),
+					...tags.map((b) => getSchemaReferencePaths(SchemaType.SettingsJson, b)),
+				]),
+			);
+		} else if (tags.length > 0) {
+			tagPaths = flatten(
+				await Promise.all([
+					getSchemaReferencePaths(SchemaType.ChaletJson, tags[0]),
+					getSchemaReferencePaths(SchemaType.SettingsJson, tags[0]),
+				]),
+			);
+		}
 
 		const branches = await getChaletBranches();
-		const branchPaths: string[] = flatten(
-			await Promise.all([
-				...branches.map((b) => getSchemaReferencePaths(SchemaType.ChaletJson, b)),
-				...branches.map((b) => getSchemaReferencePaths(SchemaType.SettingsJson, b)),
-			])
-		);
+		let branchPaths: string[] = [];
+		if (allRoutes) {
+			branchPaths = flatten(
+				await Promise.all([
+					...branches.map((b) => getSchemaReferencePaths(SchemaType.ChaletJson, b)),
+					...branches.map((b) => getSchemaReferencePaths(SchemaType.SettingsJson, b)),
+				]),
+			);
+		}
 
 		const schemaPageContentRaw = fs.readFileSync(path.join(process.cwd(), schemaPage, "index.mdx"), "utf8");
 		const { data: schemaPageMeta, content: schemaPageContent } = matter(schemaPageContentRaw);
