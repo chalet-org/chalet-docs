@@ -73,7 +73,7 @@ const PseudoTerminalImpl = ({ prompt, onCommand, cursorColor, promptColor, ...co
 				}
 			}
 		},
-		[onCommand]
+		[onCommand],
 	);
 
 	return (
@@ -99,7 +99,7 @@ const PseudoTerminalImpl = ({ prompt, onCommand, cursorColor, promptColor, ...co
 								<TerminalPrompt prompt={prompt} color={promptColor} />
 								{line}
 							</p>
-							{line.length > 0 && <p>{responses[i]}</p>}
+							{line.length > 0 && responses.length > i && <p>{responses[i]}</p>}
 						</React.Fragment>
 					);
 				})}
