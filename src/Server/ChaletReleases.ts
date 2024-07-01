@@ -48,7 +48,12 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 		const url = `https://api.github.com/repos/chalet-org/chalet/releases?per_page=100`;
 		const response = await fetchFromGithub(url);
 		const releases: any[] = await response.json();
-		const allowedReleases = releases.filter((release) => !release.draft);
+		const test: string = "";
+		test.startsWith("");
+		const allowedReleases = releases.filter(
+			(release) =>
+				!release.draft && typeof release.tag_name === "string" && !release.tag_name.startsWith("snapshot-"),
+		);
 
 		const withTransformedBody: ResultGithubReleases = await Promise.all(
 			allowedReleases.map(
