@@ -52,20 +52,13 @@ export const getServerSideProps: GetServerSideProps<Props> = withServerErrorHand
 		if (!tags.includes(ref) && !branches.includes(ref)) {
 			throw new Error(`Download for ref not found: ${ref}`);
 		}
-		const downloadLinks: HyperLink[] = tags.map((value) => {
-			return {
-				label: value,
-				href: `/download/${value}`,
-			};
-		});
 
 		const page = await getPageWithData("download");
 		return {
 			props: {
 				...page,
 				releases,
-				downloadLinks,
 			},
 		};
-	}
+	},
 );

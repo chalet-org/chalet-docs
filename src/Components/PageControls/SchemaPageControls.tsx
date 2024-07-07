@@ -18,9 +18,9 @@ const schemaPicks: HyperLink[] = [
 	},
 ];
 
-type Props = Pick<ResultNavigation, "schemaLinks" | "anchors">;
+type Props = Pick<ResultNavigation, "refs" | "anchors">;
 
-const SchemaPageControls = ({ schemaLinks, anchors }: Props) => {
+const SchemaPageControls = ({ refs, anchors }: Props) => {
 	const router = useRouter();
 	const path = router.asPath.split("?")[0];
 	const split = path.split("/");
@@ -40,7 +40,7 @@ const SchemaPageControls = ({ schemaLinks, anchors }: Props) => {
 				href: `/${kind}/${ref}/${jsonFile}${to}`,
 				label: text,
 			})),
-		[router.asPath]
+		[router.asPath],
 	);
 
 	const memoSchema: HyperLink[] = useMemo(
@@ -49,8 +49,19 @@ const SchemaPageControls = ({ schemaLinks, anchors }: Props) => {
 				href: `/${kind}/${ref}/${href}`,
 				label,
 			})),
-		[router.asPath]
+		[router.asPath],
 	);
+
+	const schemaLinks: HyperLink[] = refs.map((value) => {
+		let href = `/schema/${value}`;
+		if (jsonFile) {
+			href += `/${jsonFile}`;
+		}
+		return {
+			label: value,
+			href,
+		};
+	});
 
 	const rootUrl: string = `/${kind}/${ref}/${jsonFile}`;
 	const isTag: boolean = ref !== "main";

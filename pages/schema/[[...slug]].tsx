@@ -72,5 +72,5 @@ export const getServerSideProps: GetServerSideProps<Props> = withServerErrorHand
 				isSchema: true,
 			},
 		};
-	}
+	},
 );

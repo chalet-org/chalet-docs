@@ -24,7 +24,7 @@ const self = shallowProxy("ui-store", {
 	initialize: () => {
 		self.setTheme(LocalStorage.get<Theme>("themeId", self._getPreferredTheme()));
 
-		self.navOpen = LocalStorage.get("navOpen", "true") == "true";
+		self.navOpen = LocalStorage.get("navOpen", "true") === "true";
 
 		const tooLarge = window.matchMedia?.("(min-width: 960px)").matches ?? true;
 		if (!tooLarge) self.setNavOpen(false);

@@ -7,7 +7,7 @@ import { MarkdownLayout, Props } from "Layouts/MarkdownLayout";
 import { useUiStore } from "Stores";
 
 const SchemaPageLayout = (props: Props) => {
-	const { schemaLinks, anchors } = props;
+	const { refs, anchors } = props;
 	const { setFocusedId } = useUiStore();
 	const router = useRouter();
 
@@ -17,7 +17,7 @@ const SchemaPageLayout = (props: Props) => {
 			<Header>Schema Reference</Header>
 			<hr />
 			<PageDescription>Explore the JSON schema for a given Chalet file type.</PageDescription>
-			{!!schemaLinks && <SchemaPageControls schemaLinks={schemaLinks} anchors={anchors} />}
+			{!!refs && <SchemaPageControls refs={refs} anchors={anchors} />}
 		</MarkdownLayout>
 	);
 };

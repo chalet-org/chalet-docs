@@ -123,12 +123,13 @@ const CodeHeader = ({ children }: React.PropsWithChildren<{}>) => {
 };
 
 type CodeProps = Props & {
+	className?: string;
 	lang: string;
 	textContent: string;
 	copyButton: boolean;
 };
 
-const CodePre = ({ textContent, lang, copyButton }: CodeProps) => {
+const CodePre = ({ className, textContent, lang, copyButton }: CodeProps) => {
 	const [showCopyButton, setShowCopyButton] = useState<boolean>(false);
 	const [copied, setCopied] = useState<boolean>(false);
 
@@ -144,7 +145,7 @@ const CodePre = ({ textContent, lang, copyButton }: CodeProps) => {
 				}
 			}}
 		>
-			<pre>
+			<pre className={className}>
 				<code
 					className={`language-${lang}`}
 					dangerouslySetInnerHTML={{
@@ -153,18 +154,18 @@ const CodePre = ({ textContent, lang, copyButton }: CodeProps) => {
 							: textContent,
 					}}
 				/>
-				{showCopyButton && (
-					<button
-						onClick={(ev) => {
-							ev.preventDefault();
-							copy(textContent);
-							setCopied(true);
-						}}
-					>
-						{copied ? "Copied!" : "Copy"}
-					</button>
-				)}
 			</pre>
+			{showCopyButton && (
+				<button
+					onClick={(ev) => {
+						ev.preventDefault();
+						copy(textContent);
+						setCopied(true);
+					}}
+				>
+					{copied ? "Copied!" : "Copy"}
+				</button>
+			)}
 		</PreStyles>
 	);
 };
@@ -173,7 +174,7 @@ const CodePreFromMarkdown = ({ children, ...props }: Props) => {
 	return (
 		<>
 			{React.Children.map(children, (child) => {
-				if (!child || typeof child == "number" || typeof child == "boolean" || typeof child == "string")
+				if (!child || typeof child === "number" || typeof child === "boolean" || typeof child === "string")
 					return null;
 
 				const { props: childProps } = child as any;
@@ -465,34 +466,42 @@ const PreStyles = styled.div<StyleProps>`
 		font-weight: 400;
 		background-color: ${getThemeVariable("codeBackground")};
 
+		&.small {
+			font-size: 0.75rem;
+		}
+
 		${codeCss}
+	}
 
-		> button {
-			display: block;
-			position: absolute;
-			top: 0.5rem;
-			right: 0.5rem;
-			padding: 0.375rem 0.75rem;
-			font-family: ${(p) => p.$fonts?.paragraph ?? "inherit"};
-			font-size: 1rem;
-			z-index: 20;
-			background-color: ${getThemeVariable("codeBackground")};
-			color: ${getThemeVariable("primaryColor")};
-			border: 0.0675rem solid ${getThemeVariable("primaryColor")};
-			border-radius: 0.25rem;
-			cursor: pointer;
-			transition: color 0.125s linear, border-color 0.125s linear, background-color 0.125s linear;
+	> button {
+		display: block;
+		position: absolute;
+		top: 0.5rem;
+		bottom: 0.5rem;
+		right: 0.5rem;
+		padding: 0.375rem 0.75rem;
+		font-family: ${(p) => p.$fonts?.paragraph ?? "inherit"};
+		font-size: 0.875rem;
+		z-index: 20;
+		background-color: ${getThemeVariable("codeBackground")};
+		color: ${getThemeVariable("primaryColor")};
+		border: 0.0675rem solid ${getThemeVariable("primaryColor")};
+		border-radius: 0.25rem;
+		cursor: pointer;
+		transition:
+			color 0.125s linear,
+			border-color 0.125s linear,
+			background-color 0.125s linear;
 
-			&:hover {
-				background-color: ${getThemeVariable("primaryColor")};
-				color: ${getThemeVariable("codeBackground")};
-				border-color: ${getThemeVariable("primaryColor")};
-			}
+		&:hover {
+			background-color: ${getThemeVariable("primaryColor")};
+			color: ${getThemeVariable("codeBackground")};
+			border-color: ${getThemeVariable("primaryColor")};
+		}
 
-			&:active {
-				background-color: ${getThemeVariable("secondaryColor")};
-				border-color: ${getThemeVariable("secondaryColor")};
-			}
+		&:active {
+			background-color: ${getThemeVariable("secondaryColor")};
+			border-color: ${getThemeVariable("secondaryColor")};
 		}
 	}
 

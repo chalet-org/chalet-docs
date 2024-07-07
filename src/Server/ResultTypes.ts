@@ -37,7 +37,7 @@ export type HyperLink = {
 export type ResultNavigation = {
 	sidebarLinks: (HyperLink | string)[];
 	anchors: ResultPageAnchor[];
-	schemaLinks: HyperLink[];
+	refs: string[];
 };
 
 export type ResultReleases = {
@@ -54,9 +54,10 @@ export type ResultMDXPage = ResultNavigation & {
 
 export type ResultDataPage = ResultNavigation;
 
-export type ResultDownloadPage = ResultDataPage & {
-	downloadLinks: HyperLink[];
-};
+export type ResultDownloadPage = ResultDataPage &
+	ResultReleases & {
+		downloadLinks: HyperLink[];
+	};
 
 export type SearchResult = {
 	url: string;

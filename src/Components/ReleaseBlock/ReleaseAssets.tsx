@@ -20,7 +20,12 @@ type DeducedInfo = {
 
 const getPlatformArchFromFilename = (asset: GithubAsset): Optional<DeducedInfo> => {
 	const triple = asset.name
-		.replace(/chalet\-([\w\-_]+)\.zip/g, (result: string, p1: string) => p1)
+		.replace(/chalet\-([\w\-_]+)\.(zip|exe)/g, (result: string, p1: string) => p1)
+		.replace(
+			/chalet_([\d\.]+)_(\w+)\.deb/g,
+			(result: string, p1: string, p2: string, p3: string) => `${p2}-linux-debian`,
+		)
+		.replace(/armhf/g, "arm")
 		.replace(/pc-windows/g, "windows")
 		.replace(/-installer/g, "")
 		.split("-");
@@ -59,23 +64,22 @@ const getNiceArchName = (arch: string, platform: OperatingSystem) => {
 
 const iconSize: string = "3.25rem";
 
-type Props = Pick<GithubRelease, "assets" | "zipball_url" | "tarball_url" | "tag_name">;
+type Props = Pick<GithubRelease, "assets" | "zipball_url" | "tarball_url" | "tag_name" | "snapshot">;
 
-const ReleaseAssets = ({ assets, zipball_url, tarball_url, tag_name }: Props) => {
+const ReleaseAssets = ({ assets, zipball_url, tarball_url, tag_name, snapshot }: Props) => {
 	const { theme, showAllPlatforms } = useUiStore();
 	const router = useRouter();
 	const info = useMemo(
 		() =>
 			assets.map((asset) => getPlatformArchFromFilename(asset)).filter((data) => data !== null) as DeducedInfo[],
-		[assets]
+		[assets],
 	);
 	const windows = info
 		.filter((data) => data.platform === "windows")
 		.sort((a, b) => (a.arch === "x86_64" || (a.arch === b.arch && a.filetype === "installer") ? -1 : 1));
 
 	const macos = info
-		.filter((data) => data.platform === "apple" && data.arch !== "universal")
-		.sort((dataA) => 1)
+		.filter((data) => data.platform === "apple")
 		.sort((dataA) => (dataA.arch === "universal" ? -1 : 1));
 
 	const linux = info
@@ -97,7 +101,7 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url, tag_name }: Props) =>
 				console.error(err);
 			}
 		},
-		[router, tag_name]
+		[router, tag_name],
 	);
 
 	const version = tag_name.startsWith("v") ? tag_name.substring(1) : tag_name;
@@ -105,21 +109,7 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url, tag_name }: Props) =>
 	return (
 		<Styles>
 			<DownloadContainer>
-				{platform == OperatingSystem.MacOS && (
-					<InstallScript>
-						<p>
-							<strong>
-								Install via <Link href="https://brew.sh/">Homebrew</Link>
-							</strong>
-						</p>
-						<CodePre
-							lang="bash"
-							textContent={`brew install --cask https://www.chalet-work.space/api/brew/${version}/chalet.rb`}
-							copyButton
-						/>
-					</InstallScript>
-				)}
-				{(platform == OperatingSystem.Windows || showAllPlatforms) && windows.length > 0 && (
+				{(platform === OperatingSystem.Windows || showAllPlatforms) && windows.length > 0 && (
 					<DownloadRow>
 						<Icon id="windows" size={iconSize} color={theme.codeBlue} hoverColor={theme.codeBlue} />
 						<DownloadSection>
@@ -127,15 +117,17 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url, tag_name }: Props) =>
 								const { platform: dataPlatform, filetype, abi } = data;
 								const { browser_download_url, name } = data.asset;
 								const arch = getNiceArchName(data.arch, OperatingSystem.Windows);
-								const typeLabel = filetype === "installer" ? "installer" : "archive (.zip)";
+								const typeLabel = filetype === "installer" ? "installer" : "archive";
 								const isRecommended =
-									platform == OperatingSystem.Windows &&
+									platform === OperatingSystem.Windows &&
 									filetype === "installer" &&
 									data.arch === "x86_64";
 
 								return (
 									<AssetButton
 										key={i}
+										className="asset"
+										href={browser_download_url}
 										onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
 										onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
 										onClick={(ev) =>
@@ -144,7 +136,9 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url, tag_name }: Props) =>
 										$color={theme.codeBlue}
 									>
 										<div className="bold">
-											Windows {isRecommended ? `${typeLabel} (Recommended)` : typeLabel}
+											Windows {typeLabel}{" "}
+											{!isRecommended && (name.endsWith(".exe") ? "" : "(.zip)")}
+											{isRecommended && " (Recommended)"}
 											<br />
 											<span>{name}</span>
 										</div>
@@ -155,10 +149,29 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url, tag_name }: Props) =>
 						</DownloadSection>
 					</DownloadRow>
 				)}
-				{(platform == OperatingSystem.MacOS || showAllPlatforms) && macos.length > 0 && (
+				{(platform === OperatingSystem.MacOS || showAllPlatforms) && macos.length > 0 && (
 					<DownloadRow>
 						<Icon id="apple" size={iconSize} color={theme.codeGray} hoverColor={theme.codeGray} />
 						<DownloadSection>
+							{!snapshot && (
+								<InstallScript
+									className="asset"
+									onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
+									onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
+									$color={theme.codeGray}
+								>
+									<div className="bold">
+										{platform !== OperatingSystem.MacOS}Install via{" "}
+										<Link href="https://brew.sh/">Homebrew</Link>
+									</div>
+									<CodePre
+										className="small"
+										lang="bash"
+										textContent={`brew install --cask https://www.chalet-work.space/api/brew/${version}/chalet.rb`}
+										copyButton
+									/>
+								</InstallScript>
+							)}
 							{macos.map((data, i) => {
 								const { platform: dataPlatform, filetype, abi } = data;
 								const { browser_download_url, name } = data.asset;
@@ -166,6 +179,8 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url, tag_name }: Props) =>
 								return (
 									<AssetButton
 										key={i}
+										className="asset"
+										href={browser_download_url}
 										onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
 										onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
 										onClick={(ev) =>
@@ -191,7 +206,7 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url, tag_name }: Props) =>
 						</DownloadSection>
 					</DownloadRow>
 				)}
-				{(platform == OperatingSystem.Linux || showAllPlatforms) && debian.length > 0 && (
+				{(platform === OperatingSystem.Linux || showAllPlatforms) && debian.length > 0 && (
 					<DownloadRow>
 						<Icon id="debian" size={iconSize} color={theme.codeRed} hoverColor={theme.codeRed} />
 						<DownloadSection>
@@ -202,6 +217,8 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url, tag_name }: Props) =>
 								return (
 									<AssetButton
 										key={i}
+										className="asset"
+										href={browser_download_url}
 										onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
 										onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
 										onClick={(ev) =>
@@ -210,7 +227,8 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url, tag_name }: Props) =>
 										$color={theme.codeRed}
 									>
 										<div className="bold">
-											{dataArch === "arm" ? "Debian" : "Debian / Ubuntu"} package (.deb / .zip)
+											{dataArch === "arm" ? "Debian" : "Debian / Ubuntu"} package{" "}
+											{name.endsWith(".deb") ? "" : "(.zip)"}
 											<br />
 											<span>{name}</span>
 										</div>
@@ -221,7 +239,7 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url, tag_name }: Props) =>
 						</DownloadSection>
 					</DownloadRow>
 				)}
-				{(platform == OperatingSystem.Linux || showAllPlatforms) && linux.length > 0 && (
+				{(platform === OperatingSystem.Linux || showAllPlatforms) && linux.length > 0 && (
 					<DownloadRow>
 						<Icon id="linux" size={iconSize} color={theme.codeGreen} hoverColor={theme.codeGreen} />
 						<DownloadSection>
@@ -232,6 +250,8 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url, tag_name }: Props) =>
 								return (
 									<AssetButton
 										key={i}
+										className="asset"
+										href={browser_download_url}
 										onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
 										onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
 										onClick={(ev) =>
@@ -255,7 +275,8 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url, tag_name }: Props) =>
 					<Icon id="source" size={iconSize} color={theme.primaryColor} hoverColor={theme.primaryColor} />
 					<DownloadSection>
 						<AssetButton
-							className="source"
+							className="source asset"
+							href={zipball_url}
 							onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
 							onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
 							onClick={(ev) => onDownload(zipball_url, "source", "zip")}
@@ -265,7 +286,8 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url, tag_name }: Props) =>
 							<div></div>
 						</AssetButton>
 						<AssetButton
-							className="source"
+							className="source asset"
+							href={tarball_url}
 							onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
 							onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
 							onClick={(ev) => onDownload(tarball_url, "source", "tar")}
@@ -326,13 +348,60 @@ const DownloadRow = styled.div`
 	}
 `;
 
-const InstallScript = styled.div`
+const InstallScript = styled.div<AssetButtonProps>`
 	display: block;
-	padding-bottom: 1rem;
-	width: 100%;
+	/* width: 100%; */
+	padding: 0.5rem 0.75rem;
+	border: 0.125rem solid ${getThemeVariable("border")};
+	margin-top: -0.0625rem;
 
-	> p {
-		padding-bottom: 0.25rem;
+	transition:
+		background-color 0.125s linear,
+		border-color 0.125s linear,
+		color 0.125s linear;
+
+	> div {
+		line-height: 1.125;
+
+		transition: color 0.125s linear;
+
+		&.bold {
+			font-weight: 600;
+			text-align: left;
+
+			a {
+				font-weight: 600;
+			}
+		}
+	}
+
+	div[data-lang="sh"] {
+		&:after {
+			top: 0.625rem;
+		}
+	}
+
+	pre {
+		padding: 0.5rem 0.75rem;
+		overflow-x: auto;
+	}
+
+	button {
+		top: 0.125rem;
+		bottom: 0.125rem;
+		right: 0.125rem;
+	}
+
+	&:hover,
+	&.touch-hover {
+		color: ${getThemeVariable("background")};
+		background-color: ${(p) => p.$color};
+		border-color: ${(p) => p.$color};
+		z-index: 11;
+
+		a {
+			color: ${getThemeVariable("background")};
+		}
 	}
 `;
 
@@ -341,12 +410,24 @@ const DownloadSection = styled.div`
 	flex-direction: column;
 	align-items: left;
 	justify-content: left;
-	width: 100%;
-	padding-top: 1.5rem;
+	width: calc(100% - 3.25rem);
+	padding-top: 0.5rem;
 
 	@media ${hasMinWidth(0)} {
 		padding-top: 0;
 		padding-left: 1.5rem;
+	}
+
+	> .asset {
+		&:first-child {
+			border-radius: 0.25rem 0.25rem 0 0;
+		}
+		&:last-child {
+			border-radius: 0 0 0.25rem 0.25rem;
+		}
+		&:only-child {
+			border-radius: 0.25rem;
+		}
 	}
 `;
 
@@ -354,7 +435,7 @@ type AssetButtonProps = {
 	$color: string;
 };
 
-const AssetButton = styled.button<AssetButtonProps>`
+const AssetButton = styled.a<AssetButtonProps>`
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -368,7 +449,10 @@ const AssetButton = styled.button<AssetButtonProps>`
 	cursor: pointer;
 	z-index: 10;
 
-	transition: background-color 0.125s linear, border-color 0.125s linear, color 0.125s linear;
+	transition:
+		background-color 0.125s linear,
+		border-color 0.125s linear,
+		color 0.125s linear;
 
 	> div {
 		line-height: 1.125;
@@ -390,16 +474,6 @@ const AssetButton = styled.button<AssetButtonProps>`
 
 	&.source {
 		min-height: 2rem;
-	}
-
-	&:first-of-type {
-		border-radius: 0.25rem 0.25rem 0 0;
-	}
-	&:last-of-type {
-		border-radius: 0 0 0.25rem 0.25rem;
-	}
-	&:only-of-type {
-		border-radius: 0.25rem;
 	}
 
 	&:hover,

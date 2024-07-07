@@ -30,6 +30,7 @@ const ReleaseBlock = ({ release }: Props) => {
 		zipball_url,
 		name,
 		html_url,
+		snapshot,
 	} = release;
 	const date = useMemo(() => dateFormat(new Date(published_at), "LLL d, yyyy"), [published_at]);
 	const Header = HeadingObject["h2"];
@@ -60,6 +61,7 @@ const ReleaseBlock = ({ release }: Props) => {
 					zipball_url,
 					tag_name,
 					assets,
+					snapshot,
 				}}
 			/>
 		</Styles>

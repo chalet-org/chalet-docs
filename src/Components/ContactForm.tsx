@@ -28,7 +28,7 @@ const ContactForm = () => {
 			const isValid = formValidators[key] ?? true;
 			return !isValid ? "invalid" : "";
 		},
-		[formValidators]
+		[formValidators],
 	);
 
 	const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
@@ -47,13 +47,13 @@ const ContactForm = () => {
 
 	const isValid = useCallback(
 		(key: keyof ContactEmailOptions, value: string): boolean => {
-			if (key == "email") {
+			if (key === "email") {
 				return email.validate(value);
 			} else {
 				return value.length > 0;
 			}
 		},
-		[validEmail]
+		[validEmail],
 	);
 
 	const onFocus = useCallback(
@@ -66,7 +66,7 @@ const ContactForm = () => {
 				return { ...data };
 			});
 		},
-		[isValid]
+		[isValid],
 	);
 	const onChange = useCallback(
 		(ev: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
@@ -84,7 +84,7 @@ const ContactForm = () => {
 				return { ...data };
 			});
 		},
-		[isValid]
+		[isValid],
 	);
 
 	if (submitted) {

@@ -31,22 +31,24 @@ const parseTables = (text: string) => {
 				/((\| ([\w\d` -:,~®\=\(\)\[\]\{\}\$\?\/\\]+))+ \|\n)((\| ([- ]+))+ \|\n)/,
 				(tmatch: string, tp1: string) => {
 					const labels: string[] =
-						tp1.match(/ ([\w\d` -:,~®\=\(\)\[\]\{\}\$\?\/\\]+) /g)?.map((th: string) => `<th>${th}</th>`) ??
-						[];
+						tp1
+							.match(/ ([\w\d` -:,~®\=\(\)\[\]\{\}\$\?\/\\]+) /g)
+							?.map((th: string) => `<th>${th}</th>`) ?? [];
 					thead = `<thead><tr>${labels.join("")}</tr></thead>`;
 					return "";
-				}
+				},
 			);
 
 			rest.replace(/((\| ([\w\d` -:,~®\=\(\)\[\]\{\}\$\?\/\\]+))+ +\|\n)/g, (tmatch: string, tp1: string) => {
 				let labels: string[] =
-					tp1.match(/ ([\w\d` -:,~®\=\(\)\[\]\{\}\$\?\/\\]*) /g)?.map((th: string) => `<td>${th}</td>`) ?? [];
+					tp1.match(/ ([\w\d` -:,~®\=\(\)\[\]\{\}\$\?\/\\]*) /g)?.map((th: string) => `<td>${th}</td>`) ??
+					[];
 				rows.push(`<tr>${labels.join("")}</tr>`);
 				return "";
 			});
 
 			return `<div className="table-container"><table>${thead}<tbody>${rows.join("")}</tbody></table></div>\n\n`;
-		}
+		},
 	);
 
 	return ret;
@@ -98,7 +100,7 @@ const parseBottomPageNavigation = (text: string): Promise<string> => {
 			}
 			nav += " />";
 			return `\n${nav}\n`;
-		}
+		},
 	);
 };
 
@@ -111,7 +113,7 @@ const parseTabs = (text: string): string => {
 			if (p1.startsWith("|")) p1 = p1.substring(1);
 
 			const tabArray = p1.replace(/(\n{1,3}\||\|\n{1,3})/g, "|").split("|");
-			if (tabArray.length % 2 == 1) {
+			if (tabArray.length % 2 === 1) {
 				console.log("Something went wrong parsing a [[tabs]] block");
 				return "";
 			}
@@ -126,7 +128,7 @@ ${tabArray[i + 1]}
 			}
 			retString += `</TabbedContent>`;
 			return retString;
-		}
+		},
 	);
 };
 
@@ -138,7 +140,7 @@ const parseAccordions = (text: string): string => {
 			retString += p2;
 			retString += `</Accordion>`;
 			return retString;
-		}
+		},
 	);
 };
 
@@ -173,7 +175,7 @@ const getPageAnchors = async (
 	fileContent: string,
 	slug: string,
 	ref?: string,
-	type?: SchemaType
+	type?: SchemaType,
 ): Promise<ResultPageAnchor[]> => {
 	if (slug === "download") {
 		return [];
@@ -239,7 +241,7 @@ const parseSchemaDefinition = async (
 	text: string,
 	slug: string,
 	ref: string,
-	definition: string
+	definition: string,
 ): Promise<string> => {
 	const { schema } = await getChaletSchema(type, ref);
 
@@ -256,7 +258,7 @@ const parseSchemaDefinition = async (
 				null,
 				`${slug}/${ref}/${type}`,
 				definitions[definition],
-				definitions
+				definitions,
 			);
 
 			result += `#### [${toPascalCase(definition)}]\n\n`;
@@ -285,7 +287,7 @@ const parseCustomMarkdown = async (
 	slug: string,
 	ref?: string,
 	schemaType?: SchemaType,
-	definition?: string
+	definition?: string,
 ): Promise<{
 	meta: Dictionary<any>;
 	content: string;

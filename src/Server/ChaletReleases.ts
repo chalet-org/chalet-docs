@@ -7,12 +7,12 @@ import { ResultMDX } from "./ResultTypes";
 import { serverCache } from "./ServerCache";
 
 export type GithubAsset = {
-	url: string;
+	// url: string;
+	// content_type: string;
+	// state: string;
+	// label: string;
 	name: string;
 	browser_download_url: string;
-	content_type: string;
-	state: string;
-	label: string;
 	download_count: number;
 };
 
@@ -25,6 +25,7 @@ export type GithubRelease = {
 	body: Optional<ResultMDX>;
 	draft: boolean;
 	prerelease: boolean;
+	snapshot: boolean;
 	latest_release: boolean;
 	created_at: string;
 	published_at: string;
@@ -48,13 +49,9 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 		const url = `https://api.github.com/repos/chalet-org/chalet/releases?per_page=100`;
 		const response = await fetchFromGithub(url);
 		const releases: any[] = await response.json();
-		const test: string = "";
-		test.startsWith("");
-		const allowedReleases = releases.filter(
-			(release) =>
-				!release.draft && typeof release.tag_name === "string" && !release.tag_name.startsWith("snapshot-"),
-		);
+		const allowedReleases = releases.filter((release) => !release.draft);
 
+		let latestSet: boolean = false;
 		const withTransformedBody: ResultGithubReleases = await Promise.all(
 			allowedReleases.map(
 				async (
@@ -71,8 +68,12 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 
 							return `([${commit?.substring(0, 7)}](${p1}))`;
 						});
-						text = text.replace(/#(\d+)/g, (result: string, p1: string) => {
-							return `[#${p1}](https://github.com/chalet-org/chalet/issues/${p1})`;
+						text = text.replace(/(PR )?#(\d+)/g, (result: string, p1: string, p2: string) => {
+							if (p1) {
+								return `[PR #${p2}](https://github.com/chalet-org/chalet/pull/${p2})`;
+							} else {
+								return `[#${p2}](https://github.com/chalet-org/chalet/issues/${p2})`;
+							}
 						});
 						text = text.replace(/\[issue\]\((.+?)\)/g, (result: string, p1: string) => {
 							const issue = p1.split("/").pop();
@@ -81,7 +82,7 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 							return `([#${issue}](${p1}))`;
 						});
 						text = text.replace(
-							/https:\/\/github\.com\/chalet\-org\/chalet\/compare\/([v\d\.]+)/g,
+							/https:\/\/github\.com\/chalet\-org\/chalet\/compare\/([\w\d\-\.]+)/g,
 							(result: string, p1: string) => {
 								const formatted = p1.replace("...", " ... ");
 								return `[${formatted}](https://github.com/chalet-org/chalet/compare/${p1})`;
@@ -99,6 +100,14 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 						});
 					}
 
+					let latest_release: boolean = false;
+					if (!latestSet) {
+						if (!draft && !prerelease) {
+							latest_release = true;
+							latestSet = true;
+						}
+					}
+
 					return {
 						url,
 						html_url: html_url.replace(/^https:(.+)$/, (result: string, p1: string) => p1),
@@ -108,12 +117,17 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 						body: mdx,
 						draft,
 						prerelease,
-						latest_release: index === 0,
+						snapshot: tag_name.startsWith("snapshot-"),
+						latest_release,
 						created_at,
 						published_at,
 						tarball_url: `https://github.com/chalet-org/chalet/archive/refs/tags/${tag_name}.tar.gz`,
 						zipball_url: `https://github.com/chalet-org/chalet/archive/refs/tags/${tag_name}.zip`,
-						assets,
+						assets: assets.map((asset) => ({
+							name: asset.name,
+							browser_download_url: asset.browser_download_url,
+							download_count: asset.download_count,
+						})),
 					};
 				},
 			),
@@ -122,17 +136,35 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 		const getTotalName = (name: string) => {
 			let ret: any = {};
 			name.replace(
-				/chalet-(\w+)-(pc-windows|\w+)-(\w+)(-(installer))?/g,
-				(result: string, p1: string, p2: string, p3: string, p4?: string, p5?: string) => {
+				/chalet-(\w+)-(pc-windows|\w+)-(\w+)(-(installer))?\.(zip|exe)/g,
+				(result: string, p1: string, p2: string, p3: string, p4?: string, p5?: string, p6?: string) => {
 					const arch = p1;
 					const platform = p2 === "pc-windows" ? "windows" : p2;
 					const abi = p3;
+					if (p5 === "installer" && p6 === "zip") {
+						p6 = "installer-zip";
+					}
 					ret = {
 						// arch: `${arch}-${platform}-${abi}`,
 						arch,
 						platform,
 						abi,
-						kind: p5 ?? "zip",
+						kind: p6 ?? "zip",
+					};
+					return result;
+				},
+			);
+			name.replace(
+				/chalet_([\d\.]+)_(\w+)\.deb/g,
+				(result: string, p1: string, p2: string, p3: string, p4?: string, p5?: string) => {
+					const version = p1;
+					const arch = p2;
+					ret = {
+						// arch: `${arch}-${platform}-${abi}`,
+						arch,
+						platform: "linux",
+						abi: "debian",
+						kind: "deb",
 					};
 					return result;
 				},
@@ -146,7 +178,7 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 			const downloadsByKind: Record<string, any> = {};
 			const downloadsByTag: Record<string, any> = {};
 
-			const SHOW_LAST_COUNT = 2;
+			const SHOW_LAST_COUNT = 10;
 
 			const printableArray: ResultGithubReleases = [...withTransformedBody].reverse();
 			printableArray.forEach((release, i) => {

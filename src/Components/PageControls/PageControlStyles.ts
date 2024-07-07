@@ -31,7 +31,7 @@ const PageControlStyles = styled.div`
 			flex: 1;
 
 			&:nth-of-type(1) {
-				flex: 2;
+				flex: 3;
 			}
 			&:nth-of-type(2) {
 				flex: 2;

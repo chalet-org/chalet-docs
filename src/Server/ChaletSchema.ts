@@ -8,7 +8,7 @@ const getChaletSchema = (type: SchemaType, ref: string = "main"): Promise<{ sche
 	return serverCache.get(`chalet-schema-file/${type}/${ref}`, async () => {
 		// TODO: validate if tag is "main" or "v*.*.*"
 
-		const file = type == SchemaType.ChaletJson ? "chalet" : "chalet-settings";
+		const file = type === SchemaType.ChaletJson ? "chalet" : "chalet-settings";
 
 		const url = `https://raw.githubusercontent.com/chalet-org/chalet/${ref}/schema/${file}.schema.json`;
 		const response = await fetchFromGithub(url);

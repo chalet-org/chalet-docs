@@ -114,7 +114,7 @@ const getSidebarLinks = (): Promise<SidebarResult[]> => {
 			}
 			return result;
 		},
-		isDevelopment ? 0 : undefined
+		isDevelopment ? 0 : undefined,
 	);
 };
 
@@ -122,7 +122,7 @@ const getNavBar = async (
 	slug: string,
 	content: string = "",
 	schemaType?: SchemaType,
-	ref?: string
+	ref?: string,
 ): Promise<ResultNavigation> => {
 	const [branches, tags, sidebarLinks, anchors] = await Promise.all([
 		getChaletBranches(),
@@ -130,27 +130,18 @@ const getNavBar = async (
 		getSidebarLinks(),
 		getPageAnchors(content, slug, ref, schemaType),
 	]);
-	const schemaLinks: HyperLink[] = [...branches, ...tags].map((value) => {
-		let href = `/schema/${value}`;
-		if (schemaType) {
-			href += `/${schemaType}`;
-		}
-		return {
-			label: value,
-			href,
-		};
-	});
+	const refs: string[] = [...branches, ...tags].filter((ref) => !ref.startsWith("snapshot-"));
 	return {
 		anchors,
 		sidebarLinks,
-		schemaLinks,
+		refs,
 	};
 };
 
 const getMdxPage = async (
 	slug: string,
 	query: Dictionary<string | undefined>,
-	internal: boolean = false
+	internal: boolean = false,
 ): Promise<ResultMDXPage> => {
 	const { ref } = query;
 	let { definition } = query;

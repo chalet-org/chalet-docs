@@ -1,17 +1,17 @@
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useMemo } from "react";
 
 import { Link } from "Components";
 import { Checkbox } from "Components/Checkbox";
-import { ResultDownloadPage } from "Server/ResultTypes";
+import { HyperLink, ResultDownloadPage } from "Server/ResultTypes";
 import { useUiStore } from "Stores";
 
 import { SelectDropdown } from "../SelectDropdown";
 import { PageControlStyles } from "./PageControlStyles";
 
-type Props = React.PropsWithChildren<Pick<ResultDownloadPage, "downloadLinks">>;
+type Props = React.PropsWithChildren<Pick<ResultDownloadPage, "releases">>;
 
-const DownloadPageControls = ({ children, downloadLinks }: Props) => {
+const DownloadPageControls = ({ children, releases }: Props) => {
 	const router = useRouter();
 	const { showAllPlatforms, toggleShowAllPlatforms } = useUiStore();
 	const path = router.asPath.split("?")[0];
@@ -20,6 +20,17 @@ const DownloadPageControls = ({ children, downloadLinks }: Props) => {
 	const ref: string = split?.[2] ?? "";
 
 	const rootUrl: string = `/${kind}/${ref}`;
+
+	const downloadLinks: HyperLink[] = useMemo(
+		() =>
+			releases?.map((release) => {
+				return {
+					label: release.tag_name,
+					href: `/download/${release.tag_name}`,
+				};
+			}) ?? [],
+		[releases],
+	);
 
 	return (
 		<PageControlStyles>
@@ -42,7 +53,7 @@ const DownloadPageControls = ({ children, downloadLinks }: Props) => {
 					onClick={toggleShowAllPlatforms}
 				/>
 				<div className="spacer" />
-				<Link href="//github.com/chalet-org/chalet/releases">All Releases</Link>
+				<Link href="//github.com/chalet-org/chalet/releases">All releases</Link>
 			</div>
 			{children}
 		</PageControlStyles>

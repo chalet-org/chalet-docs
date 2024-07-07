@@ -20,7 +20,7 @@ const TabbedContent = ({ children }: Props) => {
 	let i: number = -1;
 	let activeTabSet: boolean = false;
 	children = React.Children.map(children, (child: any, index: number) => {
-		if (!child || typeof child == "number" || typeof child == "boolean" || typeof child == "string") {
+		if (!child || typeof child === "number" || typeof child === "boolean" || typeof child === "string") {
 			return child;
 		}
 
@@ -60,9 +60,9 @@ const TabbedContent = ({ children }: Props) => {
 			if (
 				activeTabSet ||
 				!child ||
-				typeof child == "number" ||
-				typeof child == "boolean" ||
-				typeof child == "string"
+				typeof child === "number" ||
+				typeof child === "boolean" ||
+				typeof child === "string"
 			)
 				return child;
 
@@ -103,7 +103,9 @@ const Styles = styled.div`
 		border: 0.0625rem solid ${getThemeVariable("border")};
 		cursor: pointer;
 		z-index: 4;
-		transition: color 0.125s linear, border-top-color 0.125s linear;
+		transition:
+			color 0.125s linear,
+			border-top-color 0.125s linear;
 
 		&:not(.active):hover {
 			color: ${getThemeVariable("primaryText")};
