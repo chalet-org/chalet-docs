@@ -77,7 +77,7 @@ export { DownloadPageLayout };
 
 const Styles = styled.div`
 	display: block;
-	padding-top: 3rem;
+	padding-top: 4.5rem;
 	padding-bottom: 3rem;
 `;
 
