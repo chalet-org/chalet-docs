@@ -2,7 +2,7 @@ import { useSnapshot } from "valtio/react";
 
 import { Theme, ThemeType, darkTheme, lightTheme } from "Theme";
 import { LocalStorage } from "Utility";
-import { shallowProxy } from "./shallowProxy";
+import { makeStore, shallowProxy } from "./ValtioHelpers";
 
 const self = shallowProxy("ui-store", {
 	initialized: false,
@@ -109,7 +109,4 @@ const self = shallowProxy("ui-store", {
 	},
 });
 
-const useUiStore = () => useSnapshot(self);
-const getUiStore = () => self;
-
-export { useUiStore, getUiStore };
+export const { useStore: useUiStore, getStore: getUiStore } = makeStore(self);

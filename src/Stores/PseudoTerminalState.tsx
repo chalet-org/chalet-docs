@@ -1,5 +1,4 @@
-import { shallowProxy } from "./shallowProxy";
-import { useSnapshot } from "valtio/react";
+import { shallowProxy, makeStore } from "./ValtioHelpers";
 
 type ResponseType = JSX.Element | string | null;
 export type TerminalCommandCallback = (args: string) => Promise<ResponseType>;
@@ -21,6 +20,7 @@ const self = shallowProxy("pseudo-terminal-store", {
 		self._.savedCurrentLine = "";
 		self.history.push(currentLine);
 		self._.lastHistory = self.history.length;
+
 		const result = await callback(currentLine);
 		if (result !== null) {
 			self.responses.push(result);
@@ -70,7 +70,4 @@ const self = shallowProxy("pseudo-terminal-store", {
 	},
 });
 
-const usePseudoTerminalStore = () => useSnapshot(self);
-const getPseudoTerminalStore = () => self;
-
-export { usePseudoTerminalStore, getPseudoTerminalStore };
+export const { useStore: usePseudoTerminalStore, getStore: getPseudoTerminalStore } = makeStore(self);

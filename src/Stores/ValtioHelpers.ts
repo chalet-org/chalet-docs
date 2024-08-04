@@ -1,4 +1,5 @@
 import { proxy, ref, subscribe } from "valtio";
+import { useSnapshot } from "valtio/react";
 
 function isObjectOrNull<T extends object>(obj: T) {
 	return typeof obj === "object" && !Array.isArray(obj);
@@ -61,4 +62,11 @@ function shallowProxy<T extends object>(cacheName: string | null, state: T) {
 	return proxy(result as T);
 }
 
-export { shallowProxy };
+function makeStore<T extends object>(self: T) {
+	return {
+		useStore: () => useSnapshot(self),
+		getStore: () => self,
+	};
+}
+
+export { shallowProxy, makeStore };
