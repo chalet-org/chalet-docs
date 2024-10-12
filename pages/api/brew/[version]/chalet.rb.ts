@@ -27,7 +27,7 @@ const handler = middleware.use([], async (req: ApiReq, res: ApiRes<any>) => {
 		}
 
 		const text = await serverCache.get(`chalet-cask-${version}`, () => {
-			const url = `https://raw.githubusercontent.com/chalet-org/chalet-homebrew-casks/main/releases/${version}.csv`;
+			const url = `https://raw.githubusercontent.com/chalet-org/chalet-homebrew-casks/main/releases/v${version}.csv`;
 			return fetchTextFromGithubUrl(url);
 		});
 		const split = text.split("\n");
@@ -45,7 +45,7 @@ const handler = middleware.use([], async (req: ApiReq, res: ApiRes<any>) => {
 			return fetchTextFromGithubUrl(url);
 		});
 		rubyTemplate = rubyTemplate
-			.replaceAll("${version}", version.substring(1))
+			.replaceAll("${version}", version)
 			.replaceAll("${sha_arm}", line1[1])
 			.replaceAll("${sha_x64}", line2[1]);
 
