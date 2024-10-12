@@ -153,23 +153,25 @@ const ReleaseAssets = ({ assets, zipball_url, tarball_url, tag_name, snapshot }:
 					<DownloadRow>
 						<Icon id="apple" size={iconSize} color={theme.codeGray} hoverColor={theme.codeGray} />
 						<DownloadSection>
-							<InstallScript
-								className="asset"
-								onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
-								onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
-								$color={theme.codeGray}
-							>
-								<div className="bold">
-									{platform !== OperatingSystem.MacOS}Install via{" "}
-									<Link href="https://brew.sh/">Homebrew</Link>
-								</div>
-								<CodePre
-									className="small"
-									lang="bash"
-									textContent={`brew install --cask https://www.chalet-work.space/api/brew/${version}/chalet.rb`}
-									copyButton
-								/>
-							</InstallScript>
+							{!snapshot && (
+								<InstallScript
+									className="asset"
+									onTouchStart={(ev) => (ev.target as any).classList.add("touch-hover")}
+									onTouchEnd={(ev) => (ev.target as any).classList.remove("touch-hover")}
+									$color={theme.codeGray}
+								>
+									<div className="bold">
+										{platform !== OperatingSystem.MacOS}Install via{" "}
+										<Link href="https://brew.sh/">Homebrew</Link>
+									</div>
+									<CodePre
+										className="small"
+										lang="bash"
+										textContent={`brew install --cask https://www.chalet-work.space/api/brew/${version}/chalet.rb`}
+										copyButton
+									/>
+								</InstallScript>
+							)}
 							{macos.map((data, i) => {
 								const { platform: dataPlatform, filetype, abi } = data;
 								const { browser_download_url, name } = data.asset;
