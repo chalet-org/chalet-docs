@@ -17,17 +17,17 @@ const fetchTextFromGithubUrl = async (url: string) => {
 
 const handler = middleware.use([], async (req: ApiReq, res: ApiRes<any>) => {
 	try {
-		let { version } = req.query;
-		if (typeof version !== "string") {
+		let { tag } = req.query;
+		if (typeof tag !== "string") {
 			throw new Error("Not found");
 		}
-		if (version === "latest") {
+		if (tag === "latest") {
 			const latestTag: string = await getLatestTag();
-			version = latestTag.substring(1);
+			tag = latestTag;
 		}
 
-		const text = await serverCache.get(`chalet-cask-${version}`, () => {
-			const url = `https://raw.githubusercontent.com/chalet-org/chalet-homebrew-casks/main/releases/${version}.csv`;
+		const text = await serverCache.get(`chalet-cask-${tag}`, () => {
+			const url = `https://raw.githubusercontent.com/chalet-org/chalet-homebrew-casks/main/releases/${tag}.csv`;
 			return fetchTextFromGithubUrl(url);
 		});
 		const split = text.split("\n");
@@ -45,7 +45,7 @@ const handler = middleware.use([], async (req: ApiReq, res: ApiRes<any>) => {
 			return fetchTextFromGithubUrl(url);
 		});
 		rubyTemplate = rubyTemplate
-			.replaceAll("${version}", version)
+			.replaceAll("${tag}", tag)
 			.replaceAll("${sha_arm}", line1[1])
 			.replaceAll("${sha_x64}", line2[1]);
 
