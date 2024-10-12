@@ -32,13 +32,25 @@ At the moment, Chalet must be installed manually in non-Windows operating system
 |MacOS|
 **To install via [Homebrew](//brew.sh/)**
 
-1. Use the following. The `latest` part of the url can be replaced with the version (ie. `v0.6.6`)
+Tap the repository:
 
-<Code lang="bash" copyButton>
-brew install --cask https://www.chalet-work.space/api/brew/latest/chalet.rb
+<Code lang="bash" copyButton> 
+brew tap chalet-org/chalet
 </Code>
 
-2. The shell completion scripts will be in `/opt/homebrew/Caskroom/chalet/(version)`
+There are two channels you can use. The main one is for stable semantic versioned releases:
+
+<Code lang="bash" copyButton> 
+brew install --cask chalet
+</Code>
+
+The other is for the development snapshots (latest and greatest):
+
+<Code lang="bash" copyButton> 
+brew install --cask chalet@dev
+</Code>
+
+The shell completion scripts will be in `/opt/homebrew/Caskroom/chalet/(version)`
 
 **Manual installation**
 
