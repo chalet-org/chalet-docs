@@ -122,7 +122,7 @@ If `enableProfiling` is set to true, profiling features are enabled. This is dif
 
 ## [Sanitizers]
 
-Chalet provides an easy way to enable sanitizers, if available by the compiler toolchain and platform. If not using any sanitizers in the build configuration, one can set the `sanitize` property to `false`, otherwise, this property can either take a single sanitizer or an array of compatible sanitizers.
+Chalet provides a way to enable sanitizers, if available by the compiler toolchain and platform. If not using any sanitizers in the build configuration, one can set the `sanitize` property to `false`, otherwise, this property can either take a single sanitizer or an array of compatible sanitizers.
 
 Accepted values are:
 
@@ -149,9 +149,7 @@ If using `staticRuntimeLibrary` in the compile settings, certain sanitizers can 
 
 ## [Default Configurations]
 
-With the above in mind, it may be easy to guess which properties are enabled in each of the default build configurations.
-
-The entire list is described below:
+With the above in mind, if we were to imagine the default build configurations defined in our build file, it would look like the following:
 
 ```json
 "configurations": {

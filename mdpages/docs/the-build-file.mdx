@@ -7,7 +7,7 @@ title: The Build File
 
 ---
 
-The philosophy behind Chalet projects is quite simple: Abstract away only what needs to be abstracted, and unify as much of the build as possible. The build file, `chalet.json` or `chalet.yaml` is the vehicle for this. All of the examples will be shown in the JSON format.
+The philosophy behind Chalet projects is this: Abstract away only what needs to be, and unify as much of the build as possible. The build file, `chalet.json` or `chalet.yaml` is the vehicle for this. All of the examples will be shown in the JSON format.
 
 From a high level, it's structured as follows:
 
@@ -138,7 +138,7 @@ Discussed in more detail on the next page, certain external dependencies can be 
 
 ## [Git Dependencies]
 
-Git dependencies are the most straightforward way of bringing code into your project. The repository is shallow-cloned and placed inside of a `chalet_external` folder local to the workspace.
+Git dependencies are a way of bringing outside code into your project. The repository is shallow-cloned and placed inside of a `chalet_external` folder local to the workspace.
 
 With it, one can add a series of repos, define what branch, tag or commit to clone the repo from, and then Chalet can lightly manage it from there - for instance, if a branch changed since the last time `chalet configure` was ran, the dependency's local path will be refreshed. For this reason, the more specific - the better.
 
@@ -218,21 +218,35 @@ If a repository only references the branch or doesn't use a branch, commit, or t
 
 \\
 
+## [Archive Dependencies]
+
+Archive dependencies can be defined to fetch an archive and extract it. Set `"kind": "archive"`, define the `url`. If you wish to set the root of the extracted path to a directory within the archive, define the `subdirectory` property as well. The below uses the `foo-main` directory.
+
+```json
+"foo-archive": {
+   "kind": "archive",
+   "url": "https://github.com/foo/foo/archive/refs/heads/main.zip",
+   "subdirectory": "foo-main"
+}
+```
+
+\\
+
 ## [Local Dependencies]
 
 Sometimes, you just want to do something yourself. That's where local dependencies come in. It simply tells Chalet to refer to a local path on the machine for a given dependency, and validates whether the path exists. Simple use `"kind": "local"` to declare a local dependency.
 
 ```json
-"bar-repo": {
+"foo-repo": {
    "kind": "local",
-   "path": "D:/Development/bar-repo"
+   "path": "D:/Development/foo-repo"
 }
 ```
 
 This is obviously not very portable, since `path` is a Windows path. The recommended approach in this case is to reference an environment variable:
 
 ```json
-"bar-repo": {
+"foo-repo": {
    "kind": "local",
    "path": "${env:BAR_REPO_PATH}"
 }
@@ -250,14 +264,14 @@ Scripts are discussed in detail on the next page [here](/docs/creating-targets?i
 
 ```json
 "externalDependencies": {
-   "bar-repo": {
+   "foo-repo": {
       "kind": "git",
-      "repository": "https://my-website.io/bar/bar.git",
+      "repository": "https://my-website.io/foo/foo.git",
       "tag": "v4.2"
    },
-   "bar-repo-script": {
+   "foo-repo-script": {
       "kind": "script",
-      "file": "${external:bar-repo}/scripts/do-more.sh",
+      "file": "${external:foo-repo}/scripts/do-more.sh",
       "arguments": [
          "--foo"
       ]

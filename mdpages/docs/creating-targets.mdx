@@ -210,7 +210,7 @@ The output would become:
 
 ## [Property Conditions]
 
-Most properties support conditions that describe whether to include or exclude them from the build. The syntax for conditions is relatively simple. At the end of a property, add square brackets  `[` `]`, and inside them, one can express a number of things that limit when the property's value is read. Take the following example:
+Most properties support conditions that describe whether to include or exclude them from the build. At the end of a property, add square brackets  `[` `]`, and inside them, one can express a number of things that limit when the property's value is read. Take the following example:
 
 ```json
 "links[configuration:debugSymbols]": [ "foo-d" ]
@@ -655,7 +655,7 @@ Chalet will attempt to add appropriate cache entries with `-D` based on its own 
 
 ## [Script Targets]
 
-Script targets are quite simple. They are triggered by setting the `kind` property to `script`. In addition to the `condition` and `description` properties, they only take a `script` property (that can also be suffixed with a property condition.
+Script targets are triggered by setting the `kind` property to `script`. In addition to the `condition` and `description` properties, they only take a `script` property (that can also be suffixed with a property condition.
 
 The following file extensions are supported:
 
@@ -764,7 +764,7 @@ If the process target depends on a previous build target, the `dependsOn` proper
 
 ## [Validation Targets]
 
-Validation targets are an easy way to validate a JSON file or group of JSON files against a (local) JSON schema of your choice. This uses the same mechanism that Chalet uses under the hood to validate the [build file](/docs/the-build-file) and [settings file](/docs/the-settings-file) against their respective schemas at build time. To create a validation target, set `kind` to `validation`, define the `schema` to use (only [Draft-07](//json-schema.org/draft-07/json-schema-release-notes) is supported), and add any files you wish to validate. Files can take a relative path of files, or a glob pattern.
+Validation targets are a great way to validate a JSON file or group of JSON files against a (local) JSON schema of your choice. This uses the same mechanism that Chalet uses under the hood to validate the [build file](/docs/the-build-file) and [settings file](/docs/the-settings-file) against their respective schemas at build time. To create a validation target, set `kind` to `validation`, define the `schema` to use (only [Draft-07](//json-schema.org/draft-07/json-schema-release-notes) is supported), and add any files you wish to validate. Files can take a relative path of files, or a glob pattern.
 
 ```json
 "my-process": {

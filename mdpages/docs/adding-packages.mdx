@@ -86,7 +86,7 @@ When a package is imported using `importPackages` in a source target, all of the
 
 ## [Header-only Packages]
 
-Header-only libraries haven't really been mentioned yet, because they're not a build target (ie. nothing to build), however they fit into the package mold quite nicely. With the above in mind, header-only targets are quite simple - they are a package that only define the `includeDirs`. Then, a compiled source target will import that package and get access to the headers, as shown below:
+Header-only libraries haven't really been mentioned yet, because they're not a build target (ie. nothing to build), however they fit into the package mold quite nicely. With the above in mind, header-only targets are a package that only define the `includeDirs`. Then, a compiled source target will import that package and get access to the headers, as shown below:
 
 ```json
 "package": {

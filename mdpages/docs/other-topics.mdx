@@ -19,7 +19,11 @@ When an application runs through Chalet, some extra paths get added to the envir
 
 ## [C++20 Modules]
 
-C++20 modules are an exciting, new frontier in the wild world of C++, and it's still gaining support from compilers. At the moment, Chalet only supports modules with MSVC.
+C++20 modules are an exciting, new frontier in the wild world of C++, however, they're still being implemented by compilers. At the moment, Chalet supports modules with MSVC, and has partial support for GCC and Clang.
+
+\
+
+**MSVC**
 
 Modules have a complicated build process compared to other C++ code, so they are built natively through Chalet, instead of using Ninja/Make. Fortunately, this is very fast, and comparable to doing so in msbuild or within Visual Studio. If the build strategy is set to `ninja` or `makefile`, other build targets will still use them, and module targets will ignore that strategy and use its own. 
 
@@ -29,8 +33,6 @@ Also of note, standard library header imports are supported without any addition
 
 To get started with modules, initialize a project with `chalet init` and answer **yes** to **Enable C++20 modules?** in the questionnaire.
 
-**C++23**
-
 As of Visual Studio 17.5 and above in C++23 mode, one can use standard library modules:
 
 | std | Module containing the C++ STL |
@@ -39,6 +41,28 @@ As of Visual Studio 17.5 and above in C++23 mode, one can use standard library m
 Comprehensive documentation about these features can be found [here](//learn.microsoft.com/en-us/cpp/cpp/tutorial-import-stl-named-module?view=msvc-170).
 
 > Notes: `import std` and `import std.compat` is a bit like a precompiled header in that they require a longer build up-front and require rebuilding if they are changed between VS versions. Unlike one, they use a lot less space on disk. 
+
+\
+
+**GCC (limited support)**
+
+Modules require at least GCC version 11, although you are probably going to want to pick the latest version, as support for them is still being added. The current iteration utilizes `-fmodules-ts` and `-fmodule-mapper`, and currently generates its own module mappings to keep the build folder structure consistent. This is still somewhat experimental, and will be given more attention in the future as the GCC implementation gets closer to the C++20 standard.
+
+From testing, it looks like [private module fragments](https://en.cppreference.com/w/cpp/language/modules#Private_module_fragment) and module partition units are unimplemented as of GCC 14. C++23 standard library modules are also unimplemented.
+
+\
+
+**Clang (limited support)**
+
+Modules in Clang require at least version 16, and have even less support, as user header units are unimplemented as of Clang 19. As with GCC, this implementation is considered experimental.
+
+\
+
+**Modules example project**
+
+A crude example project was created during the development of Chalet to implement and test out module features on each of the above compilers. While it's not a serious project, it showcases as many of the new patterns as possible. It's setup across 3 branches, with one branch dedicated to each compiler. It can be reviewed below:
+
+[Chalet Example: Modules](https://github.com/chalet-org/chalet-example-modules)
 
 \
 

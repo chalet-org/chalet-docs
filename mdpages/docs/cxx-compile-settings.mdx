@@ -7,7 +7,7 @@ title: C/C++ Compile Settings
 
 ---
 
-In source targets, C/C++ settings may be described in a similar fashion as one would if they were interacting with a compiler from the command line. This is designed to be as intuitive and straightforward as possible, while maintaining the same flexibility.
+In source targets, C/C++ settings may be described in a similar fashion as one would if they were interacting with a compiler from the command line. This is designed to be as intuitive as possible, while maintaining the same flexibility.
 
 
 ```json
@@ -122,7 +122,7 @@ However, the problem with this approach is that simply adding a folder will add 
 
 ## [Build Suffixes]
 
-The build suffix is a simple mechanism to share compiled objects between multiple source targets. By default, the following directory structures are used:
+The build suffix is a mechanism to share compiled objects between multiple source targets. By default, the following directory structures are used:
 
 | `(buildOutputDir)/obj.(suffix)` | Compiled objects |
 | `(buildOutputDir)/asm.(suffix)` | Object disassemblies (optional) |
@@ -295,7 +295,7 @@ The only Chalet-specific caveat is that a PCH can't be placed at the root direct
 
 ## [Dynamic Linking]
 
-Linking shared libraries is quite simple in Chalet. Like with the `-l` option in GCC/Clang, only the base name of the library needs to be supplied. Thus, `libfoo.a` would be linked as `foo`. If you are using MSVC, and the library is `foo.lib`, the link is again just `foo`.
+Like with the `-l` option in GCC/Clang, only the base name of the library needs to be supplied in order to link against a shared library in Chalet. Thus, `libfoo.a` would be linked as `foo`. If you are using MSVC, and the library is `foo.lib`, the link is again just `foo`.
 
 ```json
 "links": [
@@ -328,7 +328,7 @@ If linking to another target, the target must build prior to the current target,
 }
 ```
 
-You might run into a situation where a library is only supported on a certain platform, or is only relevant in a Debug build. Expressing that is quite easy:
+You might run into a situation where a library is only supported on a certain platform, or is only relevant in a Debug build. One can express that with the following:
 
 ```json
 "first-target": {
