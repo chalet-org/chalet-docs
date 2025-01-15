@@ -364,6 +364,13 @@ Generate a `compile_commands.json` file for Clang tooling use. The one for the c
 If defining a build target other than `all`, this builds only the previous targets required for that target.
 </dd>
 
+``--compiler-cache``
+``--no-compiler-cache``
+
+<dd>
+Use a compiler cache (ie. [ccache](https://ccache.dev/)) if available. This will configure CMake targets with ccache as well.
+</dd>
+
 ``--signing-identity``
 
 <dd>

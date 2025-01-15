@@ -560,6 +560,42 @@ All [variable substitutions](/docs/creating-targets?id=variable-substitution) ar
 
 \\
 
+## [Embedding Files]
+
+It is sometimes desireable to embed files into your program, and loading it somewhere in-memory by its memory offset and the number of bytes. Examples such as an embedded font, company logo, splash screen, graphics shader, etc. With the `configureFiles` feature above, there is special syntax to embed bytes directly into the file. Let's take the following project for example:
+
+```json
+"first-project": {
+   "files": "foo/**.{cpp,rc}",
+   "configureFiles": "foo/config.h.in"
+}
+```
+
+Inside of our configure file `foo/config.h.in`, we have the following line of code:
+
+```cpp
+constexpr uint8_t my_bytes[] = $embed("/path/to/file");
+```
+
+When the configure file is expanded to the header `config.h` in our local build, the above will read the file, and generate an array of bytes much like the following:
+
+
+```cpp
+constexpr uint8_t my_bytes[] = {
+   0x23, 0x20, 0x47, 0x61,  // ...
+};
+```
+
+If our `/path/to/file` changes, the configure file will be regenerated in our build to match the new changes. Additionally, substitution variables can be used in the path of the file, in case the file being embedded comes from one of our external dependencies.
+
+```cpp
+constexpr uint8_t my_bytes[] = $embed("${external:foo}/path/to/file");
+```
+
+> Note: The implementation of this only generates the bytes as `uint8_t` for now as it's arguably the most common.
+
+\\
+
 ## [Compile Settings]
 
 Like with abstracts, compile settings can be expressed in two ways:

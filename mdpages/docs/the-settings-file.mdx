@@ -249,6 +249,12 @@ If there's a build error, continue as much of the build as possible.
 Generate a `compile_commands.json` file for Clang tooling use. The one for the current build will be copied to the `build` folder path.
 </dd>
 
+``compilerCache``
+
+<dd>
+Use a compiler cache (ie. [ccache](https://ccache.dev/)) if available. This will configure CMake targets with ccache as well.
+</dd>
+
 ``signingIdentity``
 
 <dd>
