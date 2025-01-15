@@ -40,6 +40,18 @@ const DownloadPageLayout = ({ title, releases: githubReleases, downloadLinks, ..
 	);
 	useRouteChangeScroll();
 
+	const showLatestSnapshot = useMemo(() => {
+		if (snapshots.length > 0) {
+			if (thisRelease.length > 0) {
+				const snapDate = new Date(snapshots[0].created_at);
+				const latestReleaseDate = new Date(thisRelease[0].created_at);
+				return snapDate.getTime() > latestReleaseDate.getTime();
+			}
+			return true;
+		}
+		return false;
+	}, [snapshots, thisRelease]);
+
 	return (
 		<>
 			{!!navProps.sidebarLinks && <SideNavigation {...navProps} />}
@@ -51,7 +63,7 @@ const DownloadPageLayout = ({ title, releases: githubReleases, downloadLinks, ..
 						Download one of the Chalet packages for your operating system below, or build from the source
 						code.
 					</PageDescription>
-					{snapshots.length > 0 && (
+					{showLatestSnapshot && (
 						<LatestBlock>
 							<BlockQuote>
 								Latest snapshot:{" "}
