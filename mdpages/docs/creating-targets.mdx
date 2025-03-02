@@ -20,6 +20,7 @@ The following are the kinds of targets supported:
    * [Library Source Target](/schema/latest/chalet-json/target-source-library) - Describes a static or shared library to output
 * [Chalet Target](/schema/latest/chalet-json/target-chalet) - A subfolder that contains a separate [build file](/docs/the-build-file)
 * [CMake Target](/schema/latest/chalet-json/target-cmake) - A subfolder that contains a CMakeLists.txt
+* [Meson Target](/schema/latest/chalet-json/target-meson) - A subfolder that contains a meson.build
 * [Script Target](/schema/latest/chalet-json/target-script) - An individual script to run
 * [Process Target](/schema/latest/chalet-json/target-process) - A single process with arguments to run
 * [Validation Target](/schema/latest/chalet-json/target-validation) - Validate JSON file(s) against a schema
@@ -31,14 +32,18 @@ The following are the kinds of targets supported:
       "files": "src/first/**.cpp"
    },
    "second": {
-      "kind": "cmakeProject",
+      "kind": "chaletProject",
       "location": "vendor/second"
    },
    "third": {
-      "kind": "chaletProject",
+      "kind": "cmakeProject",
       "location": "vendor/third"
    },
    "fourth": {
+      "kind": "mesonProject",
+      "location": "vendor/fourth"
+   },
+   "fifth": {
       "kind": "process",
       "path": "myexec",
       "arguments": [
@@ -643,33 +648,19 @@ One can also control whether the target is rebuilt or cleaned with the `rebuild`
 
 ## [CMake Targets]
 
-CMake projects can be built as a build step / target of a Chalet project. This is the ideal choice for working with a library needs to be built with CMake before a source target that relies on that library, or if a build is better accomplished with CMake, but one wants to use Chalet to manage the command given to CMake. Chalet will pick an appropriate CMake generator based on its own toolchain, generate the build files with the given defines and toolset specification (if applicable), then build during the same step (using the `cmake --build` method). 
+[CMake](//cmake.org/) projects can be built as a build step / target of a Chalet project. This is the ideal choice for working with a library needs to be built with CMake before a source target that relies on that library, or if a build is better accomplished with CMake, but one wants to use Chalet to manage the command given to CMake. Chalet will pick an appropriate CMake generator based on its own toolchain, generate the build files with the given defines and toolset specification (if applicable), then build during the same step (using the `cmake --build` method). 
 
-At the moment, these are the generators used:
+Regarding the CMake generators used, the `Ninja` generator will always be favored for compatibility. If ninja is not available on the system, a makefile generator will be used depending on the toolchain - ie. `Unix Makefiles` on macOS and Linux, `MinGW Makefiles` used with MinGW on Windows and  `NMake Makesfiles JOM` / `NMake Makesfiles` with MSVC.
 
-| Ninja  | If the toolchain's `strategy` is ninja, this will always be the generator |
-| Visual Studio ## #### | If using MSVC and not using Ninja, this generator will be based on the version of MSVC detected (up to Visual Studio 17 2022). |
-| MinGW Makefiles  | If on Windows, and the toolchain does not use Ninja or MSVC |
-| Unix Makefiles  | If not Windows, and the toolchain does not use Ninja |
-
-To build another CMake project, set `kind` to `cmakeProject`, and define the `location` as the directory where the `CMakeLists.txt` of the project exists. If using a custom build file name, you can specify it with `buildFile`. This is passed directly to the `-C` CMake option.
-
-The only other property is `recheck` which if true, will check the project for changes each time a build is run. If not defined, this will default to `true`. Setting this to false by nature would speed up rebuilds because CMake wouldn't need to be invoked after the target has already been built once.
+To build a CMake project, set `kind` to `cmakeProject`, and define the `location` as the directory where the `CMakeLists.txt` of the project exists. If using a custom build file name, you can specify it with `buildFile`. This is passed directly to the `-C` CMake option.
 
 ```json
 "my-cmake-target": {
    "kind": "cmakeProject",
-   "condition": "[:!windows]",
    "location": "${external:foo}",
    "recheck": false
 }
 ```
-
-One can also control whether the target is rebuilt or cleaned with the `rebuild` and `clean` boolean properties respectively.
-
-To build a specific CMake target or targets (`-t` build option), simply define them under `targets`. 
-
-If using a toolset specification (`-T` option), simply define it under `toolset`.
 
 Chalet will attempt to add appropriate cache entries with `-D` based on its own settings and toolchain, but if one wants to override these, this can be done by adding `defines` manually, without the `-D` option.
 
@@ -678,8 +669,8 @@ Chalet will attempt to add appropriate cache entries with `-D` based on its own 
    "kind": "cmakeProject",
    "location": "${external:foo}",
    "defines": [
-      "CMAKE_C_COMPILER=foo",
-      "CMAKE_CXX_COMPILER=foo++"
+      "CMAKE_C_COMPILER=fooc",
+      "CMAKE_CXX_COMPILER=fooc++"
    ],
    "targets": [
       "foobar"
@@ -687,7 +678,43 @@ Chalet will attempt to add appropriate cache entries with `-D` based on its own 
 }
 ```
 
-To run the `--install` CMake command, add `"install": true`. This will create the installation into the path `${externalBuild:target}/install`.
+Additional properties:
+
+| targets | Specify which CMake targets to build |
+| recheck | Checks the project for changes (defaults to true) |
+| rebuild | Rebuilds the project when `chalet rebuild` is run (defaults to true) |
+| clean | Cleans the project when `chalet clean` is run (defaults to true) |
+| install | Runs the Cmake `--install` command to an `install` subdirectory (defaults to false) |
+| runExecutable | When `chalet buildrun (target)` is called, this specifies the executable filename to run |
+| toolset | Specify a custom toolset specification file |
+
+\\
+
+## [Meson Targets]
+
+> Note: requires Chalet v0.8.3 or later
+
+[Meson](//mesonbuild.com/) is another build system that supports C and C++, and those projects can be imported in a similar fashion as CMake projects. Ninja is a required tool to build these projects. 
+
+Set `kind` to `mesonProject`, define the `location` as the directory where the `meson.build` of the project exists.
+
+```json
+"my-cmake-target": {
+   "kind": "mesonProject",
+   "location": "${external:foo}",
+   "recheck": false
+}
+```
+
+Additional properties:
+
+| targets | Specify which Meson targets to build |
+| defines | Specify options to pass to `meson setup` without `-D` in `key=value` format |
+| recheck | Checks the project for changes (defaults to true) |
+| rebuild | Rebuilds the project when `chalet rebuild` is run (defaults to true) |
+| clean | Cleans the project when `chalet clean` is run (defaults to true) |
+| install | Runs the Meson `install` command to an `install` subdirectory (defaults to false) |
+| runExecutable | When `chalet buildrun (target)` is called, this specifies the executable filename to run |
 
 \\
 

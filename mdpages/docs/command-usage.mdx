@@ -56,7 +56,7 @@ Initialize a project in either the current directory or a subdirectory.
 ``<path>``
 
 <dd>
-The path of the project to initialize.
+The path of the project to initialize (optional)
 
 default: `.`
 </dd>
@@ -65,7 +65,14 @@ default: `.`
 ``--template``
 
 <dd>
-The project template to use during initialization (ex: cmake)
+The project template to use during initialization
+
+Supported values:
+
+| chalet | A chalet.json with a single executable target (default) |
+| cmake | A chalet.json with a single CMake target and CMakeLists.txt |
+| meson | A chalet.json with a single Meson target and meson.build |
+
 </dd>
 
 [[dl:end]]
@@ -266,9 +273,15 @@ Presets:
 ``--arch``
 
 <dd>
-The architecture to target for the build.
+The architecture to target for the build. Whether or not these are supported will depend on the toolchain, but the following are the most common:
 
-default: `auto`
+| auto | Match the architecture of the host machine (default) |
+| x64 / x86_64 | 64-bit X86 |
+| x86 / i686 | Intel X86 |
+| arm64 / aarch64 | 64-bit ARM |
+| arm / armhf | ARM |
+| universal | macOS only: "Fat" binary for both arm64 and x86_64 |
+
 </dd>
 
 ``-b``
@@ -277,10 +290,35 @@ default: `auto`
 <dd>
 The build strategy to use for the selected toolchain. When the toolchain is generated, it defaults to `native`, but can be easily set to `ninja` or `makefile` depending on your preference. The project will always build with the same underlying compiler commands.
 
-| native    | Use Chalet to build the project. CMakes targets will still use ninja or make. (default) |
-| ninja     | Uses the Ninja version defined by the `ninja` property. |
-| makefile  | Uses the GNU Make version defined by the `make` property. |
+[[tabs:start]]
+
+|Windows|
+
+Kinds:
+
+| native    | Build natively with Chalet (default) |
+| ninja     | Build with Ninja |
+| makefile  | Build with GNU Make |
 | msbuild   | Creates a Visual Studio solution & builds with MSBuild. |
+
+|MacOS|
+
+Kinds:
+
+| native    | Build natively with Chalet (default) |
+| ninja     | Build with Ninja |
+| makefile  | Build with GNU Make |
+| xcodebuild | Build using an Xcode project and xcodebuild - requires `apple-llvm` toolchain preset |
+
+|Linux|
+
+Kinds:
+
+| native    | Build natively with Chalet (default) |
+| ninja     | Build with Ninja |
+| makefile  | Build with GNU Make |
+
+[[tabs:end]]
 
 </dd>
 
@@ -516,6 +554,7 @@ The project format kind to export.
 Kinds:
 
 | vscode | Visual Studio Code (.vscode) |
+| vscodium | VSCodium - Open Source Binaries of VSCode (.vscode) |
 | vssolution | Visual Studio Solution format (\*.sln, \*.vcxproj) |
 | vsjson | Visual Studio JSON format (launch.vs.json, tasks.vs.json, CppProperties.json) |
 | clion | Jetbrains CLion (.idea) |
@@ -529,7 +568,9 @@ Kinds:
 Kinds:
 
 | vscode | Visual Studio Code (.vscode) |
+| vscodium | VSCodium - Open Source Binaries of VSCode (.vscode) |
 | xcode | Apple Xcode project format (\*.xcodeproj) |
+| codeedit | CodeEdit for macOS (.codeedit) |
 | clion | Jetbrains CLion (.idea) |
 | fleet | Jetbrains Fleet (.fleet) |
 | codeblocks | Code::Blocks IDE (GCC-only) |
@@ -541,6 +582,7 @@ Kinds:
 Kinds:
 
 | vscode | Visual Studio Code (.vscode) |
+| vscodium | VSCodium - Open Source Binaries of VSCode (.vscode) |
 | clion | Jetbrains CLion (.idea) |
 | fleet | Jetbrains Fleet (.fleet) |
 | codeblocks | Code::Blocks IDE (GCC-only) |
