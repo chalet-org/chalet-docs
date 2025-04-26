@@ -6,7 +6,7 @@ import { getChaletBranches } from "Server/ChaletBranches";
 import { getChaletReleases } from "Server/ChaletReleases";
 import { getChaletTags, getLatestTag } from "Server/ChaletTags";
 import { getPageWithData } from "Server/MarkdownFiles";
-import { HyperLink, ResultDownloadPage } from "Server/ResultTypes";
+import { ResultDownloadPage } from "Server/ResultTypes";
 import { withServerErrorHandler } from "Utility";
 
 type Props = ResultDownloadPage;
