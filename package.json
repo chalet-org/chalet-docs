@@ -8,7 +8,7 @@
 	"readme": "README.md",
 	"private": true,
 	"scripts": {
-		"start": "next-remote-watch ./mdpages/",
+		"start": "concurrently \"next dev\" \"tsx ./src/watcher.ts\" --kill-others",
 		"start:next-dev": "next dev",
 		"build": "next build",
 		"serve": "next start",
@@ -51,10 +51,13 @@
 		"@types/prismjs": "1.26.0",
 		"@types/react": "18.3.3",
 		"@types/react-dom": "18.3.0",
+		"@types/ws": "^8.18.1",
+		"concurrently": "^9.1.2",
 		"eslint": "8.56.0",
 		"eslint-config-next": "14.2.4",
-		"next-remote-watch": "2.0.0",
 		"prettier": "3.3.2",
-		"typescript": "5.5.2"
+		"tsx": "^4.19.3",
+		"typescript": "5.5.2",
+		"ws": "^8.18.1"
 	}
 }

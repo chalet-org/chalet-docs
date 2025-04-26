@@ -7,6 +7,7 @@ import React from "react";
 
 import { BaseStyle, ThemeProvider } from "Components";
 import { useSiteAnalytics } from "Utility";
+import { AutoRefresh } from "Components/AutoRefresh";
 
 /*let progress: Optional<ProgressBar> = null;
 if (progress === null) {
@@ -30,12 +31,12 @@ const Main = ({ Component, pageProps }: Props) => {
 	useSiteAnalytics();
 
 	return (
-		<>
+		<AutoRefresh>
 			<BaseStyle />
 			<ThemeProvider />
 			<Component {...pageProps} />
 			{/* Modal */}
-		</>
+		</AutoRefresh>
 	);
 };
 
