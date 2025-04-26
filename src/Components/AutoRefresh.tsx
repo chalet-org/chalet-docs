@@ -17,6 +17,7 @@ const AutoRefreshDev = ({ children }) => {
 			ws.close();
 		};
 	}, [router]);
+
 	return children;
 };
 
