@@ -135,6 +135,30 @@ Debugging an emscripten application is a little more complicated. When using `-c
 > Note: this behavior may change as support for this toolchain improves
 
 \\
+ 
+## [Unicode Support]
+
+As of version 0.8.4, support for Unicode in various areas have been added.
+Limitations:
+
+- CMake supports Unicode paths, but not Unicode target names. It may error with the following:
+
+```
+CMake Error at CMakeLists.txt:16 (add_executable):
+  The target name "夢想家たち" is reserved or not valid for certain
+  CMake features, such as generator expressions, and may result in undefined
+  behavior.
+```
+
+- MinGW and `mingw32-make.exe` do not support unicode targets or paths pretty much at all
+- You can generate a [Code::Blocks](/integrations/code-blocks) project on Windows, open it, but it will not build (see 2)
+- Certain ninja versions have Unicode issues on Windows (v1.10 and prior it seems)
+
+Additional notes:
+
+- Visual Studio .sln files and NMake build files require BOM.
+
+\\
 
 ## [Continuous Integration]
 
