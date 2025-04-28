@@ -164,11 +164,34 @@ const getMdxPage = async (
 
 	const fileContent: string = fs.readFileSync(filename, "utf8");
 
-	const { meta, content } = await parseCustomMarkdown(fileContent, slug, ref, schemaType, definition);
+	let meta: Dictionary<any> = {};
+	let content: string = "";
 
-	const mdx: MDXRemoteSerializeResult<Record<string, unknown>> = await serialize(content, {
-		parseFrontmatter: false,
-	});
+	let mdx: MDXRemoteSerializeResult<Record<string, unknown>>;
+	try {
+		const parseResult = await parseCustomMarkdown(fileContent, slug, ref, schemaType, definition);
+		meta = parseResult.meta;
+		content = parseResult.content;
+
+		mdx = await serialize(content, {
+			parseFrontmatter: false,
+		});
+	} catch (err: any) {
+		if (!!ref && !!schemaType) {
+			const parseResult = await parseCustomMarkdown(fileContent, slug, ref, undefined, definition);
+			meta = parseResult.meta;
+			content = parseResult.content.replace(
+				`!!ChaletSchemaReference!!`,
+				"> Note: There was an error converting the schema to Markdown. It will be addressed soon.",
+			);
+
+			mdx = await serialize(content, {
+				parseFrontmatter: false,
+			});
+		} else {
+			throw err;
+		}
+	}
 
 	const navData = await getNavBar(slug, content, schemaType, ref);
 	const title = meta?.title ?? "Untitled";

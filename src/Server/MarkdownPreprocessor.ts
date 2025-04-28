@@ -10,7 +10,7 @@ const processJsonSchemaToMarkdown = (
 	slug: string,
 	schema: Optional<JSONSchema7>,
 	definitions?: Dictionary<JSONSchema7Definition>,
-	indented: boolean = false
+	indented: boolean = false,
 ): string => {
 	let result: string = "";
 	if (!schema) return result;
@@ -124,7 +124,7 @@ ${JSON.stringify(defaultValue, undefined, 3)}
 			`\n<IndentGroup label="properties">\n\n` +
 			Object.entries(properties)
 				.map(([key, value], i) =>
-					processJsonSchemaToMarkdown(key, slug, value as JSONSchema7, definitions, indented)
+					processJsonSchemaToMarkdown(key, slug, value as JSONSchema7, definitions, indented),
 				)
 				.join(spacer) +
 			`\n</IndentGroup>\n\n`;
