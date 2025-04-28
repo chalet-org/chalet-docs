@@ -182,7 +182,7 @@ const getMdxPage = async (
 			meta = parseResult.meta;
 			content = parseResult.content.replace(
 				`!!ChaletSchemaReference!!`,
-				"> Note: There was an error converting the schema to Markdown. It will be addressed soon.",
+				`> Note: There was an error generating the page from the schema node: ${definition || "(root)"}`,
 			);
 
 			mdx = await serialize(content, {

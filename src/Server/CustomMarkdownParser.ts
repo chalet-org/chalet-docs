@@ -71,7 +71,7 @@ const parseAnchoredHeaders = (text: string): string => {
 
 const parseCodeHeaders = (text: string): string => {
 	return text.replace(/\n``(.+)``/g, (match: string, p1: string) => {
-		return `\n<CodeHeader>{"${p1}"}</CodeHeader>`;
+		return `\n<CodeHeader>{\`${p1}\`}</CodeHeader>`;
 	});
 };
 
