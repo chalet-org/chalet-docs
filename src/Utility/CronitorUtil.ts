@@ -48,8 +48,8 @@ class Cronitor {
 		CronitorImpl.track(`Click.GithubReleaseLink.${ref}`);
 	}
 
-	static trackGithubClick() {
-		CronitorImpl.track(`Click.GithubLink`);
+	static trackFooter(kind: string) {
+		CronitorImpl.track(`Click.Footer.${kind}`);
 	}
 }
 

@@ -67,6 +67,7 @@ class MyDocument extends Document<Props> {
 					<meta name="twitter:image" content={image} />
 
 					{/* Mastodon Meta Tags */}
+					<link rel="me" href="https://mastodon.gamedev.place/@rewrking" />
 					<meta name="fediverse:creator" content="@rewrking@mastodon.gamedev.place" />
 
 					<link rel="icon" href="/favicon.ico" />
