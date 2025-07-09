@@ -28,10 +28,9 @@ const PageFooter = (_props: Props) => {
 						</Link>
 					</div>
 					<div className="right">
-						<Link href="/contact">Contact</Link>
 						<Link
 							href="//www.github.com/chalet-org"
-							title="Github"
+							title="Github: Chalet"
 							onClick={SiteAnalytics.trackGithubClick}
 						>
 							<Icon
@@ -41,6 +40,18 @@ const PageFooter = (_props: Props) => {
 								hoverColor={theme.primaryColor}
 							/>
 						</Link>
+						<Link href="/contact" title="E-Mail">
+							<Icon id="mail" size="1.125rem" color={theme.secondaryColor} hoverColor="#A3A275" />
+						</Link>
+						<a rel="me" href="https://mastodon.gamedev.place/@rewrking" title="Mastodon">
+							<Icon id="mastodon" size="1.125rem" color={theme.secondaryColor} hoverColor="#8c8dff" />
+						</a>
+						<a rel="me" href="https://bsky.app/profile/rewrking.bsky.social" title="BlueSky">
+							<Icon id="bluesky" size="1.125rem" color={theme.secondaryColor} hoverColor="#0085ff" />
+						</a>
+						<a rel="me" href="https://www.linkedin.com/in/andrewraymondking" title="Linkedin">
+							<Icon id="linkedin" size="1.125rem" color={theme.secondaryColor} hoverColor="#1884bb" />
+						</a>
 					</div>
 				</LinkBox>
 			</Container>

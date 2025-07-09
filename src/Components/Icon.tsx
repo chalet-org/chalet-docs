@@ -1,7 +1,8 @@
 import React from "react";
 import { AiOutlineSearch, AiFillApple, AiFillWindows } from "react-icons/ai";
 import { BiCodeCurly } from "react-icons/bi";
-import { IoCloseOutline } from "react-icons/io5";
+import { FaBluesky, FaMastodon, FaLinkedin } from "react-icons/fa6";
+import { IoCloseOutline, IoMail } from "react-icons/io5";
 import { VscGithub, VscTerminalLinux, VscTerminalUbuntu, VscTerminalDebian } from "react-icons/vsc";
 import { WiMoonAltWaxingGibbous5, WiMoonAltWaningGibbous1 } from "react-icons/wi";
 import styled from "styled-components";
@@ -19,7 +20,11 @@ export type IconID =
 	| "ubuntu"
 	| "debian"
 	| "source"
-	| "github";
+	| "mail"
+	| "github"
+	| "mastodon"
+	| "bluesky"
+	| "linkedin";
 
 type IconProps = {
 	size?: string;
@@ -62,8 +67,16 @@ const getIcon = (id: IconID) => {
 			return <VscTerminalDebian />;
 		case "source":
 			return <BiCodeCurly />;
+		case "mail":
+			return <IoMail />;
 		case "github":
 			return <VscGithub />;
+		case "mastodon":
+			return <FaMastodon />;
+		case "bluesky":
+			return <FaBluesky />;
+		case "linkedin":
+			return <FaLinkedin />;
 	}
 	return null;
 };
@@ -85,11 +98,15 @@ const Styles = styled.i<IconStyleProps>`
 		width: ${({ $size }) => $size ?? "1rem"};
 		height: ${({ $size }) => $size ?? "1rem"};
 		color: ${({ color }) => color ?? "inherit"};
+		transition: color 0.125s linear;
 
 		> path,
 		> circle {
 			color: ${({ color }) => color ?? "inherit"};
 			fill: ${({ color }) => color ?? "inherit"};
+			transition:
+				color 0.125s linear,
+				fill 0.125s linear;
 		}
 	}
 

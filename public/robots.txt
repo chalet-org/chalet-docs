@@ -7,31 +7,6 @@ User-Agent: MSNBot-Media
 User-Agent: AdIdxBot
 Disallow: /
 
-User-Agent: AdBots-Google
-User-Agent: Amazonbot
-User-Agent: anthropic-ai
-User-Agent: Applebot-Extended
-User-Agent: Bytespider
-User-Agent: CCBot
-User-Agent: ChatGPT-User
-User-Agent: ClaudeBot
-User-Agent: Claude-Web
-User-Agent: cohere-ai
-User-Agent: Diffbot
-User-Agent: FacebookBot
-User-Agent: FriendlyCrawler
-User-Agent: Google-Extended
-User-Agent: GoogleOther
-User-Agent: GPTBot
-User-Agent: img2dataset
-User-Agent: omgili
-User-Agent: omgilibot
-User-Agent: peer39_crawler
-User-Agent: peer39_crawler/1.0
-User-Agent: PerplexityBot
-User-Agent: YouBot
-Disallow: /
-
 User-Agent: *
 Disallow: /api/*
 Disallow: /schema/*
