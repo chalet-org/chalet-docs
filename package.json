@@ -8,8 +8,8 @@
 	"readme": "README.md",
 	"private": true,
 	"scripts": {
-		"start": "concurrently \"next dev\" \"tsx ./src/watcher.ts\" --kill-others --prefix=none",
-		"start:next-dev": "next dev",
+		"dev": "concurrently \"next dev\" \"tsx ./src/watcher.ts\" --kill-others --prefix=none",
+		"dev:next-dev": "next dev",
 		"build": "next build",
 		"serve": "next start",
 		"lint": "next lint"
