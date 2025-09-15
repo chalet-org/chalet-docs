@@ -881,6 +881,20 @@ An executable target can also take the `defaultRunArguments` and `copyFilesOnRun
 
 > Note: The above behavior may change in the future since it's meant to handle an edge case - there may be better solutions.
 
+If a project has more than one runnable target, it may be wanted to set the default run target explicitly. This can be achieved by setting the `defaultRunTarget` property in the root. For example:
+
+```json
+{
+   "targets": {
+      "first-executable": {},
+      "second-executable": {}
+   },
+   "defaultRunTarget": "second-executable"
+}
+```
+
+The run target can be selected at the command line during `run` and `buildrun` commands, but this will set the target initially if one is omitted otherwise.
+
 \\
 
 ## [Variable Substitution]

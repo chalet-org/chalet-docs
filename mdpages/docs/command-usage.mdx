@@ -103,25 +103,25 @@ Run the first valid executable build target, or a chosen executable.
 chalet build [options] [<target>]
 ```
 
-Build the project. If a configuration doesn't exist, it will be created.
+Build a project and create its configuration if it doesn't exist.
 
 ```bash
 chalet rebuild [options] [<target>]
 ```
 
-Rebuild the project. If a configuration doesn't exist, it will be created.
+Rebuild the project and create a configuration if it doesn't exist.
 
 ```bash
 chalet clean [options]
 ```
 
-Unceremoniously clean the build folder.
+Removes the build folder for the current build configuration.
 
 ```bash
 chalet bundle [options]
 ```
 
-Bundle the project for distribution.
+Bundle a project for distribution with the current build configuration.
 
 ```bash
 chalet check [options]
@@ -229,12 +229,14 @@ default: `vs-stable`
 Presets:
 
 | vs-stable | Microsoft® Visual Studio (latest installed stable release) [default] |
-| vs-preview | Microsoft® Visual Studio (latest installed preview release) |
+| vs-preview | Microsoft® Visual Studio (latest installed preview/insider release) |
+| vs-2026 | Microsoft® Visual Studio 2026 (Insiders) |
 | vs-2022 | Microsoft® Visual Studio 2022 |
 | vs-2019 | Microsoft® Visual Studio 2019 |
 | vs-2017 | Microsoft® Visual Studio 2017 |
 | llvm-vs-stable | LLVM/Clang in Microsoft® Visual Studio (latest stable) |
-| llvm-vs-preview | LLVM/CLang in Microsoft® Visual Studio (latest preview) |
+| llvm-vs-preview | LLVM/Clang in Microsoft® Visual Studio (latest preview/insiders) |
+| llvm-vs-2026 | LLVM/Clang in Microsoft® Visual Studio 2026 |
 | llvm-vs-2022 | LLVM/Clang in Microsoft® Visual Studio 2022 |
 | llvm-vs-2019 | LLVM/Clang in Microsoft® Visual Studio 2019 |
 | llvm | The LLVM Compiler Infrastructure Project |
@@ -407,6 +409,16 @@ If defining a build target other than `all`, this builds only the previous targe
 
 <dd>
 Use a compiler cache (ie. [ccache](https://ccache.dev/)) if available. This will configure CMake targets with ccache as well.
+</dd>
+
+``--profiler-config``
+
+<dd>
+An optional config to give to the profiler during profiling.
+
+On macOS, this is the xctrace "template" - defaults to 'Time Profiler'.
+
+On Windows, this is the Visual Studio Diagnostics agent config file. Can be either the name of one of the bundled configs in that VS version, or a path to a custom one (json format). Defaults to 'CpuUsageWithCallCounts.json' or 'CpuUsageBase.json', depending on if the former exists.
 </dd>
 
 ``--signing-identity``

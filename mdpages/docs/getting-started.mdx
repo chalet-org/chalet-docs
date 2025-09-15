@@ -323,11 +323,13 @@ chalet configure --toolchain vs-stable
 chalet configure --toolchain vs-preview 
 
 # To target specific VS installations (>= 2017 until earlier ones can be tested):
+chalet configure -t vs-2026 -a arm64
 chalet configure -t vs-2022 -a arm64
 chalet configure -t vs-2019 -a x64
 chalet configure -t vs-2017 -a x86 
 
 # To generate a .sln and build with MSbuild instead of Ninja, use the following
+chalet configure -t vs-2026 -a arm64 -b msbuild
 chalet configure -t vs-2022 -a arm64 -b msbuild
 chalet configure -t vs-2019 -a x64 -b msbuild
 chalet configure -t vs-2017 -a x86 -b msbuild
@@ -551,5 +553,18 @@ A single string argument will be parsed and passed to the executable as separate
 ```bash
 chalet run my-tests '-w NoTests -s'
 ``` 
+
+To remove the project's build files at any point for the configured build, use the following:
+
+```bash
+chalet clean
+```
+
+To remove all of the project's generated files, add the `--all` options:
+
+```bash
+chalet clean --all
+```
+
 
 [[nav:/:/docs/the-build-file]]
