@@ -4,6 +4,15 @@ import { getChaletReleases } from "./ChaletReleases";
 import { fetchFromGithub } from "./FetchFromGithub";
 import { serverCache } from "./ServerCache";
 
+function getSemVersInReverseChronologicalOrder(tags: string[]): string[] {
+	return reverse(
+		tags
+			.map((a) => a.replace(/\d+/g, (n) => (+n + 100000) as any))
+			.sort()
+			.map((a) => a.replace(/\d+/g, (n) => (+n - 100000) as any)),
+	);
+}
+
 const getChaletTags = (): Promise<string[]> => {
 	return serverCache.get(`chalet-tags`, async () => {
 		const url = `https://api.github.com/repos/chalet-org/chalet/git/refs/tags`;
@@ -13,12 +22,13 @@ const getChaletTags = (): Promise<string[]> => {
 			return [];
 		}
 
-		const tags: string[] = reverse(result.map((ref: any) => (ref?.ref ?? "").split("/").pop()));
+		const tags: string[] = result.map((ref: any) => (ref?.ref ?? "").split("/").pop());
 		const releases = await getChaletReleases();
 
 		const taggedReleases = releases.map((rel) => rel.tag_name);
 		const allowedTags = tags.filter((tag) => taggedReleases.includes(tag));
-		return allowedTags;
+		const sortedTags = getSemVersInReverseChronologicalOrder(allowedTags);
+		return sortedTags;
 	});
 };
 
