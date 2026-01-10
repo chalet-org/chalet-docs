@@ -1,6 +1,6 @@
 import email from "email-validator";
 import { EmailSender } from "nodemailer-mjml-sender";
-import path from "path";
+import path from "node:path";
 
 import { ContactEmailOptions } from "Server/InputTypes";
 

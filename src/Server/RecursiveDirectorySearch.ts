@@ -1,5 +1,5 @@
-import { readdir } from "fs/promises";
-import path, { resolve } from "path";
+import { readdir } from "node:fs/promises";
+import path, { resolve } from "node:path";
 
 async function* recursiveDirectorySearchIter(dir: string) {
 	const dirents = await readdir(dir, { withFileTypes: true });

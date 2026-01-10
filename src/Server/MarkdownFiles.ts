@@ -1,9 +1,9 @@
-import fs from "fs";
+import fs from "node:fs";
+import os from "node:os";
+import nodePath from "node:path";
 import matter from "gray-matter";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
-import os from "os";
-import nodePath from "path";
 
 import { Dictionary } from "Utility";
 

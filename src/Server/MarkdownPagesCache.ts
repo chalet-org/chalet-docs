@@ -1,7 +1,7 @@
-import fs from "fs";
+import fs from "node:fs";
 import matter from "gray-matter";
 import flatten from "lodash/flatten";
-import path from "path";
+import path from "node:path";
 
 import { mdpages } from "Server/MarkdownFiles";
 import { recursiveDirectorySearch } from "Server/RecursiveDirectorySearch";

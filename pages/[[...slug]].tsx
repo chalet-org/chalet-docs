@@ -1,5 +1,5 @@
+import path from "node:path";
 import { GetStaticPropsContext } from "next";
-import path from "path";
 import React from "react";
 
 import { MarkdownLayout, Props } from "Layouts/MarkdownLayout";
