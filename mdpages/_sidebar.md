@@ -23,7 +23,7 @@ Integrations
 [@](/integrations/visual-studio)
 [@](/integrations/xcode)
 [@](/integrations/clion)
-[@](/integrations/fleet)
+[@](/integrations/zed)
 [@](/integrations/code-blocks)
 
 

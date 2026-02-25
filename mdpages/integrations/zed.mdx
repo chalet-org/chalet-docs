@@ -1,0 +1,54 @@
+---
+title: Zed
+---
+
+<PageCategory id="ides" />
+# [${meta.title}]
+
+---
+
+[Zed](//zed.dev/) is a Rust-based editor designed with speed and responsiveness in mind.
+
+\\
+
+## [Exporting project files]
+
+The following will generate Zed project files into the `.zed` path if there is not one already there, and `build/.zed` otherwise.
+
+```bash
+chalet export zed
+```
+
+This will generate a `settings.json` `tasks.json` and a `debug.json` inside the `.zed` path in your project.
+
+![Generated files for Zed](/images/zed/zed-shot1.png)
+
+For C++, Zed uses clangd for code completion, so it relies on the project having a `compile_commands.json`. The project should always be generating one from its build as long as `generateCompileCommands` is true in the chalet settings.
+
+To run one of the tasks, open up the command panel and run the `task: spawn` command. You can bind this to a keyboard shortcut, for example like `CMD+Shift+B` if you're used to VS Code.
+
+![Choosing a build configuration inside Zed](/images/zed/zed-shot2.png)
+
+This is the same list that generates in other export commands, so it's based on the selected toolchain at the time of exporting. It can be edited at any time in the `tasks.json` file.
+
+From there, you will see the .chaletrc file colorize as a JSON file, and the schema for properties will be available as you mouse over and edit them.
+
+![Seeing the .chaletrc schema definitions](/images/zed/zed-shot3.png)
+ 
+The `chalet.json` or `chalet.yaml` file of the project should also have schema definitions available, along with type completion.
+
+![Seeing the chalet.json schema definitions](/images/zed/zed-shot4.png)
+
+\\
+
+## [Debugging]
+
+Debugging in Zed is similar to VS Code. A configuration is generated in `.zed/debug.json` and it will default to the built-in CodeLLDB debug extension. In the same `task: spawn` menu, there is a `Debug` tab
+
+![Choosing a debugger configuration](/images/zed/zed-shot5.png)
+
+Once started, you can step through code like any other debugger, with familiar actions.
+
+![Launching the debugger inside of Zed](/images/zed/zed-shot6.png)
+
+[[nav:/integrations/clion:/integrations/code-blocks]]
