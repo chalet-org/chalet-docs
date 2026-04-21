@@ -1,10 +1,9 @@
-import { serialize } from "next-mdx-remote/serialize";
-
 import { Optional } from "Utility";
 
 import { fetchFromGithub } from "./FetchFromGithub";
 import { ResultMDX } from "./ResultTypes";
 import { serverCache } from "./ServerCache";
+import { serializeMDX } from "./ImplementationMDX";
 
 export type GithubAsset = {
 	// url: string;
@@ -95,9 +94,7 @@ const getChaletReleases = (): Promise<ResultGithubReleases> => {
 							},
 						);
 						text = text.replace(/## (.+)/g, "##### $1");
-						mdx = await serialize(text, {
-							parseFrontmatter: false,
-						});
+						mdx = await serializeMDX(text);
 					}
 
 					let latest_release: boolean = false;

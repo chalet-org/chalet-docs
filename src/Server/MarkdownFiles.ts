@@ -3,7 +3,6 @@ import os from "node:os";
 import nodePath from "node:path";
 import matter from "gray-matter";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
-import { serialize } from "next-mdx-remote/serialize";
 
 import { Dictionary } from "Utility";
 
@@ -13,6 +12,7 @@ import { getPageAnchors, parseCustomMarkdown } from "./CustomMarkdownParser";
 import { ResultMDXPage, ResultNavigation, HyperLink, SchemaType, ResultDataPage } from "./ResultTypes";
 import { serverCache } from "./ServerCache";
 import { isDevelopment } from "./IsDevelopment";
+import { serializeMDX } from "./ImplementationMDX";
 
 const mdpages: string = "mdpages";
 const allowedExtensions: string[] = ["mdx", "md"];
@@ -173,9 +173,7 @@ const getMdxPage = async (
 		meta = parseResult.meta;
 		content = parseResult.content;
 
-		mdx = await serialize(content, {
-			parseFrontmatter: false,
-		});
+		mdx = await serializeMDX(content);
 	} catch (err: any) {
 		if (!!ref && !!schemaType) {
 			const parseResult = await parseCustomMarkdown(fileContent, slug, ref, undefined, definition);
@@ -185,9 +183,7 @@ const getMdxPage = async (
 				`> Note: There was an error generating the page from the schema node: ${definition || "(root)"}`,
 			);
 
-			mdx = await serialize(content, {
-				parseFrontmatter: false,
-			});
+			mdx = await serializeMDX(content);
 		} else {
 			throw err;
 		}
